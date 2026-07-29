@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is Title Case used for?", answer: "Title Case capitalizes the first letter of most words and is commonly used for headings, blog titles, and book titles." },
+  { question: "What's the difference between Sentence case and Title Case?", answer: "Sentence case only capitalizes the first word of each sentence (like normal prose), while Title Case capitalizes most words in a heading or title." },
+  { question: "Can I convert text back to normal after using aLtErNaTiNg case?", answer: "Yes, paste your original text again or use the lowercase/UPPERCASE buttons to reset it to a standard case." },
+  { question: "Does this tool work with special characters and numbers?", answer: "Yes, numbers and symbols are left unchanged — only letters are affected by the case conversion." },
+  { question: "Is this tool free to use with no limits?", answer: "Yes, there's no character limit or sign-up required — paste any amount of text and convert it instantly." },
+];
 ---
 
 <Layout title="Free Case Converter Online — Upper, Lower, Title, Sentence Case">
@@ -32,6 +40,8 @@ import Layout from '../layouts/Layout.astro';
         your browser — paste your text, click a button, and copy the result.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is a hash used for?", answer: "A hash converts any input into a fixed-length string, commonly used to verify data hasn't been tampered with, store passwords securely, or create a unique fingerprint of a file or piece of text." },
+  { question: "Which hash algorithm should I use — SHA-1 or SHA-256?", answer: "SHA-256 is generally recommended over SHA-1, since SHA-1 has known security weaknesses; SHA-256 and SHA-512 are considered secure for most current use cases." },
+  { question: "Can two different inputs produce the same hash?", answer: "In theory this is called a 'collision,' but for secure algorithms like SHA-256, this is astronomically unlikely and not a practical concern." },
+  { question: "Is hashing the same as encryption?", answer: "No — hashing is one-way and cannot be reversed to get the original text back, while encryption is designed to be decrypted with the right key." },
+  { question: "Is my text sent to a server to generate the hash?", answer: "No, all hashing happens locally in your browser using the Web Crypto API — nothing is transmitted anywhere." },
+];
 ---
 
 <Layout title="Free Hash Generator Online — SHA-256, SHA-512 & More">
@@ -41,6 +49,8 @@ import Layout from '../layouts/Layout.astro';
         text is never sent to a server.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

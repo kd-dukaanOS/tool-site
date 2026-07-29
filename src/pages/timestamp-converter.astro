@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is a Unix timestamp?", answer: "A Unix timestamp is the number of seconds that have passed since January 1, 1970 (UTC), used widely in programming to represent dates in a simple, timezone-independent number." },
+  { question: "Why do developers use timestamps instead of regular dates?", answer: "Timestamps are a single number, easy to store, compare, and sort, and they avoid timezone confusion that can occur with formatted date strings." },
+  { question: "How do I convert a timestamp to my local time?", answer: "This tool shows the UTC date for a given timestamp; you can then adjust for your timezone offset, or use your browser's local date settings for exact local time." },
+  { question: "What's the current Unix timestamp right now?", answer: "The current timestamp updates automatically at the top of this page each time you load it." },
+  { question: "Are Unix timestamps in seconds or milliseconds?", answer: "Traditionally Unix timestamps are in seconds, though some systems like JavaScript's Date.now() use milliseconds — check which format your system expects." },
+];
 ---
 
 <Layout title="Free Unix Timestamp Converter Online">
@@ -44,6 +52,8 @@ import Layout from '../layouts/Layout.astro';
         readable date, or a date you pick into its Unix timestamp equivalent, instantly in your browser.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

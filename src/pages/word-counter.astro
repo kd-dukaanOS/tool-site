@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "Does this word counter count spaces as characters?", answer: "Yes, the 'Characters' count includes spaces, while 'Characters (no spaces)' excludes them, so you can check either depending on what your word limit requires." },
+  { question: "How many words is a typical college essay?", answer: "Most US undergraduate college application essays require 200-650 words, while graduate school admission essays typically range from 1,500-5,000 words depending on the program." },
+  { question: "How does this tool count sentences?", answer: "Sentences are counted by detecting periods, question marks, and exclamation points that end a group of words, so abbreviations with periods may occasionally be counted as sentence breaks." },
+  { question: "Can I count words in a Word or Google Docs document?", answer: "Yes — copy your text from Word, Google Docs, or any app and paste it directly into the box above; the counter works with any pasted text." },
+  { question: "Is this word counter free to use?", answer: "Yes, this tool is completely free with no sign-up required, and all counting happens instantly in your browser." },
+];
 ---
 
 <Layout title="Free Word Counter & Character Counter Online">
@@ -46,6 +54,8 @@ import Layout from '../layouts/Layout.astro';
         as you type.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

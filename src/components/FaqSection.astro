@@ -1,0 +1,41 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FaqItem[];
+}
+
+const { faqs = [] } = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+};
+---
+
+{faqs.length > 0 && (
+<section class="mt-10">
+  <h2 class="text-xl font-semibold mb-4 text-gray-800">Frequently Asked Questions</h2>
+  <div class="space-y-4">
+    {faqs.map((faq) => (
+      <div class="border border-gray-200 rounded-lg p-4">
+        <h3 class="font-medium text-gray-800">{faq.question}</h3>
+        <p class="text-gray-600 text-sm mt-1">{faq.answer}</p>
+      </div>
+    ))}
+  </div>
+</section>
+)}
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

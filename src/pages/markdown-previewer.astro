@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is Markdown used for?", answer: "Markdown is a simple text formatting syntax used in README files, documentation, blog platforms, and chat apps to add headings, bold/italic text, links, and lists using plain characters." },
+  { question: "How do I make text bold or italic in Markdown?", answer: "Wrap text in double asterisks for bold (**bold**) or single asterisks for italic (*italic*)." },
+  { question: "How do I create a heading in Markdown?", answer: "Start a line with one to three hash symbols followed by a space — one # for the largest heading, more for smaller subheadings." },
+  { question: "Does this tool support Markdown tables and images?", answer: "This previewer covers the most common Markdown elements — headings, bold, italic, links, code, and lists. More advanced syntax like tables may not render." },
+  { question: "Can I use this to write a GitHub README?", answer: "Yes, this is a great way to preview basic README formatting before pasting it into GitHub, though GitHub supports some additional Markdown extensions." },
+];
 ---
 
 <Layout title="Free Markdown Previewer Online — Live Preview">
@@ -34,6 +42,8 @@ import Layout from '../layouts/Layout.astro';
         before publishing them anywhere.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

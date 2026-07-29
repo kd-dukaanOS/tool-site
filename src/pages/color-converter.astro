@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What's the difference between HEX, RGB, and HSL color formats?", answer: "HEX represents color as a 6-digit code, RGB expresses it as red/green/blue intensity values (0-255 each), and HSL uses hue, saturation, and lightness — all three represent the same colors, just in different formats." },
+  { question: "Which color format should I use in CSS?", answer: "All three (HEX, RGB, HSL) are valid in modern CSS — HSL is often preferred when you want to easily adjust lightness or saturation without recalculating the whole color." },
+  { question: "How do I find the HEX code of a color I see on a website?", answer: "Use your browser's DevTools color picker (right-click an element → Inspect) to sample the exact color, then paste that HEX value into this tool to see its RGB and HSL equivalents." },
+  { question: "Can I convert a color by typing its RGB value instead of picking it?", answer: "Currently this tool converts from the color picker and HEX input — typing RGB or HSL directly to convert isn't yet supported in this version." },
+  { question: "Are HEX color codes case-sensitive?", answer: "No, HEX codes work the same whether letters are uppercase or lowercase (#3B82F6 and #3b82f6 represent the same color)." },
+];
 ---
 
 <Layout title="Free Color Converter Online — HEX, RGB, HSL">
@@ -36,6 +44,8 @@ import Layout from '../layouts/Layout.astro';
         instantly converts it into the others.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

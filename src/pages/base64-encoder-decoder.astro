@@ -1,5 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+
+const faqs = [
+  { question: "What is Base64 encoding used for?", answer: "Base64 converts binary or text data into a text-safe format, commonly used for embedding images in HTML/CSS, sending data in URLs, or storing binary data in JSON and XML." },
+  { question: "Is Base64 encoding the same as encryption?", answer: "No — Base64 is not encryption or a security measure. It's simply a way to represent data as text, and anyone can decode it instantly without a password or key." },
+  { question: "Why does decoding sometimes give an error?", answer: "An error usually means the input isn't valid Base64 — check for missing characters, extra spaces, or text that was never actually Base64-encoded." },
+  { question: "Can I encode an entire file with this tool?", answer: "This tool encodes and decodes plain text you type or paste. For encoding files like images, you'd need a file-specific Base64 converter." },
+  { question: "Is my data sent anywhere when I use this tool?", answer: "No, encoding and decoding both happen locally in your browser — nothing is transmitted to a server." },
+];
 ---
 
 <Layout title="Free Base64 Encoder & Decoder Online">
@@ -44,6 +53,8 @@ import Layout from '../layouts/Layout.astro';
         This tool lets you instantly encode plain text to Base64, or decode Base64 back into readable text, entirely in your browser — nothing is sent to a server.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is a UUID used for?", answer: "A UUID is a 128-bit unique identifier commonly used as a database primary key, session token, or unique reference ID in distributed systems, without needing a central authority to avoid duplicates." },
+  { question: "How unlikely is it for two UUIDs to be the same?", answer: "Version 4 UUIDs are generated from random numbers with so many possible combinations that the chance of a collision is astronomically small, even across billions of generated IDs." },
+  { question: "Can I generate multiple UUIDs at once?", answer: "Yes, set the count field to however many you need (up to 100 at a time) and click Generate." },
+  { question: "Is a UUID the same as a GUID?", answer: "Yes, GUID (Globally Unique Identifier) is Microsoft's term for the same concept as a UUID — they're functionally identical." },
+  { question: "Are the UUIDs generated here truly random?", answer: "Yes, this tool uses your browser's built-in cryptographically secure random number generator to create version 4 UUIDs." },
+];
 ---
 
 <Layout title="Free UUID Generator Online — v4 UUIDs Instantly">
@@ -39,6 +47,8 @@ import Layout from '../layouts/Layout.astro';
         browser — no data is sent anywhere.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

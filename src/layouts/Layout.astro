@@ -17,5 +17,11 @@ const { title = "Tool Site" } = Astro.props;
 	<body class="bg-gray-50 min-h-screen">
 		<Header />
 		<slot />
+		<footer class="border-t border-gray-200 mt-16 py-6 text-center text-sm text-gray-500">
+  <a href="/privacy-policy" class="hover:text-blue-600 mx-2">Privacy Policy</a>
+  <a href="/terms" class="hover:text-blue-600 mx-2">Terms & Conditions</a>
+  <a href="/about" class="hover:text-blue-600 mx-2">About Us</a>
+  <a href="/contact" class="hover:text-blue-600 mx-2">Contact Us</a>
+</footer>
 	</body>
 </html>

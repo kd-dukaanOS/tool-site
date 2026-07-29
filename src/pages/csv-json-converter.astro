@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "Why would I need to convert CSV to JSON?", answer: "JSON is the standard format for web APIs and applications, so converting spreadsheet data (CSV) to JSON is a common step when importing data into a web app or database." },
+  { question: "Does my CSV need headers for this to work?", answer: "Yes, this tool expects the first row of your CSV to be column headers, which become the property names in the resulting JSON." },
+  { question: "Why does JSON to CSV conversion fail?", answer: "The JSON must be a non-empty array of objects with the same structure — if your JSON is a single object rather than an array, or has deeply nested data, conversion may not work as expected." },
+  { question: "Can this tool handle commas inside CSV values?", answer: "This tool uses simple comma splitting, so values containing commas without proper quoting may not convert correctly — for complex CSV files, a dedicated CSV parser handles quoted fields more robustly." },
+  { question: "Is my data uploaded anywhere during conversion?", answer: "No, all conversion happens locally in your browser." },
+];
 ---
 
 <Layout title="Free CSV to JSON and JSON to CSV Converter Online">
@@ -35,6 +43,8 @@ import Layout from '../layouts/Layout.astro';
         format.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

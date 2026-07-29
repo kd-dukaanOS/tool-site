@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is a URL slug?", answer: "A slug is the readable part of a URL that identifies a specific page, typically lowercase with hyphens instead of spaces, like 'my-blog-post-title'." },
+  { question: "Why should URL slugs be lowercase with hyphens?", answer: "Lowercase with hyphens is the widely accepted convention because it's clean, readable, and avoids case-sensitivity issues across different servers and systems." },
+  { question: "Does this tool remove special characters automatically?", answer: "Yes, punctuation and special characters are stripped out automatically, leaving only letters, numbers, and hyphens." },
+  { question: "Can I use this for file names, not just URLs?", answer: "Yes, the same clean, hyphenated format works well for file names too, avoiding spaces and special characters that can cause issues in some systems." },
+  { question: "Are slugs important for SEO?", answer: "Yes, a clean, keyword-relevant slug helps both users and search engines understand what a page is about at a glance." },
+];
 ---
 
 <Layout title="Free URL Slug Generator Online">
@@ -25,6 +33,8 @@ import Layout from '../layouts/Layout.astro';
         lowercasing everything — ready to use in a blog post URL, CMS, or file name.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

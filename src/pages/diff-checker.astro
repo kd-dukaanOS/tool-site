@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What does a diff checker actually compare?", answer: "This tool compares two blocks of text line by line, showing which lines were removed (in red) and which were added or changed (in green)." },
+  { question: "Can I use this to compare code changes?", answer: "Yes, pasting two versions of code works well for spotting line-level differences, though for full syntax-aware code diffing, a dedicated code diff tool may show more detail." },
+  { question: "Why does a single changed word show the whole line as different?", answer: "This tool compares differences at the line level, so if even one word in a line changes, the entire line is flagged as different rather than just the changed word." },
+  { question: "Does this tool save or store the text I compare?", answer: "No, comparison happens entirely in your browser and nothing is sent to or stored on a server." },
+  { question: "Can I compare two entire documents at once?", answer: "Yes, paste the full text of each document into the two boxes — there's no strict length limit, though very large documents may take a moment longer to process." },
+];
 ---
 
 <Layout title="Free Text Diff Checker Online — Compare Two Texts">
@@ -33,6 +41,8 @@ import Layout from '../layouts/Layout.astro';
         you need to quickly spot what's different, without installing any software.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

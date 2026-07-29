@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What can I put into a QR code?", answer: "You can encode a website URL, plain text, a phone number, an email address, or Wi-Fi credentials — any of these will generate a scannable QR code." },
+  { question: "How do I scan a QR code?", answer: "Most modern smartphones can scan a QR code directly through the built-in camera app — just point the camera at the code and tap the notification that appears, no separate app needed." },
+  { question: "Can I download and print the QR code I generate?", answer: "Yes, once generated, click the Download button to save it as a PNG image, which you can print or share digitally." },
+  { question: "Does the QR code expire?", answer: "No, a QR code generated from static text or a URL does not expire — it will work for as long as the underlying URL or content remains valid." },
+  { question: "Is there a limit to how much text a QR code can hold?", answer: "Yes, QR codes have a data capacity limit depending on version and error correction level, but for typical URLs and short text, this is rarely an issue." },
+];
 ---
 
 <Layout title="Free QR Code Generator Online">
@@ -31,6 +39,8 @@ import Layout from '../layouts/Layout.astro';
         a message, or plain text — and lets you download it as an image to print or share.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

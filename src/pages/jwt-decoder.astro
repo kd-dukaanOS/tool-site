@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What is a JWT used for?", answer: "A JSON Web Token (JWT) is commonly used for authentication — after logging in, a server issues a JWT that the client includes in future requests to prove who they are." },
+  { question: "Does this tool verify if a JWT is valid or authentic?", answer: "No, this tool only decodes the header and payload to let you inspect their contents — it does not verify the cryptographic signature, so it should not be used to confirm a token's authenticity." },
+  { question: "Why does my JWT show an 'invalid format' error?", answer: "A valid JWT has exactly three parts separated by dots (header.payload.signature) — if your token is missing a part or has extra dots, it's not a valid JWT." },
+  { question: "Is it safe to paste a real JWT token into this tool?", answer: "Since all decoding happens locally in your browser and nothing is sent to a server, it's safe from a data-transmission standpoint — but avoid sharing tokens from production systems publicly regardless." },
+  { question: "What's inside a JWT payload?", answer: "The payload typically contains 'claims' — pieces of information like user ID, expiration time, and permissions, though the exact fields depend on how the issuing system was designed." },
+];
 ---
 
 <Layout title="Free JWT Decoder Online — Decode JSON Web Tokens">
@@ -36,6 +44,8 @@ import Layout from '../layouts/Layout.astro';
         proper backend verification.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

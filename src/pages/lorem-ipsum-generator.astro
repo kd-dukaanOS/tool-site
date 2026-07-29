@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "What does Lorem Ipsum text actually mean?", answer: "Lorem Ipsum is derived from a scrambled passage of Latin text and is intentionally meaningless — it's used purely as visual filler so real content doesn't distract from design." },
+  { question: "Why do designers use Lorem Ipsum instead of real text?", answer: "Placeholder text lets designers and developers preview layout, spacing, and typography without the specific wording influencing how a design looks." },
+  { question: "Can I generate Lorem Ipsum by word count instead of paragraphs?", answer: "Yes, select 'Words' from the dropdown and set your desired count." },
+  { question: "Is there a limit to how much Lorem Ipsum I can generate?", answer: "This tool supports up to 50 paragraphs, sentences, or words per generation, which covers most mockup and testing needs." },
+  { question: "Should I start with the classic 'Lorem ipsum dolor sit amet'?", answer: "That's optional — toggle the checkbox if you want your generated text to start with the traditional opening phrase." },
+];
 ---
 
 <Layout title="Free Lorem Ipsum Generator Online — Placeholder Text">
@@ -48,6 +56,8 @@ import Layout from '../layouts/Layout.astro';
         you need for mockups, wireframes, or testing a website layout.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "How do I calculate a percentage of a number?", answer: "Multiply the number by the percentage, then divide by 100. For example, 20% of 500 is calculated as (20 ÷ 100) × 500 = 100." },
+  { question: "How do I find what percentage one number is of another?", answer: "Divide the smaller number by the larger number, then multiply by 100. For example, to find what percent 50 is of 200, calculate (50 ÷ 200) × 100 = 25%." },
+  { question: "How do I calculate a discount or sale price?", answer: "Multiply the original price by the discount percentage to find the amount saved, then subtract that from the original price to get the final sale price." },
+  { question: "How is percentage increase or decrease calculated?", answer: "Subtract the original value from the new value, divide by the original value, then multiply by 100. A positive result means an increase; a negative result means a decrease." },
+  { question: "Why do businesses use percentages instead of raw numbers?", answer: "Percentages allow easy comparison between values of different sizes — a $10 discount means very different things on a $20 item versus a $1,000 item, but expressing both as a percentage makes the comparison clear." },
+];
 ---
 
 <Layout title="Free Percentage Calculator Online">
@@ -33,6 +41,8 @@ import Layout from '../layouts/Layout.astro';
         percentage increase or decrease between two values.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

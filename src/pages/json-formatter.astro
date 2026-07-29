@@ -1,5 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+
+const faqs = [{ question: "Why does my JSON show an error when I try to format it?", answer: "A formatting error usually means the JSON has a syntax issue — common causes include a missing comma, an extra trailing comma, or unmatched braces or brackets." },
+  { question: "What's the difference between formatting and minifying JSON?", answer: "Formatting adds indentation and line breaks to make JSON readable, while minifying removes whitespace to make the file as small as possible for production use." },
+  { question: "Is my JSON data sent to a server when I use this tool?", answer: "No, all formatting and validation happens directly in your browser — your data is never uploaded anywhere." },
+  { question: "Can this tool validate if my JSON is correct?", answer: "Yes, clicking Format will show an error if your JSON is invalid, or display the properly indented result if it's valid." },
+  { question: "What is JSON used for?", answer: "JSON is a lightweight data format used to exchange information between servers and applications, and it's the standard format for most modern APIs." },
+  
+];
 ---
 
 <Layout title="Free JSON Formatter & Validator Online">
@@ -49,6 +58,8 @@ import Layout from '../layouts/Layout.astro';
         If your JSON has a syntax error, this tool will tell you exactly what's wrong so you can fix it fast.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 

@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+const faqs = [
+  { question: "Why do computers use binary instead of decimal?", answer: "Computers are built from electronic switches with two states (on/off), which map directly to binary's two digits (0 and 1), making binary the natural internal representation for digital hardware." },
+  { question: "Why is hexadecimal commonly used in programming?", answer: "Hexadecimal is compact and maps cleanly to binary (each hex digit represents exactly 4 binary digits), making it a convenient shorthand for things like memory addresses and color codes." },
+  { question: "How do I convert binary to decimal manually?", answer: "Multiply each binary digit by its corresponding power of 2 (starting from the rightmost digit as 2⁰) and sum the results." },
+  { question: "What is octal used for today?", answer: "Octal is less common now but still appears in some legacy systems and in Unix/Linux file permission notation (like chmod 755)." },
+  { question: "Can this tool handle negative numbers?", answer: "This tool is designed for positive whole numbers across all four bases; negative number representation varies by system and isn't covered here." },
+];
 ---
 
 <Layout title="Free Number Base Converter — Binary, Decimal, Hex, Octal">
@@ -37,6 +45,8 @@ import Layout from '../layouts/Layout.astro';
         and this tool instantly converts it into all the others.
       </p>
     </section>
+
+    <FaqSection faqs={faqs} />
   </main>
 </Layout>
 
