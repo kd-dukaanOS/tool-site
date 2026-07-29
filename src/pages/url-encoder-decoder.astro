@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free URL Encoder & Decoder Online">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">URL Encoder & Decoder</h1>
+    <p class="text-gray-600 mb-6">Encode text for safe use in URLs, or decode URL-encoded text back to normal.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Input</label>
+        <textarea
+          id="urlInput"
+          class="w-full h-56 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Type or paste text/URL here"
+        ></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Output</label>
+        <textarea
+          id="urlOutput"
+          class="w-full h-56 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100"
+          readonly
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-4">
+      <button id="urlEncodeBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Encode</button>
+      <button id="urlDecodeBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Decode</button>
+      <button id="urlCopyBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy Output</button>
+      <button id="urlClearBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
+    </div>
+
+    <p id="urlError" class="text-red-600 mt-3 font-medium"></p>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This URL Encoder/Decoder</h2>
+      <p>
+        URL encoding (also called percent-encoding) converts special characters in text into a format that can be
+        safely transmitted in a URL, replacing characters like spaces and symbols with percent-encoded sequences.
+        This tool lets you instantly encode plain text or a URL for safe use in query strings and links, or decode
+        an already-encoded URL back into readable text — all directly in your browser.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const input = document.getElementById('urlInput');
+  const output = document.getElementById('urlOutput');
+  const errorEl = document.getElementById('urlError');
+  const encodeBtn = document.getElementById('urlEncodeBtn');
+  const decodeBtn = document.getElementById('urlDecodeBtn');
+  const copyBtn = document.getElementById('urlCopyBtn');
+  const clearBtn = document.getElementById('urlClearBtn');
+
+  if (input instanceof HTMLTextAreaElement && output instanceof HTMLTextAreaElement && errorEl) {
+    encodeBtn?.addEventListener('click', () => {
+      output.value = encodeURIComponent(input.value);
+      errorEl.textContent = '';
+    });
+
+    decodeBtn?.addEventListener('click', () => {
+      try {
+        output.value = decodeURIComponent(input.value);
+        errorEl.textContent = '';
+      } catch (e) {
+        errorEl.textContent = 'Invalid encoded input: ' + (e instanceof Error ? e.message : String(e));
+        output.value = '';
+      }
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      navigator.clipboard.writeText(output.value);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      errorEl.textContent = '';
+    });
+  }
+</script>

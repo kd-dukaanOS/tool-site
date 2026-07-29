@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free Lorem Ipsum Generator Online — Placeholder Text">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Lorem Ipsum Generator</h1>
+    <p class="text-gray-600 mb-6">Generate placeholder text instantly — by paragraphs, sentences, or words.</p>
+
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <select
+        id="loremType"
+        class="p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      >
+        <option value="paragraphs">Paragraphs</option>
+        <option value="sentences">Sentences</option>
+        <option value="words">Words</option>
+      </select>
+      <input
+        id="loremCount"
+        type="number"
+        min="1"
+        max="50"
+        value="3"
+        class="w-24 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <label class="flex items-center gap-2 text-sm text-gray-700">
+        <input id="startWithLorem" type="checkbox" checked class="w-4 h-4" />
+        Start with "Lorem ipsum..."
+      </label>
+      <button id="generateLoremBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Generate</button>
+      <button id="copyLoremBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy</button>
+    </div>
+
+    <textarea
+      id="loremOutput"
+      class="w-full h-72 p-3 border border-gray-300 rounded-lg text-sm bg-gray-50"
+      readonly
+      placeholder="Generated text will appear here"
+    ></textarea>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This Lorem Ipsum Generator</h2>
+      <p>
+        Lorem Ipsum is placeholder text used by designers and developers to fill layouts before real content is
+        ready, letting you preview typography, spacing, and design without being distracted by meaningful words.
+        This tool generates Lorem Ipsum text by paragraphs, sentences, or words, so you can get exactly the amount
+        you need for mockups, wireframes, or testing a website layout.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  // @ts-nocheck
+  const loremWords = [
+    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do','eiusmod','tempor',
+    'incididunt','ut','labore','et','dolore','magna','aliqua','enim','ad','minim','veniam','quis','nostrud',
+    'exercitation','ullamco','laboris','nisi','aliquip','ex','ea','commodo','consequat','duis','aute','irure',
+    'in','reprehenderit','voluptate','velit','esse','cillum','fugiat','nulla','pariatur','excepteur','sint',
+    'occaecat','cupidatat','non','proident','sunt','culpa','qui','officia','deserunt','mollit','anim','id','est','laborum'
+  ];
+
+  function randomWord() {
+    return loremWords[Math.floor(Math.random() * loremWords.length)];
+  }
+
+  function makeSentence(startWithLorem = false) {
+    const len = 6 + Math.floor(Math.random() * 10);
+    const words = [];
+    for (let i = 0; i < len; i++) words.push(randomWord());
+    if (startWithLorem) {
+      words[0] = 'Lorem';
+      words[1] = 'ipsum';
+      words[2] = 'dolor';
+      words[3] = 'sit';
+      words[4] = 'amet,';
+    } else {
+      words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+    }
+    return words.join(' ') + '.';
+  }
+
+  function makeParagraph(/** @type {number} */ sentenceCount, startWithLorem = false) {
+    const sentences = [];
+    for (let i = 0; i < sentenceCount; i++) {
+      sentences.push(makeSentence(startWithLorem && i === 0));
+    }
+    return sentences.join(' ');
+  }
+
+  const typeSelect = document.getElementById('loremType');
+  const countInput = document.getElementById('loremCount');
+  const startCheckbox = document.getElementById('startWithLorem');
+  const output = document.getElementById('loremOutput');
+  const generateBtn = document.getElementById('generateLoremBtn');
+  const copyBtn = document.getElementById('copyLoremBtn');
+
+  if (
+    typeSelect instanceof HTMLSelectElement &&
+    countInput instanceof HTMLInputElement &&
+    startCheckbox instanceof HTMLInputElement &&
+    output instanceof HTMLTextAreaElement
+  ) {
+    generateBtn?.addEventListener('click', () => {
+      let count = parseInt(countInput.value, 10);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 50) count = 50;
+
+      const type = typeSelect.value;
+      const startLorem = startCheckbox.checked;
+
+      if (type === 'words') {
+        const words = [];
+        for (let i = 0; i < count; i++) words.push(randomWord());
+        if (startLorem) {
+          words[0] = 'Lorem';
+          if (words[1]) words[1] = 'ipsum';
+        }
+        output.value = words.join(' ');
+      } else if (type === 'sentences') {
+        const sentences = [];
+        for (let i = 0; i < count; i++) sentences.push(makeSentence(startLorem && i === 0));
+        output.value = sentences.join(' ');
+      } else {
+        const paragraphs = [];
+        for (let i = 0; i < count; i++) paragraphs.push(makeParagraph(4, startLorem && i === 0));
+        output.value = paragraphs.join('\n\n');
+      }
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      navigator.clipboard.writeText(output.value);
+    });
+  }
+</script>

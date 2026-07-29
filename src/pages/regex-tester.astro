@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free Regex Tester Online — Test Regular Expressions Instantly">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Regex Tester</h1>
+    <p class="text-gray-600 mb-6">Test your regular expressions against sample text instantly, with live match highlighting.</p>
+
+    <div class="flex flex-wrap gap-3 mb-4">
+      <input
+        id="regexPattern"
+        type="text"
+        placeholder="Enter regex pattern, e.g. \d+"
+        class="flex-1 min-w-[200px] p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        id="regexFlags"
+        type="text"
+        placeholder="Flags, e.g. gi"
+        class="w-28 p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+
+    <label class="block text-sm font-medium text-gray-700 mb-1">Test String</label>
+    <textarea
+      id="testString"
+      class="w-full h-48 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Paste text to test your regex against..."
+    ></textarea>
+
+    <div class="mt-4">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Matches</label>
+      <div id="matchResult" class="p-3 border border-gray-300 rounded-lg bg-gray-50 min-h-[80px] text-sm whitespace-pre-wrap"></div>
+    </div>
+
+    <p id="regexError" class="text-red-600 mt-3 font-medium"></p>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This Regex Tester</h2>
+      <p>
+        This free regex tester lets you check regular expressions against real text instantly, right in your browser.
+        Enter a pattern, add flags like <code>g</code> for global or <code>i</code> for case-insensitive, then paste
+        your test string to see every match highlighted along with the total match count. Useful for developers
+        validating input formats, extracting data, or debugging regular expressions before using them in code.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const patternInput = document.getElementById('regexPattern');
+  const flagsInput = document.getElementById('regexFlags');
+  const testStringInput = document.getElementById('testString');
+  const matchResult = document.getElementById('matchResult');
+  const errorEl = document.getElementById('regexError');
+
+  if (
+    patternInput instanceof HTMLInputElement &&
+    flagsInput instanceof HTMLInputElement &&
+    testStringInput instanceof HTMLTextAreaElement &&
+    matchResult &&
+    errorEl
+  ) {
+    const runMatch = () => {
+      const pattern = patternInput.value;
+      const flags = flagsInput.value;
+      const text = testStringInput.value;
+
+      errorEl.textContent = '';
+
+      if (!pattern) {
+        matchResult.innerHTML = '';
+        return;
+      }
+
+      try {
+        const regex = new RegExp(pattern, flags);
+        const matches = [...text.matchAll(new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'))];
+
+        if (matches.length === 0) {
+          matchResult.textContent = 'No matches found.';
+        } else {
+          let highlighted = text;
+          const escapeHtml = (str: string) =>
+            str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+          highlighted = escapeHtml(text).replace(
+            new RegExp(escapeHtml(pattern) === pattern ? pattern : pattern, flags.includes('g') ? flags : flags + 'g'),
+            (m) => `<mark class="bg-yellow-200">${escapeHtml(m)}</mark>`
+          );
+
+          matchResult.innerHTML = `<strong>${matches.length} match(es) found</strong><br><br>${highlighted}`;
+        }
+      } catch (e) {
+        errorEl.textContent = 'Invalid regex: ' + (e instanceof Error ? e.message : String(e));
+        matchResult.innerHTML = '';
+      }
+    };
+
+    patternInput.addEventListener('input', runMatch);
+    flagsInput.addEventListener('input', runMatch);
+    testStringInput.addEventListener('input', runMatch);
+  }
+</script>

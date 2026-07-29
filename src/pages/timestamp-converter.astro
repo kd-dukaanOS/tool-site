@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free Unix Timestamp Converter Online">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Timestamp Converter</h1>
+    <p class="text-gray-600 mb-6">Convert between Unix timestamps and human-readable dates, instantly.</p>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+      <p class="text-sm text-gray-500 mb-1">Current Unix Timestamp</p>
+      <p id="currentTimestamp" class="text-2xl font-mono font-bold text-blue-600"></p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Unix Timestamp → Date</label>
+        <input
+          id="timestampInput"
+          type="text"
+          placeholder="e.g. 1735689600"
+          class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <p id="timestampToDateResult" class="mt-2 text-gray-800 font-medium"></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Date → Unix Timestamp</label>
+        <input
+          id="dateInput"
+          type="datetime-local"
+          class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <p id="dateToTimestampResult" class="mt-2 text-gray-800 font-medium"></p>
+      </div>
+    </div>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This Timestamp Converter</h2>
+      <p>
+        A Unix timestamp represents the number of seconds elapsed since January 1, 1970 (UTC), often called the
+        "Unix epoch." Developers use this format constantly for storing dates in databases, APIs, and logs because
+        it's a single number, timezone-independent, and easy to compare. This tool converts a Unix timestamp into a
+        readable date, or a date you pick into its Unix timestamp equivalent, instantly in your browser.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const currentTimestampEl = document.getElementById('currentTimestamp');
+  const timestampInput = document.getElementById('timestampInput');
+  const timestampToDateResult = document.getElementById('timestampToDateResult');
+  const dateInput = document.getElementById('dateInput');
+  const dateToTimestampResult = document.getElementById('dateToTimestampResult');
+
+  if (currentTimestampEl) {
+    currentTimestampEl.textContent = String(Math.floor(Date.now() / 1000));
+  }
+
+  if (timestampInput instanceof HTMLInputElement && timestampToDateResult) {
+    timestampInput.addEventListener('input', () => {
+      const val = parseInt(timestampInput.value, 10);
+      if (isNaN(val)) {
+        timestampToDateResult.textContent = '';
+        return;
+      }
+      const date = new Date(val * 1000);
+      timestampToDateResult.textContent = date.toUTCString();
+    });
+  }
+
+  if (dateInput instanceof HTMLInputElement && dateToTimestampResult) {
+    dateInput.addEventListener('input', () => {
+      if (!dateInput.value) {
+        dateToTimestampResult.textContent = '';
+        return;
+      }
+      const date = new Date(dateInput.value);
+      dateToTimestampResult.textContent = String(Math.floor(date.getTime() / 1000));
+    });
+  }
+</script>
