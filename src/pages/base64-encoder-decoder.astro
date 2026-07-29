@@ -1,0 +1,40 @@
+<script>
+  const input = document.getElementById('base64Input');
+  const output = document.getElementById('base64Output');
+  const errorMsg = document.getElementById('base64ErrorMsg');
+  const encodeBtn = document.getElementById('encodeBtn');
+  const decodeBtn = document.getElementById('decodeBtn');
+  const copyBtn = document.getElementById('copyBase64Btn');
+  const clearBtn = document.getElementById('clearBase64Btn');
+
+  if (input instanceof HTMLTextAreaElement && output instanceof HTMLTextAreaElement && errorMsg) {
+    encodeBtn?.addEventListener('click', () => {
+      try {
+        output.value = btoa(input.value);
+        errorMsg.textContent = '';
+      } catch (e) {
+        errorMsg.textContent = 'Could not encode: ' + (e instanceof Error ? e.message : String(e));
+      }
+    });
+
+    decodeBtn?.addEventListener('click', () => {
+      try {
+        output.value = atob(input.value);
+        errorMsg.textContent = '';
+      } catch (e) {
+        errorMsg.textContent = 'Invalid Base64 input: ' + (e instanceof Error ? e.message : String(e));
+        output.value = '';
+      }
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      navigator.clipboard.writeText(output.value);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      errorMsg.textContent = '';
+    });
+  }
+</script>
