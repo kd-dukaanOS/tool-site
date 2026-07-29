@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free QR Code Generator Online">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">QR Code Generator</h1>
+    <p class="text-gray-600 mb-6">Enter any text or URL and instantly generate a downloadable QR code.</p>
+
+    <input
+      id="qrInput"
+      type="text"
+      placeholder="Enter URL or text..."
+      class="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
+    />
+
+    <div class="flex gap-3 mb-6">
+      <button id="generateQrBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Generate QR Code</button>
+      <a id="downloadQrBtn" href="#" download="qrcode.png" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hidden">Download</a>
+    </div>
+
+    <div class="flex justify-center">
+      <img id="qrImage" class="border border-gray-200 rounded-lg hidden" alt="Generated QR Code" />
+    </div>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This QR Code Generator</h2>
+      <p>
+        A QR code is a scannable barcode that can store URLs, text, contact info, or Wi-Fi credentials, readable
+        instantly by any smartphone camera. This tool generates a QR code for anything you type — a website link,
+        a message, or plain text — and lets you download it as an image to print or share.
+      </p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  // @ts-nocheck
+  const input = document.getElementById('qrInput');
+  const generateBtn = document.getElementById('generateQrBtn');
+  const downloadBtn = document.getElementById('downloadQrBtn');
+  const qrImage = document.getElementById('qrImage');
+
+  generateBtn?.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (!text) return;
+
+    const encoded = encodeURIComponent(text);
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}`;
+
+    qrImage.src = url;
+    qrImage.classList.remove('hidden');
+    downloadBtn.href = url;
+    downloadBtn.classList.remove('hidden');
+  });
+</script>
