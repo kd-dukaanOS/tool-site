@@ -1,3 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Free Base64 Encoder & Decoder Online">
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Base64 Encoder & Decoder</h1>
+    <p class="text-gray-600 mb-6">Convert text to Base64, or decode Base64 back to plain text — instantly, in your browser.</p>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Input</label>
+        <textarea
+          id="base64Input"
+          class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Type or paste text here"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Output</label>
+        <textarea
+          id="base64Output"
+          class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100"
+          readonly
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-4">
+      <button id="encodeBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Encode to Base64</button>
+      <button id="decodeBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Decode from Base64</button>
+      <button id="copyBase64Btn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy Output</button>
+      <button id="clearBase64Btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
+    </div>
+
+    <p id="base64ErrorMsg" class="text-red-600 mt-3 font-medium"></p>
+
+    <section class="mt-12 text-gray-700 leading-relaxed">
+      <h2 class="text-xl font-semibold mb-2">About This Base64 Tool</h2>
+      <p>
+        Base64 encoding converts text or binary data into a text-safe format made up of letters, numbers, and symbols.
+        It's commonly used for embedding data in URLs, storing data in JSON, or sending binary data over text-based protocols like email.
+        This tool lets you instantly encode plain text to Base64, or decode Base64 back into readable text, entirely in your browser — nothing is sent to a server.
+      </p>
+    </section>
+  </main>
+</Layout>
+
 <script>
   const input = document.getElementById('base64Input');
   const output = document.getElementById('base64Output');
