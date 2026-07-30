@@ -1,23 +1,25 @@
 ---
 ---
 
-<div class="flex items-center gap-4 mb-6">
-  <input id="colorPicker" type="color" value="#4F46E5" class="w-16 h-16 rounded-lg border border-gray-300 cursor-pointer" />
-  <div id="colorPreview" class="w-16 h-16 rounded-lg border border-gray-300" style="background-color:#4F46E5"></div>
-</div>
+<div class="tool-panel">
+  <div class="flex items-center gap-4 mb-6">
+    <input id="colorPicker" type="color" value="#4F46E5" class="w-16 h-16 rounded-lg border border-gray-300 cursor-pointer" />
+    <div id="colorPreview" class="w-16 h-16 rounded-lg border border-gray-300" style="background-color:#4F46E5"></div>
+  </div>
 
-<div class="space-y-3">
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">HEX</label>
-    <input id="hexValue" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-  </div>
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">RGB</label>
-    <input id="rgbValue" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-  </div>
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">HSL</label>
-    <input id="hslValue" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+  <div class="space-y-3">
+    <div>
+      <label class="tool-label" for="hexValue">HEX</label>
+      <input id="hexValue" type="text" class="tool-textarea" style="height:auto" />
+    </div>
+    <div>
+      <label class="tool-label" for="rgbValue">RGB</label>
+      <input id="rgbValue" type="text" class="tool-textarea" style="height:auto" />
+    </div>
+    <div>
+      <label class="tool-label" for="hslValue">HSL</label>
+      <input id="hslValue" type="text" class="tool-textarea" style="height:auto" />
+    </div>
   </div>
 </div>
 

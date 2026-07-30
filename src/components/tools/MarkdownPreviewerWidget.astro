@@ -1,21 +1,21 @@
 ---
 ---
 
-<div class="grid md:grid-cols-2 gap-4">
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Markdown Input</label>
-    <textarea
-      id="markdownInput"
-      class="w-full h-96 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-      placeholder="# Heading&#10;&#10;Type **bold**, *italic*, - lists, and more..."
-    ></textarea>
-  </div>
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Live Preview</label>
-    <div
-      id="markdownPreview"
-      class="w-full h-96 p-3 border border-gray-300 rounded-lg bg-white overflow-y-auto prose prose-sm max-w-none"
-    ></div>
+<div class="tool-panel">
+  <div class="tool-grid-2">
+    <div>
+      <label class="tool-label" for="markdownInput">Markdown Input</label>
+      <textarea
+        id="markdownInput"
+        class="tool-textarea"
+        style="height:24rem"
+        placeholder="# Heading&#10;&#10;Type **bold**, *italic*, - lists, and more..."
+      ></textarea>
+    </div>
+    <div>
+      <label class="tool-label" for="markdownPreview">Live Preview</label>
+      <div id="markdownPreview" class="tool-textarea prose prose-sm max-w-none" style="height:24rem;overflow-y:auto"></div>
+    </div>
   </div>
 </div>
 

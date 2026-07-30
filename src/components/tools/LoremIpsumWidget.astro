@@ -1,37 +1,27 @@
 ---
 ---
 
-<div class="flex flex-wrap items-center gap-3 mb-4">
-  <select
-    id="loremType"
-    class="p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  >
-    <option value="paragraphs">Paragraphs</option>
-    <option value="sentences">Sentences</option>
-    <option value="words">Words</option>
-  </select>
-  <input
-    id="loremCount"
-    type="number"
-    min="1"
-    max="50"
-    value="3"
-    class="w-24 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  />
-  <label class="flex items-center gap-2 text-sm text-gray-700">
-    <input id="startWithLorem" type="checkbox" checked class="w-4 h-4" />
-    Start with "Lorem ipsum..."
-  </label>
-  <button id="generateLoremBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Generate</button>
-  <button id="copyLoremBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy</button>
-</div>
+<div class="tool-panel">
+  <div class="flex flex-wrap items-center gap-3 mb-4">
+    <select id="loremType" class="tool-textarea" style="height:auto;width:auto">
+      <option value="paragraphs">Paragraphs</option>
+      <option value="sentences">Sentences</option>
+      <option value="words">Words</option>
+    </select>
+    <input id="loremCount" type="number" min="1" max="50" value="3" class="tool-textarea" style="height:auto;width:6rem" />
+    <label class="flex items-center gap-2 text-sm" style="color:var(--color-text)">
+      <input id="startWithLorem" type="checkbox" checked class="w-4 h-4" />
+      Start with "Lorem ipsum..."
+    </label>
+    <div class="tool-actions" style="margin-top:0">
+      <button id="generateLoremBtn" class="tool-btn tool-btn-primary">Generate</button>
+      <button id="copyLoremBtn" class="tool-btn tool-btn-secondary">Copy</button>
+    </div>
+  </div>
 
-<textarea
-  id="loremOutput"
-  class="w-full h-72 p-3 border border-gray-300 rounded-lg text-sm bg-gray-50"
-  readonly
-  placeholder="Generated text will appear here"
-></textarea>
+  <label class="tool-label" for="loremOutput">Output</label>
+  <textarea id="loremOutput" class="tool-textarea" style="height:18rem" readonly placeholder="Generated text will appear here"></textarea>
+</div>
 
 <script>
   // @ts-nocheck

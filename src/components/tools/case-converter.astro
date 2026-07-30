@@ -1,0 +1,38 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro'; // adjust path
+import CaseConverterWidget from '../../components/CaseConverterWidget.astro'; // adjust path
+---
+
+<ToolLayout
+  title="Case Converter"
+  description="Free online case converter. Instantly switch text between UPPERCASE, lowercase, Title Case, Sentence case, and aLtErNaTiNg case."
+  slug="case-converter"
+>
+  <p class="tool-intro">
+    Paste your text below and pick a format — uppercase, lowercase, title case,
+    sentence case, or alternating case. Conversion happens instantly in your
+    browser, with no upload or sign-up required.
+  </p>
+
+  <CaseConverterWidget />
+
+  <dl class="tool-faq">
+    <dt>What is Title Case?</dt>
+    <dd>
+      Title Case capitalizes the first letter of every word — the style
+      commonly used for headlines, book titles, and article headings.
+    </dd>
+
+    <dt>What is Sentence case?</dt>
+    <dd>
+      Sentence case capitalizes only the first letter of each sentence,
+      matching how normal written sentences are formatted.
+    </dd>
+
+    <dt>Does this tool store or share my text?</dt>
+    <dd>
+      No. All conversions happen locally in your browser using JavaScript —
+      your text never leaves your device.
+    </dd>
+  </dl>
+</ToolLayout>

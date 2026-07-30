@@ -3,46 +3,27 @@
 // Just the interactive part — no page shell, no Layout. This gets dropped
 // into [category]/[tool].astro's placeholder spot for the json-formatter tool.
 ---
-<div class="json-tool">
-  <div class="json-grid">
+<div class="tool-panel">
+  <div class="tool-grid-2">
     <div>
-      <label for="jsonInput">Input JSON</label>
-      <textarea id="jsonInput" placeholder='{"name": "example", "value": 123}'></textarea>
+      <label class="tool-label" for="jsonInput">Input JSON</label>
+      <textarea id="jsonInput" class="tool-textarea" placeholder='{"name": "example", "value": 123}'></textarea>
     </div>
     <div>
-      <label for="jsonOutput">Output</label>
-      <textarea id="jsonOutput" readonly></textarea>
+      <label class="tool-label" for="jsonOutput">Output</label>
+      <textarea id="jsonOutput" class="tool-textarea" readonly></textarea>
     </div>
   </div>
 
-  <div class="json-actions">
-    <button id="formatBtn" class="btn-primary">Format</button>
-    <button id="minifyBtn" class="btn-secondary">Minify</button>
-    <button id="copyBtn" class="btn-secondary">Copy Output</button>
-    <button id="clearBtn" class="btn-secondary">Clear</button>
+  <div class="tool-actions">
+    <button id="formatBtn" class="tool-btn tool-btn-primary">Format</button>
+    <button id="minifyBtn" class="tool-btn tool-btn-secondary">Minify</button>
+    <button id="copyBtn" class="tool-btn tool-btn-secondary">Copy Output</button>
+    <button id="clearBtn" class="tool-btn tool-btn-danger">Clear</button>
   </div>
 
-  <p id="errorMsg" class="json-error"></p>
+  <p id="errorMsg" class="tool-error"></p>
 </div>
-
-<style>
-  .json-tool { margin: 8px 0 24px; }
-  .json-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .json-grid label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-  .json-grid textarea {
-    width: 100%; height: 280px; padding: 12px; border: 1px solid var(--border); border-radius: 10px;
-    font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--surface); color: var(--ink); resize: vertical;
-  }
-  .json-grid textarea:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
-  .json-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-  .json-actions button { border: none; border-radius: 9px; padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-  .btn-primary { background: var(--primary); color: #fff; }
-  .btn-primary:hover { background: var(--primary-hover); }
-  .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
-  .json-error { color: #EF4444; margin-top: 10px; font-size: 13.5px; font-weight: 600; min-height: 18px; }
-  @media (max-width: 640px) { .json-grid { grid-template-columns: 1fr; } }
-</style>
 
 <script>
   const input = document.getElementById('jsonInput') as HTMLTextAreaElement;

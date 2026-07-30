@@ -1,22 +1,26 @@
 ---
 ---
 
-<div class="grid md:grid-cols-2 gap-4">
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Original Text</label>
-    <textarea id="diffInput1" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Paste original text..."></textarea>
+<div class="tool-panel">
+  <div class="tool-grid-2">
+    <div>
+      <label class="tool-label" for="diffInput1">Original Text</label>
+      <textarea id="diffInput1" class="tool-textarea" placeholder="Paste original text..."></textarea>
+    </div>
+    <div>
+      <label class="tool-label" for="diffInput2">Changed Text</label>
+      <textarea id="diffInput2" class="tool-textarea" placeholder="Paste changed text..."></textarea>
+    </div>
   </div>
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Changed Text</label>
-    <textarea id="diffInput2" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Paste changed text..."></textarea>
+
+  <div class="tool-actions">
+    <button id="compareBtn" class="tool-btn tool-btn-primary">Compare</button>
   </div>
-</div>
 
-<button id="compareBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 mt-4">Compare</button>
-
-<div class="mt-6">
-  <label class="block text-sm font-medium text-gray-700 mb-1">Result</label>
-  <div id="diffResult" class="p-3 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm whitespace-pre-wrap min-h-[100px]"></div>
+  <div class="mt-6">
+    <label class="tool-label" for="diffResult">Result</label>
+    <div id="diffResult" class="tool-textarea" style="height:auto;min-height:100px;white-space:pre-wrap"></div>
+  </div>
 </div>
 
 <script>
