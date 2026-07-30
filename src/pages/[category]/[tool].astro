@@ -3,6 +3,25 @@
 import Layout from "../../layouts/Layout.astro";
 import FaqSection from "../../components/FaqSection.astro";
 import JsonFormatterWidget from "../../components/tools/JsonFormatterWidget.astro";
+import Base64Widget from "../../components/tools/Base64Widget.astro";
+import CaseConverterWidget from "../../components/tools/CaseConverterWidget.astro";
+import ColorConverterWidget from "../../components/tools/ColorConverterWidget.astro";
+import CsvJsonWidget from "../../components/tools/CsvJsonWidget.astro";
+import DiffCheckerWidget from "../../components/tools/DiffCheckerWidget.astro";
+import HashGeneratorWidget from "../../components/tools/HashGeneratorWidget.astro";
+import JwtDecoderWidget from "../../components/tools/JwtDecoderWidget.astro";
+import LoremIpsumWidget from "../../components/tools/LoremIpsumWidget.astro";
+import MarkdownPreviewerWidget from "../../components/tools/MarkdownPreviewerWidget.astro";
+import NumberBaseConverterWidget from "../../components/tools/NumberBaseConverterWidget.astro";
+import PasswordGeneratorWidget from "../../components/tools/PasswordGeneratorWidget.astro";
+import PercentageCalculatorWidget from "../../components/tools/PercentageCalculatorWidget.astro";
+import QrCodeGeneratorWidget from "../../components/tools/QrCodeGeneratorWidget.astro";
+import RegexTesterWidget from "../../components/tools/RegexTesterWidget.astro";
+import SlugGeneratorWidget from "../../components/tools/SlugGeneratorWidget.astro";
+import TimestampConverterWidget from "../../components/tools/TimestampConverterWidget.astro";
+import UrlEncoderDecoderWidget from "../../components/tools/UrlEncoderDecoderWidget.astro";
+import UuidGeneratorWidget from "../../components/tools/UuidGeneratorWidget.astro";
+import WordCounterWidget from "../../components/tools/WordCounterWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 
 // Build one real page per tool (20 pages total from this one file).
@@ -18,7 +37,12 @@ export function getStaticPaths() {
   });
 }
 
-const { tool, category } = Astro.props;
+interface Props {
+  tool: (typeof tools)[number];
+  category: (typeof categories)[number];
+}
+
+const { tool, category } = Astro.props as Props;
 
 // "Related tools" = other tools in the same category, excluding this one
 const relatedTools = tools
@@ -49,7 +73,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
 
     <div class="category-header">
       <div class="cat-icon">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category]} />
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category as keyof typeof categoryIcons]} />
       </div>
       <div>
         <h1>{tool.name}</h1>
@@ -64,6 +88,44 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     -->
     {tool.slug === "json-formatter" ? (
       <JsonFormatterWidget />
+    ) : tool.slug === "base64-tool" ? (
+      <Base64Widget />
+    ) : tool.slug === "case-converter" ? (
+      <CaseConverterWidget />
+    ) : tool.slug === "color-converter" ? (
+      <ColorConverterWidget />
+    ) : tool.slug === "csv-json-converter" ? (
+      <CsvJsonWidget />
+    ) : tool.slug === "diff-checker" ? (
+      <DiffCheckerWidget />
+    ) : tool.slug === "hash-generator" ? (
+      <HashGeneratorWidget />
+    ) : tool.slug === "jwt-decoder" ? (
+      <JwtDecoderWidget />
+    ) : tool.slug === "lorem-ipsum-generator" ? (
+      <LoremIpsumWidget />
+    ) : tool.slug === "markdown-previewer" ? (
+      <MarkdownPreviewerWidget />
+    ) : tool.slug === "number-base-converter" ? (
+      <NumberBaseConverterWidget />
+    ) : tool.slug === "password-generator" ? (
+      <PasswordGeneratorWidget />
+    ) : tool.slug === "percentage-calculator" ? (
+      <PercentageCalculatorWidget />
+    ) : tool.slug === "qr-code-generator" ? (
+      <QrCodeGeneratorWidget />
+    ) : tool.slug === "regex-tester" ? (
+      <RegexTesterWidget />
+    ) : tool.slug === "slug-generator" ? (
+      <SlugGeneratorWidget />
+    ) : tool.slug === "timestamp-converter" ? (
+      <TimestampConverterWidget />
+    ) : tool.slug === "url-encoder-decoder" ? (
+      <UrlEncoderDecoderWidget />
+    ) : tool.slug === "uuid-generator" ? (
+      <UuidGeneratorWidget />
+    ) : tool.slug === "word-counter" ? (
+      <WordCounterWidget />
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>
@@ -77,7 +139,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       </section>
     )}
 
-    <FaqSection faqs={tool.faqs} />
+    <FaqSection faqs={tool.faqs || []} />
   </div>
 
   {faqSchema && (
@@ -92,7 +154,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
           {relatedTools.map((t) => (
             <a href={`/${t.category}/${t.slug}/`} class="tool-card">
               <div class="tool-icon">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[t.category]} />
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[t.category as keyof typeof categoryIcons]} />
               </div>
               <div><h4>{t.name}</h4><p>{t.desc}</p></div>
             </a>

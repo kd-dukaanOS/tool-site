@@ -6,6 +6,7 @@ import { categories, tools } from "../data/tools.js";
 const { title = "ToolSite — Free Online Developer Tools", description = "20+ free online tools for developers, creators, and everyday tasks. Fast, simple, and it never leaves your browser." } = Astro.props;
 const footerCategories = categories.slice(0, 4);
 const footerPopular = tools.slice(0, 3);
+const toolsForSearch = tools.map((t) => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc }));
 ---
 
 <!DOCTYPE html>
@@ -39,9 +40,13 @@ const footerPopular = tools.slice(0, 3);
         <a href="/blog/">Blog</a>
         <a href="/about/">About</a>
       </nav>
-      <div class="header-search">
+      <div class="header-search" id="header-search-wrap">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input placeholder="Search tools…" id="header-search-input" />
+        <input placeholder="Search tools…" id="header-search-input" autocomplete="off" />
+        <button class="search-clear" id="header-search-clear" type="button" aria-label="Clear search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="search-suggestions" id="header-search-suggestions"></div>
       </div>
       <button class="icon-btn" id="dark-toggle" aria-label="Toggle dark mode">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg>
@@ -76,6 +81,69 @@ const footerPopular = tools.slice(0, 3);
     });
   </script>
 
+  <script define:vars={{ toolsForSearch }}>
+    const input = document.getElementById('header-search-input');
+    const clearBtn = document.getElementById('header-search-clear');
+    const suggestionsBox = document.getElementById('header-search-suggestions');
+    const wrap = document.getElementById('header-search-wrap');
+
+    function renderSuggestions(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) {
+        suggestionsBox.innerHTML = '';
+        suggestionsBox.classList.remove('open');
+        return;
+      }
+      const matches = toolsForSearch
+        .filter((t) => t.name.toLowerCase().startsWith(q))
+        .slice(0, 6);
+
+      if (matches.length === 0) {
+        suggestionsBox.innerHTML = '<div class="search-empty">No tools found</div>';
+        suggestionsBox.classList.add('open');
+        return;
+      }
+
+      suggestionsBox.innerHTML = matches
+        .map(
+          (t) =>
+            `<a href="/${t.category}/${t.slug}/" class="search-item"><span class="search-item-name">${t.name}</span><span class="search-item-desc">${t.desc}</span></a>`
+        )
+        .join('');
+      suggestionsBox.classList.add('open');
+    }
+
+    input?.addEventListener('input', () => {
+      clearBtn.style.display = input.value ? 'flex' : 'none';
+      renderSuggestions(input.value);
+    });
+
+    input?.addEventListener('focus', () => {
+      if (input.value) renderSuggestions(input.value);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.style.display = 'none';
+      suggestionsBox.innerHTML = '';
+      suggestionsBox.classList.remove('open');
+      input.focus();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) {
+        suggestionsBox.classList.remove('open');
+      }
+    });
+
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        suggestionsBox.classList.remove('open');
+        input.blur();
+      }
+    });
+  </script>
+
 </body>
 </html>
 
@@ -106,9 +174,19 @@ const footerPopular = tools.slice(0, 3);
   .logo .mark { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; }
   nav.top { display: flex; gap: 22px; font-size: 14px; color: var(--muted); font-weight: 500; }
   nav.top a:hover { color: var(--ink); }
-  .header-search { margin-left: auto; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 8px 12px; color: var(--muted); font-size: 13px; width: 220px; cursor: text; transition: width .2s ease, border-color .2s ease; }
+  .header-search { position: relative; margin-left: auto; display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 8px 12px; color: var(--muted); font-size: 13px; width: 220px; cursor: text; transition: width .2s ease, border-color .2s ease; }
   .header-search:hover, .header-search:focus-within { width: 280px; border-color: var(--primary); }
   .header-search input { border: none; outline: none; background: none; flex: 1; font-size: 13px; color: var(--ink); font-family: inherit; }
+  .search-clear { display: none; align-items: center; justify-content: center; background: none; border: none; color: var(--muted); cursor: pointer; padding: 2px; flex-shrink: 0; }
+  .search-clear:hover { color: var(--ink); }
+  .search-suggestions { display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; min-width: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); overflow: hidden; z-index: 30; }
+  .search-suggestions.open { display: block; }
+  .search-item { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .search-item:last-child { border-bottom: none; }
+  .search-item:hover { background: var(--primary-soft); }
+  .search-item-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .search-item-desc { font-size: 12px; color: var(--muted); }
+  .search-empty { padding: 14px; font-size: 13px; color: var(--muted); text-align: center; }
   .icon-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); flex-shrink: 0; }
   .icon-btn:hover { border-color: var(--primary); }
   button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
