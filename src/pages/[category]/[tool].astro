@@ -1,6 +1,8 @@
 ---
 // src/pages/[category]/[tool].astro
 import Layout from "../../layouts/Layout.astro";
+import FaqSection from "../../components/FaqSection.astro";
+import JsonFormatterWidget from "../../components/tools/JsonFormatterWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 
 // Build one real page per tool (20 pages total from this one file).
@@ -22,6 +24,18 @@ const { tool, category } = Astro.props;
 const relatedTools = tools
   .filter((t) => t.category === tool.category && t.slug !== tool.slug)
   .slice(0, 3);
+
+// FAQPage structured data — this is what lets Google show your FAQs
+// as expandable rich results directly in search, not just a blue link.
+const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: tool.faqs.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+} : null;
 ---
 
 <Layout
@@ -44,16 +58,31 @@ const relatedTools = tools
     </div>
 
     <!--
-      THE ACTUAL TOOL GOES HERE.
-      For now this is a placeholder box. Later, this is where you drop in
-      the real working JS for this specific tool (e.g. your JSON formatter
-      logic, or password generator logic). Every tool page uses this same
-      layout — only what's inside this box changes per tool.
+      Each tool gets its own widget component. Add a new "if" line here
+      whenever a new tool's real logic is ready — until then it falls
+      back to the placeholder box automatically.
     -->
-    <div class="tool-widget-placeholder">
-      <p>🔧 The working "{tool.name}" tool will go here.</p>
-    </div>
+    {tool.slug === "json-formatter" ? (
+      <JsonFormatterWidget />
+    ) : (
+      <div class="tool-widget-placeholder">
+        <p>🔧 The working "{tool.name}" tool will go here.</p>
+      </div>
+    )}
+
+    {tool.about && (
+      <section class="tool-about">
+        <h2>About this tool</h2>
+        <p>{tool.about}</p>
+      </section>
+    )}
+
+    <FaqSection faqs={tool.faqs} />
   </div>
+
+  {faqSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  )}
 
   {relatedTools.length > 0 && (
     <section class="section">
@@ -84,4 +113,7 @@ const relatedTools = tools
     background: var(--surface);
     margin-bottom: 16px;
   }
+  .tool-about { margin: 32px 0; }
+  .tool-about h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 0 0 10px; }
+  .tool-about p { color: var(--muted); font-size: 14.5px; line-height: 1.7; max-width: 720px; }
 </style>

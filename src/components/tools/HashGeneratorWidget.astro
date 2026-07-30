@@ -1,0 +1,59 @@
+---
+---
+
+<textarea
+  id="hashInput"
+  class="w-full h-40 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4"
+  placeholder="Type or paste text to hash..."
+></textarea>
+
+<div class="space-y-3">
+  <div>
+    <label class="block text-xs font-medium text-gray-500">SHA-1</label>
+    <p id="sha1Output" class="font-mono text-sm bg-gray-100 p-2 rounded break-all"></p>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-500">SHA-256</label>
+    <p id="sha256Output" class="font-mono text-sm bg-gray-100 p-2 rounded break-all"></p>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-500">SHA-384</label>
+    <p id="sha384Output" class="font-mono text-sm bg-gray-100 p-2 rounded break-all"></p>
+  </div>
+  <div>
+    <label class="block text-xs font-medium text-gray-500">SHA-512</label>
+    <p id="sha512Output" class="font-mono text-sm bg-gray-100 p-2 rounded break-all"></p>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  const input = document.getElementById('hashInput');
+  const outputs = {
+    'SHA-1': document.getElementById('sha1Output'),
+    'SHA-256': document.getElementById('sha256Output'),
+    'SHA-384': document.getElementById('sha384Output'),
+    'SHA-512': document.getElementById('sha512Output'),
+  };
+
+  async function hashText(algorithm, text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest(algorithm, data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function updateHashes() {
+    const text = input.value;
+    if (!text) {
+      Object.values(outputs).forEach(el => el.textContent = '');
+      return;
+    }
+    for (const [algo, el] of Object.entries(outputs)) {
+      el.textContent = await hashText(algo, text);
+    }
+  }
+
+  input?.addEventListener('input', updateHashes);
+</script>

@@ -1,0 +1,65 @@
+---
+---
+
+<textarea
+  id="caseInput"
+  class="w-full h-56 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+  placeholder="Type or paste your text here..."
+></textarea>
+
+<div class="flex flex-wrap gap-3 mt-4">
+  <button id="upperBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">UPPERCASE</button>
+  <button id="lowerBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">lowercase</button>
+  <button id="titleBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Title Case</button>
+  <button id="sentenceBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Sentence case</button>
+  <button id="alternatingBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">aLtErNaTiNg</button>
+  <button id="copyCaseBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy</button>
+  <button id="clearCaseBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
+</div>
+
+<script>
+  const input = document.getElementById('caseInput');
+  const upperBtn = document.getElementById('upperBtn');
+  const lowerBtn = document.getElementById('lowerBtn');
+  const titleBtn = document.getElementById('titleBtn');
+  const sentenceBtn = document.getElementById('sentenceBtn');
+  const alternatingBtn = document.getElementById('alternatingBtn');
+  const copyBtn = document.getElementById('copyCaseBtn');
+  const clearBtn = document.getElementById('clearCaseBtn');
+
+  if (input instanceof HTMLTextAreaElement) {
+    upperBtn?.addEventListener('click', () => {
+      input.value = input.value.toUpperCase();
+    });
+
+    lowerBtn?.addEventListener('click', () => {
+      input.value = input.value.toLowerCase();
+    });
+
+    titleBtn?.addEventListener('click', () => {
+      input.value = input.value.replace(/\w\S*/g, (txt) => {
+        return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+      });
+    });
+
+    sentenceBtn?.addEventListener('click', () => {
+      const lower = input.value.toLowerCase();
+      input.value = lower.replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
+    });
+
+    alternatingBtn?.addEventListener('click', () => {
+      input.value = input.value
+        .split('')
+        .map((char, i) => (i % 2 === 0 ? char.toLowerCase() : char.toUpperCase()))
+        .join('');
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      navigator.clipboard.writeText(input.value);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+    });
+  }
+</script>

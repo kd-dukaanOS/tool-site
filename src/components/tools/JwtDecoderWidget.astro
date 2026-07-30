@@ -1,0 +1,64 @@
+---
+---
+
+<textarea
+  id="jwtInput"
+  class="w-full h-32 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4"
+  placeholder="Paste your JWT token here (e.g. eyJhbGci...)"
+></textarea>
+
+<p id="jwtError" class="text-red-600 mb-3 font-medium"></p>
+
+<div class="grid md:grid-cols-2 gap-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Header</label>
+    <pre id="jwtHeader" class="p-3 border border-gray-300 rounded-lg bg-gray-100 text-sm overflow-x-auto min-h-[100px]"></pre>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Payload</label>
+    <pre id="jwtPayload" class="p-3 border border-gray-300 rounded-lg bg-gray-100 text-sm overflow-x-auto min-h-[100px]"></pre>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  const input = document.getElementById('jwtInput');
+  const errorEl = document.getElementById('jwtError');
+  const headerEl = document.getElementById('jwtHeader');
+  const payloadEl = document.getElementById('jwtPayload');
+
+  function base64UrlDecode(str) {
+    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4) base64 += '=';
+    return decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+        .join('')
+    );
+  }
+
+  input?.addEventListener('input', () => {
+    const token = input.value.trim();
+    errorEl.textContent = '';
+    headerEl.textContent = '';
+    payloadEl.textContent = '';
+
+    if (!token) return;
+
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      errorEl.textContent = 'Invalid JWT format — expected 3 parts separated by dots.';
+      return;
+    }
+
+    try {
+      const header = JSON.parse(base64UrlDecode(parts[0]));
+      const payload = JSON.parse(base64UrlDecode(parts[1]));
+      headerEl.textContent = JSON.stringify(header, null, 2);
+      payloadEl.textContent = JSON.stringify(payload, null, 2);
+    } catch (e) {
+      errorEl.textContent = 'Could not decode token: ' + e.message;
+    }
+  });
+</script>

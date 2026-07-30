@@ -1,0 +1,53 @@
+---
+---
+
+<div class="grid md:grid-cols-2 gap-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Original Text</label>
+    <textarea id="diffInput1" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Paste original text..."></textarea>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Changed Text</label>
+    <textarea id="diffInput2" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Paste changed text..."></textarea>
+  </div>
+</div>
+
+<button id="compareBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 mt-4">Compare</button>
+
+<div class="mt-6">
+  <label class="block text-sm font-medium text-gray-700 mb-1">Result</label>
+  <div id="diffResult" class="p-3 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm whitespace-pre-wrap min-h-[100px]"></div>
+</div>
+
+<script>
+  // @ts-nocheck
+  const input1 = document.getElementById('diffInput1');
+  const input2 = document.getElementById('diffInput2');
+  const result = document.getElementById('diffResult');
+  const compareBtn = document.getElementById('compareBtn');
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  compareBtn?.addEventListener('click', () => {
+    const lines1 = input1.value.split('\n');
+    const lines2 = input2.value.split('\n');
+    const maxLines = Math.max(lines1.length, lines2.length);
+    let output = '';
+
+    for (let i = 0; i < maxLines; i++) {
+      const l1 = lines1[i] ?? '';
+      const l2 = lines2[i] ?? '';
+
+      if (l1 === l2) {
+        output += `  ${escapeHtml(l1)}\n`;
+      } else {
+        if (l1) output += `<span class="bg-red-100 text-red-700">- ${escapeHtml(l1)}</span>\n`;
+        if (l2) output += `<span class="bg-green-100 text-green-700">+ ${escapeHtml(l2)}</span>\n`;
+      }
+    }
+
+    result.innerHTML = output || 'No differences found — texts are identical.';
+  });
+</script>

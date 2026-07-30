@@ -1,0 +1,69 @@
+---
+---
+
+<textarea
+  id="textInput"
+  class="w-full h-64 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+  placeholder="Start typing or paste your text here..."
+></textarea>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+    <div id="wordCount" class="text-2xl font-bold text-indigo-600">0</div>
+    <div class="text-sm text-gray-500">Words</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+    <div id="charCount" class="text-2xl font-bold text-indigo-600">0</div>
+    <div class="text-sm text-gray-500">Characters</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+    <div id="charNoSpaceCount" class="text-2xl font-bold text-indigo-600">0</div>
+    <div class="text-sm text-gray-500">Characters (no spaces)</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+    <div id="sentenceCount" class="text-2xl font-bold text-indigo-600">0</div>
+    <div class="text-sm text-gray-500">Sentences</div>
+  </div>
+</div>
+
+<div class="flex gap-3 mt-4">
+  <button id="clearTextBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
+</div>
+
+<script>
+  const textInput = document.getElementById('textInput');
+  const wordCount = document.getElementById('wordCount');
+  const charCount = document.getElementById('charCount');
+  const charNoSpaceCount = document.getElementById('charNoSpaceCount');
+  const sentenceCount = document.getElementById('sentenceCount');
+  const clearBtn = document.getElementById('clearTextBtn');
+
+  if (
+    textInput instanceof HTMLTextAreaElement &&
+    wordCount &&
+    charCount &&
+    charNoSpaceCount &&
+    sentenceCount
+  ) {
+    const updateCounts = () => {
+      const text = textInput.value;
+
+      const words = text.trim().length === 0 ? [] : text.trim().split(/\s+/);
+      wordCount.textContent = String(words.length);
+
+      charCount.textContent = String(text.length);
+
+      charNoSpaceCount.textContent = String(text.replace(/\s/g, '').length);
+
+      const sentences = text.trim().length === 0 ? [] : text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      sentenceCount.textContent = String(sentences.length);
+    };
+
+    textInput.addEventListener('input', updateCounts);
+
+    clearBtn?.addEventListener('click', () => {
+      textInput.value = '';
+      updateCounts();
+    });
+  }
+</script>

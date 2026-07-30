@@ -1,0 +1,43 @@
+---
+---
+
+<div class="space-y-6">
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <p class="text-sm text-gray-600 mb-2">What is <input id="p1a" type="number" class="w-20 p-1 border border-gray-300 rounded text-center" value="20" />% of <input id="p1b" type="number" class="w-24 p-1 border border-gray-300 rounded text-center" value="500" />?</p>
+    <p class="font-bold text-indigo-600 text-lg">Result: <span id="p1result">100</span></p>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <p class="text-sm text-gray-600 mb-2"><input id="p2a" type="number" class="w-20 p-1 border border-gray-300 rounded text-center" value="50" /> is what percent of <input id="p2b" type="number" class="w-24 p-1 border border-gray-300 rounded text-center" value="200" />?</p>
+    <p class="font-bold text-indigo-600 text-lg">Result: <span id="p2result">25</span>%</p>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-4">
+    <p class="text-sm text-gray-600 mb-2">Percentage change from <input id="p3a" type="number" class="w-24 p-1 border border-gray-300 rounded text-center" value="100" /> to <input id="p3b" type="number" class="w-24 p-1 border border-gray-300 rounded text-center" value="150" />?</p>
+    <p class="font-bold text-indigo-600 text-lg">Result: <span id="p3result">50</span>% change</p>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  function bindPair(aId, bId, resultId, calc) {
+    const a = document.getElementById(aId);
+    const b = document.getElementById(bId);
+    const result = document.getElementById(resultId);
+
+    function update() {
+      const valA = parseFloat(a.value);
+      const valB = parseFloat(b.value);
+      if (isNaN(valA) || isNaN(valB)) { result.textContent = '—'; return; }
+      result.textContent = calc(valA, valB);
+    }
+
+    a?.addEventListener('input', update);
+    b?.addEventListener('input', update);
+    update();
+  }
+
+  bindPair('p1a', 'p1b', 'p1result', (a, b) => ((a / 100) * b).toFixed(2));
+  bindPair('p2a', 'p2b', 'p2result', (a, b) => ((a / b) * 100).toFixed(2));
+  bindPair('p3a', 'p3b', 'p3result', (a, b) => (((b - a) / a) * 100).toFixed(2));
+</script>

@@ -1,0 +1,70 @@
+---
+---
+
+<div class="grid md:grid-cols-2 gap-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Input</label>
+    <textarea id="csvJsonInput" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Paste CSV or JSON here..."></textarea>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Output</label>
+    <textarea id="csvJsonOutput" class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100" readonly></textarea>
+  </div>
+</div>
+
+<div class="flex flex-wrap gap-3 mt-4">
+  <button id="csvToJsonBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">CSV → JSON</button>
+  <button id="jsonToCsvBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">JSON → CSV</button>
+  <button id="csvJsonCopyBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy Output</button>
+</div>
+
+<p id="csvJsonError" class="text-red-600 mt-3 font-medium"></p>
+
+<script>
+  // @ts-nocheck
+  const input = document.getElementById('csvJsonInput');
+  const output = document.getElementById('csvJsonOutput');
+  const errorEl = document.getElementById('csvJsonError');
+
+  function csvToJson(csv) {
+    const lines = csv.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const result = lines.slice(1).map(line => {
+      const values = line.split(',').map(v => v.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = values[i] ?? '');
+      return obj;
+    });
+    return JSON.stringify(result, null, 2);
+  }
+
+  function jsonToCsv(jsonStr) {
+    const data = JSON.parse(jsonStr);
+    if (!Array.isArray(data) || data.length === 0) throw new Error('JSON must be a non-empty array of objects');
+    const headers = Object.keys(data[0]);
+    const rows = data.map(obj => headers.map(h => obj[h] ?? '').join(','));
+    return [headers.join(','), ...rows].join('\n');
+  }
+
+  document.getElementById('csvToJsonBtn')?.addEventListener('click', () => {
+    try {
+      output.value = csvToJson(input.value);
+      errorEl.textContent = '';
+    } catch (e) {
+      errorEl.textContent = 'Error converting CSV: ' + e.message;
+    }
+  });
+
+  document.getElementById('jsonToCsvBtn')?.addEventListener('click', () => {
+    try {
+      output.value = jsonToCsv(input.value);
+      errorEl.textContent = '';
+    } catch (e) {
+      errorEl.textContent = 'Error converting JSON: ' + e.message;
+    }
+  });
+
+  document.getElementById('csvJsonCopyBtn')?.addEventListener('click', () => {
+    navigator.clipboard.writeText(output.value);
+  });
+</script>

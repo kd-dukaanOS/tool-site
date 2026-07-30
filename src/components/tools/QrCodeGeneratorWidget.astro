@@ -1,0 +1,39 @@
+---
+---
+
+<input
+  id="qrInput"
+  type="text"
+  placeholder="Enter URL or text..."
+  class="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4"
+/>
+
+<div class="flex gap-3 mb-6">
+  <button id="generateQrBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Generate QR Code</button>
+  <a id="downloadQrBtn" href="#" download="qrcode.png" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hidden">Download</a>
+</div>
+
+<div class="flex justify-center">
+  <img id="qrImage" class="border border-gray-200 rounded-lg hidden" alt="Generated QR Code" />
+</div>
+
+<script>
+  // @ts-nocheck
+  const input = document.getElementById('qrInput');
+  const generateBtn = document.getElementById('generateQrBtn');
+  const downloadBtn = document.getElementById('downloadQrBtn');
+  const qrImage = document.getElementById('qrImage');
+
+  generateBtn?.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (!text) return;
+
+    const encoded = encodeURIComponent(text);
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}`;
+
+    qrImage.src = url;
+    qrImage.classList.remove('hidden');
+    downloadBtn.href = url;
+    downloadBtn.classList.remove('hidden');
+  });
+</script>

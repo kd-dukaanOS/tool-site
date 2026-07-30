@@ -1,0 +1,56 @@
+---
+---
+
+<div class="space-y-4">
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Decimal</label>
+    <input id="decimalInput" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. 255" />
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Binary</label>
+    <input id="binaryInput" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. 11111111" />
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Hexadecimal</label>
+    <input id="hexInput" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. ff" />
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Octal</label>
+    <input id="octalInput" type="text" class="w-full p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. 377" />
+  </div>
+</div>
+
+<p id="baseError" class="text-red-600 mt-3 font-medium"></p>
+
+<script>
+  // @ts-nocheck
+  const decimalInput = document.getElementById('decimalInput');
+  const binaryInput = document.getElementById('binaryInput');
+  const hexInput = document.getElementById('hexInput');
+  const octalInput = document.getElementById('octalInput');
+  const errorEl = document.getElementById('baseError');
+
+  function updateAll(sourceValue, sourceBase) {
+    errorEl.textContent = '';
+    if (!sourceValue) {
+      [decimalInput, binaryInput, hexInput, octalInput].forEach(el => { if (el !== document.activeElement) el.value = ''; });
+      return;
+    }
+
+    const decimalValue = parseInt(sourceValue, sourceBase);
+    if (isNaN(decimalValue)) {
+      errorEl.textContent = 'Invalid number for this base.';
+      return;
+    }
+
+    if (decimalInput !== document.activeElement) decimalInput.value = decimalValue.toString(10);
+    if (binaryInput !== document.activeElement) binaryInput.value = decimalValue.toString(2);
+    if (hexInput !== document.activeElement) hexInput.value = decimalValue.toString(16);
+    if (octalInput !== document.activeElement) octalInput.value = decimalValue.toString(8);
+  }
+
+  decimalInput?.addEventListener('input', () => updateAll(decimalInput.value, 10));
+  binaryInput?.addEventListener('input', () => updateAll(binaryInput.value, 2));
+  hexInput?.addEventListener('input', () => updateAll(hexInput.value, 16));
+  octalInput?.addEventListener('input', () => updateAll(octalInput.value, 8));
+</script>
