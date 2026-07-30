@@ -1,0 +1,53 @@
+---
+// src/pages/[category]/index.astro
+import Layout from "../../layouts/Layout.astro";
+import { categories, tools, categoryIcons } from "../../data/tools.js";
+
+// This function tells Astro exactly which pages to build.
+// One entry per category = one real HTML page per category.
+export function getStaticPaths() {
+  return categories.map((cat) => ({
+    params: { category: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+// Astro.props here is whichever category object matched the current URL.
+const { category } = Astro.props;
+const categoryTools = tools.filter((t) => t.category === category.slug);
+---
+
+<Layout
+  title={`${category.name} — ToolSite`}
+  description={category.description}
+>
+  <div class="wrap">
+    <p class="breadcrumb"><a href="/">Home</a> / {category.name}</p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[category.slug]} />
+      </div>
+      <div>
+        <h1>{category.name}</h1>
+        <p>{category.description} — {categoryTools.length} tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="tool-grid">
+        {categoryTools.map((tool) => (
+          <a href={`/${tool.category}/${tool.slug}/`} class="tool-card">
+            <div class="tool-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category]} />
+            </div>
+            <div><h4>{tool.name}</h4><p>{tool.desc}</p></div>
+            <svg class="fav" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9.3-8.7C1 8.4 2.7 5 6.3 5 8.4 5 10 6.2 12 8.5 14 6.2 15.6 5 17.7 5c3.6 0 5.3 3.4 3.6 7.3C19 16.5 12 21 12 21z"/></svg>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

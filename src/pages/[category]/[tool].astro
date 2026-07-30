@@ -1,0 +1,87 @@
+---
+// src/pages/[category]/[tool].astro
+import Layout from "../../layouts/Layout.astro";
+import { categories, tools, categoryIcons } from "../../data/tools.js";
+
+// Build one real page per tool (20 pages total from this one file).
+// Each entry needs BOTH params filled in, because the URL needs both
+// pieces: /developer-tools/json-formatter/
+export function getStaticPaths() {
+  return tools.map((tool) => {
+    const category = categories.find((c) => c.slug === tool.category);
+    return {
+      params: { category: tool.category, tool: tool.slug },
+      props: { tool, category },
+    };
+  });
+}
+
+const { tool, category } = Astro.props;
+
+// "Related tools" = other tools in the same category, excluding this one
+const relatedTools = tools
+  .filter((t) => t.category === tool.category && t.slug !== tool.slug)
+  .slice(0, 3);
+---
+
+<Layout
+  title={`${tool.name} — Free Online Tool | ToolSite`}
+  description={tool.desc}
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/">Home</a> / <a href={`/${category.slug}/`}>{category.name}</a> / {tool.name}
+    </p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category]} />
+      </div>
+      <div>
+        <h1>{tool.name}</h1>
+        <p>{tool.desc}</p>
+      </div>
+    </div>
+
+    <!--
+      THE ACTUAL TOOL GOES HERE.
+      For now this is a placeholder box. Later, this is where you drop in
+      the real working JS for this specific tool (e.g. your JSON formatter
+      logic, or password generator logic). Every tool page uses this same
+      layout — only what's inside this box changes per tool.
+    -->
+    <div class="tool-widget-placeholder">
+      <p>🔧 The working "{tool.name}" tool will go here.</p>
+    </div>
+  </div>
+
+  {relatedTools.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>Related tools</h2></div>
+        <div class="tool-grid">
+          {relatedTools.map((t) => (
+            <a href={`/${t.category}/${t.slug}/`} class="tool-card">
+              <div class="tool-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[t.category]} />
+              </div>
+              <div><h4>{t.name}</h4><p>{t.desc}</p></div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .tool-widget-placeholder {
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--muted);
+    background: var(--surface);
+    margin-bottom: 16px;
+  }
+</style>
