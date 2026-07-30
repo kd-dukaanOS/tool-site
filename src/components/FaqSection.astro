@@ -10,7 +10,7 @@ interface Props {
   faqs: Faq[];
 }
 
-const { faqs } = Astro.props as Props;
+const { faqs = [] } = Astro.props as Props;
 
 ---
 {faqs.length > 0 && (
