@@ -1,7 +1,17 @@
 ---
 // src/components/FaqSection.astro
 // Usage: <FaqSection faqs={tool.faqs} />
-const { faqs = [] } = Astro.props;
+interface Faq {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: Faq[];
+}
+
+const { faqs } = Astro.props as Props;
+
 ---
 {faqs.length > 0 && (
   <section class="faq-section">
