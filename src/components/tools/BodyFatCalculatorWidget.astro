@@ -1,0 +1,53 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Percent, Tag } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <div class="field-group">
+      <label for="gender">Gender</label>
+      <select id="gender" class="calculator-input">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />
+    <CalculatorField id="neckCm" label="Neck (cm)" type="number" placeholder="e.g. 38" />
+    <CalculatorField id="waistCm" label="Waist (cm)" type="number" placeholder="e.g. 85" />
+
+    <div id="hipFieldGroup" hidden>
+      <CalculatorField id="hipCm" label="Hip (cm)" type="number" placeholder="e.g. 95" />
+    </div>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter measurements to calculate body fat"
+      description="Your estimated body fat percentage will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="bodyFatResult" title="Body Fat" icon={Percent} accent="primary" size="lg" />
+      <ResultCard id="categoryResult" title="Category" icon={Tag} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/body-fat-calculator.ts"></script>

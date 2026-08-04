@@ -1,0 +1,453 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import ScheduleTable from "../calculator/ScheduleTable.astro";
+
+import { Tag, PiggyBank, Percent } from "@lucide/astro";
+---
+
+<section class="discount-calculator">
+
+  <div class="discount-layout">
+
+    <aside class="discount-sidebar">
+
+      <CalculatorField
+        id="originalPrice"
+        label="Original Price (₹)"
+        type="number"
+        placeholder="e.g. 2000"
+        required={true}
+        min="1"
+        helpText="The price before any discount."
+      />
+
+      <div class="toggle-row">
+        <button type="button" class="toggle-btn active" data-discount-mode="percentage">% Off</button>
+        <button type="button" class="toggle-btn" data-discount-mode="flat">₹ Off</button>
+      </div>
+
+      <CalculatorField
+        id="discountValue"
+        label="Discount"
+        type="number"
+        placeholder="e.g. 20"
+        required={true}
+        min="0"
+        helpText="Discount percentage or flat amount, based on the toggle above."
+      />
+
+      <div class="scenario-row">
+        <button type="button" class="scenario-btn" data-discount-rate="10">10%</button>
+        <button type="button" class="scenario-btn" data-discount-rate="20">20%</button>
+        <button type="button" class="scenario-btn" data-discount-rate="30">30%</button>
+        <button type="button" class="scenario-btn" data-discount-rate="50">50%</button>
+      </div>
+
+      <CalculatorField
+        id="extraPercent"
+        label="Additional Coupon (%) — optional"
+        type="number"
+        placeholder="e.g. 10"
+        min="0"
+        helpText="Stack an extra coupon discount on top."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="discount-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏷️"
+          title="Discount Calculator"
+          description="Find the final price, your total savings, and compare across common discount rates."
+          tips={[
+            "Percentage or Flat Discount",
+            "Stack an Extra Coupon",
+            "Compare Common Discount Rates"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard id="finalPriceResult" title="Final Price" icon={Tag} accent="primary" />
+          <ResultCard id="saveResult" title="You Save" icon={PiggyBank} accent="success" />
+          <ResultCard id="percentResult" title="Effective Discount" icon={Percent} accent="warning" />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <ScheduleTable
+          id="scheduleBody"
+          headers={["Discount", "Final Price", "You Save"]}
+          caption="Compare Common Discount Rates"
+        />
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Enter the original price and a discount — either a percentage
+            or a flat amount — to see the final price and total savings.
+            Add an optional second coupon to see how stacked discounts
+            compound.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/discount-calculator";
+</script>
+
+<style>
+
+.discount-calculator{
+
+width:100%;
+
+}
+
+.discount-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.discount-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.discount-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.toggle-row{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:-8px;
+
+}
+
+.toggle-btn{
+
+height:44px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#374151;
+
+font-size:.88rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.toggle-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+.scenario-row{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+}
+
+.scenario-btn{
+
+height:40px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#4F46E5;
+
+font-size:.85rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.scenario-btn:hover{
+
+background:#EEF2FF;
+
+border-color:#4F46E5;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .toggle-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#D4D4D8;
+
+}
+
+:global(.dark) .toggle-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+:global(.dark) .scenario-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#A5B4FC;
+
+}
+
+:global(.dark) .scenario-btn:hover{
+
+background:#1E1B4B;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.discount-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.discount-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

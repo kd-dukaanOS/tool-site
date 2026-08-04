@@ -1,0 +1,43 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Hash } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField
+      id="numbers"
+      label="Numbers (comma or space separated)"
+      type="text"
+      placeholder="e.g. 12, 18, 24"
+    />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter numbers to find GCD"
+      description="The greatest common divisor will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="gcdResult" title="GCD" icon={Hash} accent="primary" size="lg" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/gcd-calculator.ts"></script>

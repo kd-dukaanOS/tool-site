@@ -1,58 +1,76 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Binary, Hash, Calculator, Code } from "@lucide/astro";
 ---
+<section class="base-converter">
+  <div class="base-layout">
+    <aside class="base-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="baseValue">Number</label>
+        <input id="baseValue" type="text" class="tool-input" placeholder="e.g. 255" />
+      </div>
 
-<div class="tool-panel">
-  <div class="space-y-4">
-    <div>
-      <label class="tool-label" for="decimalInput">Decimal</label>
-      <input id="decimalInput" type="text" class="tool-textarea" style="height:auto" placeholder="e.g. 255" />
-    </div>
-    <div>
-      <label class="tool-label" for="binaryInput">Binary</label>
-      <input id="binaryInput" type="text" class="tool-textarea" style="height:auto" placeholder="e.g. 11111111" />
-    </div>
-    <div>
-      <label class="tool-label" for="hexInput">Hexadecimal</label>
-      <input id="hexInput" type="text" class="tool-textarea" style="height:auto" placeholder="e.g. ff" />
-    </div>
-    <div>
-      <label class="tool-label" for="octalInput">Octal</label>
-      <input id="octalInput" type="text" class="tool-textarea" style="height:auto" placeholder="e.g. 377" />
-    </div>
+      <div class="tool-field">
+        <label class="tool-label" for="fromBase">From Base</label>
+        <select id="fromBase" class="tool-select">
+          <option value="2">Binary (Base 2)</option>
+          <option value="8">Octal (Base 8)</option>
+          <option value="10" selected>Decimal (Base 10)</option>
+          <option value="16">Hexadecimal (Base 16)</option>
+        </select>
+      </div>
+
+      <CalculatorActions calculateId="convertBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="base-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔢"
+          title="Number Base Converter"
+          description="Convert numbers between binary, octal, decimal and hexadecimal."
+          tips={["Binary", "Octal", "Decimal", "Hexadecimal"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="binaryResult" title="Binary" icon={Binary} />
+          <ResultCard id="octalResult" title="Octal" icon={Hash} />
+          <ResultCard id="decimalResult" title="Decimal" icon={Calculator} />
+          <ResultCard id="hexResult" title="Hexadecimal" icon={Code} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Convert any number between binary, octal, decimal and hexadecimal bases instantly.</p>
+        </section>
+      </div>
+    </main>
   </div>
-
-  <p id="baseError" class="tool-error"></p>
-</div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const decimalInput = document.getElementById('decimalInput');
-  const binaryInput = document.getElementById('binaryInput');
-  const hexInput = document.getElementById('hexInput');
-  const octalInput = document.getElementById('octalInput');
-  const errorEl = document.getElementById('baseError');
-
-  function updateAll(sourceValue, sourceBase) {
-    errorEl.textContent = '';
-    if (!sourceValue) {
-      [decimalInput, binaryInput, hexInput, octalInput].forEach(el => { if (el !== document.activeElement) el.value = ''; });
-      return;
-    }
-
-    const decimalValue = parseInt(sourceValue, sourceBase);
-    if (isNaN(decimalValue)) {
-      errorEl.textContent = 'Invalid number for this base.';
-      return;
-    }
-
-    if (decimalInput !== document.activeElement) decimalInput.value = decimalValue.toString(10);
-    if (binaryInput !== document.activeElement) binaryInput.value = decimalValue.toString(2);
-    if (hexInput !== document.activeElement) hexInput.value = decimalValue.toString(16);
-    if (octalInput !== document.activeElement) octalInput.value = decimalValue.toString(8);
-  }
-
-  decimalInput?.addEventListener('input', () => updateAll(decimalInput.value, 10));
-  binaryInput?.addEventListener('input', () => updateAll(binaryInput.value, 2));
-  hexInput?.addEventListener('input', () => updateAll(hexInput.value, 16));
-  octalInput?.addEventListener('input', () => updateAll(octalInput.value, 8));
+  import "../../scripts/number-base-converter";
 </script>
+
+<style>
+.base-converter{width:100%;}
+.base-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.base-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.base-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.base-layout{grid-template-columns:1fr;}.base-sidebar{position:static;}}
+</style>

@@ -1,0 +1,46 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { CalendarDays, Briefcase } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="startDate" label="Start Date" type="date" />
+    <CalculatorField id="endDate" label="End Date" type="date" />
+
+    <label class="checkbox-field">
+      <input type="checkbox" id="excludeWeekends" checked />
+      <span>Exclude weekends</span>
+    </label>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Select dates to count business days"
+      description="Working days between the dates will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="businessDaysResult" title="Business Days" icon={Briefcase} accent="primary" size="lg" />
+      <ResultCard id="totalDaysResult" title="Total Days" icon={CalendarDays} accent="neutral" />
+      <ResultCard id="weekendDaysResult" title="Weekend Days" icon={CalendarDays} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/business-days-calculator.ts"></script>

@@ -1,0 +1,40 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { PartyPopper, CalendarDays, Cake } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="birthDate" label="Date of Birth" type="date" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter your date of birth"
+      description="Your next birthday details will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="nextBirthdayResult" title="Next Birthday" icon={PartyPopper} accent="primary" size="lg" />
+      <ResultCard id="daysRemainingResult" title="Days Remaining" icon={CalendarDays} accent="neutral" />
+      <ResultCard id="turningAgeResult" title="Turning Age" icon={Cake} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/birthday-calculator.ts"></script>

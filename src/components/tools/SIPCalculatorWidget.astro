@@ -1,0 +1,414 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import ChartCard from "../calculator/ChartCard.astro";
+import ScheduleTable from "../calculator/ScheduleTable.astro";
+
+import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
+---
+
+<section class="sip-calculator">
+
+  <div class="sip-layout">
+
+    <aside class="sip-sidebar">
+
+      <CalculatorField
+        id="monthlyInvestment"
+        label="Monthly Investment (₹)"
+        type="number"
+        placeholder="e.g. 5000"
+        required={true}
+        min="1"
+        helpText="Amount you invest every month."
+      />
+
+      <CalculatorField
+        id="annualReturn"
+        label="Expected Annual Return (%)"
+        type="number"
+        placeholder="e.g. 12"
+        required={true}
+        min="0"
+        step="0.1"
+        helpText="Estimated yearly return rate."
+      />
+
+      <CalculatorField
+        id="tenure"
+        label="Investment Period (years)"
+        type="number"
+        placeholder="e.g. 15"
+        required={true}
+        min="1"
+        helpText="How long you plan to invest."
+      />
+
+      <div class="scenario-row">
+        <button type="button" class="scenario-btn" data-tenure="5">5 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="10">10 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="15">15 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="20">20 Yrs</button>
+      </div>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="sip-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="📈"
+          title="SIP Calculator"
+          description="Estimate the maturity value of your monthly investments and see year-wise growth."
+          tips={[
+            "Maturity Value & Returns",
+            "Invested vs Growth Chart",
+            "Year-wise Growth Table",
+            "Compounding Insight"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={4}>
+
+          <ResultCard id="maturityResult" title="Maturity Value" icon={TrendingUp} accent="primary" />
+          <ResultCard id="investedResult" title="Invested Amount" icon={Wallet} accent="neutral" />
+          <ResultCard id="returnsResult" title="Estimated Returns" icon={PiggyBank} accent="success" />
+          <ResultCard id="percentResult" title="Return %" icon={Percent} accent="warning" />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <ChartCard
+          id="sipLineChart"
+          title="Invested vs Growth Over Time"
+        />
+
+        <ScheduleTable
+          id="scheduleBody"
+          headers={["Year", "Invested", "Value"]}
+          caption="Year-wise Growth"
+        />
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            A Systematic Investment Plan (SIP) lets you invest a fixed
+            amount every month. Compounding means your returns also start
+            earning returns, so the growth curve accelerates over time.
+          </p>
+
+          <h3>Formula</h3>
+
+          <p>
+            Maturity Value = P &times; [(1+r)<sup>n</sup> &minus; 1] &divide; r &times; (1+r)
+            — where P is the monthly investment, r is the monthly return
+            rate, and n is the number of months.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/sip-calculator";
+</script>
+
+<style>
+
+.sip-calculator{
+
+width:100%;
+
+}
+
+.sip-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.sip-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.sip-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.scenario-row{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+}
+
+.scenario-btn{
+
+height:40px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#4F46E5;
+
+font-size:.85rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.scenario-btn:hover{
+
+background:#EEF2FF;
+
+border-color:#4F46E5;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info h3{
+
+margin:20px 0 10px;
+
+font-size:1rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .scenario-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#A5B4FC;
+
+}
+
+:global(.dark) .scenario-btn:hover{
+
+background:#1E1B4B;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2,
+:global(.dark) .calculator-info h3{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.sip-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.sip-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

@@ -1,39 +1,104 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { QrCode, Type, Ruler, Download } from "@lucide/astro";
 ---
+<section class="qr-generator">
+  <div class="qr-layout">
+    <aside class="qr-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="qrText">Text or URL</label>
+        <textarea id="qrText" class="tool-textarea" placeholder="https://example.com"></textarea>
+      </div>
 
-<input
-  id="qrInput"
-  type="text"
-  placeholder="Enter URL or text..."
-  class="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4"
-/>
+      <div class="tool-field">
+        <label class="tool-label" for="qrSize">Size (px)</label>
+        <input id="qrSize" type="number" class="tool-input" value="300" min="100" max="1000" step="50" />
+      </div>
 
-<div class="flex gap-3 mb-6">
-  <button id="generateQrBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Generate QR Code</button>
-  <a id="downloadQrBtn" href="#" download="qrcode.png" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 hidden">Download</a>
-</div>
+      <div class="tool-field">
+        <label class="tool-label" for="qrEcc">Error Correction</label>
+        <select id="qrEcc" class="tool-select">
+          <option value="L">Low (L)</option>
+          <option value="M" selected>Medium (M)</option>
+          <option value="Q">Quartile (Q)</option>
+          <option value="H">High (H)</option>
+        </select>
+      </div>
 
-<div class="flex justify-center">
-  <img id="qrImage" class="border border-gray-200 rounded-lg hidden" alt="Generated QR Code" />
-</div>
+      <div class="tool-grid-2">
+        <div class="tool-field">
+          <label class="tool-label" for="qrFgColor">Foreground</label>
+          <input id="qrFgColor" type="color" class="tool-input" value="#000000" />
+        </div>
+        <div class="tool-field">
+          <label class="tool-label" for="qrBgColor">Background</label>
+          <input id="qrBgColor" type="color" class="tool-input" value="#ffffff" />
+        </div>
+      </div>
+
+      <div class="tool-actions">
+        <button id="generateBtn" class="tool-btn tool-btn-primary">Generate</button>
+        <button id="resetBtn" class="tool-btn tool-btn-secondary">Reset</button>
+      </div>
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="qr-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="⬜"
+          title="QR Code Generator"
+          description="Generate a QR code from any text, URL or email instantly."
+          tips={["Custom Size", "Error Correction Level", "Custom Colors", "Download PNG"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <div class="qr-preview">
+          <img id="qrImage" alt="Generated QR code" />
+        </div>
+
+        <ResultsGrid columns={3}>
+          <ResultCard id="typeResult" title="Type" icon={Type} />
+          <ResultCard id="charsResult" title="Characters" icon={QrCode} />
+          <ResultCard id="sizeResult" title="Size" icon={Ruler} />
+        </ResultsGrid>
+
+        <div class="tool-actions">
+          <button id="downloadBtn" class="tool-btn tool-btn-primary"><Download size={16} /> Download PNG</button>
+        </div>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Generate a scannable QR code from any text, URL, or email address, with adjustable size, colors and error correction level.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const input = document.getElementById('qrInput');
-  const generateBtn = document.getElementById('generateQrBtn');
-  const downloadBtn = document.getElementById('downloadQrBtn');
-  const qrImage = document.getElementById('qrImage');
-
-  generateBtn?.addEventListener('click', () => {
-    const text = input.value.trim();
-    if (!text) return;
-
-    const encoded = encodeURIComponent(text);
-    const url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}`;
-
-    qrImage.src = url;
-    qrImage.classList.remove('hidden');
-    downloadBtn.href = url;
-    downloadBtn.classList.remove('hidden');
-  });
+  import "../../scripts/qr-code-generator";
 </script>
+
+<style>
+.qr-generator{width:100%;}
+.qr-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.qr-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.qr-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.qr-preview{display:flex;justify-content:center;padding:32px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.qr-preview img{max-width:100%;border-radius:8px;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .qr-preview,:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.qr-layout{grid-template-columns:1fr;}.qr-sidebar{position:static;}.tool-grid-2{grid-template-columns:1fr;}}
+</style>

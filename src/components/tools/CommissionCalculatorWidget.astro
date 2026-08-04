@@ -1,0 +1,42 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { IndianRupee, Percent, Wallet } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="salesAmount" label="Sales Amount (₹)" type="number" placeholder="e.g. 100000" />
+    <CalculatorField id="commissionRate" label="Commission Rate (%)" type="number" placeholder="e.g. 5" />
+    <CalculatorField id="baseSalary" label="Base Salary (₹, optional)" type="number" placeholder="e.g. 15000" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter sales to calculate commission"
+      description="Your commission earnings will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="commissionEarnedResult" title="Commission Earned" icon={IndianRupee} accent="success" size="lg" />
+      <ResultCard id="totalEarningsResult" title="Total Earnings" icon={Wallet} accent="primary" />
+      <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/commission-calculator.ts"></script>

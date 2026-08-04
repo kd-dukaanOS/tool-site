@@ -1,0 +1,41 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Flower2, CalendarRange, CalendarClock } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="lastPeriodDate" label="First Day of Last Period" type="date" />
+    <CalculatorField id="cycleLength" label="Average Cycle Length (days)" type="number" placeholder="e.g. 28" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter details to estimate ovulation"
+      description="Ovulation date and fertile window will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="ovulationDateResult" title="Ovulation Date" icon={Flower2} accent="primary" size="lg" />
+      <ResultCard id="fertileWindowResult" title="Fertile Window" icon={CalendarRange} accent="neutral" />
+      <ResultCard id="nextPeriodResult" title="Next Period (Est.)" icon={CalendarClock} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/ovulation-calculator.ts"></script>

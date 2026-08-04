@@ -1,0 +1,40 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { CalendarCheck, Clock } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="invoiceDate" label="Invoice Date" type="date" />
+    <CalculatorField id="paymentTermsDays" label="Payment Terms (Days)" type="number" placeholder="e.g. 30" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter invoice details to find due date"
+      description="Your invoice due date and status will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="dueDateResult" title="Due Date" icon={CalendarCheck} accent="primary" size="lg" />
+      <ResultCard id="statusResult" title="Status" icon={Clock} accent="warning" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/invoice-due-date-calculator.ts"></script>

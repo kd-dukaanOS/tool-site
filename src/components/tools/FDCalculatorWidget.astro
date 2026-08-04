@@ -1,0 +1,351 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Wallet,
+  TrendingUp,
+  Coins,
+  Percent,
+  Receipt,
+  PiggyBank
+} from "@lucide/astro";
+---
+
+<section class="fd-calculator">
+
+  <div class="fd-layout">
+
+    <aside class="fd-sidebar">
+
+      <CalculatorField
+        id="principal"
+        label="Deposit Amount (₹)"
+        type="number"
+        placeholder="e.g. 100000"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Lump sum amount you're depositing."
+      />
+
+      <CalculatorField
+        id="annualRate"
+        label="Interest Rate (% p.a.)"
+        type="number"
+        placeholder="e.g. 7.5"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="Rate offered by the bank."
+      />
+
+      <CalculatorField
+        id="tenureYears"
+        label="Tenure (Years)"
+        type="number"
+        placeholder="e.g. 5"
+        required={true}
+        min="0"
+        step="0.25"
+        helpText="Deposit duration, e.g. 1.5 for 1 year 6 months."
+      />
+
+      <CalculatorField
+        id="compoundingFrequency"
+        label="Compounding Frequency (times/year)"
+        type="number"
+        value="4"
+        required={true}
+        min="1"
+        step="1"
+        helpText="Most Indian FDs compound quarterly (4)."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="fd-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏦"
+          title="FD Calculator"
+          description="Calculate your Fixed Deposit maturity value and estimated TDS."
+          tips={[
+            "Maturity Value",
+            "Total Interest Earned",
+            "Effective Annual Yield",
+            "Estimated TDS"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="maturityResult"
+            title="Maturity Value"
+            icon={Wallet}
+            accent="success"
+          />
+
+          <ResultCard
+            id="interestResult"
+            title="Total Interest Earned"
+            icon={TrendingUp}
+          />
+
+          <ResultCard
+            id="principalResult"
+            title="Principal Invested"
+            icon={Coins}
+          />
+
+          <ResultCard
+            id="yieldResult"
+            title="Effective Annual Yield"
+            icon={Percent}
+          />
+
+          <ResultCard
+            id="tdsResult"
+            title="Estimated TDS"
+            icon={Receipt}
+            accent="warning"
+          />
+
+          <ResultCard
+            id="netInterestResult"
+            title="Net Interest After TDS"
+            icon={PiggyBank}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Calculates your Fixed Deposit maturity value using
+            compound interest, plus an estimated TDS deduction
+            (10% flat, applied when annualised interest exceeds
+            ₹40,000 as per general Indian tax rules). This is an
+            estimate only — actual TDS depends on your PAN status,
+            Form 15G/15H, and total taxable income.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/fd-calculator";
+</script>
+
+<style>
+
+.fd-calculator{
+
+width:100%;
+
+}
+
+.fd-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.fd-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.fd-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.fd-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.fd-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.fd-layout{
+
+gap:24px;
+
+}
+
+.fd-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

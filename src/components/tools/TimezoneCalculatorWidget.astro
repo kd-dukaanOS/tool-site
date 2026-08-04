@@ -1,0 +1,68 @@
+---
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Clock, ArrowLeftRight } from "@lucide/astro";
+
+const timezones = [
+  "Asia/Kolkata",
+  "America/New_York",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Berlin",
+  "Asia/Dubai",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+  "UTC",
+];
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <div class="field-group">
+      <label for="dateTime">Date & Time</label>
+      <input type="datetime-local" id="dateTime" class="calculator-input" />
+    </div>
+
+    <div class="field-group">
+      <label for="fromTimezone">From Timezone</label>
+      <select id="fromTimezone" class="calculator-input">
+        {timezones.map((tz) => <option value={tz}>{tz}</option>)}
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label for="toTimezone">To Timezone</label>
+      <select id="toTimezone" class="calculator-input">
+        {timezones.map((tz) => <option value={tz} selected={tz === "America/New_York"}>{tz}</option>)}
+      </select>
+    </div>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter date/time to convert"
+      description="Converted time in the target timezone will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Time" icon={Clock} accent="primary" size="lg" />
+      <ResultCard id="differenceResult" title="Time Difference" icon={ArrowLeftRight} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/timezone-calculator.ts"></script>

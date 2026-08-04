@@ -1,0 +1,34 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Binary } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="mode" label="Mode" type="select">
+      <option value="encode">Encode</option>
+      <option value="decode">Decode</option>
+    </CalculatorField>
+
+    <CalculatorField id="text" label="Text" type="textarea" placeholder="Enter text or Base64 string" />
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Base64 Encoder / Decoder" description="Enter text to encode or decode." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="outputResult" title="Output" icon={Binary} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/base64-encoder-decoder.ts"></script>

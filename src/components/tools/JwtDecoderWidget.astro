@@ -1,63 +1,78 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { KeyRound, ShieldAlert, CalendarClock, CalendarX, Code2 } from "@lucide/astro";
 ---
+<section class="jwt-decoder">
+  <div class="jwt-layout">
+    <aside class="jwt-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="jwtInput">JWT Token</label>
+        <textarea id="jwtInput" class="tool-textarea" placeholder="eyJhbGciOiJIUzI1NiIs..."></textarea>
+      </div>
+      <CalculatorActions calculateId="decodeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
 
-<div class="tool-panel">
-  <label class="tool-label" for="jwtInput">JWT Token</label>
-  <textarea id="jwtInput" class="tool-textarea" style="height:8rem" placeholder="Paste your JWT token here (e.g. eyJhbGci...)"></textarea>
+    <main class="jwt-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔑"
+          title="JWT Decoder"
+          description="Decode and inspect JSON Web Tokens instantly."
+          tips={["Header & Payload", "Expiry Check", "Algorithm", "Copy Summary"]}
+        />
+      </div>
 
-  <p id="jwtError" class="tool-error"></p>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="statusResult" title="Status" icon={ShieldAlert} />
+          <ResultCard id="algResult" title="Algorithm" icon={KeyRound} />
+          <ResultCard id="issuedResult" title="Issued At" icon={CalendarClock} />
+          <ResultCard id="expiresResult" title="Expires At" icon={CalendarX} />
+        </ResultsGrid>
 
-  <div class="tool-grid-2">
-    <div>
-      <label class="tool-label" for="jwtHeader">Header</label>
-      <pre id="jwtHeader" class="tool-textarea" style="height:auto;min-height:100px;overflow-x:auto"></pre>
-    </div>
-    <div>
-      <label class="tool-label" for="jwtPayload">Payload</label>
-      <pre id="jwtPayload" class="tool-textarea" style="height:auto;min-height:100px;overflow-x:auto"></pre>
-    </div>
+        <div class="tool-grid-2">
+          <div class="tool-field">
+            <label class="tool-label"><Code2 size={16} /> Header</label>
+            <pre id="headerOutput" class="tool-textarea code-block"></pre>
+          </div>
+          <div class="tool-field">
+            <label class="tool-label"><Code2 size={16} /> Payload</label>
+            <pre id="payloadOutput" class="tool-textarea code-block"></pre>
+          </div>
+        </div>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Decode JWT header and payload, check expiry status and algorithm — entirely client-side, your token never leaves your browser.</p>
+        </section>
+      </div>
+    </main>
   </div>
-</div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const input = document.getElementById('jwtInput');
-  const errorEl = document.getElementById('jwtError');
-  const headerEl = document.getElementById('jwtHeader');
-  const payloadEl = document.getElementById('jwtPayload');
-
-  function base64UrlDecode(str) {
-    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (base64.length % 4) base64 += '=';
-    return decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
-        .join('')
-    );
-  }
-
-  input?.addEventListener('input', () => {
-    const token = input.value.trim();
-    errorEl.textContent = '';
-    headerEl.textContent = '';
-    payloadEl.textContent = '';
-
-    if (!token) return;
-
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-      errorEl.textContent = 'Invalid JWT format — expected 3 parts separated by dots.';
-      return;
-    }
-
-    try {
-      const header = JSON.parse(base64UrlDecode(parts[0]));
-      const payload = JSON.parse(base64UrlDecode(parts[1]));
-      headerEl.textContent = JSON.stringify(header, null, 2);
-      payloadEl.textContent = JSON.stringify(payload, null, 2);
-    } catch (e) {
-      errorEl.textContent = 'Could not decode token: ' + e.message;
-    }
-  });
+  import "../../scripts/jwt-decoder";
 </script>
+
+<style>
+.jwt-decoder{width:100%;}
+.jwt-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.jwt-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-field .tool-label{display:flex;align-items:center;gap:6px;}
+.jwt-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.code-block{white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.82rem;overflow:auto;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.jwt-layout{grid-template-columns:1fr;}.jwt-sidebar{position:static;}.tool-grid-2{grid-template-columns:1fr;}}
+</style>

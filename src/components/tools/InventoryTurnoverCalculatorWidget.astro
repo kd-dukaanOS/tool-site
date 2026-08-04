@@ -1,0 +1,42 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { IndianRupee, Repeat, CalendarDays } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="cogs" label="Cost of Goods Sold (₹)" type="number" placeholder="e.g. 500000" />
+    <CalculatorField id="beginningInventory" label="Beginning Inventory (₹)" type="number" placeholder="e.g. 80000" />
+    <CalculatorField id="endingInventory" label="Ending Inventory (₹)" type="number" placeholder="e.g. 60000" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter values to calculate turnover"
+      description="Your inventory turnover ratio will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="avgInventoryResult" title="Average Inventory" icon={IndianRupee} accent="neutral" />
+      <ResultCard id="turnoverRatioResult" title="Turnover Ratio" icon={Repeat} accent="primary" size="lg" />
+      <ResultCard id="daysToSellResult" title="Days to Sell" icon={CalendarDays} accent="warning" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/inventory-turnover-calculator.ts"></script>

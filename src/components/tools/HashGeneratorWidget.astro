@@ -1,58 +1,65 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Hash, KeyRound, ShieldCheck, Lock } from "@lucide/astro";
 ---
+<section class="hash-generator">
+  <div class="hash-layout">
+    <aside class="hash-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="hashText">Text to Hash</label>
+        <textarea id="hashText" class="tool-textarea" placeholder="Enter text..."></textarea>
+      </div>
+      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
 
-<div class="tool-panel">
-  <label class="tool-label" for="hashInput">Text to hash</label>
-  <textarea id="hashInput" class="tool-textarea" style="height:10rem" placeholder="Type or paste text to hash..."></textarea>
+    <main class="hash-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔐"
+          title="Hash Generator"
+          description="Generate MD5, SHA-1, SHA-256 and SHA-512 hashes instantly."
+          tips={["MD5", "SHA-1", "SHA-256", "SHA-512"]}
+        />
+      </div>
 
-  <div class="space-y-3" style="margin-top:1rem">
-    <div>
-      <label class="tool-label">SHA-1</label>
-      <p id="sha1Output" class="tool-error" style="color:var(--color-text);word-break:break-all"></p>
-    </div>
-    <div>
-      <label class="tool-label">SHA-256</label>
-      <p id="sha256Output" class="tool-error" style="color:var(--color-text);word-break:break-all"></p>
-    </div>
-    <div>
-      <label class="tool-label">SHA-384</label>
-      <p id="sha384Output" class="tool-error" style="color:var(--color-text);word-break:break-all"></p>
-    </div>
-    <div>
-      <label class="tool-label">SHA-512</label>
-      <p id="sha512Output" class="tool-error" style="color:var(--color-text);word-break:break-all"></p>
-    </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="md5Result" title="MD5" icon={Hash} />
+          <ResultCard id="sha1Result" title="SHA-1" icon={KeyRound} />
+          <ResultCard id="sha256Result" title="SHA-256" icon={ShieldCheck} />
+          <ResultCard id="sha512Result" title="SHA-512" icon={Lock} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Generate MD5, SHA-1, SHA-256 and SHA-512 hashes from any text, entirely in your browser.</p>
+        </section>
+      </div>
+    </main>
   </div>
-</div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const input = document.getElementById('hashInput');
-  const outputs = {
-    'SHA-1': document.getElementById('sha1Output'),
-    'SHA-256': document.getElementById('sha256Output'),
-    'SHA-384': document.getElementById('sha384Output'),
-    'SHA-512': document.getElementById('sha512Output'),
-  };
-
-  async function hashText(algorithm, text) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest(algorithm, data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-  async function updateHashes() {
-    const text = input.value;
-    if (!text) {
-      Object.values(outputs).forEach(el => el.textContent = '');
-      return;
-    }
-    for (const [algo, el] of Object.entries(outputs)) {
-      el.textContent = await hashText(algo, text);
-    }
-  }
-
-  input?.addEventListener('input', updateHashes);
+  import "../../scripts/hash-generator";
 </script>
+
+<style>
+.hash-generator{width:100%;}
+.hash-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.hash-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.hash-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.hash-layout{grid-template-columns:1fr;}.hash-sidebar{position:static;}}
+</style>

@@ -1,0 +1,41 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { IndianRupee, Percent, TrendingUp } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="costPrice" label="Cost Price (₹)" type="number" placeholder="e.g. 500" />
+    <CalculatorField id="sellingPrice" label="Selling Price (₹)" type="number" placeholder="e.g. 750" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter prices to calculate margin"
+      description="Your profit margin and markup will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="profitResult" title="Profit" icon={IndianRupee} accent="success" size="lg" />
+      <ResultCard id="marginResult" title="Profit Margin" icon={Percent} accent="primary" />
+      <ResultCard id="markupResult" title="Markup" icon={TrendingUp} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/profit-margin-calculator.ts"></script>

@@ -1,57 +1,310 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  GitCompare,
+  Plus,
+  Minus,
+  Equal,
+  Percent
+} from "@lucide/astro";
 ---
 
-<div class="tool-panel">
-  <div class="tool-grid-2">
-    <div>
-      <label class="tool-label" for="diffInput1">Original Text</label>
-      <textarea id="diffInput1" class="tool-textarea" placeholder="Paste original text..."></textarea>
-    </div>
-    <div>
-      <label class="tool-label" for="diffInput2">Changed Text</label>
-      <textarea id="diffInput2" class="tool-textarea" placeholder="Paste changed text..."></textarea>
-    </div>
+<section class="diff-checker">
+
+  <div class="diff-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="diff-sidebar">
+
+      <div class="tool-field">
+        <label class="tool-label" for="diffInput1">Original Text</label>
+        <textarea
+          id="diffInput1"
+          class="tool-textarea"
+          placeholder="Paste original text..."
+        ></textarea>
+      </div>
+
+      <div class="tool-field">
+        <label class="tool-label" for="diffInput2">Changed Text</label>
+        <textarea
+          id="diffInput2"
+          class="tool-textarea"
+          placeholder="Paste changed text..."
+        ></textarea>
+      </div>
+
+      <CalculatorActions
+        calculateId="compareBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <!-- Results -->
+
+    <main class="diff-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🔍"
+          title="Diff Checker"
+          description="Compare two blocks of text line by line."
+          tips={[
+            "Line-by-Line Diff",
+            "Added & Removed Lines",
+            "Similarity Score",
+            "Copy Summary"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={4}>
+
+          <ResultCard
+            id="addedResult"
+            title="Lines Added"
+            icon={Plus}
+          />
+
+          <ResultCard
+            id="removedResult"
+            title="Lines Removed"
+            icon={Minus}
+          />
+
+          <ResultCard
+            id="unchangedResult"
+            title="Unchanged"
+            icon={Equal}
+          />
+
+          <ResultCard
+            id="similarityResult"
+            title="Similarity"
+            icon={Percent}
+          />
+
+        </ResultsGrid>
+
+        <section class="diff-output-section">
+
+          <h2><GitCompare size={18} /> Diff Result</h2>
+
+          <div id="diffOutput" class="diff-output"></div>
+
+        </section>
+
+        <section class="calculator-info">
+
+          <h2>About this Tool</h2>
+
+          <p>
+            The Diff Checker compares two blocks of text and highlights
+            lines that were added, removed or left unchanged, along with
+            an overall similarity score.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
   </div>
 
-  <div class="tool-actions">
-    <button id="compareBtn" class="tool-btn tool-btn-primary">Compare</button>
-  </div>
-
-  <div class="mt-6">
-    <label class="tool-label" for="diffResult">Result</label>
-    <div id="diffResult" class="tool-textarea" style="height:auto;min-height:100px;white-space:pre-wrap"></div>
-  </div>
-</div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const input1 = document.getElementById('diffInput1');
-  const input2 = document.getElementById('diffInput2');
-  const result = document.getElementById('diffResult');
-  const compareBtn = document.getElementById('compareBtn');
-
-  function escapeHtml(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  compareBtn?.addEventListener('click', () => {
-    const lines1 = input1.value.split('\n');
-    const lines2 = input2.value.split('\n');
-    const maxLines = Math.max(lines1.length, lines2.length);
-    let output = '';
-
-    for (let i = 0; i < maxLines; i++) {
-      const l1 = lines1[i] ?? '';
-      const l2 = lines2[i] ?? '';
-
-      if (l1 === l2) {
-        output += `  ${escapeHtml(l1)}\n`;
-      } else {
-        if (l1) output += `<span class="bg-red-100 text-red-700">- ${escapeHtml(l1)}</span>\n`;
-        if (l2) output += `<span class="bg-green-100 text-green-700">+ ${escapeHtml(l2)}</span>\n`;
-      }
-    }
-
-    result.innerHTML = output || 'No differences found — texts are identical.';
-  });
+  import "../../scripts/diff-checker-script";
 </script>
+
+<style>
+
+.diff-checker{
+width:100%;
+}
+
+.diff-layout{
+display:grid;
+grid-template-columns:340px minmax(0,1fr);
+gap:32px;
+align-items:start;
+}
+
+.diff-sidebar{
+position:sticky;
+top:24px;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.tool-field{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.diff-content{
+display:flex;
+flex-direction:column;
+gap:28px;
+min-width:0;
+}
+
+.diff-output-section{
+padding:24px;
+border:1px solid #E5E7EB;
+border-radius:18px;
+background:#FFFFFF;
+}
+
+.diff-output-section h2{
+display:flex;
+align-items:center;
+gap:8px;
+margin:0 0 12px;
+font-size:1.15rem;
+font-weight:700;
+color:#111827;
+}
+
+.diff-output{
+white-space:pre-wrap;
+font-family:ui-monospace,monospace;
+font-size:.85rem;
+line-height:1.6;
+max-height:480px;
+overflow:auto;
+}
+
+:global(.diff-added){
+display:block;
+background:#DCFCE7;
+color:#166534;
+}
+
+:global(.diff-removed){
+display:block;
+background:#FEE2E2;
+color:#991B1B;
+}
+
+:global(.diff-same){
+display:block;
+color:#6B7280;
+}
+
+.calculator-info{
+padding:24px;
+border:1px solid #E5E7EB;
+border-radius:18px;
+background:#FFFFFF;
+}
+
+.calculator-info h2{
+margin:0 0 12px;
+font-size:1.15rem;
+font-weight:700;
+color:#111827;
+}
+
+.calculator-info p{
+margin:0;
+line-height:1.8;
+font-size:.95rem;
+color:#6B7280;
+}
+
+.error-box{
+display:flex;
+align-items:center;
+padding:14px 16px;
+border-radius:14px;
+background:#FEF2F2;
+border:1px solid #FCA5A5;
+color:#B91C1C;
+font-size:.92rem;
+font-weight:600;
+}
+
+:global(.dark) .diff-output-section,
+:global(.dark) .calculator-info{
+background:#111217;
+border-color:#27272A;
+}
+
+:global(.dark) .diff-output-section h2,
+:global(.dark) .calculator-info h2{
+color:#FAFAFA;
+}
+
+:global(.dark) .calculator-info p{
+color:#A1A1AA;
+}
+
+:global(.dark) .diff-same{
+color:#A1A1AA;
+}
+
+:global(.dark) .error-box{
+background:#2A1111;
+border-color:#7F1D1D;
+color:#FECACA;
+}
+
+@media(max-width:1024px){
+
+.diff-layout{
+grid-template-columns:1fr;
+}
+
+.diff-sidebar{
+position:static;
+}
+
+}
+
+@media(max-width:768px){
+
+.diff-layout{
+gap:24px;
+}
+
+.diff-content{
+gap:20px;
+}
+
+}
+
+@media(max-width:640px){
+
+.diff-output-section,
+.calculator-info{
+padding:18px;
+}
+
+}
+
+</style>

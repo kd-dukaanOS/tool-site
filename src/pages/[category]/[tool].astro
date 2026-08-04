@@ -1,9 +1,9 @@
----
+﻿---
 // src/pages/[category]/[tool].astro
 import Layout from "../../layouts/Layout.astro";
 import FaqSection from "../../components/FaqSection.astro";
 import JsonFormatterWidget from "../../components/tools/JsonFormatterWidget.astro";
-import Base64Widget from "../../components/tools/Base64Widget.astro";
+import Base64EncoderDecoderWidget from "../../components/tools/Base64EncoderDecoderWidget.astro";
 import CaseConverterWidget from "../../components/tools/CaseConverterWidget.astro";
 import ColorConverterWidget from "../../components/tools/ColorConverterWidget.astro";
 import CsvJsonWidget from "../../components/tools/CsvJsonWidget.astro";
@@ -89,7 +89,7 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
     {tool.slug === "json-formatter" ? (
       <JsonFormatterWidget />
     ) : tool.slug === "base64-tool" ? (
-      <Base64Widget />
+      <Base64EncoderDecoderWidget />
     ) : tool.slug === "case-converter" ? (
       <CaseConverterWidget />
     ) : tool.slug === "color-converter" ? (

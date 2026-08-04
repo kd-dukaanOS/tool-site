@@ -1,0 +1,47 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Gauge } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+
+    <CalculatorField id="fromUnit" label="From" type="select">
+      <option value="pascal">Pascal</option>
+      <option value="kpa">Kilopascal</option>
+      <option value="bar" selected>Bar</option>
+      <option value="atm">Atmosphere</option>
+      <option value="psi">PSI</option>
+      <option value="mmhg">mmHg</option>
+    </CalculatorField>
+
+    <CalculatorField id="toUnit" label="To" type="select">
+      <option value="pascal">Pascal</option>
+      <option value="kpa">Kilopascal</option>
+      <option value="bar">Bar</option>
+      <option value="atm">Atmosphere</option>
+      <option value="psi" selected>PSI</option>
+      <option value="mmhg">mmHg</option>
+    </CalculatorField>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Pressure Converter" description="Enter a value to convert." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Value" icon={Gauge} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/pressure-calculator.ts"></script>

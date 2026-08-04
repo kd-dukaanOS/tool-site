@@ -1,0 +1,401 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Home,
+  Landmark,
+  Percent,
+  ShieldCheck,
+  Building2,
+  Receipt,
+  TrendingUp,
+  Wallet
+} from "@lucide/astro";
+---
+
+<section class="mort-calculator">
+
+  <div class="mort-layout">
+
+    <aside class="mort-sidebar">
+
+      <CalculatorField
+        id="homePrice"
+        label="Home Price (₹)"
+        type="number"
+        placeholder="e.g. 5000000"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Total purchase price of the home."
+      />
+
+      <CalculatorField
+        id="downPayment"
+        label="Down Payment (₹)"
+        type="number"
+        placeholder="e.g. 1000000"
+        min="0"
+        step="1"
+        helpText="Amount paid upfront."
+      />
+
+      <CalculatorField
+        id="loanYears"
+        label="Loan Term (Years)"
+        type="number"
+        placeholder="e.g. 20"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Repayment period."
+      />
+
+      <CalculatorField
+        id="annualRate"
+        label="Interest Rate (%)"
+        type="number"
+        placeholder="e.g. 8.5"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="Annual interest rate."
+      />
+
+      <CalculatorField
+        id="propertyTaxAnnual"
+        label="Property Tax (% of price/year)"
+        type="number"
+        placeholder="e.g. 1"
+        min="0"
+        step="0.01"
+        helpText="Optional. Leave blank if unknown."
+      />
+
+      <CalculatorField
+        id="homeInsuranceAnnual"
+        label="Home Insurance (₹/year)"
+        type="number"
+        placeholder="e.g. 8000"
+        min="0"
+        step="1"
+        helpText="Optional annual insurance premium."
+      />
+
+      <CalculatorField
+        id="pmiAnnual"
+        label="PMI (% of loan/year)"
+        type="number"
+        placeholder="e.g. 0.5"
+        min="0"
+        step="0.01"
+        helpText="Applies only if down payment is under 20%."
+      />
+
+      <CalculatorField
+        id="hoaMonthly"
+        label="HOA / Maintenance (₹/month)"
+        type="number"
+        placeholder="e.g. 1500"
+        min="0"
+        step="1"
+        helpText="Optional monthly society/maintenance fee."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="mort-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏠"
+          title="Mortgage Calculator"
+          description="Estimate your full monthly home loan payment, including taxes and insurance."
+          tips={[
+            "Monthly Principal + Interest",
+            "Property Tax & Insurance",
+            "PMI (if applicable)",
+            "Total Monthly Payment"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="totalMonthlyResult"
+            title="Total Monthly Payment"
+            icon={Wallet}
+            accent="success"
+          />
+
+          <ResultCard
+            id="principalInterestResult"
+            title="Principal + Interest"
+            icon={Home}
+          />
+
+          <ResultCard
+            id="loanAmountResult"
+            title="Loan Amount"
+            icon={Landmark}
+          />
+
+          <ResultCard
+            id="propertyTaxResult"
+            title="Monthly Property Tax"
+            icon={Receipt}
+          />
+
+          <ResultCard
+            id="insuranceResult"
+            title="Monthly Home Insurance"
+            icon={ShieldCheck}
+          />
+
+          <ResultCard
+            id="pmiResult"
+            title="Monthly PMI"
+            icon={Percent}
+          />
+
+          <ResultCard
+            id="hoaResult"
+            title="Monthly HOA"
+            icon={Building2}
+          />
+
+          <ResultCard
+            id="totalInterestResult"
+            title="Total Interest Paid"
+            icon={TrendingUp}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Estimates your full monthly mortgage payment (PITI):
+            Principal, Interest, Taxes and Insurance, plus PMI and
+            HOA fees where applicable. All calculations run locally —
+            no external data or paid service is required.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/mortgage-calculator";
+</script>
+
+<style>
+
+.mort-calculator{
+
+width:100%;
+
+}
+
+.mort-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.mort-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.mort-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.mort-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.mort-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.mort-layout{
+
+gap:24px;
+
+}
+
+.mort-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

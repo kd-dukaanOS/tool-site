@@ -1,0 +1,45 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Gauge } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+
+    <CalculatorField id="fromUnit" label="From" type="select">
+      <option value="mps">m/s</option>
+      <option value="kmph" selected>km/h</option>
+      <option value="mph">mph</option>
+      <option value="knot">Knot</option>
+      <option value="fps">ft/s</option>
+    </CalculatorField>
+
+    <CalculatorField id="toUnit" label="To" type="select">
+      <option value="mps">m/s</option>
+      <option value="kmph">km/h</option>
+      <option value="mph" selected>mph</option>
+      <option value="knot">Knot</option>
+      <option value="fps">ft/s</option>
+    </CalculatorField>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Speed Converter" description="Enter a value to convert." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Value" icon={Gauge} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/speed-calculator.ts"></script>

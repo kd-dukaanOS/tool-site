@@ -1,0 +1,381 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Scale, Activity, Ruler } from "@lucide/astro";
+---
+
+<section class="bmi-calculator">
+
+  <div class="bmi-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="bmi-sidebar">
+
+      <CalculatorField
+        id="weight"
+        label="Weight (kg)"
+        type="number"
+        placeholder="e.g. 70"
+        required={true}
+        min="1"
+        step="0.1"
+        helpText="Enter your weight in kilograms."
+      />
+
+      <CalculatorField
+        id="height"
+        label="Height (cm)"
+        type="number"
+        placeholder="e.g. 175"
+        required={true}
+        min="1"
+        step="0.1"
+        helpText="Enter your height in centimeters."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <!-- Results -->
+
+    <main class="bmi-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="⚖️"
+          title="BMI Calculator"
+          description="Find out your Body Mass Index and healthy weight range instantly."
+          tips={[
+            "BMI Value & Category",
+            "Healthy Weight Range",
+            "Personalized Insight"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="bmiResult"
+            title="Your BMI"
+            icon={Scale}
+            subtitle=" "
+          />
+
+          <ResultCard
+            id="categoryResult"
+            title="Category"
+            icon={Activity}
+          />
+
+          <ResultCard
+            id="rangeResult"
+            title="Healthy Weight Range"
+            icon={Ruler}
+            size="lg"
+          />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Body Mass Index (BMI) estimates whether your weight is healthy
+            for your height, using the formula BMI = weight (kg) &divide;
+            height (m)&sup2;. It's a screening tool, not a diagnosis —
+            muscle mass, age, and body composition all affect what a
+            healthy number looks like for you.
+          </p>
+
+          <h3>BMI Categories</h3>
+
+          <ul>
+            <li>Below 18.5 — Underweight</li>
+            <li>18.5 – 24.9 — Normal weight</li>
+            <li>25 – 29.9 — Overweight</li>
+            <li>30 and above — Obese</li>
+          </ul>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/bmi-calculator";
+</script>
+
+<style>
+
+.bmi-calculator{
+
+width:100%;
+
+}
+
+.bmi-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.bmi-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.bmi-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info h3{
+
+margin:20px 0 10px;
+
+font-size:1rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.calculator-info ul{
+
+margin:0;
+
+padding-left:20px;
+
+line-height:1.9;
+
+font-size:.92rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2,
+:global(.dark) .calculator-info h3{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p,
+:global(.dark) .calculator-info ul{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.bmi-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.bmi-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.bmi-layout{
+
+gap:24px;
+
+}
+
+.bmi-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

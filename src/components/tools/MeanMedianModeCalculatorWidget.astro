@@ -1,0 +1,46 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Calculator, BarChart2, Hash } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField
+      id="numbers"
+      label="Numbers (comma or space separated)"
+      type="text"
+      placeholder="e.g. 2, 4, 4, 6, 8"
+    />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter numbers to calculate"
+      description="Mean, median, mode, and range will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="meanResult" title="Mean" icon={Calculator} accent="primary" size="lg" />
+      <ResultCard id="medianResult" title="Median" icon={BarChart2} accent="neutral" />
+      <ResultCard id="modeResult" title="Mode" icon={Hash} accent="neutral" />
+      <ResultCard id="rangeResult" title="Range" icon={Hash} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/mean-median-mode-calculator.ts"></script>

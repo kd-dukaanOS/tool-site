@@ -1,0 +1,51 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Ruler } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+
+    <CalculatorField id="fromUnit" label="From" type="select">
+      <option value="sqmm">Sq Millimeter</option>
+      <option value="sqcm">Sq Centimeter</option>
+      <option value="sqm" selected>Sq Meter</option>
+      <option value="sqkm">Sq Kilometer</option>
+      <option value="sqft">Sq Foot</option>
+      <option value="sqyd">Sq Yard</option>
+      <option value="acre">Acre</option>
+      <option value="hectare">Hectare</option>
+    </CalculatorField>
+
+    <CalculatorField id="toUnit" label="To" type="select">
+      <option value="sqmm">Sq Millimeter</option>
+      <option value="sqcm">Sq Centimeter</option>
+      <option value="sqm">Sq Meter</option>
+      <option value="sqkm">Sq Kilometer</option>
+      <option value="sqft" selected>Sq Foot</option>
+      <option value="sqyd">Sq Yard</option>
+      <option value="acre">Acre</option>
+      <option value="hectare">Hectare</option>
+    </CalculatorField>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Area Calculator" description="Enter a value to convert." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Value" icon={Ruler} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/area-calculator.ts"></script>

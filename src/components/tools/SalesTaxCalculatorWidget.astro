@@ -1,0 +1,46 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { IndianRupee, Receipt } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="amount" label="Amount (₹)" type="number" placeholder="e.g. 1000" />
+    <CalculatorField id="taxRate" label="Tax Rate (%)" type="number" placeholder="e.g. 18" />
+
+    <label class="checkbox-field">
+      <input type="checkbox" id="isTaxIncluded" />
+      <span>Amount already includes tax</span>
+    </label>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter amount to calculate sales tax"
+      description="Net, tax, and gross amounts will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="netAmountResult" title="Net Amount" icon={IndianRupee} accent="neutral" />
+      <ResultCard id="taxAmountResult" title="Tax Amount" icon={Receipt} accent="warning" />
+      <ResultCard id="grossAmountResult" title="Gross Amount" icon={IndianRupee} accent="primary" size="lg" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/sales-tax-calculator.ts"></script>

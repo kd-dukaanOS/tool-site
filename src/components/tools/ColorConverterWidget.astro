@@ -1,73 +1,38 @@
 ---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Palette, Hash, Droplet } from "@lucide/astro";
 ---
 
-<div class="tool-panel">
-  <div class="flex items-center gap-4 mb-6">
-    <input id="colorPicker" type="color" value="#4F46E5" class="w-16 h-16 rounded-lg border border-gray-300 cursor-pointer" />
-    <div id="colorPreview" class="w-16 h-16 rounded-lg border border-gray-300" style="background-color:#4F46E5"></div>
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="inputFormat" label="Input Format" type="select">
+      <option value="hex">HEX</option>
+      <option value="rgb">RGB (r,g,b)</option>
+    </CalculatorField>
+
+    <CalculatorField id="color" label="Color Value" type="text" placeholder="#ff0000 or 255,0,0" />
+
+    <div id="colorSwatch" class="color-swatch"></div>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
   </div>
 
-  <div class="space-y-3">
-    <div>
-      <label class="tool-label" for="hexValue">HEX</label>
-      <input id="hexValue" type="text" class="tool-textarea" style="height:auto" />
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Color Converter" description="Enter a color to convert." />
     </div>
-    <div>
-      <label class="tool-label" for="rgbValue">RGB</label>
-      <input id="rgbValue" type="text" class="tool-textarea" style="height:auto" />
-    </div>
-    <div>
-      <label class="tool-label" for="hslValue">HSL</label>
-      <input id="hslValue" type="text" class="tool-textarea" style="height:auto" />
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="hexResult" title="HEX" icon={Hash} />
+      <ResultCard id="rgbResult" title="RGB" icon={Palette} />
+      <ResultCard id="hslResult" title="HSL" icon={Droplet} />
     </div>
   </div>
 </div>
 
-<script>
-  // @ts-nocheck
-  const colorPicker = document.getElementById('colorPicker');
-  const colorPreview = document.getElementById('colorPreview');
-  const hexValue = document.getElementById('hexValue');
-  const rgbValue = document.getElementById('rgbValue');
-  const hslValue = document.getElementById('hslValue');
-
-  function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return { r, g, b };
-  }
-
-  function rgbToHsl(r, g, b) {
-    r /= 255; g /= 255; b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
-
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
-      else if (max === g) h = (b - r) / d + 2;
-      else h = (r - g) / d + 4;
-      h /= 6;
-    }
-    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
-  }
-
-  function updateFromHex(hex) {
-    if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return;
-    const { r, g, b } = hexToRgb(hex);
-    const { h, s, l } = rgbToHsl(r, g, b);
-
-    hexValue.value = hex;
-    rgbValue.value = `rgb(${r}, ${g}, ${b})`;
-    hslValue.value = `hsl(${h}, ${s}%, ${l}%)`;
-    colorPreview.style.backgroundColor = hex;
-    colorPicker.value = hex;
-  }
-
-  colorPicker?.addEventListener('input', () => updateFromHex(colorPicker.value));
-  hexValue?.addEventListener('input', () => updateFromHex(hexValue.value));
-
-  updateFromHex('#4F46E5');
-</script>
+<script src="../../scripts/color-converter.ts"></script>

@@ -1,0 +1,473 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import ChartCard from "../calculator/ChartCard.astro";
+import ScheduleTable from "../calculator/ScheduleTable.astro";
+
+import { Receipt, Percent, Wallet, SplitSquareHorizontal } from "@lucide/astro";
+---
+
+<section class="gst-calculator">
+
+  <div class="gst-layout">
+
+    <aside class="gst-sidebar">
+
+      <CalculatorField
+        id="amount"
+        label="Amount (₹)"
+        type="number"
+        placeholder="e.g. 10000"
+        required={true}
+        min="1"
+        helpText="Enter the base amount or GST-inclusive amount."
+      />
+
+      <div class="toggle-row">
+        <button type="button" class="toggle-btn active" data-mode="exclusive">Add GST</button>
+        <button type="button" class="toggle-btn" data-mode="inclusive">Remove GST</button>
+      </div>
+
+      <CalculatorField
+        id="rate"
+        label="GST Rate (%)"
+        type="number"
+        placeholder="e.g. 18"
+        required={true}
+        min="0"
+        step="0.1"
+        helpText="Applicable GST rate."
+      />
+
+      <div class="scenario-row">
+        <button type="button" class="scenario-btn" data-rate="5">5%</button>
+        <button type="button" class="scenario-btn" data-rate="12">12%</button>
+        <button type="button" class="scenario-btn" data-rate="18">18%</button>
+        <button type="button" class="scenario-btn" data-rate="28">28%</button>
+      </div>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="gst-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🧾"
+          title="GST Calculator"
+          description="Add or remove GST from any amount and see the CGST + SGST split."
+          tips={[
+            "Add or Remove GST",
+            "CGST + SGST Split",
+            "Base vs Tax Chart",
+            "Compare All GST Slabs"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={4}>
+
+          <ResultCard id="baseResult" title="Base Amount" icon={Wallet} accent="neutral" />
+          <ResultCard id="gstResult" title="GST Amount" icon={Percent} accent="warning" />
+          <ResultCard id="totalResult" title="Total Amount" icon={Receipt} accent="primary" />
+          <ResultCard id="splitResult" title="CGST + SGST" icon={SplitSquareHorizontal} accent="success" size="lg" />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <ChartCard
+          id="gstPieChart"
+          title="Base Amount vs GST"
+        />
+
+        <ScheduleTable
+          id="scheduleBody"
+          headers={["GST Rate", "GST Amount", "Total Amount"]}
+          caption="Compare Across GST Slabs"
+        />
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            GST (Goods and Services Tax) can be added to a base price or
+            extracted from a GST-inclusive price. For intra-state
+            transactions, GST splits equally into CGST and SGST; for
+            inter-state transactions, the full amount is charged as IGST.
+          </p>
+
+          <h3>Formula</h3>
+
+          <p>
+            Add GST: Total = Amount &times; (1 + Rate/100).<br />
+            Remove GST: Base = Amount &divide; (1 + Rate/100).
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/gst-calculator";
+</script>
+
+<style>
+
+.gst-calculator{
+
+width:100%;
+
+}
+
+.gst-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.gst-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.gst-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.toggle-row{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:-8px;
+
+}
+
+.toggle-btn{
+
+height:44px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#374151;
+
+font-size:.88rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.toggle-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+.scenario-row{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+}
+
+.scenario-btn{
+
+height:40px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#4F46E5;
+
+font-size:.85rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.scenario-btn:hover{
+
+background:#EEF2FF;
+
+border-color:#4F46E5;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info h3{
+
+margin:20px 0 10px;
+
+font-size:1rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .toggle-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#D4D4D8;
+
+}
+
+:global(.dark) .toggle-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+:global(.dark) .scenario-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#A5B4FC;
+
+}
+
+:global(.dark) .scenario-btn:hover{
+
+background:#1E1B4B;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2,
+:global(.dark) .calculator-info h3{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.gst-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.gst-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

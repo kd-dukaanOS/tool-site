@@ -1,0 +1,47 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Weight } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+
+    <CalculatorField id="fromUnit" label="From" type="select">
+      <option value="mg">Milligram</option>
+      <option value="g">Gram</option>
+      <option value="kg" selected>Kilogram</option>
+      <option value="tonne">Tonne</option>
+      <option value="oz">Ounce</option>
+      <option value="lb">Pound</option>
+    </CalculatorField>
+
+    <CalculatorField id="toUnit" label="To" type="select">
+      <option value="mg">Milligram</option>
+      <option value="g">Gram</option>
+      <option value="kg">Kilogram</option>
+      <option value="tonne">Tonne</option>
+      <option value="oz">Ounce</option>
+      <option value="lb" selected>Pound</option>
+    </CalculatorField>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="?" title="Weight Converter" description="Enter a value to convert." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Value" icon={Weight} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/weight-calculator.ts"></script>

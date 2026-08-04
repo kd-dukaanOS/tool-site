@@ -1,45 +1,392 @@
 ---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Percent, Calculator } from "@lucide/astro";
 ---
 
-<div class="tool-panel">
-  <div class="space-y-6">
-    <div class="tool-panel">
-      <p class="text-sm mb-2" style="color:var(--color-text-muted)">What is <input id="p1a" type="number" class="w-20 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="20" />% of <input id="p1b" type="number" class="w-24 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="500" />?</p>
-      <p class="font-bold text-lg" style="color:var(--color-primary)">Result: <span id="p1result">100</span></p>
-    </div>
+<section class="percent-calculator">
 
-    <div class="tool-panel">
-      <p class="text-sm mb-2" style="color:var(--color-text-muted)"><input id="p2a" type="number" class="w-20 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="50" /> is what percent of <input id="p2b" type="number" class="w-24 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="200" />?</p>
-      <p class="font-bold text-lg" style="color:var(--color-primary)">Result: <span id="p2result">25</span>%</p>
-    </div>
+  <div class="percent-layout">
 
-    <div class="tool-panel">
-      <p class="text-sm mb-2" style="color:var(--color-text-muted)">Percentage change from <input id="p3a" type="number" class="w-24 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="100" /> to <input id="p3b" type="number" class="w-24 p-1 rounded text-center" style="border:1px solid var(--color-border)" value="150" />?</p>
-      <p class="font-bold text-lg" style="color:var(--color-primary)">Result: <span id="p3result">50</span>% change</p>
-    </div>
+    <aside class="percent-sidebar">
+
+      <div class="mode-grid">
+        <button type="button" class="mode-btn active" data-percent-mode="percentOf">X% of Y</button>
+        <button type="button" class="mode-btn" data-percent-mode="isWhatPercent">X is what % of Y</button>
+        <button type="button" class="mode-btn" data-percent-mode="percentChange">% Change</button>
+        <button type="button" class="mode-btn" data-percent-mode="findBase">Find the Base</button>
+      </div>
+
+      <p id="modeHint" class="mode-hint"></p>
+
+      <CalculatorField
+        id="value1"
+        label="Value 1"
+        type="number"
+        placeholder="e.g. 20"
+      />
+
+      <CalculatorField
+        id="value2"
+        label="Value 2"
+        type="number"
+        placeholder="e.g. 200"
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="percent-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="％"
+          title="Percentage Calculator"
+          description="Pick a calculation type above, enter your values, and get an instant answer."
+          tips={[
+            "4 Calculation Modes",
+            "Instant Results",
+            "Plain-English Explanation"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={2}>
+
+          <ResultCard id="percentResult" title="Result" icon={Percent} accent="primary" size="lg" />
+          <ResultCard id="expressionResult" title="Calculation" icon={Calculator} accent="neutral" size="lg" />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Percentages express a number as a fraction of 100. This
+            calculator covers the four most common percentage questions —
+            finding a percentage of a number, finding what percentage one
+            number is of another, calculating percentage change, and
+            working backward to find the original number.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
   </div>
-</div>
+
+</section>
 
 <script>
-  // @ts-nocheck
-  function bindPair(aId, bId, resultId, calc) {
-    const a = document.getElementById(aId);
-    const b = document.getElementById(bId);
-    const result = document.getElementById(resultId);
-
-    function update() {
-      const valA = parseFloat(a.value);
-      const valB = parseFloat(b.value);
-      if (isNaN(valA) || isNaN(valB)) { result.textContent = '—'; return; }
-      result.textContent = calc(valA, valB);
-    }
-
-    a?.addEventListener('input', update);
-    b?.addEventListener('input', update);
-    update();
-  }
-
-  bindPair('p1a', 'p1b', 'p1result', (a, b) => ((a / 100) * b).toFixed(2));
-  bindPair('p2a', 'p2b', 'p2result', (a, b) => ((a / b) * 100).toFixed(2));
-  bindPair('p3a', 'p3b', 'p3result', (a, b) => (((b - a) / a) * 100).toFixed(2));
+  import "../../scripts/percentage-calculator";
 </script>
+
+<style>
+
+.percent-calculator{
+
+width:100%;
+
+}
+
+.percent-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.percent-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:16px;
+
+}
+
+.percent-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.mode-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+}
+
+.mode-btn{
+
+height:56px;
+
+padding:0 10px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#374151;
+
+font-size:.82rem;
+
+font-weight:600;
+
+line-height:1.3;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.mode-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+.mode-hint{
+
+margin:0;
+
+font-size:.85rem;
+
+color:#6B7280;
+
+line-height:1.5;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .mode-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#D4D4D8;
+
+}
+
+:global(.dark) .mode-btn.active{
+
+background:#4F46E5;
+
+border-color:#4F46E5;
+
+color:#fff;
+
+}
+
+:global(.dark) .mode-hint{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.percent-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.percent-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

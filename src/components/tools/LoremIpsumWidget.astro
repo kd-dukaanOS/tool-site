@@ -1,108 +1,86 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Type, Hash, AlignLeft } from "@lucide/astro";
 ---
+<section class="lorem-ipsum">
+  <div class="lorem-layout">
+    <aside class="lorem-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="loremType">Generate</label>
+        <select id="loremType" class="tool-select">
+          <option value="paragraphs">Paragraphs</option>
+          <option value="sentences">Sentences</option>
+          <option value="words">Words</option>
+        </select>
+      </div>
 
-<div class="tool-panel">
-  <div class="flex flex-wrap items-center gap-3 mb-4">
-    <select id="loremType" class="tool-textarea" style="height:auto;width:auto">
-      <option value="paragraphs">Paragraphs</option>
-      <option value="sentences">Sentences</option>
-      <option value="words">Words</option>
-    </select>
-    <input id="loremCount" type="number" min="1" max="50" value="3" class="tool-textarea" style="height:auto;width:6rem" />
-    <label class="flex items-center gap-2 text-sm" style="color:var(--color-text)">
-      <input id="startWithLorem" type="checkbox" checked class="w-4 h-4" />
-      Start with "Lorem ipsum..."
-    </label>
-    <div class="tool-actions" style="margin-top:0">
-      <button id="generateLoremBtn" class="tool-btn tool-btn-primary">Generate</button>
-      <button id="copyLoremBtn" class="tool-btn tool-btn-secondary">Copy</button>
-    </div>
+      <div class="tool-field">
+        <label class="tool-label" for="loremCount">Count</label>
+        <input id="loremCount" type="number" class="tool-input" value="5" min="1" max="500" />
+      </div>
+
+      <div class="tool-checkbox-field">
+        <input id="startWithLorem" type="checkbox" checked />
+        <label for="startWithLorem">Start with "Lorem ipsum..."</label>
+      </div>
+
+      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="lorem-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="📝"
+          title="Lorem Ipsum Generator"
+          description="Generate placeholder text for designs, mockups and layouts."
+          tips={["Paragraphs, Sentences or Words", "Classic Lorem Start", "Word & Char Count", "Copy Output"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="wordsResult" title="Words" icon={Type} />
+          <ResultCard id="charsResult" title="Characters" icon={Hash} />
+          <ResultCard id="paragraphsResult" title="Paragraphs" icon={AlignLeft} />
+        </ResultsGrid>
+
+        <div class="tool-field">
+          <label class="tool-label" for="loremOutput">Generated Text</label>
+          <textarea id="loremOutput" class="tool-textarea" readonly></textarea>
+        </div>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Generate placeholder Lorem Ipsum text in paragraphs, sentences or words for use in designs, wireframes and content mockups.</p>
+        </section>
+      </div>
+    </main>
   </div>
-
-  <label class="tool-label" for="loremOutput">Output</label>
-  <textarea id="loremOutput" class="tool-textarea" style="height:18rem" readonly placeholder="Generated text will appear here"></textarea>
-</div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const loremWords = [
-    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do','eiusmod','tempor',
-    'incididunt','ut','labore','et','dolore','magna','aliqua','enim','ad','minim','veniam','quis','nostrud',
-    'exercitation','ullamco','laboris','nisi','aliquip','ex','ea','commodo','consequat','duis','aute','irure',
-    'in','reprehenderit','voluptate','velit','esse','cillum','fugiat','nulla','pariatur','excepteur','sint',
-    'occaecat','cupidatat','non','proident','sunt','culpa','qui','officia','deserunt','mollit','anim','id','est','laborum'
-  ];
-
-  function randomWord() {
-    return loremWords[Math.floor(Math.random() * loremWords.length)];
-  }
-
-  function makeSentence(startWithLorem = false) {
-    const len = 6 + Math.floor(Math.random() * 10);
-    const words = [];
-    for (let i = 0; i < len; i++) words.push(randomWord());
-    if (startWithLorem) {
-      words[0] = 'Lorem';
-      words[1] = 'ipsum';
-      words[2] = 'dolor';
-      words[3] = 'sit';
-      words[4] = 'amet,';
-    } else {
-      words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
-    }
-    return words.join(' ') + '.';
-  }
-
-  function makeParagraph(/** @type {number} */ sentenceCount, startWithLorem = false) {
-    const sentences = [];
-    for (let i = 0; i < sentenceCount; i++) {
-      sentences.push(makeSentence(startWithLorem && i === 0));
-    }
-    return sentences.join(' ');
-  }
-
-  const typeSelect = document.getElementById('loremType');
-  const countInput = document.getElementById('loremCount');
-  const startCheckbox = document.getElementById('startWithLorem');
-  const output = document.getElementById('loremOutput');
-  const generateBtn = document.getElementById('generateLoremBtn');
-  const copyBtn = document.getElementById('copyLoremBtn');
-
-  if (
-    typeSelect instanceof HTMLSelectElement &&
-    countInput instanceof HTMLInputElement &&
-    startCheckbox instanceof HTMLInputElement &&
-    output instanceof HTMLTextAreaElement
-  ) {
-    generateBtn?.addEventListener('click', () => {
-      let count = parseInt(countInput.value, 10);
-      if (isNaN(count) || count < 1) count = 1;
-      if (count > 50) count = 50;
-
-      const type = typeSelect.value;
-      const startLorem = startCheckbox.checked;
-
-      if (type === 'words') {
-        const words = [];
-        for (let i = 0; i < count; i++) words.push(randomWord());
-        if (startLorem) {
-          words[0] = 'Lorem';
-          if (words[1]) words[1] = 'ipsum';
-        }
-        output.value = words.join(' ');
-      } else if (type === 'sentences') {
-        const sentences = [];
-        for (let i = 0; i < count; i++) sentences.push(makeSentence(startLorem && i === 0));
-        output.value = sentences.join(' ');
-      } else {
-        const paragraphs = [];
-        for (let i = 0; i < count; i++) paragraphs.push(makeParagraph(4, startLorem && i === 0));
-        output.value = paragraphs.join('\n\n');
-      }
-    });
-
-    copyBtn?.addEventListener('click', () => {
-      navigator.clipboard.writeText(output.value);
-    });
-  }
+  import "../../scripts/lorem-ipsum";
 </script>
+
+<style>
+.lorem-ipsum{width:100%;}
+.lorem-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.lorem-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-checkbox-field{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#374151;}
+.lorem-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .tool-checkbox-field{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.lorem-layout{grid-template-columns:1fr;}.lorem-sidebar{position:static;}}
+</style>

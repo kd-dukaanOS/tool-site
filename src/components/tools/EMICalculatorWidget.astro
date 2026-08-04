@@ -1,0 +1,418 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import ChartCard from "../calculator/ChartCard.astro";
+import ScheduleTable from "../calculator/ScheduleTable.astro";
+
+import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
+---
+
+<section class="emi-calculator">
+
+  <div class="emi-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="emi-sidebar">
+
+      <CalculatorField
+        id="principal"
+        label="Loan Amount (₹)"
+        type="number"
+        placeholder="e.g. 2500000"
+        required={true}
+        min="1"
+        helpText="Total loan / principal amount."
+      />
+
+      <CalculatorField
+        id="rate"
+        label="Interest Rate (% per year)"
+        type="number"
+        placeholder="e.g. 8.5"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="Annual interest rate."
+      />
+
+      <CalculatorField
+        id="tenure"
+        label="Loan Tenure (years)"
+        type="number"
+        placeholder="e.g. 20"
+        required={true}
+        min="1"
+        helpText="Loan repayment period."
+      />
+
+      <div class="scenario-row">
+        <button type="button" class="scenario-btn" data-tenure="10">10 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="15">15 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="20">20 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="25">25 Yrs</button>
+      </div>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <!-- Results -->
+
+    <main class="emi-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏦"
+          title="Loan EMI Calculator"
+          description="Calculate your monthly EMI, total interest and the full year-wise repayment schedule."
+          tips={[
+            "Monthly EMI Breakdown",
+            "Principal vs Interest Chart",
+            "Year-wise Amortization Schedule",
+            "Smart Payoff Insight"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={4}>
+
+          <ResultCard id="emiResult" title="Monthly EMI" icon={Wallet} accent="primary" />
+          <ResultCard id="interestResult" title="Total Interest" icon={Percent} accent="warning" />
+          <ResultCard id="totalResult" title="Total Payment" icon={Receipt} accent="neutral" />
+          <ResultCard id="percentResult" title="Interest % of Payment" icon={PiggyBank} accent="danger" />
+
+        </ResultsGrid>
+
+        <p
+          id="insightBox"
+          class="insight-box"
+          hidden
+        ></p>
+
+        <ChartCard
+          id="emiPieChart"
+          title="Principal vs Interest"
+        />
+
+        <ScheduleTable
+          id="scheduleBody"
+          headers={["Year", "Principal Paid", "Interest Paid", "Remaining Balance"]}
+          caption="Year-wise Amortization Schedule"
+        />
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            EMI (Equated Monthly Installment) is the fixed amount you repay
+            every month, covering both principal and interest, until the
+            loan is fully paid off.
+          </p>
+
+          <h3>Formula</h3>
+
+          <p>
+            EMI = [P &times; R &times; (1+R)<sup>N</sup>] &divide; [(1+R)<sup>N</sup> &minus; 1]
+            — where P is the principal, R is the monthly interest rate, and
+            N is the number of monthly installments.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/emi-calculator";
+</script>
+
+<style>
+
+.emi-calculator{
+
+width:100%;
+
+}
+
+.emi-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.emi-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.emi-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.scenario-row{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:10px;
+
+}
+
+.scenario-btn{
+
+height:40px;
+
+border-radius:12px;
+
+border:1px solid #D1D5DB;
+
+background:#fff;
+
+color:#4F46E5;
+
+font-size:.85rem;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:all .2s ease;
+
+}
+
+.scenario-btn:hover{
+
+background:#EEF2FF;
+
+border-color:#4F46E5;
+
+}
+
+.insight-box{
+
+margin:0;
+
+padding:18px 20px;
+
+border-radius:16px;
+
+background:#EEF2FF;
+
+border:1px solid #C7D2FE;
+
+color:#3730A3;
+
+font-size:.92rem;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info h3{
+
+margin:20px 0 10px;
+
+font-size:1rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .scenario-btn{
+
+background:#18181B;
+
+border-color:#27272A;
+
+color:#A5B4FC;
+
+}
+
+:global(.dark) .scenario-btn:hover{
+
+background:#1E1B4B;
+
+}
+
+:global(.dark) .insight-box{
+
+background:#1E1B4B;
+
+border-color:#3730A3;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2,
+:global(.dark) .calculator-info h3{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.emi-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.emi-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

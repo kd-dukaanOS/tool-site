@@ -1,0 +1,54 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Droplets, GlassWater } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="weightKg" label="Weight (kg)" type="number" placeholder="e.g. 65" />
+
+    <div class="field-group">
+      <label for="activityLevel">Activity Level</label>
+      <select id="activityLevel" class="calculator-input">
+        <option value="sedentary">Sedentary</option>
+        <option value="light">Light Activity</option>
+        <option value="moderate" selected>Moderate Activity</option>
+        <option value="active">Very Active</option>
+      </select>
+    </div>
+
+    <label class="checkbox-field">
+      <input type="checkbox" id="climateHot" />
+      <span>I live in a hot/humid climate</span>
+    </label>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter weight to calculate water intake"
+      description="Your recommended daily water intake will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="litersResult" title="Daily Water Intake" icon={Droplets} accent="primary" size="lg" />
+      <ResultCard id="glassesResult" title="Equivalent Glasses" icon={GlassWater} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/water-intake-calculator.ts"></script>

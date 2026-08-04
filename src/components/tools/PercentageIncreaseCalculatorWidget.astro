@@ -1,0 +1,40 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { ArrowUpRight, Percent } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="originalValue" label="Original Value" type="number" placeholder="e.g. 200" />
+    <CalculatorField id="newValue" label="New Value" type="number" placeholder="e.g. 250" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter values to calculate change"
+      description="Percentage increase or decrease will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="changeResult" title="Change" icon={ArrowUpRight} accent="neutral" />
+      <ResultCard id="percentResult" title="Percentage Change" icon={Percent} accent="primary" size="lg" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/percentage-increase-calculator.ts"></script>

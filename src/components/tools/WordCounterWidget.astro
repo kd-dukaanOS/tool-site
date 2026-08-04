@@ -1,69 +1,70 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Type, Hash, AlignLeft, BookOpen, Mic, Ruler } from "@lucide/astro";
 ---
+<section class="word-counter">
+  <div class="wc-layout">
+    <aside class="wc-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="wcInput">Text</label>
+        <textarea id="wcInput" class="tool-textarea" placeholder="Paste or type your text here..."></textarea>
+      </div>
 
-<textarea
-  id="textInput"
-  class="w-full h-64 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  placeholder="Start typing or paste your text here..."
-></textarea>
+      <CalculatorActions calculateId="analyzeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
 
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-    <div id="wordCount" class="text-2xl font-bold text-indigo-600">0</div>
-    <div class="text-sm text-gray-500">Words</div>
-  </div>
-  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-    <div id="charCount" class="text-2xl font-bold text-indigo-600">0</div>
-    <div class="text-sm text-gray-500">Characters</div>
-  </div>
-  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-    <div id="charNoSpaceCount" class="text-2xl font-bold text-indigo-600">0</div>
-    <div class="text-sm text-gray-500">Characters (no spaces)</div>
-  </div>
-  <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
-    <div id="sentenceCount" class="text-2xl font-bold text-indigo-600">0</div>
-    <div class="text-sm text-gray-500">Sentences</div>
-  </div>
-</div>
+    <main class="wc-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="📊"
+          title="Word Counter"
+          description="Count words, characters, sentences and estimate reading time."
+          tips={["Live Word Count", "Reading & Speaking Time", "Sentence & Paragraph Count", "Copy Summary"]}
+        />
+      </div>
 
-<div class="flex gap-3 mt-4">
-  <button id="clearTextBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
-</div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="wordsResult" title="Words" icon={Type} />
+          <ResultCard id="charactersResult" title="Characters" icon={Hash} />
+          <ResultCard id="noSpacesResult" title="No Spaces" icon={Hash} />
+          <ResultCard id="sentencesResult" title="Sentences" icon={AlignLeft} />
+          <ResultCard id="paragraphsResult" title="Paragraphs" icon={AlignLeft} />
+          <ResultCard id="avgWordLengthResult" title="Avg Word Length" icon={Ruler} />
+          <ResultCard id="readingTimeResult" title="Reading Time" icon={BookOpen} />
+          <ResultCard id="speakingTimeResult" title="Speaking Time" icon={Mic} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Count words, characters, sentences and paragraphs, with estimated reading and speaking time — updates live as you type.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
 
 <script>
-  const textInput = document.getElementById('textInput');
-  const wordCount = document.getElementById('wordCount');
-  const charCount = document.getElementById('charCount');
-  const charNoSpaceCount = document.getElementById('charNoSpaceCount');
-  const sentenceCount = document.getElementById('sentenceCount');
-  const clearBtn = document.getElementById('clearTextBtn');
-
-  if (
-    textInput instanceof HTMLTextAreaElement &&
-    wordCount &&
-    charCount &&
-    charNoSpaceCount &&
-    sentenceCount
-  ) {
-    const updateCounts = () => {
-      const text = textInput.value;
-
-      const words = text.trim().length === 0 ? [] : text.trim().split(/\s+/);
-      wordCount.textContent = String(words.length);
-
-      charCount.textContent = String(text.length);
-
-      charNoSpaceCount.textContent = String(text.replace(/\s/g, '').length);
-
-      const sentences = text.trim().length === 0 ? [] : text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      sentenceCount.textContent = String(sentences.length);
-    };
-
-    textInput.addEventListener('input', updateCounts);
-
-    clearBtn?.addEventListener('click', () => {
-      textInput.value = '';
-      updateCounts();
-    });
-  }
+  import "../../scripts/word-counter";
 </script>
+
+<style>
+.word-counter{width:100%;}
+.wc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.wc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.wc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.wc-layout{grid-template-columns:1fr;}.wc-sidebar{position:static;}}
+</style>

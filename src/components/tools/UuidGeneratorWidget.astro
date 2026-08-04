@@ -1,54 +1,85 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Fingerprint, Hash, Layers, Ruler } from "@lucide/astro";
 ---
+<section class="uuid-generator">
+  <div class="uuid-layout">
+    <aside class="uuid-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="uuidCount">Count</label>
+        <input id="uuidCount" type="number" class="tool-input" value="5" min="1" max="1000" />
+      </div>
 
-<div class="flex flex-wrap items-center gap-3 mb-4">
-  <label class="text-sm font-medium text-gray-700">How many?</label>
-  <input
-    id="uuidCount"
-    type="number"
-    min="1"
-    max="100"
-    value="1"
-    class="w-24 p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  />
-  <button id="generateBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Generate</button>
-  <button id="copyUuidBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy All</button>
-  <button id="clearUuidBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
-</div>
+      <div class="tool-field">
+        <label class="tool-label" for="uuidVersion">Version</label>
+        <select id="uuidVersion" class="tool-select">
+          <option value="v4" selected>Version 4 (Random)</option>
+          <option value="nil">Nil UUID</option>
+        </select>
+      </div>
 
-<textarea
-  id="uuidOutput"
-  class="w-full h-64 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100"
-  readonly
-  placeholder="Your UUIDs will appear here"
-></textarea>
+      <div class="tool-checkbox-field"><input id="uuidHyphens" type="checkbox" checked /><label for="uuidHyphens">Include hyphens</label></div>
+      <div class="tool-checkbox-field"><input id="uuidUppercase" type="checkbox" /><label for="uuidUppercase">Uppercase</label></div>
+
+      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="uuid-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🆔"
+          title="UUID Generator"
+          description="Generate random UUID v4 identifiers instantly."
+          tips={["Bulk Generation", "v4 & Nil UUID", "Custom Formatting", "Copy All"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="countResult" title="Generated" icon={Hash} />
+          <ResultCard id="versionResult" title="Version" icon={Layers} />
+          <ResultCard id="lengthResult" title="Length" icon={Ruler} />
+        </ResultsGrid>
+
+        <div class="tool-field">
+          <label class="tool-label"><Fingerprint size={16} /> Generated UUIDs</label>
+          <textarea id="uuidOutput" class="tool-textarea uuid-output" readonly></textarea>
+        </div>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Generate cryptographically random UUID v4 identifiers in bulk, using your browser's native crypto.randomUUID().</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
 
 <script>
-  const countInput = document.getElementById('uuidCount');
-  const output = document.getElementById('uuidOutput');
-  const generateBtn = document.getElementById('generateBtn');
-  const copyBtn = document.getElementById('copyUuidBtn');
-  const clearBtn = document.getElementById('clearUuidBtn');
-
-  if (countInput instanceof HTMLInputElement && output instanceof HTMLTextAreaElement) {
-    generateBtn?.addEventListener('click', () => {
-      let count = parseInt(countInput.value, 10);
-      if (isNaN(count) || count < 1) count = 1;
-      if (count > 100) count = 100;
-
-      const uuids = [];
-      for (let i = 0; i < count; i++) {
-        uuids.push(crypto.randomUUID());
-      }
-      output.value = uuids.join('\n');
-    });
-
-    copyBtn?.addEventListener('click', () => {
-      navigator.clipboard.writeText(output.value);
-    });
-
-    clearBtn?.addEventListener('click', () => {
-      output.value = '';
-    });
-  }
+  import "../../scripts/uuid-generator";
 </script>
+
+<style>
+.uuid-generator{width:100%;}
+.uuid-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.uuid-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-field .tool-label{display:flex;align-items:center;gap:6px;}
+.tool-checkbox-field{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#374151;}
+.uuid-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.uuid-output{font-family:ui-monospace,monospace;font-size:.85rem;min-height:200px;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .tool-checkbox-field{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.uuid-layout{grid-template-columns:1fr;}.uuid-sidebar{position:static;}}
+</style>

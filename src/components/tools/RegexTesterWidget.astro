@@ -1,87 +1,83 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Regex, Hash, Type, Layers } from "@lucide/astro";
 ---
+<section class="regex-tester">
+  <div class="regex-layout">
+    <aside class="regex-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="regexPattern"><Regex size={16} /> Pattern</label>
+        <input id="regexPattern" type="text" class="tool-input" placeholder="\\d+" />
+      </div>
 
-<div class="flex flex-wrap gap-3 mb-4">
-  <input
-    id="regexPattern"
-    type="text"
-    placeholder="Enter regex pattern, e.g. \d+"
-    class="flex-1 min-w-[200px] p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  />
-  <input
-    id="regexFlags"
-    type="text"
-    placeholder="Flags, e.g. gi"
-    class="w-28 p-2 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  />
-</div>
+      <div class="tool-field">
+        <label class="tool-label" for="regexFlags">Flags</label>
+        <input id="regexFlags" type="text" class="tool-input" value="g" placeholder="g, i, m, s" />
+      </div>
 
-<label class="block text-sm font-medium text-gray-700 mb-1">Test String</label>
-<textarea
-  id="testString"
-  class="w-full h-48 p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-  placeholder="Paste text to test your regex against..."
-></textarea>
+      <div class="tool-field">
+        <label class="tool-label" for="regexText">Test Text</label>
+        <textarea id="regexText" class="tool-textarea" placeholder="Paste text to test against..."></textarea>
+      </div>
 
-<div class="mt-4">
-  <label class="block text-sm font-medium text-gray-700 mb-1">Matches</label>
-  <div id="matchResult" class="p-3 border border-gray-300 rounded-lg bg-gray-50 min-h-[80px] text-sm whitespace-pre-wrap"></div>
-</div>
+      <CalculatorActions calculateId="testBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
 
-<p id="regexError" class="text-red-600 mt-3 font-medium"></p>
+    <main class="regex-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🧩"
+          title="Regex Tester"
+          description="Test regular expressions against text with live match highlighting."
+          tips={["Match Highlighting", "Flags Support", "Capture Groups", "Copy Summary"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="matchCountResult" title="Matches" icon={Hash} />
+          <ResultCard id="firstMatchResult" title="First Match" icon={Type} />
+          <ResultCard id="groupsResult" title="Capture Groups" icon={Layers} />
+        </ResultsGrid>
+
+        <div class="tool-field">
+          <label class="tool-label">Highlighted Text</label>
+          <div id="highlightedOutput" class="regex-output"></div>
+        </div>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Test JavaScript regular expressions against sample text with live match highlighting, flags support and capture group detection.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
 
 <script>
-  const patternInput = document.getElementById('regexPattern');
-  const flagsInput = document.getElementById('regexFlags');
-  const testStringInput = document.getElementById('testString');
-  const matchResult = document.getElementById('matchResult');
-  const errorEl = document.getElementById('regexError');
-
-  if (
-    patternInput instanceof HTMLInputElement &&
-    flagsInput instanceof HTMLInputElement &&
-    testStringInput instanceof HTMLTextAreaElement &&
-    matchResult &&
-    errorEl
-  ) {
-    const runMatch = () => {
-      const pattern = patternInput.value;
-      const flags = flagsInput.value;
-      const text = testStringInput.value;
-
-      errorEl.textContent = '';
-
-      if (!pattern) {
-        matchResult.innerHTML = '';
-        return;
-      }
-
-      try {
-        const regex = new RegExp(pattern, flags);
-        const matches = [...text.matchAll(new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'))];
-
-        if (matches.length === 0) {
-          matchResult.textContent = 'No matches found.';
-        } else {
-          let highlighted = text;
-          const escapeHtml = (str: string) =>
-            str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-          highlighted = escapeHtml(text).replace(
-            new RegExp(escapeHtml(pattern) === pattern ? pattern : pattern, flags.includes('g') ? flags : flags + 'g'),
-            (m) => `<mark class="bg-yellow-200">${escapeHtml(m)}</mark>`
-          );
-
-          matchResult.innerHTML = `<strong>${matches.length} match(es) found</strong><br><br>${highlighted}`;
-        }
-      } catch (e) {
-        errorEl.textContent = 'Invalid regex: ' + (e instanceof Error ? e.message : String(e));
-        matchResult.innerHTML = '';
-      }
-    };
-
-    patternInput.addEventListener('input', runMatch);
-    flagsInput.addEventListener('input', runMatch);
-    testStringInput.addEventListener('input', runMatch);
-  }
+  import "../../scripts/regex-tester";
 </script>
+
+<style>
+.regex-tester{width:100%;}
+.regex-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.regex-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-field .tool-label{display:flex;align-items:center;gap:6px;}
+.regex-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.regex-output{padding:20px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.88rem;line-height:1.7;max-height:400px;overflow:auto;}
+.regex-output :global(mark){background:#FDE68A;color:#78350F;border-radius:3px;padding:0 2px;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .regex-output,:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.regex-layout{grid-template-columns:1fr;}.regex-sidebar{position:static;}}
+</style>

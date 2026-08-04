@@ -1,67 +1,85 @@
 ---
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Link, ArrowRightLeft, Ruler, Plus } from "@lucide/astro";
 ---
+<section class="url-encoder">
+  <div class="url-layout">
+    <aside class="url-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="urlInput">Text or URL</label>
+        <textarea id="urlInput" class="tool-textarea" placeholder="https://example.com/?q=hello world"></textarea>
+      </div>
 
-<div class="grid md:grid-cols-2 gap-4">
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Input</label>
-    <textarea
-      id="urlInput"
-      class="w-full h-56 p-3 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-      placeholder="Type or paste text/URL here"
-    ></textarea>
+      <div class="tool-checkbox-field">
+        <input id="urlComponent" type="checkbox" checked />
+        <label for="urlComponent">Encode/decode as URI component (recommended)</label>
+      </div>
+
+      <div class="tool-actions">
+        <button id="encodeBtn" class="tool-btn tool-btn-primary"><ArrowRightLeft size={16} /> Encode</button>
+        <button id="decodeBtn" class="tool-btn tool-btn-secondary">Decode</button>
+      </div>
+
+      <div class="tool-actions">
+        <button id="resetBtn" class="tool-btn tool-btn-secondary">Reset</button>
+        <button id="copyBtn" class="tool-btn tool-btn-secondary">Copy</button>
+      </div>
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="url-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔗"
+          title="URL Encoder / Decoder"
+          description="Encode or decode URLs and text for safe transmission."
+          tips={["Encode", "Decode", "Component or Full URI", "Copy Result"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <div class="tool-field">
+          <label class="tool-label" for="urlOutput">Output</label>
+          <textarea id="urlOutput" class="tool-textarea" readonly></textarea>
+        </div>
+
+        <ResultsGrid columns={3}>
+          <ResultCard id="inputLengthResult" title="Input Length" icon={Ruler} />
+          <ResultCard id="outputLengthResult" title="Output Length" icon={Link} />
+          <ResultCard id="diffResult" title="Length Diff" icon={Plus} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Encode text and URLs for safe transmission in query strings, or decode percent-encoded URLs back to readable text.</p>
+        </section>
+      </div>
+    </main>
   </div>
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Output</label>
-    <textarea
-      id="urlOutput"
-      class="w-full h-56 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100"
-      readonly
-    ></textarea>
-  </div>
-</div>
-
-<div class="flex flex-wrap gap-3 mt-4">
-  <button id="urlEncodeBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Encode</button>
-  <button id="urlDecodeBtn" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Decode</button>
-  <button id="urlCopyBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy Output</button>
-  <button id="urlClearBtn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Clear</button>
-</div>
-
-<p id="urlError" class="text-red-600 mt-3 font-medium"></p>
+</section>
 
 <script>
-  const input = document.getElementById('urlInput');
-  const output = document.getElementById('urlOutput');
-  const errorEl = document.getElementById('urlError');
-  const encodeBtn = document.getElementById('urlEncodeBtn');
-  const decodeBtn = document.getElementById('urlDecodeBtn');
-  const copyBtn = document.getElementById('urlCopyBtn');
-  const clearBtn = document.getElementById('urlClearBtn');
-
-  if (input instanceof HTMLTextAreaElement && output instanceof HTMLTextAreaElement && errorEl) {
-    encodeBtn?.addEventListener('click', () => {
-      output.value = encodeURIComponent(input.value);
-      errorEl.textContent = '';
-    });
-
-    decodeBtn?.addEventListener('click', () => {
-      try {
-        output.value = decodeURIComponent(input.value);
-        errorEl.textContent = '';
-      } catch (e) {
-        errorEl.textContent = 'Invalid encoded input: ' + (e instanceof Error ? e.message : String(e));
-        output.value = '';
-      }
-    });
-
-    copyBtn?.addEventListener('click', () => {
-      navigator.clipboard.writeText(output.value);
-    });
-
-    clearBtn?.addEventListener('click', () => {
-      input.value = '';
-      output.value = '';
-      errorEl.textContent = '';
-    });
-  }
+  import "../../scripts/url-encoder-decoder";
 </script>
+
+<style>
+.url-encoder{width:100%;}
+.url-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.url-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-checkbox-field{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#374151;}
+.url-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .tool-checkbox-field{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.url-layout{grid-template-columns:1fr;}.url-sidebar{position:static;}}
+</style>

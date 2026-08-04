@@ -1,0 +1,40 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { CaseSensitive } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="caseType" label="Case Type" type="select">
+      <option value="upper">UPPERCASE</option>
+      <option value="lower">lowercase</option>
+      <option value="title">Title Case</option>
+      <option value="sentence">Sentence case</option>
+      <option value="camel">camelCase</option>
+      <option value="pascal">PascalCase</option>
+      <option value="snake">snake_case</option>
+      <option value="kebab">kebab-case</option>
+    </CalculatorField>
+
+    <CalculatorField id="text" label="Text" type="textarea" placeholder="Enter text to convert" />
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="??" title="Case Converter" description="Enter text to convert case." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="outputResult" title="Output" icon={CaseSensitive} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/case-converter.ts"></script>

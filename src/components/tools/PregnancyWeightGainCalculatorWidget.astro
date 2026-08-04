@@ -1,0 +1,47 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Scale, TrendingUp, CalendarDays } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="prePregnancyWeightKg" label="Pre-Pregnancy Weight (kg)" type="number" placeholder="e.g. 60" />
+    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 165" />
+    <CalculatorField id="currentWeekOfPregnancy" label="Current Week of Pregnancy" type="number" placeholder="e.g. 20" />
+
+    <label class="checkbox-field">
+      <input type="checkbox" id="isTwins" />
+      <span>Twin pregnancy</span>
+    </label>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter details to check weight gain"
+      description="Recommended pregnancy weight gain range will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="bmiResult" title="Pre-Pregnancy BMI" icon={Scale} accent="neutral" />
+      <ResultCard id="totalGainResult" title="Total Recommended Gain" icon={TrendingUp} accent="primary" size="lg" />
+      <ResultCard id="gainToDateResult" title="Recommended Gain by Now" icon={CalendarDays} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/pregnancy-weight-gain-calculator.ts"></script>

@@ -1,0 +1,357 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server";
+
+interface Props {
+  id: string;
+  title: string;
+
+  value?: string | number;
+  subtitle?: string;
+
+  icon?: AstroComponentFactory;
+  badge?: string;
+
+  accent?: "primary" | "success" | "warning" | "danger" | "neutral";
+  size?: "sm" | "md" | "lg";
+}
+
+const {
+  id,
+  title,
+  value = "--",
+  subtitle = "",
+  icon: Icon,
+  badge = "",
+  accent = "primary",
+  size = "md",
+} = Astro.props as Props;
+---
+
+<article
+  class={`result-card ${accent} ${size}`}
+>
+
+  <div class="card-header">
+
+    <div class="title-group">
+
+      {
+        Icon && (
+          <span
+            class="card-icon"
+            aria-hidden="true"
+          >
+            <Icon
+              size={20}
+              strokeWidth={2}
+            />
+          </span>
+        )
+      }
+
+      <h3 class="card-title">
+        {title}
+      </h3>
+
+    </div>
+
+    {
+      badge && (
+        <span class="card-badge">
+          {badge}
+        </span>
+      )
+    }
+
+  </div>
+
+  <div
+    id={id}
+    class="card-value"
+    aria-live="polite"
+  >
+    {value}
+  </div>
+
+  {
+    subtitle && (
+      <p
+        id={`${id}-subtitle`}
+        class="card-subtitle"
+      >
+        {subtitle}
+      </p>
+    )
+  }
+
+</article>
+
+<style>
+
+.result-card{
+
+position:relative;
+
+display:flex;
+
+flex-direction:column;
+
+gap:14px;
+
+padding:22px;
+
+border-radius:18px;
+
+border:1px solid #E5E7EB;
+
+background:#FFFFFF;
+
+transition:
+transform .2s,
+box-shadow .2s,
+border-color .2s;
+
+overflow:hidden;
+
+}
+
+.result-card:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 14px 34px rgba(0,0,0,.08);
+
+}
+
+.result-card::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:4px;
+
+background:#4F46E5;
+
+}
+
+/* Accent */
+
+.result-card.success::before{
+
+background:#10B981;
+
+}
+
+.result-card.warning::before{
+
+background:#F59E0B;
+
+}
+
+.result-card.danger::before{
+
+background:#EF4444;
+
+}
+
+.result-card.neutral::before{
+
+background:#94A3B8;
+
+}
+
+/* Sizes */
+
+.result-card.sm{
+
+padding:16px;
+
+}
+
+.result-card.lg{
+
+padding:28px;
+
+}
+
+/* Header */
+
+.card-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:12px;
+
+}
+
+.title-group{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.card-icon{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+width:42px;
+
+height:42px;
+
+border-radius:12px;
+
+background:#EEF2FF;
+
+color:#4F46E5;
+
+flex-shrink:0;
+
+}
+
+.card-title{
+
+margin:0;
+
+font-size:.92rem;
+
+font-weight:600;
+
+color:#6B7280;
+
+}
+
+/* Badge */
+
+.card-badge{
+
+padding:4px 10px;
+
+border-radius:999px;
+
+background:#EEF2FF;
+
+font-size:.72rem;
+
+font-weight:700;
+
+color:#4338CA;
+
+}
+
+/* Value */
+
+.card-value{
+
+font-size:2rem;
+
+font-weight:700;
+
+line-height:1.2;
+
+word-break:break-word;
+
+color:#111827;
+
+}
+
+/* Subtitle */
+
+.card-subtitle{
+
+margin:0;
+
+font-size:.88rem;
+
+line-height:1.6;
+
+color:#6B7280;
+
+}
+
+/* Dark */
+
+:global(.dark) .result-card{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .card-icon{
+
+background:#312E81;
+
+color:#C7D2FE;
+
+}
+
+:global(.dark) .card-title,
+
+:global(.dark) .card-subtitle{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .card-value{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .card-badge{
+
+background:#312E81;
+
+color:#C7D2FE;
+
+}
+
+/* Mobile */
+
+@media (max-width:640px){
+
+.result-card{
+
+padding:18px;
+
+}
+
+.card-value{
+
+font-size:1.6rem;
+
+}
+
+.card-icon{
+
+width:36px;
+
+height:36px;
+
+}
+
+}
+
+</style>

@@ -1,0 +1,325 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  TrendingUp,
+  Wallet,
+  Percent,
+  TrendingDown
+} from "@lucide/astro";
+---
+
+<section class="inf-calculator">
+
+  <div class="inf-layout">
+
+    <aside class="inf-sidebar">
+
+      <CalculatorField
+        id="amount"
+        label="Amount (₹)"
+        type="number"
+        placeholder="e.g. 100000"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Today's amount you want to project."
+      />
+
+      <CalculatorField
+        id="years"
+        label="Time Period (Years)"
+        type="number"
+        placeholder="e.g. 10"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Number of years into the future."
+      />
+
+      <CalculatorField
+        id="annualRate"
+        label="Annual Inflation Rate (%)"
+        type="number"
+        placeholder="e.g. 6"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="India's long-term average is roughly 5-6%."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="inf-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="📉"
+          title="Inflation Calculator"
+          description="See how inflation erodes purchasing power over time."
+          tips={[
+            "Future Value Needed",
+            "Purchasing Power Left",
+            "Total Inflation %",
+            "Purchasing Power Lost"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={2}>
+
+          <ResultCard
+            id="futureValueResult"
+            title="Future Value Needed"
+            icon={TrendingUp}
+            accent="warning"
+          />
+
+          <ResultCard
+            id="purchasingPowerResult"
+            title="Purchasing Power Left"
+            icon={Wallet}
+            accent="danger"
+          />
+
+          <ResultCard
+            id="totalInflationResult"
+            title="Total Inflation Over Period"
+            icon={Percent}
+          />
+
+          <ResultCard
+            id="powerLostResult"
+            title="Purchasing Power Lost"
+            icon={TrendingDown}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Shows two sides of inflation: the future amount you'd need
+            to buy what today's amount buys now, and how much today's
+            amount will actually be worth in real terms after N years
+            of inflation. All calculations run locally with the rate
+            you provide — no external data required.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/inflation-calculator";
+</script>
+
+<style>
+
+.inf-calculator{
+
+width:100%;
+
+}
+
+.inf-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.inf-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.inf-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.inf-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.inf-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.inf-layout{
+
+gap:24px;
+
+}
+
+.inf-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

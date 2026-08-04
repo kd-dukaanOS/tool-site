@@ -1,0 +1,50 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Sigma, BarChart2, Calculator } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField
+      id="numbers"
+      label="Numbers (comma or space separated)"
+      type="text"
+      placeholder="e.g. 4, 8, 6, 5, 3"
+    />
+
+    <label class="checkbox-field">
+      <input type="checkbox" id="isSample" />
+      <span>Treat as sample (not full population)</span>
+    </label>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter numbers to calculate deviation"
+      description="Standard deviation, variance, and mean will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="stdDevResult" title="Standard Deviation" icon={Sigma} accent="primary" size="lg" />
+      <ResultCard id="varianceResult" title="Variance" icon={BarChart2} accent="neutral" />
+      <ResultCard id="meanResult" title="Mean" icon={Calculator} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/standard-deviation-calculator.ts"></script>

@@ -1,0 +1,49 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Zap } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-form">
+    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+
+    <CalculatorField id="fromUnit" label="From" type="select">
+      <option value="joule">Joule</option>
+      <option value="kj">Kilojoule</option>
+      <option value="cal">Calorie</option>
+      <option value="kcal" selected>Kilocalorie</option>
+      <option value="wh">Watt-hour</option>
+      <option value="kwh">Kilowatt-hour</option>
+      <option value="btu">BTU</option>
+    </CalculatorField>
+
+    <CalculatorField id="toUnit" label="To" type="select">
+      <option value="joule">Joule</option>
+      <option value="kj">Kilojoule</option>
+      <option value="cal">Calorie</option>
+      <option value="kcal">Kilocalorie</option>
+      <option value="wh">Watt-hour</option>
+      <option value="kwh" selected>Kilowatt-hour</option>
+      <option value="btu">BTU</option>
+    </CalculatorField>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+  </div>
+
+  <div class="calculator-results">
+    <div id="emptyState">
+      <EmptyState icon="?" title="Energy Converter" description="Enter a value to convert." />
+    </div>
+
+    <div id="resultsContainer" hidden>
+      <ResultCard id="convertedResult" title="Converted Value" icon={Zap} />
+    </div>
+  </div>
+</div>
+
+<script src="../../scripts/energy-calculator.ts"></script>

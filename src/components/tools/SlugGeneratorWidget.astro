@@ -1,36 +1,89 @@
 ---
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Link2, Ruler, Type } from "@lucide/astro";
 ---
+<section class="slug-generator">
+  <div class="slug-layout">
+    <aside class="slug-sidebar">
+      <div class="tool-field">
+        <label class="tool-label" for="slugText">Text / Title</label>
+        <textarea id="slugText" class="tool-textarea" placeholder="e.g. 10 Best Productivity Tips for 2026"></textarea>
+      </div>
 
-<label class="block text-sm font-medium text-gray-700 mb-1">Input Text</label>
-<input id="slugInput" type="text" placeholder="e.g. My Awesome Blog Post!" class="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4" />
+      <div class="tool-field">
+        <label class="tool-label" for="slugSeparator">Separator</label>
+        <select id="slugSeparator" class="tool-select">
+          <option value="-" selected>Hyphen (-)</option>
+          <option value="_">Underscore (_)</option>
+        </select>
+      </div>
 
-<label class="block text-sm font-medium text-gray-700 mb-1">Generated Slug</label>
-<div class="flex gap-2">
-  <input id="slugOutput" type="text" readonly class="flex-1 p-3 border border-gray-300 rounded-lg font-mono text-sm bg-gray-100" />
-  <button id="copySlugBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Copy</button>
-</div>
+      <div class="tool-field">
+        <label class="tool-label" for="slugMaxLength">Max Length</label>
+        <input id="slugMaxLength" type="number" class="tool-input" value="60" min="10" max="200" />
+      </div>
+
+      <div class="tool-checkbox-field"><input id="slugLowercase" type="checkbox" checked /><label for="slugLowercase">Lowercase</label></div>
+      <div class="tool-checkbox-field"><input id="slugRemoveStopwords" type="checkbox" /><label for="slugRemoveStopwords">Remove stopwords (a, the, and...)</label></div>
+
+      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="slug-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔗"
+          title="Slug Generator"
+          description="Convert any text into a clean, SEO-friendly URL slug."
+          tips={["Live Preview", "Custom Separator", "Stopword Removal", "Copy Slug"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <div class="tool-field">
+          <label class="tool-label"><Link2 size={16} /> Generated Slug</label>
+          <input id="slugOutput" type="text" class="tool-input slug-output" readonly />
+        </div>
+
+        <ResultsGrid columns={2}>
+          <ResultCard id="lengthResult" title="Length" icon={Ruler} />
+          <ResultCard id="wordsResult" title="Words" icon={Type} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Convert titles or text into clean, lowercase, SEO-friendly URL slugs with custom separators and stopword removal.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
 
 <script>
-  // @ts-nocheck
-  const input = document.getElementById('slugInput');
-  const output = document.getElementById('slugOutput');
-  const copyBtn = document.getElementById('copySlugBtn');
-
-  function slugify(text) {
-    return text
-      .toString()
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  }
-
-  input?.addEventListener('input', () => {
-    output.value = slugify(input.value);
-  });
-
-  copyBtn?.addEventListener('click', () => {
-    navigator.clipboard.writeText(output.value);
-  });
+  import "../../scripts/slug-generator";
 </script>
+
+<style>
+.slug-generator{width:100%;}
+.slug-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.slug-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;}
+.tool-field .tool-label{display:flex;align-items:center;gap:6px;}
+.tool-checkbox-field{display:flex;align-items:center;gap:8px;font-size:.9rem;color:#374151;}
+.slug-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.slug-output{font-family:ui-monospace,monospace;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .tool-checkbox-field{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.slug-layout{grid-template-columns:1fr;}.slug-sidebar{position:static;}}
+</style>

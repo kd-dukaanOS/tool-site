@@ -1,0 +1,371 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Cake,
+  CalendarDays,
+  CalendarRange,
+  Clock3,
+  Timer,
+  Hourglass,
+  PartyPopper,
+  Gem,
+  Star,
+  Baby,
+  Sun,
+  Orbit
+} from "@lucide/astro";
+---
+
+<section class="age-calculator">
+
+  <div class="age-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="age-sidebar">
+
+      <CalculatorField
+        id="birthDate"
+        label="Date of Birth"
+        type="date"
+        required={true}
+        helpText="Select your date of birth."
+      />
+
+      <CalculatorField
+        id="targetDate"
+        label="Calculate Age On"
+        type="date"
+        helpText="Leave blank to calculate today's age."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <!-- Results -->
+
+    <main class="age-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🎂"
+          title="Age Calculator"
+          description="Calculate your exact age instantly."
+          tips={[
+            "Years, Months & Days",
+            "Age on Any Date",
+            "Birthday Countdown",
+            "Birthstone",
+            "Zodiac",
+            "Generation"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="yearsResult"
+            title="Years"
+            icon={Cake}
+          />
+
+          <ResultCard
+            id="monthsResult"
+            title="Months"
+            icon={CalendarDays}
+          />
+
+          <ResultCard
+            id="daysResult"
+            title="Days"
+            icon={CalendarRange}
+          />
+
+          <ResultCard
+            id="weeksResult"
+            title="Weeks"
+            icon={CalendarRange}
+          />
+
+          <ResultCard
+            id="hoursResult"
+            title="Hours"
+            icon={Clock3}
+          />
+
+          <ResultCard
+            id="minutesResult"
+            title="Minutes"
+            icon={Timer}
+          />
+
+          <ResultCard
+            id="secondsResult"
+            title="Seconds"
+            icon={Hourglass}
+          />
+
+          <ResultCard
+            id="birthdayResult"
+            title="Next Birthday"
+            icon={PartyPopper}
+            subtitle=" "
+          />
+
+          <ResultCard
+            id="weekdayResult"
+            title="Weekday Born"
+            icon={Sun}
+          />
+
+          <ResultCard
+            id="zodiacResult"
+            title="Western Zodiac"
+            icon={Star}
+          />
+
+          <ResultCard
+            id="chineseResult"
+            title="Chinese Zodiac"
+            icon={Orbit}
+          />
+
+          <ResultCard
+            id="birthstoneResult"
+            title="Birthstone"
+            icon={Gem}
+          />
+
+          <ResultCard
+            id="generationResult"
+            title="Generation"
+            icon={Baby}
+          />
+
+        </ResultsGrid>
+                <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Calculate your exact age in years, months, weeks, days,
+            hours, minutes and seconds. You can also calculate your
+            age on any future or past date.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/age-calculator";
+</script>
+
+<style>
+
+.age-calculator{
+
+width:100%;
+
+}
+
+.age-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.age-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.age-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.age-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.age-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.age-layout{
+
+gap:24px;
+
+}
+
+.age-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

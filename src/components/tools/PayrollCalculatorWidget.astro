@@ -1,0 +1,46 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { IndianRupee, MinusCircle, Wallet } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="basicSalary" label="Basic Salary (₹)" type="number" placeholder="e.g. 30000" />
+    <CalculatorField id="hra" label="HRA (₹)" type="number" placeholder="e.g. 12000" />
+    <CalculatorField id="otherAllowances" label="Other Allowances (₹)" type="number" placeholder="e.g. 3000" />
+    <CalculatorField id="pfPercent" label="PF (%)" type="number" placeholder="e.g. 12" />
+    <CalculatorField id="professionalTax" label="Professional Tax (₹)" type="number" placeholder="e.g. 200" />
+    <CalculatorField id="otherDeductions" label="Other Deductions (₹)" type="number" placeholder="e.g. 500" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter salary details to calculate payroll"
+      description="Gross, deductions, and net salary will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="grossSalaryResult" title="Gross Salary" icon={IndianRupee} accent="neutral" />
+      <ResultCard id="pfDeductionResult" title="PF Deduction" icon={MinusCircle} accent="warning" />
+      <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={MinusCircle} accent="danger" />
+      <ResultCard id="netSalaryResult" title="Net Salary" icon={Wallet} accent="success" size="lg" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/payroll-calculator.ts"></script>

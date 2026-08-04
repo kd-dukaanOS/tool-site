@@ -1,0 +1,42 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Baby, CalendarHeart, Hash } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="lastPeriodDate" label="First Day of Last Period" type="date" />
+    <CalculatorField id="cycleLength" label="Average Cycle Length (days)" type="number" placeholder="e.g. 28" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter details to estimate due date"
+      description="Estimated due date and current progress will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="dueDateResult" title="Estimated Due Date" icon={CalendarHeart} accent="primary" size="lg" />
+      <ResultCard id="currentWeekResult" title="Current Progress" icon={Baby} accent="neutral" />
+      <ResultCard id="trimesterResult" title="Trimester" icon={Hash} accent="neutral" />
+      <ResultCard id="daysRemainingResult" title="Days Remaining" icon={Hash} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/pregnancy-due-date-calculator.ts"></script>

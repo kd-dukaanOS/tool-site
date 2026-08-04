@@ -1,0 +1,276 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Wallet,
+  TrendingUp,
+  Coins,
+  PiggyBank,
+  Landmark,
+  Banknote
+} from "@lucide/astro";
+---
+
+<section class="nps-calculator">
+
+  <div class="nps-layout">
+
+    <aside class="nps-sidebar">
+
+      <CalculatorField
+        id="monthlyContribution"
+        label="Monthly Contribution (₹)"
+        type="number"
+        placeholder="e.g. 5000"
+        required={true}
+        min="0"
+        step="1"
+      />
+
+      <CalculatorField
+        id="expectedReturnRate"
+        label="Expected Return Rate (% p.a.)"
+        type="number"
+        placeholder="e.g. 10"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="yearsToRetirement"
+        label="Years to Retirement"
+        type="number"
+        placeholder="e.g. 25"
+        required={true}
+        min="0"
+        step="1"
+      />
+
+      <CalculatorField
+        id="annuityPercent"
+        label="Annuity Purchase (%)"
+        type="number"
+        value="40"
+        min="40"
+        max="100"
+        step="1"
+        helpText="Minimum 40% as per NPS rules."
+      />
+
+      <CalculatorField
+        id="annuityRate"
+        label="Annuity Rate (% p.a.)"
+        type="number"
+        placeholder="e.g. 6"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div
+        id="errorBox"
+        class="error-box"
+        hidden
+      ></div>
+
+    </aside>
+
+    <main class="nps-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏛️"
+          title="NPS Calculator"
+          description="Estimate your NPS retirement corpus and monthly pension."
+          tips={[
+            "Total Corpus at Retirement",
+            "Lump Sum Withdrawal",
+            "Annuity Corpus",
+            "Estimated Monthly Pension"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="corpusResult"
+            title="Total Corpus"
+            icon={Wallet}
+            accent="success"
+          />
+
+          <ResultCard
+            id="growthResult"
+            title="Total Growth"
+            icon={TrendingUp}
+          />
+
+          <ResultCard
+            id="investedResult"
+            title="Total Invested"
+            icon={Coins}
+          />
+
+          <ResultCard
+            id="lumpSumResult"
+            title="Lump Sum Withdrawal"
+            icon={Banknote}
+          />
+
+          <ResultCard
+            id="annuityCorpusResult"
+            title="Annuity Corpus"
+            icon={Landmark}
+          />
+
+          <ResultCard
+            id="pensionResult"
+            title="Monthly Pension"
+            icon={PiggyBank}
+          />
+
+        </ResultsGrid>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/nps-calculator";
+</script>
+
+<style>
+
+.nps-calculator{
+
+width:100%;
+
+}
+
+.nps-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.nps-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.nps-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.nps-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.nps-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.nps-layout{
+
+gap:24px;
+
+}
+
+.nps-content{
+
+gap:20px;
+
+}
+
+}
+
+</style>

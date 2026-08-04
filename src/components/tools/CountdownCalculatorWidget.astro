@@ -1,0 +1,42 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { CalendarClock, Clock } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="targetDate" label="Target Date" type="date" />
+    <CalculatorField id="targetTime" label="Target Time (optional)" type="time" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Select a target date to start countdown"
+      description="Live countdown to your target date will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="daysResult" title="Days" icon={CalendarClock} accent="primary" size="lg" />
+      <ResultCard id="hoursResult" title="Hours" icon={Clock} accent="neutral" />
+      <ResultCard id="minutesResult" title="Minutes" icon={Clock} accent="neutral" />
+      <ResultCard id="secondsResult" title="Seconds" icon={Clock} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/countdown-calculator.ts"></script>

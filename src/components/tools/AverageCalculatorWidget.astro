@@ -1,0 +1,47 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Calculator, Hash, ArrowDown, ArrowUp } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField
+      id="numbers"
+      label="Numbers (comma or space separated)"
+      type="text"
+      placeholder="e.g. 10, 20, 30, 40"
+    />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter numbers to calculate average"
+      description="Average, sum, min, and max will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="averageResult" title="Average" icon={Calculator} accent="primary" size="lg" />
+      <ResultCard id="sumResult" title="Sum" icon={Hash} accent="neutral" />
+      <ResultCard id="countResult" title="Count" icon={Hash} accent="neutral" />
+      <ResultCard id="minResult" title="Min" icon={ArrowDown} accent="warning" />
+      <ResultCard id="maxResult" title="Max" icon={ArrowUp} accent="success" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/average-calculator.ts"></script>

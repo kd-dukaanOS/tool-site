@@ -1,0 +1,47 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Scale, TrendingUp } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <div class="field-group">
+      <label for="gender">Gender</label>
+      <select id="gender" class="calculator-input">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons
+      calculateId="calculateBtn"
+      resetId="resetBtn"
+      copyId="copyBtn"
+      showDownload={false}
+      showShare={false}
+    />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState
+      id="emptyState"
+      title="Enter height to calculate ideal weight"
+      description="Your ideal weight and healthy range will appear here."
+    />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="idealWeightResult" title="Ideal Weight" icon={Scale} accent="primary" size="lg" />
+      <ResultCard id="healthyRangeResult" title="Healthy Weight Range" icon={TrendingUp} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/ideal-weight-calculator.ts"></script>

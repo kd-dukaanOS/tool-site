@@ -1,0 +1,199 @@
+---
+// src/components/content/CalculatorContent.astro
+import type { CalculatorContentData } from "@/types/calculator-content";
+
+type Props = CalculatorContentData;
+
+const { intro, formula, steps, examples, tips, mistakes, faqs, related } = Astro.props;
+---
+
+<section class="calc-content">
+  {intro && (
+    <div class="calc-block">
+      <h2 class="calc-heading">{intro.title}</h2>
+      <p class="calc-text">{intro.description}</p>
+      {intro.highlights && intro.highlights.length > 0 && (
+        <ul class="calc-highlights">
+          {intro.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      )}
+    </div>
+  )}
+
+  {formula && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Formula</h2>
+      <div class="calc-card calc-formula">
+        <code>{formula.formula}</code>
+      </div>
+      <ul class="calc-variables">
+        {formula.variables.map((v) => (
+          <li><strong>{v.symbol}</strong> — {v.meaning}</li>
+        ))}
+      </ul>
+      {formula.notes && <p class="calc-note">{formula.notes}</p>}
+    </div>
+  )}
+
+  {steps && steps.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">How It Works</h2>
+      <ol class="calc-steps">
+        {steps.map((s) => <li>{s}</li>)}
+      </ol>
+    </div>
+  )}
+
+  {examples && examples.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Examples</h2>
+      <div class="calc-examples-grid">
+        {examples.map((ex) => (
+          <div class="calc-card calc-example">
+            <h3 class="calc-subheading">{ex.title}</h3>
+            <p><strong>Inputs:</strong> {ex.inputs}</p>
+            <p><strong>Result:</strong> {ex.result}</p>
+            <p class="calc-text">{ex.explanation}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {tips && tips.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Tips</h2>
+      <ul class="calc-tips">
+        {tips.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  )}
+
+  {mistakes && mistakes.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Common Mistakes</h2>
+      <ul class="calc-mistakes">
+        {mistakes.map((m) => <li>{m}</li>)}
+      </ul>
+    </div>
+  )}
+
+  {faqs && faqs.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Frequently Asked Questions</h2>
+      <div class="calc-faq-list">
+        {faqs.map((f) => (
+          <details class="calc-card calc-faq-item">
+            <summary class="calc-subheading">{f.question}</summary>
+            <p class="calc-text">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {related && related.length > 0 && (
+    <div class="calc-block">
+      <h2 class="calc-heading">Related Calculators</h2>
+      <div class="calc-related-grid">
+        {related.map((r) => (
+          <a class="calc-card calc-related-card" href={r.href}>
+            {r.icon && <span class="calc-related-icon">{r.icon}</span>}
+            <span>{r.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  /* Uses your existing design tokens/variables — adjust var(--...) names
+     to match whatever your calculator widgets already use. */
+  .calc-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg, 2rem);
+    margin-top: var(--space-xl, 3rem);
+    color: var(--text-color, #1a1a1a);
+  }
+
+  .calc-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.75rem);
+  }
+
+  .calc-heading {
+    font-size: var(--font-lg, 1.5rem);
+    font-weight: 700;
+  }
+
+  .calc-subheading {
+    font-size: var(--font-md, 1.1rem);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .calc-text {
+    line-height: 1.6;
+    color: var(--text-muted, #4b5563);
+  }
+
+  .calc-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: var(--radius-md, 12px);
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05));
+    padding: var(--space-md, 1.25rem);
+  }
+
+  .calc-formula code {
+    font-size: 1.1rem;
+  }
+
+  .calc-variables,
+  .calc-highlights,
+  .calc-steps,
+  .calc-tips,
+  .calc-mistakes {
+    padding-left: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .calc-examples-grid,
+  .calc-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md, 1rem);
+  }
+
+  .calc-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm, 0.75rem);
+  }
+
+  .calc-related-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color, #1a1a1a);
+    transition: transform 0.15s ease;
+  }
+
+  .calc-related-card:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .calc-content {
+      color: var(--text-color-dark, #f3f4f6);
+    }
+    .calc-card {
+      background: var(--card-bg-dark, #1f2937);
+      border-color: var(--border-color-dark, #374151);
+    }
+  }
+</style>
