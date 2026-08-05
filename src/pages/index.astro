@@ -13,7 +13,7 @@ const previewByCategory = categories.map(cat => ({
   preview: tools.filter(t => t.category === cat.slug).slice(0, 3),
 }));
 
-const popularSlugs = ["json-formatter", "base64-tool", "uuid-generator", "password-generator", "word-counter", "markdown-previewer"];
+const popularSlugs = ["json-formatter", "base64-tool", "uuid-generator", "password-generator", "emi-calculator", "bmi-calculator"];
 const popularTools = popularSlugs
   .map(slug => tools.find(t => t.slug === slug))
   .map(t => ({ ...t, icon: categoryIcons[t.category] }));

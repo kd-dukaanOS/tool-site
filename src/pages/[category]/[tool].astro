@@ -1,4 +1,4 @@
-﻿---
+---
 // src/pages/[category]/[tool].astro
 import Layout from "../../layouts/Layout.astro";
 import FaqSection from "../../components/FaqSection.astro";
@@ -22,7 +22,65 @@ import TimestampConverterWidget from "../../components/tools/TimestampConverterW
 import UrlEncoderDecoderWidget from "../../components/tools/UrlEncoderDecoderWidget.astro";
 import UuidGeneratorWidget from "../../components/tools/UuidGeneratorWidget.astro";
 import WordCounterWidget from "../../components/tools/WordCounterWidget.astro";
+import EMICalculatorWidget from "../../components/tools/EMICalculatorWidget.astro";
+import ROICalculatorWidget from "../../components/tools/ROICalculatorWidget.astro";
+import DiscountCalculatorWidget from "../../components/tools/DiscountCalculatorWidget.astro";
+import SimpleInterestCalculatorWidget from "../../components/tools/SimpleInterestCalculatorWidget.astro";
+import CompoundInterestCalculatorWidget from "../../components/tools/CompoundInterestCalculatorWidget.astro";
+import FDCalculatorWidget from "../../components/tools/FDCalculatorWidget.astro";
+import RDCalculatorWidget from "../../components/tools/RDCalculatorWidget.astro";
+import SIPCalculatorWidget from "../../components/tools/SIPCalculatorWidget.astro";
+import PPFCalculatorWidget from "../../components/tools/PPFCalculatorWidget.astro";
+import MortgageCalculatorWidget from "../../components/tools/MortgageCalculatorWidget.astro";
+import BMICalculatorWidget from "../../components/tools/BMICalculatorWidget.astro";
+import BMRCalculatorWidget from "../../components/tools/BMRCalculatorWidget.astro";
+import BodyFatCalculatorWidget from "../../components/tools/BodyFatCalculatorWidget.astro";
+import CalorieCalculatorWidget from "../../components/tools/CalorieCalculatorWidget.astro";
+import IdealWeightCalculatorWidget from "../../components/tools/IdealWeightCalculatorWidget.astro";
+import OvulationCalculatorWidget from "../../components/tools/OvulationCalculatorWidget.astro";
+import PregnancyDueDateCalculatorWidget from "../../components/tools/PregnancyDueDateCalculatorWidget.astro";
+import PregnancyWeightGainCalculatorWidget from "../../components/tools/PregnancyWeightGainCalculatorWidget.astro";
+import WaterIntakeCalculatorWidget from "../../components/tools/WaterIntakeCalculatorWidget.astro";
+import AgeCalculatorWidget from "../../components/tools/AgeCalculatorWidget.astro";
+import CAGRCalculatorWidget from "../../components/tools/CAGRCalculatorWidget.astro";
+import BreakEvenCalculatorWidget from "../../components/tools/BreakEvenCalculatorWidget.astro";
+import CommissionCalculatorWidget from "../../components/tools/CommissionCalculatorWidget.astro";
+import GSTCalculatorWidget from "../../components/tools/GSTCalculatorWidget.astro";
+import VATCalculatorWidget from "../../components/tools/VATCalculatorWidget.astro";
+import SalesTaxCalculatorWidget from "../../components/tools/SalesTaxCalculatorWidget.astro";
+import InflationCalculatorWidget from "../../components/tools/InflationCalculatorWidget.astro";
+import NPSCalculatorWidget from "../../components/tools/NPSCalculatorWidget.astro";
+import PayrollCalculatorWidget from "../../components/tools/PayrollCalculatorWidget.astro";
+import SalaryCalculatorWidget from "../../components/tools/SalaryCalculatorWidget.astro";
+import AreaCalculatorWidget from "../../components/tools/AreaCalculatorWidget.astro";
+import CurrencyConverterWidget from "../../components/tools/CurrencyConverterWidget.astro";
+import DataStorageCalculatorWidget from "../../components/tools/DataStorageCalculatorWidget.astro";
+import EnergyCalculatorWidget from "../../components/tools/EnergyCalculatorWidget.astro";
+import LengthCalculatorWidget from "../../components/tools/LengthCalculatorWidget.astro";
+import PressureCalculatorWidget from "../../components/tools/PressureCalculatorWidget.astro";
+import SpeedCalculatorWidget from "../../components/tools/SpeedCalculatorWidget.astro";
+import TemperatureCalculatorWidget from "../../components/tools/TemperatureCalculatorWidget.astro";
+import VolumeCalculatorWidget from "../../components/tools/VolumeCalculatorWidget.astro";
+import WeightCalculatorWidget from "../../components/tools/WeightCalculatorWidget.astro";
+import AverageCalculatorWidget from "../../components/tools/AverageCalculatorWidget.astro";
+import GCDCalculatorWidget from "../../components/tools/GCDCalculatorWidget.astro";
+import LCMCalculatorWidget from "../../components/tools/LCMCalculatorWidget.astro";
+import MeanMedianModeCalculatorWidget from "../../components/tools/MeanMedianModeCalculatorWidget.astro";
+import PercentageIncreaseCalculatorWidget from "../../components/tools/PercentageIncreaseCalculatorWidget.astro";
+import PrimeNumberCalculatorWidget from "../../components/tools/PrimeNumberCalculatorWidget.astro";
+import RatioCalculatorWidget from "../../components/tools/RatioCalculatorWidget.astro";
+import StandardDeviationCalculatorWidget from "../../components/tools/StandardDeviationCalculatorWidget.astro";
+import InventoryTurnoverCalculatorWidget from "../../components/tools/InventoryTurnoverCalculatorWidget.astro";
+import InvoiceDueDateCalculatorWidget from "../../components/tools/InvoiceDueDateCalculatorWidget.astro";
+import ProfitMarginCalculatorWidget from "../../components/tools/ProfitMarginCalculatorWidget.astro";
+import BirthdayCalculatorWidget from "../../components/tools/BirthdayCalculatorWidget.astro";
+import BusinessDaysCalculatorWidget from "../../components/tools/BusinessDaysCalculatorWidget.astro";
+import CountdownCalculatorWidget from "../../components/tools/CountdownCalculatorWidget.astro";
+import DateDifferenceCalculatorWidget from "../../components/tools/DateDifferenceCalculatorWidget.astro";
+import TimeDurationCalculatorWidget from "../../components/tools/TimeDurationCalculatorWidget.astro";
+import TimezoneCalculatorWidget from "../../components/tools/TimezoneCalculatorWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
+import { contentMap } from "../../data/calculator-content-map.js";
 
 // Build one real page per tool (20 pages total from this one file).
 // Each entry needs BOTH params filled in, because the URL needs both
@@ -49,12 +107,24 @@ const relatedTools = tools
   .filter((t) => t.category === tool.category && t.slug !== tool.slug)
   .slice(0, 3);
 
+// Rich per-tool content (formula, steps, examples, tips, faq) written
+// separately in src/data/calculators/*.ts. contentMap looks up the right
+// file for this tool's slug; import.meta.glob loads them all at build time.
+const contentModules = import.meta.glob("../../data/calculators/*.ts", { eager: true });
+const contentFile = contentMap[tool.slug];
+const contentModule = contentFile ? contentModules[`../../data/calculators/${contentFile}.ts`] : null;
+const content = contentModule ? Object.values(contentModule)[0] as any : null;
+
+// FAQs: prefer the rich content file's faq list (q/a shape), fall back to
+// tools.js's thinner faqs list (question/answer shape) for any tool without one.
+const faqs = (content?.faq?.length ? content.faq.map((f: any) => ({ question: f.q, answer: f.a })) : tool.faqs) || [];
+
 // FAQPage structured data — this is what lets Google show your FAQs
 // as expandable rich results directly in search, not just a blue link.
-const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
+const faqSchema = faqs.length > 0 ? {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: tool.faqs.map((f) => ({
+  mainEntity: faqs.map((f: any) => ({
     "@type": "Question",
     name: f.question,
     acceptedAnswer: { "@type": "Answer", text: f.answer },
@@ -126,20 +196,194 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
       <UuidGeneratorWidget />
     ) : tool.slug === "word-counter" ? (
       <WordCounterWidget />
+    ) : tool.slug === "emi-calculator" ? (
+      <EMICalculatorWidget />
+    ) : tool.slug === "roi-calculator" ? (
+      <ROICalculatorWidget />
+    ) : tool.slug === "discount-calculator" ? (
+      <DiscountCalculatorWidget />
+    ) : tool.slug === "simple-interest-calculator" ? (
+      <SimpleInterestCalculatorWidget />
+    ) : tool.slug === "compound-interest-calculator" ? (
+      <CompoundInterestCalculatorWidget />
+    ) : tool.slug === "fd-calculator" ? (
+      <FDCalculatorWidget />
+    ) : tool.slug === "rd-calculator" ? (
+      <RDCalculatorWidget />
+    ) : tool.slug === "sip-calculator" ? (
+      <SIPCalculatorWidget />
+    ) : tool.slug === "ppf-calculator" ? (
+      <PPFCalculatorWidget />
+    ) : tool.slug === "mortgage-calculator" ? (
+      <MortgageCalculatorWidget />
+    ) : tool.slug === "bmi-calculator" ? (
+      <BMICalculatorWidget />
+    ) : tool.slug === "bmr-calculator" ? (
+      <BMRCalculatorWidget />
+    ) : tool.slug === "body-fat-calculator" ? (
+      <BodyFatCalculatorWidget />
+    ) : tool.slug === "calorie-calculator" ? (
+      <CalorieCalculatorWidget />
+    ) : tool.slug === "ideal-weight-calculator" ? (
+      <IdealWeightCalculatorWidget />
+    ) : tool.slug === "ovulation-calculator" ? (
+      <OvulationCalculatorWidget />
+    ) : tool.slug === "pregnancy-due-date-calculator" ? (
+      <PregnancyDueDateCalculatorWidget />
+    ) : tool.slug === "pregnancy-weight-gain-calculator" ? (
+      <PregnancyWeightGainCalculatorWidget />
+    ) : tool.slug === "water-intake-calculator" ? (
+      <WaterIntakeCalculatorWidget />
+    ) : tool.slug === "age-calculator" ? (
+      <AgeCalculatorWidget />
+    ) : tool.slug === "cagr-calculator" ? (
+      <CAGRCalculatorWidget />
+    ) : tool.slug === "break-even-calculator" ? (
+      <BreakEvenCalculatorWidget />
+    ) : tool.slug === "commission-calculator" ? (
+      <CommissionCalculatorWidget />
+    ) : tool.slug === "gst-calculator" ? (
+      <GSTCalculatorWidget />
+    ) : tool.slug === "vat-calculator" ? (
+      <VATCalculatorWidget />
+    ) : tool.slug === "sales-tax-calculator" ? (
+      <SalesTaxCalculatorWidget />
+    ) : tool.slug === "inflation-calculator" ? (
+      <InflationCalculatorWidget />
+    ) : tool.slug === "nps-calculator" ? (
+      <NPSCalculatorWidget />
+    ) : tool.slug === "payroll-calculator" ? (
+      <PayrollCalculatorWidget />
+    ) : tool.slug === "salary-calculator" ? (
+      <SalaryCalculatorWidget />
+    ) : tool.slug === "area-converter" ? (
+      <AreaCalculatorWidget />
+    ) : tool.slug === "currency-converter" ? (
+      <CurrencyConverterWidget />
+    ) : tool.slug === "data-storage-converter" ? (
+      <DataStorageCalculatorWidget />
+    ) : tool.slug === "energy-converter" ? (
+      <EnergyCalculatorWidget />
+    ) : tool.slug === "length-converter" ? (
+      <LengthCalculatorWidget />
+    ) : tool.slug === "pressure-converter" ? (
+      <PressureCalculatorWidget />
+    ) : tool.slug === "speed-converter" ? (
+      <SpeedCalculatorWidget />
+    ) : tool.slug === "temperature-converter" ? (
+      <TemperatureCalculatorWidget />
+    ) : tool.slug === "volume-converter" ? (
+      <VolumeCalculatorWidget />
+    ) : tool.slug === "weight-converter" ? (
+      <WeightCalculatorWidget />
+    ) : tool.slug === "average-calculator" ? (
+      <AverageCalculatorWidget />
+    ) : tool.slug === "gcd-calculator" ? (
+      <GCDCalculatorWidget />
+    ) : tool.slug === "lcm-calculator" ? (
+      <LCMCalculatorWidget />
+    ) : tool.slug === "mean-median-mode-calculator" ? (
+      <MeanMedianModeCalculatorWidget />
+    ) : tool.slug === "percentage-increase-calculator" ? (
+      <PercentageIncreaseCalculatorWidget />
+    ) : tool.slug === "prime-number-calculator" ? (
+      <PrimeNumberCalculatorWidget />
+    ) : tool.slug === "ratio-calculator" ? (
+      <RatioCalculatorWidget />
+    ) : tool.slug === "standard-deviation-calculator" ? (
+      <StandardDeviationCalculatorWidget />
+    ) : tool.slug === "inventory-turnover-calculator" ? (
+      <InventoryTurnoverCalculatorWidget />
+    ) : tool.slug === "invoice-due-date-calculator" ? (
+      <InvoiceDueDateCalculatorWidget />
+    ) : tool.slug === "profit-margin-calculator" ? (
+      <ProfitMarginCalculatorWidget />
+    ) : tool.slug === "birthday-calculator" ? (
+      <BirthdayCalculatorWidget />
+    ) : tool.slug === "business-days-calculator" ? (
+      <BusinessDaysCalculatorWidget />
+    ) : tool.slug === "countdown-calculator" ? (
+      <CountdownCalculatorWidget />
+    ) : tool.slug === "date-difference-calculator" ? (
+      <DateDifferenceCalculatorWidget />
+    ) : tool.slug === "time-duration-calculator" ? (
+      <TimeDurationCalculatorWidget />
+    ) : tool.slug === "timezone-calculator" ? (
+      <TimezoneCalculatorWidget />
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>
       </div>
     )}
 
-    {tool.about && (
+    {(content?.about?.text || tool.about) && (
       <section class="tool-about">
         <h2>About this tool</h2>
-        <p>{tool.about}</p>
+        <p>{content?.about?.text || tool.about}</p>
       </section>
     )}
 
-    <FaqSection faqs={tool.faqs || []} />
+    {content?.formula && (
+      <section class="tool-about">
+        <h2>Formula</h2>
+        <p><code>{content.formula.formula}</code></p>
+        {content.formula.variables?.length > 0 && (
+          <ul class="tool-list">
+            {content.formula.variables.map((v: any) => (
+              <li><strong>{v.symbol}</strong> — {v.meaning}</li>
+            ))}
+          </ul>
+        )}
+        {content.formula.explanation && <p>{content.formula.explanation}</p>}
+        {content.formula.interpretation && <p>{content.formula.interpretation}</p>}
+      </section>
+    )}
+
+    {content?.steps?.length > 0 && (
+      <section class="tool-about">
+        <h2>How to Use</h2>
+        <ol class="tool-list">
+          {content.steps.map((s: string) => <li>{s}</li>)}
+        </ol>
+      </section>
+    )}
+
+    {content?.examples?.length > 0 && (
+      <section class="tool-about">
+        <h2>Examples</h2>
+        <div class="tool-examples">
+          {content.examples.map((ex: any) => (
+            <div class="tool-example-card">
+              <p><strong>Inputs:</strong> {ex.inputs}</p>
+              <p><strong>Result:</strong> {ex.result}</p>
+              {ex.explanation && <p class="tool-example-note">{ex.explanation}</p>}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {(content?.expertTips?.length > 0 || content?.practicalUses?.length > 0) && (
+      <section class="tool-about">
+        <h2>Tips</h2>
+        <ul class="tool-list">
+          {(content.expertTips || content.practicalUses || []).map((t: string) => <li>{t}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {content?.commonMistakes?.length > 0 && (
+      <section class="tool-about">
+        <h2>Common Mistakes</h2>
+        <ul class="tool-list">
+          {content.commonMistakes.map((m: any) => (
+            <li><strong>{m.mistake}</strong> — {m.fix}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <FaqSection faqs={faqs} />
   </div>
 
   {faqSchema && (
@@ -178,4 +422,9 @@ const faqSchema = tool.faqs && tool.faqs.length > 0 ? {
   .tool-about { margin: 32px 0; }
   .tool-about h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 0 0 10px; }
   .tool-about p { color: var(--muted); font-size: 14.5px; line-height: 1.7; max-width: 720px; }
+  .tool-list { color: var(--muted); font-size: 14.5px; line-height: 1.8; max-width: 720px; padding-left: 20px; }
+  .tool-examples { display: grid; gap: 12px; max-width: 720px; }
+  .tool-example-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--surface); font-size: 14px; }
+  .tool-example-card p { margin: 4px 0; }
+  .tool-example-note { color: var(--muted); }
 </style>

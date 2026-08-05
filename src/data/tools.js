@@ -8,6 +8,10 @@ export const categoryIcons = {
   "converters": `<path d="M17 8V6a5 5 0 00-10 0v2M5 8h14l-1 12H6L5 8z"/>`,
   "security-tools": `<path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/>`,
   "generators-calculators": `<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"/>`,
+  "finance": `<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>`,
+  "health": `<path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/>`,
+  "date-time": `<path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>`,
+  "math-stats": `<path d="M4 4h16v16H4z M8 8h.01 M16 8h.01 M8 16h.01 M16 16h.01 M12 12h.01"/>`,
 };
 
 export const categories = [
@@ -16,6 +20,10 @@ export const categories = [
   { slug: "converters", name: "Converters", description: "Convert between encodings, timestamps, and color formats." },
   { slug: "security-tools", name: "Security Tools", description: "Generate IDs, passwords, and hashes — all done locally in your browser." },
   { slug: "generators-calculators", name: "Generators & Calculators", description: "Quick generators and calculators for common everyday tasks." },
+  { slug: "finance", name: "Finance Calculators", description: "Loans, deposits, investments, and everyday finance math." },
+  { slug: "health", name: "Health Calculators", description: "BMI, calories, and everyday health tracking tools." },
+  { slug: "date-time", name: "Date & Time Calculators", description: "Age, dates, and time-based calculators." },
+  { slug: "math-stats", name: "Math & Stats Calculators", description: "Everyday math and statistics calculators." },
 ];
 
 export const tools = [
@@ -218,4 +226,72 @@ export const tools = [
       { question: "Why do businesses use percentages instead of raw numbers?", answer: "Percentages allow easy comparison between values of different sizes — a $10 discount means very different things on a $20 item versus a $1,000 item, but expressing both as a percentage makes the comparison clear." },
       { question: "How do I calculate a tip percentage at a restaurant?", answer: "Use the first calculator — enter the tip percentage you want to leave (e.g. 18%) and the bill total, and the result shows the exact tip amount to add." },
     ] },
+  // Finance
+  { slug: "emi-calculator", category: "finance", name: "EMI Calculator", desc: "Loan EMI, interest & amortization" },
+  { slug: "roi-calculator", category: "finance", name: "ROI Calculator", desc: "Return on investment" },
+  { slug: "discount-calculator", category: "finance", name: "Discount Calculator", desc: "Find sale price & savings" },
+  { slug: "simple-interest-calculator", category: "finance", name: "Simple Interest Calculator", desc: "SI formula calculator" },
+  { slug: "compound-interest-calculator", category: "finance", name: "Compound Interest Calculator", desc: "Calculate investment growth" },
+  { slug: "fd-calculator", category: "finance", name: "FD Calculator", desc: "Fixed deposit maturity value" },
+  { slug: "rd-calculator", category: "finance", name: "RD Calculator", desc: "Recurring deposit maturity" },
+  { slug: "sip-calculator", category: "finance", name: "SIP Calculator", desc: "Mutual fund SIP returns" },
+  { slug: "ppf-calculator", category: "finance", name: "PPF Calculator", desc: "Maturity value & interest" },
+  { slug: "mortgage-calculator", category: "finance", name: "Mortgage Calculator", desc: "Monthly payment calculator" },
+
+  // Health
+  { slug: "bmi-calculator", category: "health", name: "BMI Calculator", desc: "Check your Body Mass Index" },
+  { slug: "bmr-calculator", category: "health", name: "BMR Calculator", desc: "Find your basal metabolic rate" },
+  { slug: "body-fat-calculator", category: "health", name: "Body Fat Calculator", desc: "US Navy method estimate" },
+  { slug: "calorie-calculator", category: "health", name: "Calorie Calculator", desc: "Daily calorie needs & weight goals" },
+  { slug: "ideal-weight-calculator", category: "health", name: "Ideal Weight Calculator", desc: "Find your healthy weight" },
+  { slug: "ovulation-calculator", category: "health", name: "Ovulation Calculator", desc: "Fertile window & next period" },
+  { slug: "pregnancy-due-date-calculator", category: "health", name: "Pregnancy Due Date Calculator", desc: "Estimate your due date" },
+  { slug: "pregnancy-weight-gain-calculator", category: "health", name: "Pregnancy Weight Gain Calculator", desc: "Track healthy weight gain" },
+  { slug: "water-intake-calculator", category: "health", name: "Water Intake Calculator", desc: "Daily hydration needs" },
+
+  // Date & Time
+  { slug: "age-calculator", category: "date-time", name: "Age Calculator", desc: "Exact age in years, months, days" },
+  { slug: "birthday-calculator", category: "date-time", name: "Birthday Calculator", desc: "Find your next birthday" },
+  { slug: "business-days-calculator", category: "date-time", name: "Business Days Calculator", desc: "Count working days" },
+  { slug: "countdown-calculator", category: "date-time", name: "Countdown Calculator", desc: "Countdown to any date" },
+  { slug: "date-difference-calculator", category: "date-time", name: "Date Difference Calculator", desc: "Days between two dates" },
+  { slug: "time-duration-calculator", category: "date-time", name: "Time Duration Calculator", desc: "Calculate time between times" },
+  { slug: "timezone-calculator", category: "date-time", name: "Timezone Calculator", desc: "Convert between timezones" },
+
+  // Finance batch 2
+  { slug: "cagr-calculator", category: "finance", name: "CAGR Calculator", desc: "Compound annual growth rate" },
+  { slug: "break-even-calculator", category: "finance", name: "Break-Even Calculator", desc: "Find your break-even point" },
+  { slug: "commission-calculator", category: "finance", name: "Commission Calculator", desc: "Calculate sales commission" },
+  { slug: "gst-calculator", category: "finance", name: "GST Calculator", desc: "Add or remove GST" },
+  { slug: "vat-calculator", category: "finance", name: "VAT Calculator", desc: "Add or remove VAT" },
+  { slug: "sales-tax-calculator", category: "finance", name: "Sales Tax Calculator", desc: "Calculate sales tax" },
+  { slug: "inflation-calculator", category: "finance", name: "Inflation Calculator", desc: "Adjust value for inflation" },
+  { slug: "nps-calculator", category: "finance", name: "NPS Calculator", desc: "National Pension Scheme maturity" },
+  { slug: "payroll-calculator", category: "finance", name: "Payroll Calculator", desc: "Calculate net pay" },
+  { slug: "salary-calculator", category: "finance", name: "Salary Calculator", desc: "Gross to net salary breakdown" },
+  { slug: "profit-margin-calculator", category: "finance", name: "Profit Margin Calculator", desc: "Calculate profit margin %" },
+  { slug: "inventory-turnover-calculator", category: "finance", name: "Inventory Turnover Calculator", desc: "Measure inventory efficiency" },
+  { slug: "invoice-due-date-calculator", category: "finance", name: "Invoice Due Date Calculator", desc: "Calculate invoice due dates" },
+
+  // Converters batch
+  { slug: "area-converter", category: "converters", name: "Area Converter", desc: "Convert between area units" },
+  { slug: "currency-converter", category: "converters", name: "Currency Converter", desc: "Convert between currencies" },
+  { slug: "data-storage-converter", category: "converters", name: "Data Storage Converter", desc: "Convert bytes, KB, MB, GB" },
+  { slug: "energy-converter", category: "converters", name: "Energy Converter", desc: "Convert between energy units" },
+  { slug: "length-converter", category: "converters", name: "Length Converter", desc: "Convert between length units" },
+  { slug: "pressure-converter", category: "converters", name: "Pressure Converter", desc: "Convert between pressure units" },
+  { slug: "speed-converter", category: "converters", name: "Speed Converter", desc: "Convert between speed units" },
+  { slug: "temperature-converter", category: "converters", name: "Temperature Converter", desc: "Convert C, F, and Kelvin" },
+  { slug: "volume-converter", category: "converters", name: "Volume Converter", desc: "Convert between volume units" },
+  { slug: "weight-converter", category: "converters", name: "Weight Converter", desc: "Convert between weight units" },
+
+  // Math & Stats
+  { slug: "average-calculator", category: "math-stats", name: "Average Calculator", desc: "Find the average of numbers" },
+  { slug: "gcd-calculator", category: "math-stats", name: "GCD Calculator", desc: "Greatest common divisor" },
+  { slug: "lcm-calculator", category: "math-stats", name: "LCM Calculator", desc: "Least common multiple" },
+  { slug: "mean-median-mode-calculator", category: "math-stats", name: "Mean, Median & Mode Calculator", desc: "Find central tendency" },
+  { slug: "percentage-increase-calculator", category: "math-stats", name: "Percentage Increase Calculator", desc: "Percentage increase or decrease" },
+  { slug: "prime-number-calculator", category: "math-stats", name: "Prime Number Calculator", desc: "Check if a number is prime" },
+  { slug: "ratio-calculator", category: "math-stats", name: "Ratio Calculator", desc: "Simplify and compare ratios" },
+  { slug: "standard-deviation-calculator", category: "math-stats", name: "Standard Deviation Calculator", desc: "Calculate standard deviation" },
 ];
