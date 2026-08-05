@@ -3,7 +3,7 @@
 // Every page uses this: <Layout title="..." description="..."> your content </Layout>
 import { categories, tools } from "../data/tools.js";
 
-const { title = "ToolSite — Free Online Developer Tools", description = "20+ free online tools for developers, creators, and everyday tasks. Fast, simple, and it never leaves your browser." } = Astro.props;
+const { title = "ToolSite — Free Online Developer Tools", description = "77+ free online tools for developers, creators, and everyday tasks. Fast, simple, and it never leaves your browser." } = Astro.props;
 const footerCategories = categories.slice(0, 4);
 const footerPopular = tools.slice(0, 3);
 const toolsForSearch = tools.map((t) => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc }));
@@ -204,6 +204,10 @@ const toolsForSearch = tools.map((t) => ({ name: t.name, slug: t.slug, category:
 
   .popular-searches { margin-top: 22px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
   .popular-searches span.label { padding-top: 5px; }
+  .stat-strip { margin-top: 40px; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+  .stat-strip .stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .stat-strip .stat strong { font-family: 'Space Grotesk', sans-serif; font-size: 24px; color: var(--ink); }
+  .stat-strip .stat span { font-size: 12px; color: var(--muted); }
   .tag-pill { border: 1px solid var(--border); background: var(--surface); border-radius: 20px; padding: 5px 12px; }
   .tag-pill:hover { border-color: var(--primary); color: var(--primary); }
 
@@ -219,7 +223,8 @@ const toolsForSearch = tools.map((t) => ({ name: t.name, slug: t.slug, category:
   .cat-card:hover::before { opacity: 1; }
   .cat-icon { width: 44px; height: 44px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
   .cat-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin: 0 0 4px; }
-  .cat-card .count { font-size: 12.5px; color: var(--muted); margin: 0 0 14px; }
+  .cat-card .count { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+  .cat-card .cat-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
   .cat-card .tool-list { list-style: none; margin: 0 0 16px; padding: 0; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
   .cat-card .explore { font-size: 13px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 5px; padding-top: 12px; border-top: 1px solid var(--border); }
 
