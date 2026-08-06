@@ -2,6 +2,7 @@
 // One place for all category + tool info. Add a new tool = add one object here.
 // Every page (homepage, category pages, tool pages later) reads from this file.
 
+/** @type {Record<string, string>} */
 export const categoryIcons = {
   "text-tools": `<path d="M4 6h16M4 12h10M4 18h13"/>`,
   "developer-tools": `<path d="M8 3a3 3 0 00-3 3v3a2 2 0 01-2 2 2 2 0 012 2v3a3 3 0 003 3M16 3a3 3 0 013 3v3a2 2 0 002 2 2 2 0 00-2 2v3a3 3 0 01-3 3"/>`,
@@ -248,6 +249,9 @@ export const tools = [
   { slug: "pregnancy-due-date-calculator", category: "health", name: "Pregnancy Due Date Calculator", desc: "Estimate your due date" },
   { slug: "pregnancy-weight-gain-calculator", category: "health", name: "Pregnancy Weight Gain Calculator", desc: "Track healthy weight gain" },
   { slug: "water-intake-calculator", category: "health", name: "Water Intake Calculator", desc: "Daily hydration needs" },
+  { slug: "macro-calculator", category: "health", name: "Macro Calculator", desc: "Daily protein, carbs & fat targets" },
+  { slug: "protein-calculator", category: "health", name: "Protein Calculator", desc: "Daily protein intake by weight & goal" },
+  { slug: "heart-rate-zone-calculator", category: "health", name: "Heart Rate Zone Calculator", desc: "Target training zones by age" },
 
   // Date & Time
   { slug: "age-calculator", category: "date-time", name: "Age Calculator", desc: "Exact age in years, months, days" },

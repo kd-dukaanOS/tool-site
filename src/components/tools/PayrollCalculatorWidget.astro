@@ -1,20 +1,20 @@
----
+﻿---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { IndianRupee, MinusCircle, Wallet } from "@lucide/astro";
+import { IndianRupee, CircleMinus, Wallet } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="basicSalary" label="Basic Salary (₹)" type="number" placeholder="e.g. 30000" />
-    <CalculatorField id="hra" label="HRA (₹)" type="number" placeholder="e.g. 12000" />
-    <CalculatorField id="otherAllowances" label="Other Allowances (₹)" type="number" placeholder="e.g. 3000" />
+    <CalculatorField id="basicSalary" label="Basic Salary (â‚¹)" type="number" placeholder="e.g. 30000" />
+    <CalculatorField id="hra" label="HRA (â‚¹)" type="number" placeholder="e.g. 12000" />
+    <CalculatorField id="otherAllowances" label="Other Allowances (â‚¹)" type="number" placeholder="e.g. 3000" />
     <CalculatorField id="pfPercent" label="PF (%)" type="number" placeholder="e.g. 12" />
-    <CalculatorField id="professionalTax" label="Professional Tax (₹)" type="number" placeholder="e.g. 200" />
-    <CalculatorField id="otherDeductions" label="Other Deductions (₹)" type="number" placeholder="e.g. 500" />
+    <CalculatorField id="professionalTax" label="Professional Tax (â‚¹)" type="number" placeholder="e.g. 200" />
+    <CalculatorField id="otherDeductions" label="Other Deductions (â‚¹)" type="number" placeholder="e.g. 500" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -36,11 +36,12 @@ import { IndianRupee, MinusCircle, Wallet } from "@lucide/astro";
 
     <ResultsGrid id="resultsContainer" hidden>
       <ResultCard id="grossSalaryResult" title="Gross Salary" icon={IndianRupee} accent="neutral" />
-      <ResultCard id="pfDeductionResult" title="PF Deduction" icon={MinusCircle} accent="warning" />
-      <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={MinusCircle} accent="danger" />
+      <ResultCard id="pfDeductionResult" title="PF Deduction" icon={CircleMinus} accent="warning" />
+      <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={CircleMinus} accent="danger" />
       <ResultCard id="netSalaryResult" title="Net Salary" icon={Wallet} accent="success" size="lg" />
     </ResultsGrid>
   </div>
 </div>
 
 <script src="../../scripts/payroll-calculator.ts"></script>
+

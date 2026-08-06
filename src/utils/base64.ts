@@ -1,4 +1,4 @@
-export interface Base64Input {
+﻿export interface Base64Input {
   text: string;
   mode: "encode" | "decode";
 }
@@ -21,9 +21,9 @@ export function validateBase64Input(i: Base64Input): string | null {
 
 export function calculateBase64(i: Base64Input): Base64Result {
   if (i.mode === "encode") {
-    return { output: btoa(unescape(encodeURIComponent(i.text))) };
+    return { output: btoa(String.fromCharCode(...new TextEncoder().encode(i.text))) };
   }
-  return { output: decodeURIComponent(escape(atob(i.text))) };
+  return { output: new TextDecoder().decode(Uint8Array.from(atob(i.text), c => c.charCodeAt(0))) };
 }
 
 export function copyBase64Summary(i: Base64Input, r: Base64Result): string {

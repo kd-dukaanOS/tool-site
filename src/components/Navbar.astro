@@ -1,0 +1,167 @@
+---
+import Button from './ui/Button.astro';
+
+const navLinks = [
+  { label: 'Tools', href: '/tools' },
+  { label: 'Categories', href: '/categories' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'API', href: '/api' },
+  { label: 'About', href: '/about' },
+];
+---
+<header class="ts-nav">
+  <div class="ts-nav-inner">
+    <a href="/" class="ts-nav-logo">
+      <span class="ts-nav-logo-mark">T</span>
+      <span>ToolSite</span>
+    </a>
+
+    <nav class="ts-nav-links">
+      {navLinks.map((link) => (
+        <a href={link.href} class="ts-nav-link">{link.label}</a>
+      ))}
+    </nav>
+
+    <div class="ts-nav-actions">
+      <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      <Button variant="secondary" href="/bookmarks" class="ts-nav-bookmarks">
+        🔖 Bookmarks
+      </Button>
+      <Button variant="primary" href="https://github.com/your-repo" class="ts-nav-github">
+        ⭐ Star on GitHub
+      </Button>
+      <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+
+  <nav class="ts-nav-mobile" id="mobile-menu">
+    {navLinks.map((link) => (
+      <a href={link.href} class="ts-nav-mobile-link">{link.label}</a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .ts-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg-page) 80%, transparent);
+    backdrop-filter: blur(var(--blur-md));
+    -webkit-backdrop-filter: blur(var(--blur-md));
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .ts-nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-6);
+  }
+  .ts-nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 700;
+    font-size: var(--fs-h3);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-sans);
+  }
+  .ts-nav-logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #fff;
+    font-size: var(--fs-small);
+  }
+
+  .ts-nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .ts-nav-link {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: var(--space-2) 0;
+    position: relative;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  .ts-nav-link:hover { color: var(--text-primary); }
+  .ts-nav-link.active {
+    color: var(--color-primary);
+  }
+  .ts-nav-link.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+  }
+
+  .ts-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .ts-nav-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: var(--fs-body);
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+  .ts-nav-icon-btn:hover { border-color: var(--border-hover); }
+  .ts-nav-mobile-toggle { display: none; }
+
+  .ts-nav-mobile {
+    display: none;
+    flex-direction: column;
+    padding: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .ts-nav-mobile.open { display: flex; }
+  .ts-nav-mobile-link {
+    padding: var(--space-3) 0;
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 900px) {
+    .ts-nav-links,
+    .ts-nav-bookmarks,
+    .ts-nav-github {
+      display: none;
+    }
+    .ts-nav-mobile-toggle { display: inline-flex; }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
+
+  const themeBtn = document.getElementById('theme-toggle');
+  themeBtn?.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>

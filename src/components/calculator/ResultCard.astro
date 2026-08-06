@@ -1,5 +1,5 @@
 ---
-import type { AstroComponentFactory } from "astro/runtime/server";
+type IconComponent = (props: any) => any;
 
 interface Props {
   id: string;
@@ -8,7 +8,7 @@ interface Props {
   value?: string | number;
   subtitle?: string;
 
-  icon?: AstroComponentFactory;
+  icon?: IconComponent;
   badge?: string;
 
   accent?: "primary" | "success" | "warning" | "danger" | "neutral";

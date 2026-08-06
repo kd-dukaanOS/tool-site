@@ -1,0 +1,57 @@
+/* src/styles/effects.css — decorative pass, imported once in Layout.astro */
+
+/* scroll-reveal */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--ease-standard), transform .5s var(--ease-standard); }
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > * { animation: revealItem .5s var(--ease-standard) both; }
+.reveal-stagger.in-view > *:nth-child(2) { animation-delay: .06s; }
+.reveal-stagger.in-view > *:nth-child(3) { animation-delay: .12s; }
+.reveal-stagger.in-view > *:nth-child(4) { animation-delay: .18s; }
+.reveal-stagger.in-view > *:nth-child(5) { animation-delay: .24s; }
+.reveal-stagger.in-view > *:nth-child(6) { animation-delay: .3s; }
+@keyframes revealItem { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* hero background: grid + noise + aurora glow (layered behind .ts-hero-inner) */
+.ts-hero { position: relative; }
+.ts-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border-subtle) 1px, transparent 1px),
+                     linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 20%, black 40%, transparent 90%);
+  opacity: .35;
+  pointer-events: none;
+}
+.ts-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(99,102,241,.14), transparent 55%);
+  pointer-events: none;
+}
+
+/* floating tool chips around hero */
+.ts-hero-float {
+  position: absolute;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 8px 12px;
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  box-shadow: var(--shadow-md);
+  animation: floaty 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.ts-hero-float span.dot { width: 8px; height: 8px; border-radius: 50%; }
+.ts-hero-float.f1 { top: 12%; left: 6%;  animation-delay: 0s;   }
+.ts-hero-float.f2 { top: 55%; left: 2%;  animation-delay: .8s;  }
+.ts-hero-float.f3 { top: 18%; right: 6%; animation-delay: .4s;  }
+.ts-hero-float.f4 { top: 58%; right: 3%; animation-delay: 1.2s; }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-2deg); }
+}
+@media (max-width: 900px) { .ts-hero-float { display: none; } }
+
+/* hover glow utility (uses tokens' primary shadow) */
+.glow-hover:hover { box-shadow: var(--shadow-glow-primary), var(--shadow-lg); }

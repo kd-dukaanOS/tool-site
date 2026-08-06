@@ -1,5 +1,4 @@
----
-import CalculatorActions from "../calculator/ActionButtons.astro";
+﻿---
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
@@ -49,7 +48,7 @@ import { QrCode, Type, Ruler, Download } from "@lucide/astro";
     <main class="qr-content">
       <div id="emptyState">
         <EmptyState
-          icon="⬜"
+          icon="â¬œ"
           title="QR Code Generator"
           description="Generate a QR code from any text, URL or email instantly."
           tips={["Custom Size", "Error Correction Level", "Custom Colors", "Download PNG"]}
@@ -102,3 +101,4 @@ import { QrCode, Type, Ruler, Download } from "@lucide/astro";
 :global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
 @media(max-width:1024px){.qr-layout{grid-template-columns:1fr;}.qr-sidebar{position:static;}.tool-grid-2{grid-template-columns:1fr;}}
 </style>
+

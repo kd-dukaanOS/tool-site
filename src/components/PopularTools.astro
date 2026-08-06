@@ -1,0 +1,74 @@
+---
+const popularTools = [
+  { icon: '≡', name: 'JSON Formatter', desc: 'Format & validate JSON', href: '/tools/json-formatter' },
+  { icon: '𝐀', name: 'Word Counter', desc: 'Count words & characters', href: '/tools/word-counter' },
+  { icon: '{}', name: 'UUID Generator', desc: 'Generate unique IDs', href: '/tools/uuid-generator' },
+  { icon: '🔑', name: 'Password Generator', desc: 'Strong & secure passwords', href: '/tools/password-generator' },
+  { icon: '📊', name: 'EMI Calculator', desc: 'Loan EMI calculation', href: '/tools/emi-calculator' },
+  { icon: '$', name: 'GST Calculator', desc: 'Add or remove GST', href: '/tools/gst-calculator' },
+];
+---
+<section class="ts-pop">
+  <div class="ts-pop-inner">
+    <div class="ts-pop-head">
+      <h2 class="ts-pop-title">🔥 Popular Tools</h2>
+      <a href="/tools" class="ts-pop-viewall">View all →</a>
+    </div>
+    <div class="ts-pop-row">
+      {popularTools.map((tool) => (
+        <a href={tool.href} class="ts-pop-card">
+          <span class="ts-pop-icon">{tool.icon}</span>
+          <div class="ts-pop-text">
+            <span class="ts-pop-name">{tool.name}</span>
+            <span class="ts-pop-desc">{tool.desc}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ts-pop { padding: 0 var(--space-6) var(--space-8); }
+  .ts-pop-inner { max-width: 1280px; margin: 0 auto; }
+  .ts-pop-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+  .ts-pop-title {
+    font-family: var(--font-sans); font-size: var(--fs-h3); font-weight: 700;
+    color: var(--text-primary); margin: 0;
+  }
+  .ts-pop-viewall {
+    font-family: var(--font-sans); font-size: var(--fs-small); font-weight: 600;
+    color: var(--color-primary); text-decoration: none;
+  }
+  .ts-pop-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-3);
+  }
+  .ts-pop-card {
+    display: flex; align-items: center; gap: var(--space-2);
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg); padding: var(--space-3);
+    text-decoration: none;
+    transition: border-color var(--duration-fast) var(--ease-standard),
+                transform var(--duration-fast) var(--ease-standard);
+  }
+  .ts-pop-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+  .ts-pop-icon {
+    font-size: 1rem; width: 32px; height: 32px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--color-primary-light); border-radius: var(--radius-sm);
+  }
+  .ts-pop-text { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+  .ts-pop-name {
+    font-family: var(--font-sans); font-size: var(--fs-small); font-weight: 600;
+    color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ts-pop-desc { font-family: var(--font-sans); font-size: 0.75rem; color: var(--text-muted); }
+
+  @media (max-width: 1000px) { .ts-pop-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .ts-pop-row { grid-template-columns: repeat(2, 1fr); } }
+</style>

@@ -1,51 +1,38 @@
-import { generateHashes, validateHashInput, copyHashSummary } from "../utils/hash-generator";
-import { setValue, copyToClipboard } from "../utils/calculator";
+import md5lib from "crypto-js/md5";
 
-const textInput = document.getElementById("hashText") as HTMLTextAreaElement;
-const generateBtn = document.getElementById("generateBtn");
-const resetBtn = document.getElementById("resetBtn");
-const copyBtn = document.getElementById("copyBtn");
-const errorBox = document.getElementById("errorBox") as HTMLElement;
-const emptyState = document.getElementById("emptyState") as HTMLElement;
-const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
-
-let lastText = "";
-let lastResult: Awaited<ReturnType<typeof generateHashes>> | null = null;
-
-function showError(m: string) { errorBox.textContent = m; errorBox.hidden = false; }
-function clearError() { errorBox.textContent = ""; errorBox.hidden = true; }
-
-async function generate() {
-  clearError();
-  const text = textInput.value;
-  const err = validateHashInput(text);
-  if (err) { showError(err); return; }
-
-  const result = await generateHashes(text);
-  setValue("md5Result", result.md5);
-  setValue("sha1Result", result.sha1);
-  setValue("sha256Result", result.sha256);
-  setValue("sha512Result", result.sha512);
-
-  lastText = text;
-  lastResult = result;
-  emptyState.hidden = true;
-  resultsContainer.hidden = false;
+export interface HashResult {
+  md5: string;
+  sha1: string;
+  sha256: string;
+  sha512: string;
 }
 
-function reset() {
-  textInput.value = "";
-  clearError();
-  lastResult = null;
-  resultsContainer.hidden = true;
-  emptyState.hidden = false;
+async function digest(algo: string, text: string): Promise<string> {
+  const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-function handleCopy() {
-  if (!lastResult) return;
-  copyToClipboard(copyHashSummary(lastText, lastResult));
+// MD5 not supported by SubtleCrypto — using crypto-js as a fallback
+function md5(str: string): string {
+  return md5lib(str).toString();
 }
 
-generateBtn?.addEventListener("click", generate);
-resetBtn?.addEventListener("click", reset);
-copyBtn?.addEventListener("click", handleCopy);
+export async function generateHashes(text: string): Promise<HashResult> {
+  const [sha1, sha256, sha512] = await Promise.all([
+    digest("SHA-1", text),
+    digest("SHA-256", text),
+    digest("SHA-512", text),
+  ]);
+  return { md5: md5(text), sha1, sha256, sha512 };
+}
+
+export function validateHashInput(text: string): string | null {
+  if (!text.trim()) return "Please enter text to hash.";
+  return null;
+}
+
+export function copyHashSummary(text: string, r: HashResult): string {
+  return `Hash Summary\n\nInput:\n${text}\n\nMD5:\n${r.md5}\n\nSHA-1:\n${r.sha1}\n\nSHA-256:\n${r.sha256}\n\nSHA-512:\n${r.sha512}`.trim();
+}

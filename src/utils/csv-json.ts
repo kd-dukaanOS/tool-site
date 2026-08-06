@@ -1,4 +1,4 @@
-export interface CsvJsonInput {
+﻿export interface CsvJsonInput {
   text: string;
   mode: "csvToJson" | "jsonToCsv";
 }
@@ -57,6 +57,6 @@ export function calculateCsvJson(i: CsvJsonInput): CsvJsonResult {
   return { output: jsonToCsv(i.text) };
 }
 
-export function copyCsvJsonSummary(i: CsvJsonInput, r: CsvJsonResult): string {
+export function copyCsvJsonSummary(_i: CsvJsonInput, r: CsvJsonResult): string {
   return r.output;
 }

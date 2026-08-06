@@ -26,12 +26,31 @@ const { faqs = [] } = Astro.props as Props;
 )}
 
 <style>
-  .faq-section { margin: 40px 0; }
-  .faq-section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 0 0 16px; }
-  .faq-item { border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; background: var(--surface); }
-  .faq-item summary { cursor: pointer; font-weight: 600; font-size: 14.5px; color: var(--ink); list-style: none; }
+  .faq-section { max-width: 1120px; margin: var(--space-12) auto; padding: 0 24px; }
+  .faq-section h2 { font-family: var(--font-sans); font-size: var(--fs-h2); font-weight: 700; color: var(--text-primary); margin: 0 0 var(--space-4); }
+  .faq-item {
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5); margin-bottom: var(--space-2);
+    background: var(--bg-card);
+    transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard);
+  }
+  .faq-item:hover { border-color: var(--border-hover); }
+  .faq-item[open] { box-shadow: var(--shadow-sm); }
+  .faq-item summary {
+    cursor: pointer; font-weight: 600; font-size: 14.5px; color: var(--text-primary);
+    list-style: none; display: flex; align-items: center; gap: var(--space-3);
+  }
   .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::before { content: '+'; color: var(--primary); font-weight: 700; margin-right: 10px; }
-  .faq-item[open] summary::before { content: '−'; }
-  .faq-item p { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
+  .faq-item summary::before {
+    content: '+'; color: var(--color-primary); font-weight: 700; font-size: 16px;
+    display: inline-flex; width: 20px; flex-shrink: 0; justify-content: center;
+    transition: transform var(--duration-base) var(--ease-standard);
+  }
+  .faq-item[open] summary::before { content: '+'; transform: rotate(45deg); }
+  .faq-item p {
+    font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;
+    margin: var(--space-3) 0 0 32px;
+    animation: faqFadeIn var(--duration-base) var(--ease-standard);
+  }
+  @keyframes faqFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 </style>

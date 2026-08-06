@@ -1,0 +1,90 @@
+---
+import CategoryCard from './ui/CategoryCard.astro';
+
+interface CategoryItem {
+  icon: string;
+  title: string;
+  count: number;
+  accent: "purple" | "violet" | "teal" | "red" | "green" | "orange" | "blue" | "yellow";
+  description: string;
+  tools: string[];
+  href: string;
+}
+
+const categories: CategoryItem[] = [
+  { icon: '≡', title: 'Text Tools', count: 5, accent: 'purple',
+    description: 'Word counting, case conversion, diffing, and other everyday text utilities.',
+    tools: ['Word Counter', 'Case Converter', 'Markdown Previewer'], href: '/categories/text-tools' },
+  { icon: '{}', title: 'Developer Tools', count: 5, accent: 'violet',
+    description: 'JSON, regex, tokens, and data-format helpers for day-to-day dev work.',
+    tools: ['JSON Formatter', 'Regex Tester', 'JWT Decoder'], href: '/categories/developer-tools' },
+  { icon: '⇄', title: 'Converters', count: 14, accent: 'teal',
+    description: 'Convert between encodings, timestamps, and color formats.',
+    tools: ['Base64 Tool', 'URL Encoder/Decoder', 'Timestamp Converter'], href: '/categories/converters' },
+  { icon: '🛡', title: 'Security Tools', count: 3, accent: 'red',
+    description: 'Generate IDs, passwords, and hashes — all done locally in your browser.',
+    tools: ['UUID Generator', 'Password Generator', 'Hash Generator'], href: '/categories/security-tools' },
+  { icon: '$', title: 'Finance Calculators', count: 23, accent: 'green',
+    description: 'Loans, deposits, investments, and everyday finance math.',
+    tools: ['EMI Calculator', 'ROI Calculator', 'SIP Calculator'], href: '/categories/finance-calculators' },
+  { icon: '÷', title: 'Math & Numbers', count: 10, accent: 'orange',
+    description: 'Solve equations, percentages, ratios, and more.',
+    tools: ['Percentage Calculator', 'Ratio Calculator', 'Equation Solver'], href: '/categories/math-numbers' },
+  { icon: '📅', title: 'Date & Time', count: 8, accent: 'blue',
+    description: 'Work with dates, durations, and time conversions.',
+    tools: ['Age Calculator', 'Date Difference', 'Countdown Timer'], href: '/categories/date-time' },
+  { icon: '🖼', title: 'Image Tools', count: 6, accent: 'yellow',
+    description: 'Compress, convert, and optimize images instantly.',
+    tools: ['Image Compressor', 'Image Converter', 'Image Resizer'], href: '/categories/image-tools' },
+];
+---
+<section class="ts-cat-section">
+  <div class="ts-cat-section-inner">
+    <div class="ts-cat-section-head">
+      <h2 class="ts-cat-section-title">✦ Browse by category</h2>
+      <a href="/categories" class="ts-cat-section-viewall">View all categories →</a>
+    </div>
+
+    <div class="ts-cat-grid reveal-stagger">
+      {categories.map((cat) => <CategoryCard {...cat} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ts-cat-section { padding: 0 var(--space-6) var(--space-12); }
+  .ts-cat-section-inner { max-width: 1280px; margin: 0 auto; }
+  .ts-cat-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+  }
+  .ts-cat-section-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .ts-cat-section-viewall {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .ts-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 1100px) {
+    .ts-cat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .ts-cat-grid { grid-template-columns: 1fr; }
+  }
+</style>

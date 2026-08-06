@@ -1,0 +1,61 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Flame, Beef, Wheat, Droplet } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <div class="field-group">
+      <label for="gender">Gender</label>
+      <select id="gender" class="calculator-input">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <CalculatorField id="age" label="Age" type="number" placeholder="e.g. 28" />
+    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />
+    <CalculatorField id="weightKg" label="Weight (kg)" type="number" placeholder="e.g. 65" />
+
+    <div class="field-group">
+      <label for="activityLevel">Activity Level</label>
+      <select id="activityLevel" class="calculator-input">
+        <option value="sedentary">Sedentary (little/no exercise)</option>
+        <option value="light">Light (1-3 days/week)</option>
+        <option value="moderate" selected>Moderate (3-5 days/week)</option>
+        <option value="active">Active (6-7 days/week)</option>
+        <option value="veryActive">Very Active (physical job)</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label for="goal">Goal</label>
+      <select id="goal" class="calculator-input">
+        <option value="lose">Lose Weight</option>
+        <option value="maintain" selected>Maintain Weight</option>
+        <option value="gain">Gain Weight</option>
+      </select>
+    </div>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState id="emptyState" title="Enter details to calculate macros" description="Your daily calorie and macro targets will appear here." />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="caloriesResult" title="Daily Calories" icon={Flame} accent="primary" size="lg" />
+      <ResultCard id="proteinResult" title="Protein" icon={Beef} accent="success" />
+      <ResultCard id="carbsResult" title="Carbs" icon={Wheat} accent="neutral" />
+      <ResultCard id="fatResult" title="Fat" icon={Droplet} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/macro-calculator.ts"></script>

@@ -1,3 +1,5 @@
+import md5lib from "crypto-js/md5";
+
 export interface HashResult {
   md5: string;
   sha1: string;
@@ -12,15 +14,9 @@ async function digest(algo: string, text: string): Promise<string> {
     .join("");
 }
 
-// MD5 not supported by SubtleCrypto — lightweight JS fallback
+// MD5 not supported by SubtleCrypto — using crypto-js as a fallback
 function md5(str: string): string {
-  function rl(n: number, c: number) { return (n << c) | (n >>> (32 - c)); }
-  function cvt(a: number, b: number, c: number, d: number, x: number, s: number, t: number) {
-    a = (((a + ((b & c) | (~b & d))) + x) + t) >>> 0;
-    return (((rl(a, s)) + b) >>> 0);
-  }
-  // ... standard md5 implementation (use 'blueimp-md5' or 'crypto-js' package instead in production)
-  return require("crypto-js/md5")(str).toString();
+  return md5lib(str).toString();
 }
 
 export async function generateHashes(text: string): Promise<HashResult> {

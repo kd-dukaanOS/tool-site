@@ -1,0 +1,28 @@
+---
+interface Props {
+  hoverable?: boolean;
+  class?: string;
+}
+const { hoverable = true, class: className = '' } = Astro.props;
+---
+<div class={`ts-card ${hoverable ? 'ts-card-hoverable' : ''} ${className}`}>
+  <slot />
+</div>
+
+<style>
+  .ts-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-base) var(--ease-standard),
+                box-shadow var(--duration-base) var(--ease-standard),
+                border-color var(--duration-base) var(--ease-standard);
+  }
+  .ts-card-hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-primary), var(--shadow-lg);
+    border-color: var(--border-hover);
+  }
+</style>

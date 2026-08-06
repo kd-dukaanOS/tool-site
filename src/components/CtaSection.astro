@@ -1,0 +1,45 @@
+---
+import Button from './ui/Button.astro';
+---
+<section class="ts-cta">
+  <div class="ts-cta-inner">
+    <div>
+      <h2>All the tools you need. One place.</h2>
+      <p>Save time, boost productivity, and get things done instantly.</p>
+    </div>
+    <form class="ts-cta-form" onsubmit="return false">
+      <input type="email" placeholder="Enter your email" required />
+      <Button variant="secondary" type="submit">Explore All Tools →</Button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .ts-cta {
+    margin: var(--space-8) var(--space-6);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-lg);
+  }
+  .ts-cta-inner {
+    max-width: 1120px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+    flex-wrap: wrap;
+  }
+  .ts-cta h2 { font-family: var(--font-sans); font-size: var(--fs-h2); color: #fff; margin: 0 0 6px; }
+  .ts-cta p { font-size: var(--fs-body); color: rgba(255,255,255,0.85); margin: 0; }
+  .ts-cta-form { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .ts-cta-form input {
+    border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.12);
+    border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4);
+    color: #fff; font-family: var(--font-sans); font-size: 14px; min-width: 220px;
+  }
+  .ts-cta-form input::placeholder { color: rgba(255,255,255,0.7); }
+  .ts-cta-form :global(.ts-btn-secondary) { background: #fff; color: var(--color-primary-dark); border-color: transparent; white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    .ts-cta-inner { flex-direction: column; align-items: stretch; text-align: center; }
+    .ts-cta-form { flex-direction: column; }
+  }
+</style>

@@ -1,4 +1,4 @@
-/* ==========================================================
+﻿/* ==========================================================
    ToolSite Diff Checker Utilities
 ========================================================== */
 
@@ -75,7 +75,7 @@ export function computeDiff(text1: string, text2: string): DiffResult {
 
 export function formatDiffHtml(result: DiffResult): string {
   if (result.lines.length === 0) {
-    return "No differences found — texts are identical.";
+    return "No differences found â€” texts are identical.";
   }
 
   return result.lines
@@ -106,8 +106,8 @@ export function validateDiffInput(
 }
 
 export function copyDiffSummary(
-  text1: string,
-  text2: string,
+  _text1: string,
+  _text2: string,
   result: DiffResult
 ): string {
   return `
@@ -130,3 +130,5 @@ ${result.lines
   .join("\n")}
 `.trim();
 }
+
+

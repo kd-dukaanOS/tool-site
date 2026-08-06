@@ -1,9 +1,9 @@
----
+﻿---
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
-import { KeyRound, ShieldAlert, CalendarClock, CalendarX, Code2 } from "@lucide/astro";
+import { KeyRound, ShieldAlert, CalendarClock, CalendarX, CodeXml } from "@lucide/astro";
 ---
 <section class="jwt-decoder">
   <div class="jwt-layout">
@@ -19,7 +19,7 @@ import { KeyRound, ShieldAlert, CalendarClock, CalendarX, Code2 } from "@lucide/
     <main class="jwt-content">
       <div id="emptyState">
         <EmptyState
-          icon="🔑"
+          icon="ðŸ”‘"
           title="JWT Decoder"
           description="Decode and inspect JSON Web Tokens instantly."
           tips={["Header & Payload", "Expiry Check", "Algorithm", "Copy Summary"]}
@@ -36,18 +36,18 @@ import { KeyRound, ShieldAlert, CalendarClock, CalendarX, Code2 } from "@lucide/
 
         <div class="tool-grid-2">
           <div class="tool-field">
-            <label class="tool-label"><Code2 size={16} /> Header</label>
+            <label class="tool-label"><CodeXml size={16} /> Header</label>
             <pre id="headerOutput" class="tool-textarea code-block"></pre>
           </div>
           <div class="tool-field">
-            <label class="tool-label"><Code2 size={16} /> Payload</label>
+            <label class="tool-label"><CodeXml size={16} /> Payload</label>
             <pre id="payloadOutput" class="tool-textarea code-block"></pre>
           </div>
         </div>
 
         <section class="calculator-info">
           <h2>About this Tool</h2>
-          <p>Decode JWT header and payload, check expiry status and algorithm — entirely client-side, your token never leaves your browser.</p>
+          <p>Decode JWT header and payload, check expiry status and algorithm â€” entirely client-side, your token never leaves your browser.</p>
         </section>
       </div>
     </main>
@@ -76,3 +76,4 @@ import { KeyRound, ShieldAlert, CalendarClock, CalendarX, Code2 } from "@lucide/
 :global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
 @media(max-width:1024px){.jwt-layout{grid-template-columns:1fr;}.jwt-sidebar{position:static;}.tool-grid-2{grid-template-columns:1fr;}}
 </style>
+

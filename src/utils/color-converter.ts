@@ -1,4 +1,4 @@
-export interface ColorConverterInput {
+﻿export interface ColorConverterInput {
   color: string; // hex like #ff0000, or "r,g,b"
   inputFormat: "hex" | "rgb";
 }
@@ -66,7 +66,7 @@ export function calculateColorConverter(i: ColorConverterInput): ColorConverterR
   };
 }
 
-export function copyColorConverterSummary(i: ColorConverterInput, r: ColorConverterResult): string {
+export function copyColorConverterSummary(_i: ColorConverterInput, r: ColorConverterResult): string {
   return `
 Color Conversion
 

@@ -1,10 +1,10 @@
-import {
+﻿import {
   calculateBodyFat,
   validateBodyFatInput,
   copyBodyFatSummary,
   type BodyFatInput,
 } from "../utils/body-fat";
-import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { setValue, copyToClipboard } from "../utils/calculator";
 
 const genderInput = document.getElementById("gender") as HTMLSelectElement;
 const heightInput = document.getElementById("heightCm") as HTMLInputElement;

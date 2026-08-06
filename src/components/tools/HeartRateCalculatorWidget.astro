@@ -1,0 +1,33 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { HeartPulse, Flame, Activity, Zap, Gauge } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="age" label="Age" type="number" placeholder="e.g. 30" />
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState id="emptyState" title="Enter your age to see heart rate zones" description="Your training zones based on max heart rate will appear here." />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="maxHrResult" title="Max Heart Rate" icon={HeartPulse} accent="primary" size="lg" />
+      <ResultCard id="warmUpResult" title="Warm Up (50-60%)" icon={Gauge} accent="neutral" />
+      <ResultCard id="fatBurnResult" title="Fat Burn (60-70%)" icon={Flame} accent="success" />
+      <ResultCard id="cardioResult" title="Cardio (70-80%)" icon={Activity} accent="neutral" />
+      <ResultCard id="hardcoreResult" title="Hardcore (80-90%)" icon={Zap} accent="neutral" />
+      <ResultCard id="peakResult" title="Peak (90-100%)" icon={HeartPulse} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/heartrate-calculator.ts"></script>

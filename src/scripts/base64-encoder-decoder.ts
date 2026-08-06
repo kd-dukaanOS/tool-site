@@ -1,7 +1,6 @@
 import {
   calculateBase64,
   validateBase64Input,
-  copyBase64Summary,
   type Base64Input,
 } from "../utils/base64";
 import { setValue, copyToClipboard } from "../utils/calculator";

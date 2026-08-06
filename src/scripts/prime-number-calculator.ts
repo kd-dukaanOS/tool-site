@@ -1,10 +1,10 @@
-import {
+﻿import {
   calculatePrime,
   validatePrimeInput,
   copyPrimeSummary,
   type PrimeInput,
 } from "../utils/prime-number";
-import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { setValue, copyToClipboard } from "../utils/calculator";
 
 const numberInput = document.getElementById("number") as HTMLInputElement;
 

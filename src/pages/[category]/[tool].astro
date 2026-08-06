@@ -1,4 +1,4 @@
----
+﻿---
 // src/pages/[category]/[tool].astro
 import Layout from "../../layouts/Layout.astro";
 import FaqSection from "../../components/FaqSection.astro";
@@ -41,6 +41,9 @@ import OvulationCalculatorWidget from "../../components/tools/OvulationCalculato
 import PregnancyDueDateCalculatorWidget from "../../components/tools/PregnancyDueDateCalculatorWidget.astro";
 import PregnancyWeightGainCalculatorWidget from "../../components/tools/PregnancyWeightGainCalculatorWidget.astro";
 import WaterIntakeCalculatorWidget from "../../components/tools/WaterIntakeCalculatorWidget.astro";
+import MacroCalculatorWidget from "../../components/tools/MacroCalculatorWidget.astro";
+import ProteinCalculatorWidget from "../../components/tools/ProteinCalculatorWidget.astro";
+import HeartRateCalculatorWidget from "../../components/tools/HeartRateCalculatorWidget.astro";
 import AgeCalculatorWidget from "../../components/tools/AgeCalculatorWidget.astro";
 import CAGRCalculatorWidget from "../../components/tools/CAGRCalculatorWidget.astro";
 import BreakEvenCalculatorWidget from "../../components/tools/BreakEvenCalculatorWidget.astro";
@@ -81,6 +84,7 @@ import TimeDurationCalculatorWidget from "../../components/tools/TimeDurationCal
 import TimezoneCalculatorWidget from "../../components/tools/TimezoneCalculatorWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 import { contentMap } from "../../data/calculator-content-map.js";
+import CalculatorContent from "../../components/content/CalculatorContent.astro";
 
 // Build one real page per tool (20 pages total from this one file).
 // Each entry needs BOTH params filled in, because the URL needs both
@@ -111,7 +115,7 @@ const relatedTools = tools
 // separately in src/data/calculators/*.ts. contentMap looks up the right
 // file for this tool's slug; import.meta.glob loads them all at build time.
 const contentModules = import.meta.glob("../../data/calculators/*.ts", { eager: true });
-const contentFile = contentMap[tool.slug];
+const contentFile = (contentMap as Record<string, string>)[tool.slug];
 const contentModule = contentFile ? contentModules[`../../data/calculators/${contentFile}.ts`] : null;
 const content = contentModule ? Object.values(contentModule)[0] as any : null;
 
@@ -119,7 +123,7 @@ const content = contentModule ? Object.values(contentModule)[0] as any : null;
 // tools.js's thinner faqs list (question/answer shape) for any tool without one.
 const faqs = (content?.faq?.length ? content.faq.map((f: any) => ({ question: f.q, answer: f.a })) : tool.faqs) || [];
 
-// FAQPage structured data — this is what lets Google show your FAQs
+// FAQPage structured data â€” this is what lets Google show your FAQs
 // as expandable rich results directly in search, not just a blue link.
 const faqSchema = faqs.length > 0 ? {
   "@context": "https://schema.org",
@@ -133,7 +137,7 @@ const faqSchema = faqs.length > 0 ? {
 ---
 
 <Layout
-  title={`${tool.name} — Free Online Tool | ToolSite`}
+  title={`${tool.name} â€” Free Online Tool | ToolSite`}
   description={tool.desc}
 >
   <div class="wrap">
@@ -153,7 +157,7 @@ const faqSchema = faqs.length > 0 ? {
 
     <!--
       Each tool gets its own widget component. Add a new "if" line here
-      whenever a new tool's real logic is ready — until then it falls
+      whenever a new tool's real logic is ready â€” until then it falls
       back to the placeholder box automatically.
     -->
     {tool.slug === "json-formatter" ? (
@@ -310,84 +314,25 @@ const faqSchema = faqs.length > 0 ? {
       <TimeDurationCalculatorWidget />
     ) : tool.slug === "timezone-calculator" ? (
       <TimezoneCalculatorWidget />
+    ) : tool.slug === "macro-calculator" ? (
+      <MacroCalculatorWidget />
+    ) : tool.slug === "protein-calculator" ? (
+      <ProteinCalculatorWidget />
+    ) : tool.slug === "heart-rate-zone-calculator" ? (
+      <HeartRateCalculatorWidget />
     ) : (
       <div class="tool-widget-placeholder">
-        <p>🔧 The working "{tool.name}" tool will go here.</p>
+        <p>ðŸ”§ The working "{tool.name}" tool will go here.</p>
       </div>
     )}
 
-    {(content?.about?.text || tool.about) && (
-      <section class="tool-about">
-        <h2>About this tool</h2>
-        <p>{content?.about?.text || tool.about}</p>
-      </section>
-    )}
-
-    {content?.formula && (
-      <section class="tool-about">
-        <h2>Formula</h2>
-        <p><code>{content.formula.formula}</code></p>
-        {content.formula.variables?.length > 0 && (
-          <ul class="tool-list">
-            {content.formula.variables.map((v: any) => (
-              <li><strong>{v.symbol}</strong> — {v.meaning}</li>
-            ))}
-          </ul>
-        )}
-        {content.formula.explanation && <p>{content.formula.explanation}</p>}
-        {content.formula.interpretation && <p>{content.formula.interpretation}</p>}
-      </section>
-    )}
-
-    {content?.steps?.length > 0 && (
-      <section class="tool-about">
-        <h2>How to Use</h2>
-        <ol class="tool-list">
-          {content.steps.map((s: string) => <li>{s}</li>)}
-        </ol>
-      </section>
-    )}
-
-    {content?.examples?.length > 0 && (
-      <section class="tool-about">
-        <h2>Examples</h2>
-        <div class="tool-examples">
-          {content.examples.map((ex: any) => (
-            <div class="tool-example-card">
-              <p><strong>Inputs:</strong> {ex.inputs}</p>
-              <p><strong>Result:</strong> {ex.result}</p>
-              {ex.explanation && <p class="tool-example-note">{ex.explanation}</p>}
-            </div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    {(content?.expertTips?.length > 0 || content?.practicalUses?.length > 0) && (
-      <section class="tool-about">
-        <h2>Tips</h2>
-        <ul class="tool-list">
-          {(content.expertTips || content.practicalUses || []).map((t: string) => <li>{t}</li>)}
-        </ul>
-      </section>
-    )}
-
-    {content?.commonMistakes?.length > 0 && (
-      <section class="tool-about">
-        <h2>Common Mistakes</h2>
-        <ul class="tool-list">
-          {content.commonMistakes.map((m: any) => (
-            <li><strong>{m.mistake}</strong> — {m.fix}</li>
-          ))}
-        </ul>
-      </section>
-    )}
+    {content && <CalculatorContent {...content} />}
 
     <FaqSection faqs={faqs} />
   </div>
 
   {faqSchema && (
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
   )}
 
   {relatedTools.length > 0 && (
@@ -428,3 +373,4 @@ const faqSchema = faqs.length > 0 ? {
   .tool-example-card p { margin: 4px 0; }
   .tool-example-note { color: var(--muted); }
 </style>
+

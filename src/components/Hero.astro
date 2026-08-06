@@ -1,0 +1,140 @@
+---
+import Badge from './ui/Badge.astro';
+import Input from './ui/Input.astro';
+import Button from './ui/Button.astro';
+
+const popularSearches = [
+  'JSON Formatter',
+  'Word Counter',
+  'UUID Generator',
+  'Hash Generator',
+  'EMI Calculator',
+  'GST Calculator',
+];
+---
+<section class="ts-hero">
+  <div class="ts-hero-float f1"><span class="dot" style="background:#ef4444"></span> JSON</div>
+  <div class="ts-hero-float f2"><span class="dot" style="background:#2563eb"></span> Password</div>
+  <div class="ts-hero-float f3"><span class="dot" style="background:#059669"></span> GST</div>
+  <div class="ts-hero-float f4"><span class="dot" style="background:#ea580c"></span> EMI</div>
+  <div class="ts-hero-inner reveal">
+    <Badge tone="primary" class="ts-hero-badge">
+      ✦ 77+ Free Tools · 100% Private · No Sign-up
+    </Badge>
+
+    <h1 class="ts-hero-heading">
+      Essential Tools.<br />
+      <span class="ts-hero-gradient">Instant</span> Results.
+    </h1>
+
+    <p class="ts-hero-desc">
+      77+ fast, free browser-based tools for developers, creators, and everyday
+      tasks — no installs, no accounts, and nothing ever leaves your device.
+    </p>
+
+    <div class="ts-hero-search">
+      <Input placeholder="Search any tool..." shortcut="Ctrl /">
+        <Button slot="action" variant="primary" class="ts-hero-search-btn">→</Button>
+      </Input>
+    </div>
+
+    <div class="ts-hero-popular">
+      <span class="ts-hero-popular-label">Popular:</span>
+      {popularSearches.map((term) => (
+        <a href={`/search?q=${encodeURIComponent(term)}`} class="ts-hero-chip">{term}</a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ts-hero {
+    position: relative;
+    padding: var(--space-16) var(--space-6) var(--space-12);
+    background: var(--bg-hero-glow), var(--bg-page);
+    overflow: hidden;
+  }
+  .ts-hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ts-hero-badge { margin-bottom: var(--space-2); }
+
+  .ts-hero-heading {
+    font-family: var(--font-sans);
+    font-size: var(--fs-hero);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .ts-hero-gradient {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .ts-hero-desc {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ts-hero-search {
+    width: 100%;
+    max-width: 560px;
+  }
+  .ts-hero-search-btn {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .ts-hero-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+  .ts-hero-popular-label {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    margin-right: var(--space-1);
+  }
+  .ts-hero-chip {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-1) var(--space-4);
+    text-decoration: none;
+    transition: transform var(--duration-fast) var(--ease-standard),
+                border-color var(--duration-fast) var(--ease-standard);
+  }
+  .ts-hero-chip:hover {
+    transform: translateY(-1px);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 600px) {
+    .ts-hero { padding: var(--space-12) var(--space-4) var(--space-8); }
+  }
+</style>

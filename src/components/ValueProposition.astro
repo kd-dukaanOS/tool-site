@@ -1,0 +1,40 @@
+---
+import Card from './ui/Card.astro';
+
+const values = [
+  { icon: '🔒', title: '100% Private', desc: 'All processing happens in your browser. Nothing is ever uploaded.' },
+  { icon: '🎁', title: 'Always Free', desc: 'Every tool is free and will always be free — no paywalls, ever.' },
+  { icon: '∞', title: 'Unlimited Usage', desc: 'Use as much as you want, as often as you want, forever.' },
+  { icon: '👥', title: 'Community Driven', desc: 'Open source and shaped by feedback from real users.' },
+];
+---
+<section class="ts-value">
+  <div class="ts-value-inner">
+    {values.map((v) => (
+      <Card class="ts-value-card">
+        <span class="ts-value-icon">{v.icon}</span>
+        <h3>{v.title}</h3>
+        <p>{v.desc}</p>
+      </Card>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ts-value { padding: var(--space-8) var(--space-6); }
+  .ts-value-inner {
+    max-width: 1120px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4);
+  }
+  .ts-value-card { text-align: center; }
+  .ts-value-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px; border-radius: var(--radius-lg);
+    background: var(--color-primary-light); font-size: 20px; margin-bottom: var(--space-3);
+  }
+  .ts-value-card h3 { font-family: var(--font-sans); font-size: var(--fs-h3); color: var(--text-primary); margin: 0 0 6px; }
+  .ts-value-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+
+  @media (max-width: 860px) { .ts-value-inner { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .ts-value-inner { grid-template-columns: 1fr; } }
+</style>

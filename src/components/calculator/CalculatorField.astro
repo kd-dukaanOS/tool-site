@@ -2,7 +2,7 @@
 interface Props {
   id: string;
   label: string;
-  type?: string;
+  type?: "text" | "number" | "email" | "password" | "search" | "tel" | "url" | "date" | "time" | "datetime-local" | "month" | "week" | "color" | "range" | "hidden" | "select" | "textarea";
   placeholder?: string;
   value?: string | number;
   helpText?: string;
@@ -46,19 +46,38 @@ const {
 
   </label>
 
-  <input
-    id={id}
-    class="calculator-input"
-    type={type}
-    value={value}
-    placeholder={placeholder}
-    required={required}
-    min={min}
-    max={max}
-    step={step}
-    disabled={disabled}
-    autocomplete={autocomplete}
-  />
+  {type === "select" ? (
+    <select
+      id={id}
+      class="calculator-input"
+      required={required}
+      disabled={disabled}
+    >
+      <slot />
+    </select>
+  ) : type === "textarea" ? (
+    <textarea
+      id={id}
+      class="calculator-input"
+      placeholder={placeholder}
+      required={required}
+      disabled={disabled}
+    >{value}</textarea>
+  ) : (
+    <input
+      id={id}
+      class="calculator-input"
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      required={required}
+      min={min}
+      max={max}
+      step={step}
+      disabled={disabled}
+      autocomplete={autocomplete}
+    />
+  )}
 
   {
     helpText && (
@@ -147,6 +166,28 @@ box-shadow:0 0 0 4px rgba(79,70,229,.12);
 opacity:.6;
 
 cursor:not-allowed;
+
+}
+
+select.calculator-input{
+
+cursor:pointer;
+
+}
+
+textarea.calculator-input{
+
+height:auto;
+
+min-height:120px;
+
+padding:.7rem .95rem;
+
+line-height:1.5;
+
+resize:vertical;
+
+font-family:inherit;
 
 }
 

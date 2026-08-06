@@ -1,5 +1,6 @@
 ---
 interface Props {
+  id?: string;
   icon?: string;
   title?: string;
   description?: string;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const {
+  id,
   icon = "🧮",
   title = "Ready to Calculate?",
   description = "Fill in the required fields above and click Calculate to see your results.",
@@ -14,7 +16,7 @@ const {
 } = Astro.props as Props;
 ---
 
-<section class="empty-state">
+<section class="empty-state" id={id}>
 
   <div class="empty-icon">
 

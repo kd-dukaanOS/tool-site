@@ -1,4 +1,4 @@
----
+﻿---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
@@ -6,7 +6,7 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import {
-  Home,
+  House,
   Landmark,
   Percent,
   ShieldCheck,
@@ -25,18 +25,18 @@ import {
 
       <CalculatorField
         id="homePrice"
-        label="Home Price (₹)"
+        label="House Price (â‚¹)"
         type="number"
         placeholder="e.g. 5000000"
         required={true}
         min="0"
         step="1"
-        helpText="Total purchase price of the home."
+        helpText="Total purchase price of the House."
       />
 
       <CalculatorField
         id="downPayment"
-        label="Down Payment (₹)"
+        label="Down Payment (â‚¹)"
         type="number"
         placeholder="e.g. 1000000"
         min="0"
@@ -78,7 +78,7 @@ import {
 
       <CalculatorField
         id="homeInsuranceAnnual"
-        label="Home Insurance (₹/year)"
+        label="House Insurance (â‚¹/year)"
         type="number"
         placeholder="e.g. 8000"
         min="0"
@@ -98,7 +98,7 @@ import {
 
       <CalculatorField
         id="hoaMonthly"
-        label="HOA / Maintenance (₹/month)"
+        label="HOA / Maintenance (â‚¹/month)"
         type="number"
         placeholder="e.g. 1500"
         min="0"
@@ -126,9 +126,9 @@ import {
       <div id="emptyState">
 
         <EmptyState
-          icon="🏠"
+          icon="ðŸ "
           title="Mortgage Calculator"
-          description="Estimate your full monthly home loan payment, including taxes and insurance."
+          description="Estimate your full monthly House loan payment, including taxes and insurance."
           tips={[
             "Monthly Principal + Interest",
             "Property Tax & Insurance",
@@ -156,7 +156,7 @@ import {
           <ResultCard
             id="principalInterestResult"
             title="Principal + Interest"
-            icon={Home}
+            icon={House}
           />
 
           <ResultCard
@@ -173,7 +173,7 @@ import {
 
           <ResultCard
             id="insuranceResult"
-            title="Monthly Home Insurance"
+            title="Monthly House Insurance"
             icon={ShieldCheck}
           />
 
@@ -204,7 +204,7 @@ import {
           <p>
             Estimates your full monthly mortgage payment (PITI):
             Principal, Interest, Taxes and Insurance, plus PMI and
-            HOA fees where applicable. All calculations run locally —
+            HOA fees where applicable. All calculations run locally â€”
             no external data or paid service is required.
           </p>
 
@@ -399,3 +399,4 @@ padding:18px;
 }
 
 </style>
+

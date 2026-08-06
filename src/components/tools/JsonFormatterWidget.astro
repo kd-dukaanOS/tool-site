@@ -1,9 +1,9 @@
----
+﻿---
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
-import { Braces, Layers, Ruler, HardDrive } from "@lucide/astro";
+import { Braces, Layers, HardDrive } from "@lucide/astro";
 ---
 <section class="json-formatter">
   <div class="json-layout">
@@ -46,7 +46,7 @@ import { Braces, Layers, Ruler, HardDrive } from "@lucide/astro";
 
         <section class="calculator-info">
           <h2>About this Tool</h2>
-          <p>Format, minify and validate JSON with key count, depth and size stats — all in your browser.</p>
+          <p>Format, minify and validate JSON with key count, depth and size stats â€” all in your browser.</p>
         </section>
       </div>
     </main>
@@ -73,3 +73,4 @@ import { Braces, Layers, Ruler, HardDrive } from "@lucide/astro";
 :global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
 @media(max-width:1024px){.json-layout{grid-template-columns:1fr;}.json-sidebar{position:static;}}
 </style>
+

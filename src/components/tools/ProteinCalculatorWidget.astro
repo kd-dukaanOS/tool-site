@@ -1,0 +1,41 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import ActionButtons from "../calculator/ActionButtons.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import { Beef, TrendingUp, Flame } from "@lucide/astro";
+---
+
+<div class="calculator-widget">
+  <div class="calculator-inputs">
+    <CalculatorField id="weightKg" label="Weight (kg)" type="number" placeholder="e.g. 70" />
+
+    <div class="field-group">
+      <label for="goal">Goal</label>
+      <select id="goal" class="calculator-input">
+        <option value="sedentary">Sedentary / Low activity</option>
+        <option value="maintenance" selected>General Maintenance</option>
+        <option value="muscleGain">Muscle Gain</option>
+        <option value="fatLoss">Fat Loss</option>
+        <option value="athlete">Athlete / High Performance</option>
+      </select>
+    </div>
+
+    <div id="errorBox" class="error-box" role="alert" hidden></div>
+
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
+  </div>
+
+  <div class="calculator-output">
+    <EmptyState id="emptyState" title="Enter your weight to calculate protein needs" description="Your daily protein target will appear here." />
+
+    <ResultsGrid id="resultsContainer" hidden>
+      <ResultCard id="proteinResult" title="Recommended Protein" icon={Beef} accent="primary" size="lg" />
+      <ResultCard id="rangeResult" title="Daily Range" icon={TrendingUp} accent="neutral" />
+      <ResultCard id="caloriesResult" title="Calories from Protein" icon={Flame} accent="neutral" />
+    </ResultsGrid>
+  </div>
+</div>
+
+<script src="../../scripts/protein-calculator.ts"></script>

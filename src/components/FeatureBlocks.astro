@@ -1,0 +1,80 @@
+---
+const blocks = [
+  {
+    title: 'Recently Added', href: '/tools?sort=new',
+    items: [
+      { icon: '🎨', name: 'Color Palette Generator', desc: 'Generate beautiful color palettes', tag: 'NEW' },
+      { icon: '𝐀', name: 'Lorem Ipsum Generator', desc: 'Generate placeholder text', tag: 'NEW' },
+      { icon: '🖼', name: 'Image to Base64', desc: 'Convert images to base64', tag: 'NEW' },
+    ],
+  },
+  {
+    title: 'Trending Now', href: '/tools?sort=trending',
+    items: [
+      { icon: '1', name: 'Regex Tester', desc: 'Test regular expressions', tag: '↑ 12%' },
+      { icon: '2', name: 'Base64 Encoder/Decoder', desc: 'Encode or decode base64', tag: '↑ 9%' },
+      { icon: '3', name: 'Markdown Previewer', desc: 'Preview markdown in real-time', tag: '↑ 7%' },
+    ],
+  },
+  {
+    title: 'Developer Picks', href: '/tools?tag=developer-picks',
+    items: [
+      { icon: '≡', name: 'HTTP Status Code Lookup', desc: 'Find HTTP status code details', tag: '' },
+      { icon: '{}', name: 'JWT Decoder', desc: 'Decode & inspect JWT tokens', tag: '' },
+      { icon: '🔗', name: 'URL Parser', desc: 'Parse URLs into components', tag: '' },
+    ],
+  },
+];
+---
+<section class="ts-feat">
+  <div class="ts-feat-inner">
+    {blocks.map((block) => (
+      <div class="ts-feat-col">
+        <div class="ts-feat-head">
+          <h3 class="ts-feat-title">{block.title}</h3>
+          <a href={block.href} class="ts-feat-viewall">View all →</a>
+        </div>
+        <ul class="ts-feat-list">
+          {block.items.map((item) => (
+            <li class="ts-feat-item">
+              <span class="ts-feat-icon">{item.icon}</span>
+              <div class="ts-feat-text">
+                <span class="ts-feat-name">{item.name}</span>
+                <span class="ts-feat-desc">{item.desc}</span>
+              </div>
+              {item.tag && <span class="ts-feat-tag">{item.tag}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ts-feat { padding: 0 var(--space-6) var(--space-12); }
+  .ts-feat-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);
+  }
+  .ts-feat-col {
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl); padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+  }
+  .ts-feat-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3); }
+  .ts-feat-title { font-family: var(--font-sans); font-size: var(--fs-body); font-weight: 700; color: var(--text-primary); margin: 0; }
+  .ts-feat-viewall { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-decoration: none; }
+  .ts-feat-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .ts-feat-item { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) 0; }
+  .ts-feat-icon {
+    width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--color-primary-light); border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; color: var(--color-primary-dark);
+  }
+  .ts-feat-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .ts-feat-name { font-family: var(--font-sans); font-size: var(--fs-small); font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ts-feat-desc { font-family: var(--font-sans); font-size: 0.75rem; color: var(--text-muted); }
+  .ts-feat-tag { font-family: var(--font-sans); font-size: 0.7rem; font-weight: 700; color: var(--accent-green-icon); flex-shrink: 0; }
+
+  @media (max-width: 900px) { .ts-feat-inner { grid-template-columns: 1fr; } }
+</style>

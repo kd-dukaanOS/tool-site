@@ -1,0 +1,109 @@
+/* src/styles/tokens.css — ToolSite design tokens (light theme) */
+
+:root {
+  /* ── Base surfaces ────────────────────────── */
+  --bg-page: #f8f8fc;
+  --bg-hero-glow: radial-gradient(circle at 20% 20%, #e0e7ff 0%, transparent 50%),
+                  radial-gradient(circle at 80% 10%, #ede9fe 0%, transparent 50%);
+  --bg-card: #ffffff;
+  --border-subtle: #e5e7eb;
+  --border-hover: #c7d2fe;
+
+  /* ── Text ─────────────────────────────────── */
+  --text-primary: #0f172a;   /* headings */
+  --text-secondary: #475569; /* body */
+  --text-muted: #94a3b8;     /* subtext, counts */
+
+  /* ── Brand / primary ──────────────────────── */
+  --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  --color-primary-light: #eef2ff;
+  --gradient-brand: linear-gradient(90deg, #6366f1, #06b6d4); /* use on "Instant" text */
+
+  /* ── Category accent pairs (bg + icon color) ─
+       pick ONE pair per category, keep it consistent everywhere that category appears */
+  --accent-purple-bg: #ede9fe;   --accent-purple-icon: #7c3aed;  /* Text Tools */
+  --accent-violet-bg: #ede9fe;   --accent-violet-icon: #6d28d9;  /* Developer Tools */
+  --accent-teal-bg:   #ccfbf1;   --accent-teal-icon:   #0d9488;  /* Converters */
+  --accent-red-bg:    #fee2e2;   --accent-red-icon:    #dc2626;  /* Security Tools */
+  --accent-green-bg:  #d1fae5;   --accent-green-icon:  #059669;  /* Finance Calculators */
+  --accent-orange-bg: #ffedd5;   --accent-orange-icon: #ea580c;  /* Math & Numbers */
+  --accent-blue-bg:   #dbeafe;   --accent-blue-icon:   #2563eb;  /* Date & Time */
+  --accent-yellow-bg: #fef9c3;   --accent-yellow-icon: #ca8a04;  /* Image Tools */
+
+  /* ── Radius ───────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* ── Spacing (8px grid) ───────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Shadow ───────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --shadow-glow-primary: 0 0 0 4px rgba(99, 102, 241, 0.12);
+
+  /* ── Blur (for glass elements) ────────────── */
+  --blur-sm: 8px;
+  --blur-md: 16px;
+
+  /* ── Typography ───────────────────────────── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --fs-hero: clamp(2.25rem, 5vw, 3.5rem);
+  --fs-h2: 1.75rem;
+  --fs-h3: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+
+  /* ── Motion ───────────────────────────────── */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+}
+
+/* ============================================
+   Dark mode — same variable names, inverted surfaces
+   Activated via <html class="dark">
+   ============================================ */
+html.dark {
+  --bg-page: #0b0c10;
+  --bg-hero-glow: radial-gradient(circle at 20% 20%, rgba(99,102,241,.14) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 10%, rgba(139,92,246,.12) 0%, transparent 50%);
+  --bg-card: #15161c;
+  --border-subtle: #24252f;
+  --border-hover: #3b3d52;
+
+  --text-primary: #f2f2f7;
+  --text-secondary: #a8aabc;
+  --text-muted: #6f7182;
+
+  --color-primary: #818cf8;
+  --color-primary-dark: #a5b4fc;
+  --color-primary-light: #1e1f3a;
+  --gradient-brand: linear-gradient(90deg, #818cf8, #22d3ee);
+
+  --accent-purple-bg: #241c3a;   --accent-purple-icon: #a78bfa;
+  --accent-violet-bg: #241c3a;   --accent-violet-icon: #a78bfa;
+  --accent-teal-bg:   #0f2a2c;   --accent-teal-icon:   #2dd4bf;
+  --accent-red-bg:    #2e1616;   --accent-red-icon:    #f87171;
+  --accent-green-bg:  #102819;   --accent-green-icon:  #34d399;
+  --accent-orange-bg: #2e1d0e;   --accent-orange-icon: #fb923c;
+  --accent-blue-bg:   #16213a;   --accent-blue-icon:   #60a5fa;
+  --accent-yellow-bg: #2e2a0e;   --accent-yellow-icon: #facc15;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-glow-primary: 0 0 0 4px rgba(129, 140, 248, 0.18);
+}

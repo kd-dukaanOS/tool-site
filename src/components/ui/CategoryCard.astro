@@ -1,0 +1,118 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  count: number;
+  description: string;
+  tools: string[];
+  href: string;
+  accent: 'purple' | 'violet' | 'teal' | 'red' | 'green' | 'orange' | 'blue' | 'yellow';
+}
+const { icon, title, count, description, tools, href, accent } = Astro.props;
+---
+<a href={href} class="ts-cat-card" style={`--acc-bg: var(--accent-${accent}-bg); --acc-icon: var(--accent-${accent}-icon);`}>
+  <div class="ts-cat-head">
+    <span class="ts-cat-icon">{icon}</span>
+    <div class="ts-cat-title-row">
+      <h3 class="ts-cat-title">{title}</h3>
+      <span class="ts-cat-count">{count} tools</span>
+    </div>
+  </div>
+
+  <p class="ts-cat-desc">{description}</p>
+
+  <ul class="ts-cat-tools">
+    {tools.map((tool) => <li>{tool}</li>)}
+  </ul>
+
+  <span class="ts-cat-explore">Explore →</span>
+</a>
+
+<style>
+  .ts-cat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--duration-base) var(--ease-standard),
+                box-shadow var(--duration-base) var(--ease-standard),
+                border-color var(--duration-base) var(--ease-standard);
+  }
+  .ts-cat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-primary), var(--shadow-lg);
+    border-color: var(--border-hover);
+  }
+
+  .ts-cat-head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .ts-cat-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--acc-bg);
+    color: var(--acc-icon);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  .ts-cat-title-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .ts-cat-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .ts-cat-count {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .ts-cat-desc {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ts-cat-tools {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-3);
+  }
+  .ts-cat-tools li {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-secondary);
+  }
+
+  .ts-cat-explore {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: var(--space-1);
+  }
+</style>
