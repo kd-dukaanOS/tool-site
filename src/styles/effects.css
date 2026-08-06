@@ -47,6 +47,10 @@
 .ts-hero-float.f2 { top: 55%; left: 2%;  animation-delay: .8s;  }
 .ts-hero-float.f3 { top: 18%; right: 6%; animation-delay: .4s;  }
 .ts-hero-float.f4 { top: 58%; right: 3%; animation-delay: 1.2s; }
+.ts-hero-float.f5 { top: 34%; left: 9%;  animation-delay: .2s;  }
+.ts-hero-float.f6 { top: 80%; left: 5%;  animation-delay: 1.6s; }
+.ts-hero-float.f7 { top: 36%; right: 9%; animation-delay: .6s;  }
+.ts-hero-float.f8 { top: 82%; right: 6%; animation-delay: 2s;   }
 @keyframes floaty {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-10px) rotate(-2deg); }
