@@ -1,5 +1,6 @@
 ---
 import Button from './ui/Button.astro';
+import { tools } from '../data/tools.js';
 
 const navLinks = [
   { label: 'Text Tools', href: '/text-tools/' },
@@ -25,6 +26,11 @@ const navLinks = [
     </nav>
 
     <div class="ts-nav-actions">
+      <div class="ts-nav-search">
+        <input type="text" id="nav-search-input" placeholder="Search tools..." autocomplete="off" />
+        <div class="ts-nav-search-results" id="nav-search-results"></div>
+      </div>
+      <script type="application/json" id="tools-data" set:html={JSON.stringify(tools.map(t => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc })))}></script>
       <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
       <Button variant="secondary" href="/bookmarks" class="ts-nav-bookmarks">
         🔖 Bookmarks
@@ -155,6 +161,39 @@ const navLinks = [
     }
     .ts-nav-mobile-toggle { display: inline-flex; }
   }
+
+  .ts-nav-search { position: relative; }
+  .ts-nav-search input {
+    width: 180px;
+    padding: 7px 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--fs-small);
+  }
+  .ts-nav-search-results {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 260px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    z-index: 60;
+  }
+  .ts-nav-search-results.open { display: block; }
+  .ts-nav-search-item {
+    display: block;
+    padding: 8px 12px;
+    font-size: var(--fs-small);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .ts-nav-search-item:hover { background: var(--bg-page); }
+  .ts-nav-search-empty { padding: 8px 12px; font-size: var(--fs-small); color: var(--text-secondary); }
 </style>
 
 <script>
@@ -165,5 +204,23 @@ const navLinks = [
   const themeBtn = document.getElementById('theme-toggle');
   themeBtn?.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
+  });
+
+  const toolsData = JSON.parse(document.getElementById('tools-data')?.textContent || '[]');
+  const searchInput = document.getElementById('nav-search-input');
+  const searchResults = document.getElementById('nav-search-results');
+
+  searchInput?.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) { searchResults.innerHTML = ''; searchResults.classList.remove('open'); return; }
+    const matches = toolsData.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)).slice(0, 6);
+    searchResults.innerHTML = matches.length
+      ? matches.map(t => `<a href="/${t.category}/${t.slug}/" class="ts-nav-search-item">${t.name}</a>`).join('')
+      : '<div class="ts-nav-search-empty">No tools found</div>';
+    searchResults.classList.add('open');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.ts-nav-search')) searchResults?.classList.remove('open');
   });
 </script>

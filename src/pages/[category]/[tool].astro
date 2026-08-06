@@ -372,5 +372,38 @@ const faqSchema = faqs.length > 0 ? {
   .tool-example-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--surface); font-size: 14px; }
   .tool-example-card p { margin: 4px 0; }
   .tool-example-note { color: var(--muted); }
+  .bookmark-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  .bookmark-btn.active { border-color: var(--color-primary, #6366f1); color: var(--color-primary, #6366f1); }
 </style>
+
+<script>
+  const btn = document.getElementById('bookmark-btn');
+  if (btn) {
+    const slug = btn.dataset.slug;
+    const getBookmarks = () => JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
+    const setBookmarks = (arr) => localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
+    const isSaved = () => getBookmarks().some(b => b.slug === slug);
+    const render = () => {
+      btn.textContent = isSaved() ? '★ Saved' : '☆ Save';
+      btn.classList.toggle('active', isSaved());
+    };
+    render();
+    btn.addEventListener('click', () => {
+      let bookmarks = getBookmarks();
+      bookmarks = isSaved()
+        ? bookmarks.filter(b => b.slug !== slug)
+        : [...bookmarks, { name: btn.dataset.name, slug, url: btn.dataset.url }];
+      setBookmarks(bookmarks);
+      render();
+    });
+  }
+</script>
 
