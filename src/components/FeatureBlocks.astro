@@ -1,27 +1,27 @@
 ---
 const blocks = [
   {
-    title: 'Recently Added', href: '/tools?sort=new',
+    title: 'Recently Added', href: '/generators-calculators/',
     items: [
-      { icon: '🎨', name: 'Color Palette Generator', desc: 'Generate beautiful color palettes', tag: 'NEW' },
-      { icon: '𝐀', name: 'Lorem Ipsum Generator', desc: 'Generate placeholder text', tag: 'NEW' },
-      { icon: '🖼', name: 'Image to Base64', desc: 'Convert images to base64', tag: 'NEW' },
+      { icon: '𝐀', name: 'Lorem Ipsum Generator', desc: 'Generate placeholder text', tag: 'NEW', href: '/generators-calculators/lorem-ipsum-generator/' },
+      { icon: '{}', name: 'Number Base Converter', desc: 'Convert between number bases', tag: 'NEW', href: '/developer-tools/number-base-converter/' },
+      { icon: '⇄', name: 'CSV ↔ JSON Converter', desc: 'Convert between CSV and JSON', tag: 'NEW', href: '/developer-tools/csv-json-converter/' },
     ],
   },
   {
-    title: 'Trending Now', href: '/tools?sort=trending',
+    title: 'Trending Now', href: '/developer-tools/',
     items: [
-      { icon: '1', name: 'Regex Tester', desc: 'Test regular expressions', tag: '↑ 12%' },
-      { icon: '2', name: 'Base64 Encoder/Decoder', desc: 'Encode or decode base64', tag: '↑ 9%' },
-      { icon: '3', name: 'Markdown Previewer', desc: 'Preview markdown in real-time', tag: '↑ 7%' },
+      { icon: '1', name: 'Regex Tester', desc: 'Test regular expressions', tag: '↑ 12%', href: '/developer-tools/regex-tester/' },
+      { icon: '2', name: 'Base64 Tool', desc: 'Encode or decode base64', tag: '↑ 9%', href: '/converters/base64-tool/' },
+      { icon: '3', name: 'Markdown Previewer', desc: 'Preview markdown in real-time', tag: '↑ 7%', href: '/text-tools/markdown-previewer/' },
     ],
   },
   {
-    title: 'Developer Picks', href: '/tools?tag=developer-picks',
+    title: 'Developer Picks', href: '/developer-tools/',
     items: [
-      { icon: '≡', name: 'HTTP Status Code Lookup', desc: 'Find HTTP status code details', tag: '' },
-      { icon: '{}', name: 'JWT Decoder', desc: 'Decode & inspect JWT tokens', tag: '' },
-      { icon: '🔗', name: 'URL Parser', desc: 'Parse URLs into components', tag: '' },
+      { icon: '{ }', name: 'JSON Formatter', desc: 'Format & validate JSON', tag: '', href: '/developer-tools/json-formatter/' },
+      { icon: '{}', name: 'JWT Decoder', desc: 'Decode & inspect JWT tokens', tag: '', href: '/developer-tools/jwt-decoder/' },
+      { icon: '🔗', name: 'URL Encoder/Decoder', desc: 'Encode or decode URLs', tag: '', href: '/converters/url-encoder-decoder/' },
     ],
   },
 ];
@@ -37,12 +37,14 @@ const blocks = [
         <ul class="ts-feat-list">
           {block.items.map((item) => (
             <li class="ts-feat-item">
-              <span class="ts-feat-icon">{item.icon}</span>
-              <div class="ts-feat-text">
-                <span class="ts-feat-name">{item.name}</span>
-                <span class="ts-feat-desc">{item.desc}</span>
-              </div>
-              {item.tag && <span class="ts-feat-tag">{item.tag}</span>}
+              <a href={item.href} class="ts-feat-link">
+                <span class="ts-feat-icon">{item.icon}</span>
+                <div class="ts-feat-text">
+                  <span class="ts-feat-name">{item.name}</span>
+                  <span class="ts-feat-desc">{item.desc}</span>
+                </div>
+                {item.tag && <span class="ts-feat-tag">{item.tag}</span>}
+              </a>
             </li>
           ))}
         </ul>
@@ -66,7 +68,9 @@ const blocks = [
   .ts-feat-title { font-family: var(--font-sans); font-size: var(--fs-body); font-weight: 700; color: var(--text-primary); margin: 0; }
   .ts-feat-viewall { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-decoration: none; }
   .ts-feat-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
-  .ts-feat-item { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) 0; }
+  .ts-feat-item { padding: 0; }
+  .ts-feat-link { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) 0; text-decoration: none; }
+  .ts-feat-link:hover .ts-feat-name { color: var(--color-primary); }
   .ts-feat-icon {
     width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
     background: var(--color-primary-light); border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; color: var(--color-primary-dark);

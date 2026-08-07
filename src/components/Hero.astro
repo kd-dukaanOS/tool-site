@@ -3,15 +3,16 @@ import Badge from './ui/Badge.astro';
 import Input from './ui/Input.astro';
 import Button from './ui/Button.astro';
 
+import { tools } from '../data/tools.js';
 const popularSearches = [
-  'JSON Formatter',
-  'Word Counter',
-  'UUID Generator',
-  'Hash Generator',
-  'EMI Calculator',
-  'GST Calculator',
-  'BMI Calculator',
-  'Age Calculator',
+  { name: 'JSON Formatter', href: '/developer-tools/json-formatter/' },
+  { name: 'Word Counter', href: '/text-tools/word-counter/' },
+  { name: 'UUID Generator', href: '/security-tools/uuid-generator/' },
+  { name: 'Hash Generator', href: '/security-tools/hash-generator/' },
+  { name: 'EMI Calculator', href: '/finance/emi-calculator/' },
+  { name: 'GST Calculator', href: '/finance/gst-calculator/' },
+  { name: 'BMI Calculator', href: '/health/bmi-calculator/' },
+  { name: 'Age Calculator', href: '/date-time/age-calculator/' },
 ];
 ---
 <section class="ts-hero">
@@ -39,15 +40,18 @@ const popularSearches = [
     </p>
 
     <div class="ts-hero-search">
-      <Input placeholder="Search any tool..." shortcut="Ctrl /">
-        <Button slot="action" variant="primary" class="ts-hero-search-btn">→</Button>
+      <Input id="hero-search-input" placeholder="Search any tool..." shortcut="Ctrl /">
+        <Button slot="action" variant="primary" class="ts-hero-search-btn" id="hero-search-btn">→</Button>
       </Input>
+      <div class="ts-hero-search-results" id="hero-search-results"></div>
     </div>
+
+    <script type="application/json" id="hero-tools-data" define:vars={{ }}></script>
 
     <div class="ts-hero-popular">
       <span class="ts-hero-popular-label">Popular:</span>
       {popularSearches.map((term) => (
-        <a href={`/search?q=${encodeURIComponent(term)}`} class="ts-hero-chip">{term}</a>
+        <a href={term.href} class="ts-hero-chip">{term.name}</a>
       ))}
     </div>
   </div>
@@ -144,3 +148,7 @@ const popularSearches = [
     .ts-hero { padding: var(--space-12) var(--space-4) var(--space-8); }
   }
 </style>
+<script>
+  import.meta.env; // no-op, keep Astro happy
+</script>
+<script define:vars={{ toolsJson: JSON.stringify([]) }}></script>
