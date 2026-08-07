@@ -28,10 +28,13 @@ const navLinks = [
     <div class="ts-nav-actions">
       <div class="ts-nav-search">
         <input type="text" id="nav-search-input" placeholder="Search tools..." autocomplete="off" />
+        <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none">✕</button>
         <div class="ts-nav-search-results" id="nav-search-results"></div>
       </div>
       <script type="application/json" id="tools-data" set:html={JSON.stringify(tools.map(t => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc })))}></script>
-      <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">
+        <span id="theme-icon">🌙</span>
+      </button>
       <Button variant="secondary" href="/bookmarks" class="ts-nav-bookmarks">
         🔖 Bookmarks
       </Button>
@@ -159,8 +162,8 @@ const navLinks = [
 
   @media (max-width: 900px) {
     .ts-nav-links,
-    .ts-nav-bookmarks,
-    .ts-nav-github {
+    :global(.ts-nav-bookmarks),
+    :global(.ts-nav-github) {
       display: none;
     }
     .ts-nav-mobile-toggle { display: inline-flex; }
@@ -169,12 +172,24 @@ const navLinks = [
   .ts-nav-search { position: relative; }
   .ts-nav-search input {
     width: 180px;
-    padding: 7px 10px;
+    padding: 7px 26px 7px 10px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
     background: var(--bg-card);
     color: var(--text-primary);
     font-size: var(--fs-small);
+  }
+  .ts-nav-search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 2px;
   }
   .ts-nav-search-results {
     display: none;
@@ -206,22 +221,52 @@ const navLinks = [
   toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
 
   const themeBtn = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const syncIcon = () => { if (themeIcon) themeIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙'; };
+  syncIcon();
   themeBtn?.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
+    syncIcon();
   });
 
   const toolsData = JSON.parse(document.getElementById('tools-data')?.textContent || '[]');
   const searchInput = document.getElementById('nav-search-input');
   const searchResults = document.getElementById('nav-search-results');
+  const navClearBtn = document.getElementById('nav-clear-btn');
 
-  searchInput?.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
+  function matchNavTools(q) {
+    q = q.trim().toLowerCase();
+    if (!q) return [];
+    return toolsData.filter(t => {
+      const words = t.name.toLowerCase().split(' ');
+      return words.some(w => w.startsWith(q)) || t.name.toLowerCase().startsWith(q);
+    }).slice(0, 6);
+  }
+
+  function renderNavSearch() {
+    const q = searchInput.value;
+    navClearBtn.style.display = q ? 'block' : 'none';
     if (!q) { searchResults.innerHTML = ''; searchResults.classList.remove('open'); return; }
-    const matches = toolsData.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)).slice(0, 6);
+    const matches = matchNavTools(q);
     searchResults.innerHTML = matches.length
       ? matches.map(t => `<a href="/${t.category}/${t.slug}/" class="ts-nav-search-item">${t.name}</a>`).join('')
       : '<div class="ts-nav-search-empty">No tools found</div>';
     searchResults.classList.add('open');
+  }
+
+  searchInput?.addEventListener('input', renderNavSearch);
+
+  navClearBtn?.addEventListener('click', () => {
+    searchInput.value = '';
+    renderNavSearch();
+    searchInput.focus();
+  });
+
+  searchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const matches = matchNavTools(searchInput.value);
+      if (matches.length) window.location.href = `/${matches[0].category}/${matches[0].slug}/`;
+    }
   });
 
   document.addEventListener('click', (e) => {

@@ -6,7 +6,7 @@
 export const categoryIcons = {
   "text-tools": `<path d="M4 6h16M4 12h10M4 18h13"/>`,
   "developer-tools": `<path d="M8 3a3 3 0 00-3 3v3a2 2 0 01-2 2 2 2 0 012 2v3a3 3 0 003 3M16 3a3 3 0 013 3v3a2 2 0 002 2 2 2 0 00-2 2v3a3 3 0 01-3 3"/>`,
-  "converters": `<path d="M17 8V6a5 5 0 00-10 0v2M5 8h14l-1 12H6L5 8z"/>`,
+  "converters": `<path d="M7 7h11l-3-3M17 17H6l3 3"/>`,
   "security-tools": `<path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z"/>`,
   "generators-calculators": `<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"/>`,
   "finance": `<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>`,
