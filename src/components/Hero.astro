@@ -196,19 +196,23 @@ const popularSearches = [
     font-size: 14px; padding: 4px;
   }
   .ts-hero-search-results {
-    display: none;
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     right: 0;
     text-align: left;
-    background: var(--bg-card); border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg, var(--shadow-md));
     z-index: 30;
   }
-  .ts-hero-search-results.open { display: block; }
-  .ts-hero-result-item {
-    display: flex !important;
+  :global(.ts-hero-search-results) {
+    display: none;
+  }
+  :global(.ts-hero-search-results.open) {
+    display: block;
+    background: var(--bg-card); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg, var(--shadow-md));
+  }
+  :global(.ts-hero-result-item) {
+    display: flex;
     width: 100%;
     box-sizing: border-box;
     align-items: center;
@@ -220,9 +224,9 @@ const popularSearches = [
     border-bottom: 1px solid var(--border-subtle);
     transition: background var(--duration-fast) var(--ease-standard);
   }
-  .ts-hero-result-item:last-child { border-bottom: none; }
-  .ts-hero-result-item:hover { background: var(--bg-page); }
-  .ts-hero-result-empty { padding: 14px 20px; color: var(--text-muted); font-size: var(--fs-small); text-align: center; }
+  :global(.ts-hero-result-item:last-child) { border-bottom: none; }
+  :global(.ts-hero-result-item:hover) { background: var(--bg-page); }
+  :global(.ts-hero-result-empty) { padding: 14px 20px; color: var(--text-muted); font-size: var(--fs-small); text-align: center; }
 </style>
 
 <script define:vars={{ toolsData: JSON.stringify(tools) }}>
