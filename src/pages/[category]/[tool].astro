@@ -154,6 +154,16 @@ const faqSchema = faqs.length > 0 ? {
       </div>
     </div>
 
+    <button
+      id="bookmark-btn"
+      class="bookmark-btn"
+      data-slug={tool.slug}
+      data-name={tool.name}
+      data-url={`/${tool.category}/${tool.slug}/`}
+    >
+      ☆ Save
+    </button>
+
     <!--
       Each tool gets its own widget component. Add a new "if" line here
       whenever a new tool's real logic is ready â€” until then it falls

@@ -24,6 +24,14 @@ import { categories, tools } from "../data/tools.js";
             <div class="ts-tools-grid">
               {catTools.map((t) => (
                 <a href={`/${t.category}/${t.slug}/`} class="ts-tools-card">
+                  <button
+                    class="ts-tools-card-bookmark"
+                    data-slug={t.slug}
+                    data-name={t.name}
+                    data-url={`/${t.category}/${t.slug}/`}
+                    aria-label="Bookmark this tool"
+                    onclick="event.preventDefault(); event.stopPropagation(); window.toggleBookmark(this);"
+                  >☆</button>
                   <span class="ts-tools-card-name">{t.name}</span>
                   {t.desc && <span class="ts-tools-card-desc">{t.desc}</span>}
                 </a>
@@ -39,6 +47,32 @@ import { categories, tools } from "../data/tools.js";
     </div>
   </section>
 </Layout>
+
+<script>
+  function getBookmarks() {
+    return JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
+  }
+  function setBookmarks(arr: any[]) {
+    localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
+  }
+  function paint(btn: HTMLElement) {
+    const slug = btn.dataset.slug;
+    const saved = getBookmarks().some((b: any) => b.slug === slug);
+    btn.textContent = saved ? '★' : '☆';
+    btn.classList.toggle('active', saved);
+  }
+  (window as any).toggleBookmark = function (btn: HTMLElement) {
+    const slug = btn.dataset.slug;
+    let bookmarks = getBookmarks();
+    const saved = bookmarks.some((b: any) => b.slug === slug);
+    bookmarks = saved
+      ? bookmarks.filter((b: any) => b.slug !== slug)
+      : [...bookmarks, { name: btn.dataset.name, slug, url: btn.dataset.url }];
+    setBookmarks(bookmarks);
+    paint(btn);
+  };
+  document.querySelectorAll<HTMLElement>('.ts-tools-card-bookmark').forEach(paint);
+</script>
 
 <style>
   .ts-tools-page { padding: var(--space-12) var(--space-6); }
@@ -93,6 +127,7 @@ import { categories, tools } from "../data/tools.js";
   }
 
   .ts-tools-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -100,10 +135,26 @@ import { categories, tools } from "../data/tools.js";
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
+    padding-right: var(--space-8);
     text-decoration: none;
     transition: transform var(--duration-fast) var(--ease-standard),
                 border-color var(--duration-fast) var(--ease-standard),
                 box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  :global(.ts-tools-card-bookmark) {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+  }
+  :global(.ts-tools-card-bookmark.active) {
+    color: var(--color-primary, #6366f1);
   }
   .ts-tools-card:hover {
     transform: translateY(-2px);
