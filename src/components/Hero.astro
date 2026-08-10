@@ -215,15 +215,15 @@ const popularSearches = [
     scrollbar-color: transparent transparent;
   }
   :global(.ts-hero-search-results.open:hover) {
-    scrollbar-color: var(--border-subtle) transparent;
+    scrollbar-color: var(--text-muted, #999) transparent;
   }
-  :global(.ts-hero-search-results.open::-webkit-scrollbar) { width: 4px; }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar) { width: 5px; }
   :global(.ts-hero-search-results.open::-webkit-scrollbar-track) { background: transparent; margin-block: 6px; }
   :global(.ts-hero-search-results.open::-webkit-scrollbar-thumb) {
     background: transparent; border-radius: 999px;
   }
   :global(.ts-hero-search-results.open:hover::-webkit-scrollbar-thumb) {
-    background: var(--border-subtle);
+    background: var(--text-muted, #999);
   }
   :global(.ts-hero-result-item) {
     padding-right: 14px;
