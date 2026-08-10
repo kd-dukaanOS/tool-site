@@ -205,6 +205,22 @@ Results are mathematical estimates based on the values you enter and do not incl
       q: "How accurate is this calculator?",
       a: "The calculator performs exact mathematical calculations based on the values entered. Company-specific commission rules, bonuses or deductions are not included.",
     },
+    {
+      q: "What is a tiered or graduated commission structure?",
+      a: "A tiered structure pays a higher commission rate as sales volume crosses set thresholds — for example, 5% on the first ₹1,00,000 in sales and 8% beyond that — rather than a single flat rate on all sales.",
+    },
+    {
+      q: "How do I calculate commission on a draw against future earnings?",
+      a: "A draw is an advance against future commission — subtract the draw amount already paid from total commission earned to find what's still owed, or whether the salesperson owes money back if commission fell short.",
+    },
+    {
+      q: "What's the difference between commission and bonus?",
+      a: "Commission is typically a consistent percentage tied directly to sales volume, while a bonus is often a fixed or discretionary amount awarded for hitting targets, milestones, or overall performance.",
+    },
+    {
+      q: "Can I calculate commission for a real estate transaction split between two agents?",
+      a: "Yes — calculate the total commission on the sale price first, then apply each agent's or brokerage's split percentage to that total to find individual payouts.",
+    },
   ],
 
   relatedCalculators: [

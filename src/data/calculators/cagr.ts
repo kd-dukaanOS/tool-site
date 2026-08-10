@@ -94,6 +94,11 @@ Use this tool to compare investment options fairly, especially across different 
     { q: "How many years of data do I need for CAGR?", a: "You only need the initial value, final value, and the number of years between them — no need for data on every year in between." },
     { q: "Is a higher CAGR always better?", a: "Generally yes, but it should be evaluated alongside risk, volatility and whether the growth rate is sustainable." },
     { q: "Can CAGR be used for business revenue growth?", a: "Yes, businesses commonly use CAGR to express consistent revenue or profit growth rates over multiple years." },
+    { q: "How do I calculate CAGR in Excel or Google Sheets?", a: "Use the formula =(Final Value/Initial Value)^(1/Years)-1, then format the result as a percentage — this mirrors exactly what the calculator computes." },
+    { q: "What is a realistic CAGR for a savings account or FD?", a: "Fixed deposits and savings accounts typically yield a CAGR in the low single digits to around 6-7%, depending on prevailing interest rates, far lower than equity markets historically." },
+    { q: "How is CAGR different from annualized return (XIRR)?", a: "CAGR assumes a single lump-sum investment held for the full period, while XIRR (or IRR) handles multiple cash flows at different dates, such as SIPs or staggered withdrawals." },
+    { q: "Can I use CAGR to project future investment value?", a: "Yes, by rearranging the formula to Final Value = Initial Value × (1 + CAGR)^Years, though this assumes the historical growth rate continues unchanged, which isn't guaranteed." },
+    { q: "What time period is ideal for calculating CAGR?", a: "Longer periods (5-10+ years) generally produce more meaningful CAGR figures since they smooth out short-term market noise; CAGR over less than a year can be misleading when annualized." },
   ],
 
   relatedCalculators: [

@@ -90,6 +90,11 @@ Use this tool anytime you want a quick, accurate birthday countdown.`,
     { q: "Can this calculator find past birthdays too?", a: "No, it's designed specifically to count forward to your next upcoming birthday." },
     { q: "Does the tool store my birth date?", a: "No, calculations happen in your browser and no personal data is saved or transmitted." },
     { q: "What's the difference between this and an age calculator?", a: "An age calculator shows your current exact age, while a birthday calculator counts down the days to your next birthday." },
+    { q: "How many weeks until my birthday?", a: "Divide the total days-remaining figure by 7 for an approximate week count, or check the detailed breakdown if the tool shows weeks directly." },
+    { q: "Can I use this to plan a surprise party in advance?", a: "Yes — the exact date and weekday results help you book venues, send invites, and time the surprise so it lands on or near the actual day." },
+    { q: "Why does the weekday change every year for the same birth date?", a: "A regular year has 365 days, which isn't a multiple of 7, so the same calendar date shifts to a different weekday each year (except across some leap-year boundaries)." },
+    { q: "What is considered a milestone birthday?", a: "Commonly celebrated milestone ages include 1st, 5th, 13th, 16th, 18th, 21st, 30th, 40th, 50th and other round-number birthdays, which often warrant extra planning time." },
+    { q: "Can I calculate the countdown to a specific future birthday, not just the next one?", a: "This tool counts to the very next occurrence of the birth date; for a birthday several years out, use an age calculator with a custom future 'as of' date instead." },
   ],
 
   relatedCalculators: [

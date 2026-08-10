@@ -1,9 +1,18 @@
 export const volumeCalculatorContent = {
-  meta: { seoTitle: "Volume Converter - Liters, Gallons, Cups, ml", metaDescription: "Convert volume units instantly between ml, liters, gallons, quarts, cups and fluid ounces. Free volume converter.", canonicalSlug: "/volume-converter", ogTitle: "Volume Converter - Free Unit Conversion", ogDescription: "Instantly convert between metric and imperial volume units.", twitterTitle: "Free Volume Converter", twitterDescription: "Convert volume units instantly." },
+  meta: {
+    seoTitle: "Volume Converter - Liters, Gallons, Cups, ml",
+    metaDescription: "Convert volume units instantly between ml, liters, gallons, quarts, cups and fluid ounces. Free volume converter for cooking, fuel and liquids.",
+    canonicalSlug: "/volume-converter",
+    ogTitle: "Volume Converter - Free Unit Conversion",
+    ogDescription: "Instantly convert between metric and imperial volume units.",
+    twitterTitle: "Free Volume Converter",
+    twitterDescription: "Convert volume units instantly — liters, gallons, cups and ml.",
+    keywords: ["volume converter", "liters to gallons converter", "ml to cups converter", "volume unit converter", "cooking measurement converter"],
+  },
   hero: { text: "The Volume Converter instantly converts between metric and imperial volume units including milliliters, liters, gallons, quarts, pints, cups and fluid ounces. Enter a value and select units to get an instant result. Useful for cooking, fuel and liquid measurements." },
-  about: { text: `The Volume Converter converts a liquid or capacity value between common metric and imperial volume units.
+  about: { text: `The Volume Converter is a free online tool that converts a liquid or capacity value between common metric and imperial volume units.
 
-It's useful for cooking and baking measurement conversion, fuel tank capacity comparisons, and converting container sizes between regions.
+It is useful for cooking and baking measurement conversion, fuel tank capacity comparisons, and converting container sizes between regions.
 
 The tool converts through a common base unit (liters) for accurate results across any unit pair.
 
@@ -16,16 +25,22 @@ Use this tool whenever you need a quick, accurate volume conversion.` },
     { inputs: "1 gallon to liters", result: "3.785 L", explanation: "Common fuel or liquid conversion." },
     { inputs: "500 ml to cups", result: "2.113 cups", explanation: "Recipe measurement conversion." },
     { inputs: "2 liters to quarts", result: "2.113 quarts", explanation: "Metric to imperial beverage conversion." },
+    { inputs: "1 cup to tablespoons", result: "16 tbsp", explanation: "Common baking conversion between smaller volume units." },
   ],
-  practicalUses: ["Converting recipe measurements between metric and imperial", "Comparing fuel tank capacities across vehicle listings", "Converting beverage or liquid container sizes", "Cooking and baking measurement conversion", "Comparing paint, chemical or liquid product volumes", "Science lab measurement conversions"],
-  expertTips: ["1 US gallon equals about 3.785 liters — different from the UK imperial gallon (4.546 L).", "1 cup equals about 236.6 ml in US measurement standards.", "For precise baking, weight-based measurement is often more accurate than volume.", "Always check whether a recipe uses US or metric cup sizes, as they differ slightly."],
-  commonMistakes: [{ mistake: "Confusing US and UK gallon definitions", fix: "This calculator uses the US gallon (3.785 L); UK imperial gallon is larger at 4.546 L." }, { mistake: "Mixing weight and volume measurements", fix: "Volume (ml, cups) and weight (grams) aren't directly interchangeable without ingredient density." }, { mistake: "Assuming all countries use the same cup size", fix: "Cup measurements vary slightly between US, UK, Australian and metric standards." }],
+  practicalUses: ["Converting recipe measurements between metric and imperial", "Comparing fuel tank capacities across vehicle listings", "Converting beverage or liquid container sizes", "Cooking and baking measurement conversion", "Comparing paint, chemical or liquid product volumes", "Science lab measurement conversions", "Converting medicine dosage volumes (ml to teaspoons)", "Estimating water tank or aquarium capacity", "Comparing detergent or cleaning product sizes across brands", "Converting swimming pool or container volume for maintenance"],
+  expertTips: ["1 US gallon equals about 3.785 liters — different from the UK imperial gallon (4.546 L).", "1 cup equals about 236.6 ml in US measurement standards.", "For precise baking, weight-based measurement is often more accurate than volume.", "Always check whether a recipe uses US or metric cup sizes, as they differ slightly.", "1 tablespoon equals 3 teaspoons, useful for scaling small recipe quantities.", "Fuel efficiency figures sometimes mix liters and gallons across regions — convert carefully when comparing.", "For medicine dosing, always use the measuring device provided rather than approximating with household spoons.", "Keep decimal precision when converting for scientific or medical purposes rather than rounding early.", "When buying appliances or containers abroad, double-check whether capacity is listed in US or imperial units.", "Density affects the weight of a given volume — volume and weight conversions aren't interchangeable without it."],
+  commonMistakes: [{ mistake: "Confusing US and UK gallon definitions", fix: "This calculator uses the US gallon (3.785 L); UK imperial gallon is larger at 4.546 L." }, { mistake: "Mixing weight and volume measurements", fix: "Volume (ml, cups) and weight (grams) aren't directly interchangeable without ingredient density." }, { mistake: "Assuming all countries use the same cup size", fix: "Cup measurements vary slightly between US, UK, Australian and metric standards." }, { mistake: "Using kitchen spoons instead of proper measuring tools for medicine", fix: "Always use a calibrated measuring device for medicine dosing, not household cutlery." }, { mistake: "Rounding too early in multi-step conversions", fix: "Keep full decimal precision through intermediate steps, especially for lab or medical use." }, { mistake: "Assuming fluid ounces and weight ounces are the same", fix: "Fluid ounces measure volume while ounces measure weight — they aren't interchangeable without density." }],
   faq: [
     { q: "How do you convert liters to gallons?", a: "Divide the liter value by approximately 3.78541 to get US gallons." },
     { q: "How many milliliters are in a cup?", a: "One US cup equals approximately 236.6 milliliters." },
     { q: "What's the difference between US and UK gallons?", a: "A US gallon equals 3.785 liters, while a UK imperial gallon is larger at 4.546 liters." },
     { q: "How do I convert quarts to liters?", a: "Multiply the quart value by approximately 0.9464 to get liters." },
     { q: "Is this converter accurate for cooking measurements?", a: "Yes, it uses standard US volume conversion factors suitable for recipe conversion." },
+    { q: "How many tablespoons are in a cup?", a: "There are 16 tablespoons in one US cup." },
+    { q: "How many teaspoons are in a tablespoon?", a: "There are 3 teaspoons in one tablespoon." },
+    { q: "Can I convert volume to weight with this tool?", a: "No, this tool converts volume units only; converting to weight requires knowing the ingredient's density, since different substances weigh differently at the same volume." },
+    { q: "What is a fluid ounce?", a: "A fluid ounce is a unit of volume (not weight) equal to about 29.57 ml in the US customary system." },
+    { q: "Why do US and metric recipes give different cup measurements?", a: "US cups are based on the US customary system (about 236.6 ml), while some metric recipes define a cup as exactly 250 ml, leading to small but meaningful differences." },
   ],
   relatedCalculators: ["Weight Converter", "Length Converter", "Water Intake Calculator", "Area Converter"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

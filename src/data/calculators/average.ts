@@ -95,6 +95,11 @@ Use this tool whenever you need a fast, error-free average of a small to medium 
     { q: "Can I calculate the average of decimals?", a: "Yes, decimal numbers are fully supported and calculated precisely." },
     { q: "Why is my average different from what I expected?", a: "Check for outliers or extreme values — a single very high or low number can significantly shift the average." },
     { q: "What does 'count' mean in the results?", a: "Count is the total number of valid numeric values that were included in the calculation." },
+    { q: "How do I calculate my average grade or GPA?", a: "Enter your individual scores or grade points and this tool gives the simple average; for GPA weighted by credit hours, use a dedicated GPA calculator instead." },
+    { q: "What is the average of a data set with only one number?", a: "The average of a single number is the number itself, since sum divided by a count of 1 equals that value." },
+    { q: "Can I paste numbers from a spreadsheet directly?", a: "Yes, you can paste a column or row of numbers separated by spaces, commas, or line breaks and the tool will parse them automatically." },
+    { q: "How is average different from mode?", a: "Average is the calculated mean of all values, while mode is simply the value that appears most frequently in the data set — they can be completely different numbers." },
+    { q: "Does adding a zero to my list change the average?", a: "Yes, zero counts as a valid number and is included in both the sum and the count, which lowers the average compared to leaving it out entirely." },
   ],
 
   relatedCalculators: [

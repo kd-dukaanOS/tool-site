@@ -1,7 +1,6 @@
 ﻿---
 // src/pages/[category]/[tool].astro
 import Layout from "../../layouts/Layout.astro";
-import FaqSection from "../../components/FaqSection.astro";
 import JsonFormatterWidget from "../../components/tools/JsonFormatterWidget.astro";
 import Base64EncoderDecoderWidget from "../../components/tools/Base64EncoderDecoderWidget.astro";
 import CaseConverterWidget from "../../components/tools/CaseConverterWidget.astro";
@@ -137,7 +136,7 @@ const faqSchema = faqs.length > 0 ? {
 ---
 
 <Layout
-  title={`${tool.name} â€” Free Online Tool | ToolSite`}
+  title={`${tool.name} — Free Online Tool | ToolSite`}
   description={tool.desc}
 >
   <div class="wrap">
@@ -322,13 +321,11 @@ const faqSchema = faqs.length > 0 ? {
       <HeartRateCalculatorWidget />
     ) : (
       <div class="tool-widget-placeholder">
-        <p>ðŸ”§ The working "{tool.name}" tool will go here.</p>
+        <p>🔧 The working "{tool.name}" tool will go here.</p>
       </div>
     )}
 
     {content && <CalculatorContent {...content} />}
-
-    <FaqSection faqs={faqs} />
   </div>
 
   {faqSchema && (

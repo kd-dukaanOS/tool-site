@@ -95,6 +95,11 @@ Use this tool to track trends over time rather than relying on a single reading 
     { q: "Is this method more accurate than BMI?", a: "Yes, unlike BMI, it accounts for body composition rather than just weight and height, making it more relevant for fitness tracking." },
     { q: "Can body fat percentage be negative or extremely low?", a: "No, healthy body fat percentages have practical lower limits; results significantly below essential fat ranges likely indicate measurement error." },
     { q: "Does hydration affect body fat readings?", a: "Yes, dehydration or water retention can slightly affect waist measurements and therefore the calculated result." },
+    { q: "How does the US Navy method compare to a body fat scale?", a: "Bioelectrical impedance scales estimate body fat using electrical signals and can be thrown off by hydration levels, while tape measurements are less affected by water balance but rely on precise, consistent technique." },
+    { q: "What body fat percentage is considered 'six-pack' visible abs?", a: "Ab definition typically starts becoming visible around 10-14% body fat for men and 16-22% for women, though genetics affect exactly where visibility begins." },
+    { q: "Can I use inches instead of centimeters for measurements?", a: "The formula requires centimeters, but you can enter inch measurements and convert them (inches × 2.54) — some calculators handle this conversion automatically." },
+    { q: "Why is my body fat percentage different from my gym's caliper test?", a: "Different methods (tape, calipers, bioelectrical impedance, DEXA) use different assumptions and have different margins of error, so results commonly vary by a few percentage points between methods." },
+    { q: "Should athletes use a different body fat method?", a: "Athletes with high muscle mass and low fat sometimes get more accurate results from DEXA scans or skinfold calipers, since circumference-based methods can be less precise at very low body fat levels." },
   ],
 
   relatedCalculators: [

@@ -125,6 +125,9 @@ Use this tool whenever you need a fast, error-free age calculation instead of do
     { q: "What does 'generation' mean in the results?", a: "It classifies your birth year into a generational cohort like Millennial, Gen Z or Gen Alpha based on commonly used year ranges." },
     { q: "Is there a minimum or maximum birth year supported?", a: "Most calculators support birth years from around 1900 onward for realistic and accurate results." },
     { q: "How accurate is the total days count?", a: "It's exact — calculated directly from the millisecond difference between the two dates, then converted to days." },
+    { q: "How do I calculate age in months only, not years?", a: "Total months is shown alongside years and days in the results — it's the full number of completed months since birth, useful for infant milestones or eligibility rules quoted in months." },
+    { q: "Can I calculate age difference between two people?", a: "Yes — run the calculator once for each person using the same 'age as of' date, then compare the two results to find the gap between them." },
+    { q: "Why do some countries calculate age differently (e.g. Korean age)?", a: "Some cultures count age from conception or add a year at each New Year rather than the birth date anniversary. This tool uses the standard international method (years since birth date)." },
   ],
 
   relatedCalculators: [

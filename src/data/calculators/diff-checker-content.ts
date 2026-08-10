@@ -61,6 +61,11 @@ Use this tool whenever you need a quick, visual comparison between two versions 
       result: "4 unchanged, 1 removed, 1 added, 80% similarity",
       explanation: "Only the reworded line is flagged; the rest match exactly.",
     },
+    {
+      inputs: "Two code blocks with one indentation change",
+      result: "That line flagged as removed and added",
+      explanation: "Since comparison is line-based, whitespace-only changes still register as a difference.",
+    },
   ],
 
   practicalUses: [
@@ -72,6 +77,10 @@ Use this tool whenever you need a quick, visual comparison between two versions 
     "Comparing changelog entries between versions",
     "Reviewing legal or contract text revisions",
     "Checking email or message drafts for accidental edits",
+    "Comparing two versions of resume or CV content",
+    "Auditing copy-pasted content against a source",
+    "Tracking changes in blog post revisions",
+    "Verifying data migration output matches expected text",
   ],
 
   expertTips: [
@@ -81,6 +90,10 @@ Use this tool whenever you need a quick, visual comparison between two versions 
     "Remove trailing whitespace before pasting to avoid false differences.",
     "Use the copy button to save a diff summary for review notes.",
     "For large documents, compare in smaller sections for easier reading.",
+    "Watch for invisible characters like tabs vs spaces causing unexpected diffs.",
+    "Use this alongside a word counter to sanity-check line count mismatches.",
+    "For merge conflict review, compare each conflicting block separately.",
+    "Paste plain text, not rich text, to avoid formatting artifacts skewing the diff.",
   ],
 
   commonMistakes: [
@@ -88,6 +101,8 @@ Use this tool whenever you need a quick, visual comparison between two versions 
     { mistake: "Expecting word-level highlighting", fix: "This tool compares whole lines, not individual words." },
     { mistake: "Comparing very large documents at once", fix: "Split into smaller sections for a clearer diff." },
     { mistake: "Ignoring the similarity score", fix: "Use it as a quick sanity check before reading line details." },
+    { mistake: "Pasting rich text with hidden formatting", fix: "Paste as plain text to avoid formatting-related false differences." },
+    { mistake: "Assuming tabs and spaces are treated the same", fix: "Whitespace differences count as changes — normalize indentation first." },
   ],
 
   faq: [
@@ -98,6 +113,10 @@ Use this tool whenever you need a quick, visual comparison between two versions 
     { q: "Does the tool store my text?", a: "No, the comparison runs entirely in your browser and nothing is uploaded or saved." },
     { q: "Why are both lines shown as different for small edits?", a: "Because the comparison is line-based, any change within a line causes both the old and new line to be shown." },
     { q: "Can I copy the diff result?", a: "Yes, use the copy button to copy a full summary including stats and the line-by-line diff." },
+    { q: "Does the tool support comparing large files?", a: "It works best on moderate-sized text; very large documents are easier to review when split into smaller sections." },
+    { q: "Can I use this to check plagiarism?", a: "It can highlight matching and differing lines between two texts, but it's not a dedicated plagiarism detection service." },
+    { q: "Does whitespace affect the comparison?", a: "Yes, differences in spaces, tabs or trailing whitespace can cause lines to be flagged as changed even if the visible text looks similar." },
+    { q: "Is this diff checker free to use?", a: "Yes, it's completely free with no sign-up required." },
   ],
 
   relatedCalculators: [
@@ -107,6 +126,8 @@ Use this tool whenever you need a quick, visual comparison between two versions 
     "Markdown Previewer",
     "URL Encoder/Decoder",
     "Slug Generator",
+    "Case Converter",
+    "Text Reverser",
   ],
 
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

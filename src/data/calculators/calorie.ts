@@ -210,6 +210,22 @@ The estimates are based on scientifically accepted equations and should be used 
       q: "Why isn't my weight changing despite following the calculator?",
       a: "Estimated calorie needs may differ from your actual metabolism. Food tracking inaccuracies, inconsistent activity or medical conditions can also affect progress. Adjust intake gradually and monitor results over several weeks.",
     },
+    {
+      q: "What's the difference between TDEE and calorie maintenance level?",
+      a: "They refer to the same thing — TDEE is the technical term for the total calories burned in a day, and 'maintenance calories' is the everyday name for eating that same amount to keep weight stable.",
+    },
+    {
+      q: "How many calories are in a pound of body fat?",
+      a: "Roughly 3,500 calories are associated with one pound of body fat, which is why a 500-calorie daily deficit is often estimated to produce about one pound of loss per week — though real-world results vary by individual.",
+    },
+    {
+      q: "Do I need to recalculate calories as I lose weight?",
+      a: "Yes, calorie needs drop as body weight decreases, so recalculating every 5-10 pounds lost helps keep your target accurate instead of stalling progress.",
+    },
+    {
+      q: "Should I eat the same calories on rest days and workout days?",
+      a: "Some people prefer consistent daily calories for simplicity, while others cycle slightly higher calories on training days — either approach works as long as the weekly average matches your goal.",
+    },
   ],
 
   relatedCalculators: [

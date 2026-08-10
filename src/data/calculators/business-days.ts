@@ -92,14 +92,19 @@ Use this tool whenever calendar days aren't the right metric and you need actual
     { q: "What's the difference between business days and working days?", a: "The terms are generally used interchangeably to mean weekdays excluding weekends and holidays." },
     { q: "How are holidays different from weekends in this calculator?", a: "Weekends are automatically detected by day of week, while holidays must be manually added since they vary by location and year." },
     { q: "Can this tool be used for international date calculations?", a: "Yes, but you should manually adjust holiday lists for the relevant country or region for accurate results." },
+    { q: "How many business days are in a typical month?", a: "Most calendar months have around 20-23 business days, since roughly 4-5 weekends (8-10 weekend days) fall within a 28-31 day month." },
+    { q: "How do I add 10 business days to a date?", a: "Starting from your date, count forward skipping Saturdays and Sundays (and any holidays) until you've counted 10 qualifying weekdays — this calculator does that counting automatically when you set a start date and required day count." },
+    { q: "Does this calculator work for six-day work weeks?", a: "Yes, if your business operates six days a week, disable weekend exclusion or adjust which days count as weekends to match your actual schedule." },
+    { q: "What's the difference between business days and banking days?", a: "The terms are often used interchangeably, though 'banking days' sometimes specifically excludes bank holidays that may differ from general public holidays." },
+    { q: "Why do some contracts specify business days instead of calendar days?", a: "Business days give a more predictable timeline for tasks that only happen during working hours, like processing, shipping, or approvals, avoiding weekend and holiday delays skewing deadlines." },
   ],
 
   relatedCalculators: [
     "Date Difference Calculator",
     "Age Calculator",
-    "Business Days Calculator",
+    "Working Hours Calculator",
     "Countdown Timer",
-    "Percentage Calculator",
+    "Days Until Calculator",
     "Loan EMI Calculator",
   ],
 

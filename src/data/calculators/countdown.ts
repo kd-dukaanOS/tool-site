@@ -202,6 +202,18 @@ Unlike a basic date difference calculator, this tool continuously updates the re
       q: "Can I use it on mobile devices?",
       a: "Yes. The calculator is fully responsive and works on desktops, tablets and smartphones.",
     },
+    {
+      q: "How many days until my next birthday?",
+      a: "Enter your next birthday's date as the target, and the calculator instantly shows the remaining days, weeks, and months until it arrives.",
+    },
+    {
+      q: "Can I count down to a recurring annual event?",
+      a: "Yes, just update the target year each time the event passes — the calculator itself always counts to whatever future date you enter.",
+    },
+    {
+      q: "Does the countdown work across different time zones?",
+      a: "The calculation uses your device's local date and time, so if you're planning an event in another time zone, adjust the target time to match that zone first.",
+    },
   ],
 
   relatedCalculators: [

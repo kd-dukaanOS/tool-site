@@ -220,6 +220,18 @@ Use this calculator to compare investment opportunities, evaluate savings plans,
       q: "Does a higher interest rate always produce better returns?",
       a: "Generally yes, but higher returns often involve greater investment risk. Consider both expected return and risk before investing.",
     },
+    {
+      q: "How do I calculate compound interest in Excel?",
+      a: "Use =P*(1+r/n)^(n*t), substituting your principal, rate, compounding periods per year, and years — the same formula this calculator applies automatically.",
+    },
+    {
+      q: "What's the difference between nominal and effective annual rate?",
+      a: "Nominal rate is the stated annual rate before compounding; effective annual rate reflects the actual return after accounting for compounding frequency, which is always equal to or higher than the nominal rate.",
+    },
+    {
+      q: "How much difference does monthly vs annual compounding really make?",
+      a: "The gap is usually small at low rates and short durations, but widens noticeably at higher rates and over decades — monthly compounding on a 10% rate over 20 years yields meaningfully more than annual.",
+    },
   ],
 
   relatedCalculators: [

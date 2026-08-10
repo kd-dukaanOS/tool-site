@@ -95,6 +95,11 @@ Use this tool as a starting point for understanding your weight status, not as a
     { q: "Why is my BMI high even though I'm fit?", a: "BMI doesn't differentiate muscle from fat, so muscular or athletic individuals often show higher BMI despite low body fat." },
     { q: "What BMI is considered obese?", a: "A BMI of 30 or above is classified as obese." },
     { q: "How often should I check my BMI?", a: "Checking every few weeks to months is enough to track meaningful trends without over-focusing on daily fluctuations." },
+    { q: "What is the BMI formula in imperial units (pounds and inches)?", a: "BMI = (Weight in pounds ÷ Height in inches²) × 703. This calculator handles the conversion automatically once you enter metric or imperial values." },
+    { q: "Does BMI account for waist size or fat distribution?", a: "No, BMI only uses total weight and height. Pairing it with waist circumference or waist-to-hip ratio gives a better sense of where fat is stored, which matters more for health risk." },
+    { q: "What BMI is considered morbidly obese?", a: "A BMI of 40 or above is generally classified as severely or morbidly obese, a category associated with significantly higher health risk." },
+    { q: "Is there a different BMI standard for Asian populations?", a: "Yes, some health organizations recommend lower BMI cutoffs (e.g., overweight starting around 23) for Asian populations, since health risks can appear at lower BMI values than the standard Western thresholds." },
+    { q: "Can pregnancy affect BMI readings?", a: "Yes, BMI is not a reliable measure during pregnancy due to normal weight gain from the growing baby, placenta, and fluid — doctors use separate pregnancy weight gain guidelines instead." },
   ],
 
   relatedCalculators: [

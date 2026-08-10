@@ -44,10 +44,32 @@ const categoryTools = tools.filter((t) => t.category === category.slug);
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category]} />
             </div>
             <div><h4>{tool.name}</h4><p>{tool.desc}</p></div>
-            <svg class="fav" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9.3-8.7C1 8.4 2.7 5 6.3 5 8.4 5 10 6.2 12 8.5 14 6.2 15.6 5 17.7 5c3.6 0 5.3 3.4 3.6 7.3C19 16.5 12 21 12 21z"/></svg>
+            <svg class="fav" data-slug={tool.slug} data-name={tool.name} data-url={`/${tool.category}/${tool.slug}/`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9.3-8.7C1 8.4 2.7 5 6.3 5 8.4 5 10 6.2 12 8.5 14 6.2 15.6 5 17.7 5c3.6 0 5.3 3.4 3.6 7.3C19 16.5 12 21 12 21z"/></svg>
           </a>
         ))}
       </div>
     </div>
   </section>
+  <script>
+  const getBookmarks = () => JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
+  const setBookmarks = (arr) => localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
+
+  document.querySelectorAll('.fav').forEach((icon) => {
+    const slug = icon.dataset.slug;
+    if (getBookmarks().some(b => b.slug === slug)) icon.classList.add('active');
+
+    icon.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      let bookmarks = getBookmarks();
+      const isSaved = bookmarks.some(b => b.slug === slug);
+      bookmarks = isSaved
+        ? bookmarks.filter(b => b.slug !== slug)
+        : [...bookmarks, { name: icon.dataset.name, slug, url: icon.dataset.url }];
+      setBookmarks(bookmarks);
+      icon.classList.toggle('active', !isSaved);
+    });
+  });
+</script>
+  
 </Layout>

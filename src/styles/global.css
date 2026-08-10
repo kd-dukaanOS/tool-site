@@ -1,6 +1,8 @@
 /* ============================================
    Design tokens — shared across every tool page
    ============================================ */
+[hidden] { display: none !important; }
+
 :root {
   --color-primary: #4f46e5;      /* indigo-600 */
   --color-primary-hover: #4338ca; /* indigo-700 */

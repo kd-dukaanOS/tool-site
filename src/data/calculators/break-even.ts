@@ -94,6 +94,11 @@ Use this tool during business planning, before launching a new product, or when 
     { q: "What's a good contribution margin ratio?", a: "It varies by industry, but generally 40% or higher is considered healthy, though even lower ratios can work with high sales volume." },
     { q: "Is break-even analysis useful for service businesses?", a: "Yes, service businesses can apply it by treating billable hours or service units in place of physical product units." },
     { q: "How does break-even revenue differ from break-even units?", a: "Break-even units is the sales quantity needed, while break-even revenue is that quantity multiplied by the selling price." },
+    { q: "How do I calculate break-even point in Excel?", a: "Set up cells for fixed costs, variable cost per unit, and price per unit, then divide fixed costs by (price minus variable cost) in a formula — the same logic this calculator automates instantly." },
+    { q: "What is the margin of safety in break-even analysis?", a: "Margin of safety is how far actual or projected sales exceed the break-even point, expressed in units or as a percentage — a larger margin means more cushion against sales dips." },
+    { q: "How do fixed and variable costs affect the break-even point?", a: "Higher fixed costs raise the break-even point since more units are needed to cover them, while a higher variable cost per unit shrinks the contribution margin, also raising break-even units." },
+    { q: "Can break-even analysis be used for multiple products?", a: "Yes, with a weighted-average contribution margin across your product mix, though it requires more detailed data than a single-product calculation." },
+    { q: "What's the difference between break-even point and payback period?", a: "Break-even point measures when revenue covers costs for ongoing operations, while payback period measures how long it takes to recover an initial investment, such as startup capital." },
   ],
 
   relatedCalculators: [

@@ -215,14 +215,8 @@ const navLinks = [
   const menu = document.getElementById('mobile-menu');
   toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
 
-  const themeBtn = document.getElementById('theme-toggle');
   const themeIcon = document.getElementById('theme-icon');
-  const syncIcon = () => { if (themeIcon) themeIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙'; };
-  syncIcon();
-  themeBtn?.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-    syncIcon();
-  });
+  if (themeIcon) themeIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
 
   const toolsData = JSON.parse(document.getElementById('tools-data')?.textContent || '[]');
   const searchInput = document.getElementById('nav-search-input');

@@ -94,6 +94,11 @@ Use this tool as a starting point for calorie planning, then adjust based on rea
     { q: "Can I increase my BMR?", a: "Yes, building muscle through strength training and maintaining adequate protein intake can help increase BMR over time." },
     { q: "Why do men have higher BMR than women on average?", a: "Men generally have more muscle mass and less body fat on average, which raises resting calorie burn." },
     { q: "Is BMR the same as metabolism?", a: "BMR is a major component of metabolism, but total metabolism also includes calories burned through digestion and physical activity." },
+    { q: "How do I calculate BMR by hand without a calculator?", a: "Use the Mifflin-St Jeor formula directly: for men, 10×weight(kg) + 6.25×height(cm) − 5×age + 5; for women, subtract 161 instead of adding 5. A calculator just automates this arithmetic." },
+    { q: "What activity multiplier should I use to convert BMR to TDEE?", a: "Common multipliers are 1.2 for sedentary, 1.375 for lightly active, 1.55 for moderately active, 1.725 for very active, and 1.9 for extremely active lifestyles." },
+    { q: "Why do BMR calculators give slightly different results?", a: "Different calculators may use different formulas — Mifflin-St Jeor, Harris-Benedict, or Katch-McArdle — each weighting weight, height, age, and body fat slightly differently." },
+    { q: "Does BMR decrease during weight loss?", a: "Yes, as body weight drops, BMR typically decreases too, since a smaller body requires fewer calories at rest — this is why calorie targets often need periodic recalculation." },
+    { q: "What is the Katch-McArdle formula and how does it differ?", a: "Katch-McArdle estimates BMR from lean body mass instead of total weight, making it more accurate for people who know their body fat percentage, especially athletes with more muscle mass." },
   ],
 
   relatedCalculators: [
