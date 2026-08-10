@@ -1,0 +1,132 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { categories, tools } from "../data/tools.js";
+---
+
+<Layout title="All Tools — ToolSite" description="Browse all 77+ free browser-based tools, organized by category.">
+  <section class="ts-tools-page">
+    <div class="ts-tools-inner">
+      <div class="ts-tools-head">
+        <h1 class="ts-tools-title">All Tools</h1>
+        <p class="ts-tools-sub">{tools.length}+ free tools, organized by category. No installs, no sign-up.</p>
+      </div>
+
+      {categories.map((cat) => {
+        const catTools = tools.filter((t) => t.category === cat.slug);
+        if (!catTools.length) return null;
+        return (
+          <div class="ts-tools-group" id={cat.slug}>
+            <div class="ts-tools-group-head">
+              <h2 class="ts-tools-group-title">{cat.name}</h2>
+              <span class="ts-tools-group-count">{catTools.length} tools</span>
+            </div>
+            <p class="ts-tools-group-desc">{cat.description}</p>
+            <div class="ts-tools-grid">
+              {catTools.map((t) => (
+                <a href={`/${t.category}/${t.slug}/`} class="ts-tools-card">
+                  <span class="ts-tools-card-name">{t.name}</span>
+                  {t.desc && <span class="ts-tools-card-desc">{t.desc}</span>}
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- Ad slot: place a leaderboard/responsive unit here once AdSense is approved.
+           Keep it below the fold and away from tool cards to avoid accidental clicks. -->
+      <!-- <div class="ts-tools-ad-slot"></div> -->
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ts-tools-page { padding: var(--space-12) var(--space-6); }
+  .ts-tools-inner { max-width: 1280px; margin: 0 auto; }
+
+  .ts-tools-head { text-align: center; margin-bottom: var(--space-12); }
+  .ts-tools-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-h1, var(--fs-h2));
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+  }
+  .ts-tools-sub {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .ts-tools-group { margin-bottom: var(--space-12); scroll-margin-top: var(--space-8); }
+  .ts-tools-group-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-1);
+  }
+  .ts-tools-group-title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-h3, var(--fs-h2));
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .ts-tools-group-count {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+  .ts-tools-group-desc {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-4);
+    max-width: 640px;
+  }
+
+  .ts-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  .ts-tools-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    text-decoration: none;
+    transition: transform var(--duration-fast) var(--ease-standard),
+                border-color var(--duration-fast) var(--ease-standard),
+                box-shadow var(--duration-fast) var(--ease-standard);
+  }
+  .ts-tools-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+  }
+  .ts-tools-card-name {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .ts-tools-card-desc {
+    font-family: var(--font-sans);
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .ts-tools-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .ts-tools-page { padding: var(--space-8) var(--space-4); }
+    .ts-tools-grid { grid-template-columns: 1fr; }
+  }
+</style>
