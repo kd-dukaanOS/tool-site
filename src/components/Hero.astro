@@ -212,12 +212,21 @@ const popularSearches = [
     border-radius: var(--radius-lg); overflow-y: auto; max-height: 280px;
     box-shadow: var(--shadow-lg, var(--shadow-md));
     scrollbar-width: thin;
-    scrollbar-color: var(--border-hover, #ccc) transparent;
+    scrollbar-color: transparent transparent;
   }
-  :global(.ts-hero-search-results.open::-webkit-scrollbar) { width: 6px; }
-  :global(.ts-hero-search-results.open::-webkit-scrollbar-track) { background: transparent; }
+  :global(.ts-hero-search-results.open:hover) {
+    scrollbar-color: var(--border-subtle) transparent;
+  }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar) { width: 4px; }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar-track) { background: transparent; margin-block: 6px; }
   :global(.ts-hero-search-results.open::-webkit-scrollbar-thumb) {
-    background: var(--border-hover, #ccc); border-radius: 999px;
+    background: transparent; border-radius: 999px;
+  }
+  :global(.ts-hero-search-results.open:hover::-webkit-scrollbar-thumb) {
+    background: var(--border-subtle);
+  }
+  :global(.ts-hero-result-item) {
+    padding-right: 14px;
   }
   :global(.ts-hero-result-item) {
     display: flex;
