@@ -209,7 +209,8 @@ const popularSearches = [
   :global(.ts-hero-search-results.open) {
     display: block;
     background: var(--bg-card); border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg, var(--shadow-md));
+    border-radius: var(--radius-lg); overflow-y: auto; max-height: 280px;
+    box-shadow: var(--shadow-lg, var(--shadow-md));
   }
   :global(.ts-hero-result-item) {
     display: flex;
@@ -239,10 +240,18 @@ const popularSearches = [
   function matchTools(q) {
     q = q.trim().toLowerCase();
     if (!q) return [];
-    return allTools.filter(t => {
-      const words = t.name.toLowerCase().split(' ');
-      return words.some(w => w.startsWith(q)) || t.name.toLowerCase().startsWith(q);
-    }).slice(0, 6);
+    const scored = allTools
+      .map(t => {
+        const name = t.name.toLowerCase();
+        const words = name.split(' ');
+        let score = -1;
+        if (name.startsWith(q)) score = 0;
+        else if (words.some(w => w.startsWith(q))) score = 1;
+        return { t, score };
+      })
+      .filter(x => x.score !== -1)
+      .sort((a, b) => a.score - b.score || a.t.name.length - b.t.name.length);
+    return scored.map(x => x.t).slice(0, 6);
   }
 
   function render() {
