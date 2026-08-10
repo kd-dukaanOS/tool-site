@@ -63,7 +63,7 @@ const popularSearches = [
     position: relative;
     padding: var(--space-16) var(--space-6) var(--space-12);
     background: var(--bg-hero-glow), var(--bg-page);
-    overflow: hidden;
+    overflow-x: hidden;
   }
   .ts-hero-inner {
     max-width: 720px;
@@ -211,6 +211,13 @@ const popularSearches = [
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg); overflow-y: auto; max-height: 280px;
     box-shadow: var(--shadow-lg, var(--shadow-md));
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-hover, #ccc) transparent;
+  }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar) { width: 6px; }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar-track) { background: transparent; }
+  :global(.ts-hero-search-results.open::-webkit-scrollbar-thumb) {
+    background: var(--border-hover, #ccc); border-radius: 999px;
   }
   :global(.ts-hero-result-item) {
     display: flex;
