@@ -148,21 +148,22 @@ const faqSchema = faqs.length > 0 ? {
       <div class="cat-icon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category as keyof typeof categoryIcons]} />
       </div>
-      <div>
+      <div class="category-header-text">
         <h1>{tool.name}</h1>
         <p>{tool.desc}</p>
       </div>
+      <button
+        id="bookmark-btn"
+        class="bookmark-btn"
+        data-slug={tool.slug}
+        data-name={tool.name}
+        data-url={`/${tool.category}/${tool.slug}/`}
+        aria-label="Save this tool"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Save</span>
+      </button>
     </div>
-
-    <button
-      id="bookmark-btn"
-      class="bookmark-btn"
-      data-slug={tool.slug}
-      data-name={tool.name}
-      data-url={`/${tool.category}/${tool.slug}/`}
-    >
-      ☆ Save
-    </button>
 
     <!--
       Each tool gets its own widget component. Add a new "if" line here
@@ -398,8 +399,9 @@ const faqSchema = faqs.length > 0 ? {
     const getBookmarks = () => JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
     const setBookmarks = (arr) => localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
     const isSaved = () => getBookmarks().some(b => b.slug === slug);
+    const label = btn.querySelector('.bookmark-btn-label');
     const render = () => {
-      btn.textContent = isSaved() ? '★ Saved' : '☆ Save';
+      if (label) label.textContent = isSaved() ? 'Saved' : 'Save';
       btn.classList.toggle('active', isSaved());
     };
     render();

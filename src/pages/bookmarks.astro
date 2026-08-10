@@ -3,9 +3,13 @@ import Layout from "../layouts/Layout.astro";
 ---
 <Layout title="Bookmarks — ToolSite" description="Your saved tools, stored locally in your browser.">
   <div class="wrap">
-    <h1>Bookmarks</h1>
-    <div id="bookmarks-list"></div>
-    <p id="bookmarks-empty" style="display:none;">No bookmarks yet. Click ☆ Save on any tool to add it here.</p>
+    <h1>Your Bookmarks</h1>
+    <p class="bookmarks-sub">Tools you've saved, stored locally in this browser.</p>
+    <div id="bookmarks-list" class="bookmarks-grid"></div>
+    <div id="bookmarks-empty" class="bookmarks-empty" style="display:none;">
+      <p>No bookmarks yet.</p>
+      <p class="bookmarks-empty-sub">Click the ✦ Save button on any tool to add it here.</p>
+    </div>
   </div>
 </Layout>
 
@@ -18,8 +22,8 @@ import Layout from "../layouts/Layout.astro";
   } else {
     list.innerHTML = saved.map(b => `
       <div class="bookmark-item">
-        <a href="${b.url}">${b.name}</a>
-        <button data-slug="${b.slug}" class="remove-bookmark">Remove</button>
+        <a href="${b.url}" class="bookmark-item-link">${b.name}</a>
+        <button data-slug="${b.slug}" class="remove-bookmark" aria-label="Remove bookmark">✕</button>
       </div>
     `).join('');
     list.querySelectorAll('.remove-bookmark').forEach(el => {
@@ -35,7 +39,60 @@ import Layout from "../layouts/Layout.astro";
 </script>
 
 <style>
-  .wrap { max-width: 720px; margin: 0 auto; padding: 24px; }
-  .bookmark-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .remove-bookmark { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 13px; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+  .wrap h1 { font-family: var(--font-sans); font-size: var(--fs-h1, 32px); font-weight: 800; color: var(--text-primary); margin: 0 0 6px; }
+  .bookmarks-sub { color: var(--text-secondary); font-size: var(--fs-body, 15px); margin: 0 0 32px; }
+</style>
+<style is:global>
+  .bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .bookmark-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card, var(--surface));
+    border: 1px solid var(--border-subtle, var(--border));
+    border-radius: var(--radius-lg, 12px);
+    padding: 14px 16px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .bookmark-item:hover {
+    border-color: var(--border-hover, var(--color-primary, #6366f1));
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.06));
+    transform: translateY(-1px);
+  }
+  .bookmark-item-link {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14.5px;
+    text-decoration: none;
+  }
+  .bookmark-item-link:hover { color: var(--color-primary, #6366f1); }
+  .remove-bookmark {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    border-radius: 999px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    font-size: 13px;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .remove-bookmark:hover { background: var(--bg-page); color: #ef4444; }
+  .bookmarks-empty {
+    text-align: center;
+    padding: 60px 20px;
+    border: 1px dashed var(--border-subtle, var(--border));
+    border-radius: var(--radius-lg, 12px);
+    color: var(--text-secondary);
+  }
+  .bookmarks-empty-sub { color: var(--text-muted); font-size: 13.5px; margin-top: 4px; }
+  @media (max-width: 640px) {
+    .bookmarks-grid { grid-template-columns: 1fr; }
+  }
 </style>
