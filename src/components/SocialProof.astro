@@ -1,4 +1,6 @@
 ---
+import { tools } from '../data/tools.js';
+
 const highlights = [
   { icon: '🔒', text: 'Calculations run in your browser — nothing you type is uploaded.' },
   { icon: '⚡', text: 'No sign-up, no install. Open a tool and get your result instantly.' },
@@ -10,7 +12,7 @@ const highlights = [
     <div class="ts-social-left">
       <div>
         <p class="ts-social-title">Built for speed and privacy</p>
-        <p class="ts-social-sub">77+ browser-based tools, no accounts required.</p>
+        <p class="ts-social-sub">{tools.length}+ browser-based tools, no accounts required.</p>
       </div>
     </div>
 

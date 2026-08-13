@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { categories, tools } from "../data/tools.js";
 ---
 
-<Layout title="All Tools — ToolSite" description="Browse all 77+ free browser-based tools, organized by category.">
+<Layout title="All Tools — ToolSite" description={`Browse all ${tools.length}+ free browser-based tools, organized by category.`}>
   <section class="ts-tools-page">
     <div class="ts-tools-inner">
       <div class="ts-tools-head">

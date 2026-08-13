@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Layout title={`${post.data.title} — ToolSite Blog`} description={post.data.description}>
+  <article class="ts-blog-post">
+    <div class="ts-blog-post-inner">
+      <h1>{post.data.title}</h1>
+      <p class="ts-blog-post-date">
+        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </p>
+      <div class="ts-blog-post-content">
+        <Content />
+      </div>
+      {post.data.relatedTool && (
+        <a class="ts-blog-post-cta" href={post.data.relatedTool}>
+          Try the {post.data.relatedToolName} →
+        </a>
+      )}
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .ts-blog-post { padding: var(--space-12) var(--space-6); }
+  .ts-blog-post-inner { max-width: 720px; margin: 0 auto; }
+  .ts-blog-post-inner h1 {
+    font-family: var(--font-sans); font-size: var(--fs-h1, var(--fs-h2)); font-weight: 800;
+    color: var(--text-primary); margin: 0 0 var(--space-2);
+  }
+  .ts-blog-post-date { font-size: var(--fs-small); color: var(--text-muted); margin: 0 0 var(--space-6); }
+  .ts-blog-post-content {
+    font-family: var(--font-sans); font-size: var(--fs-body); color: var(--text-primary); line-height: 1.75;
+  }
+  .ts-blog-post-content :global(h2) { font-size: var(--fs-h3, var(--fs-h2)); font-weight: 700; margin: var(--space-8) 0 var(--space-3); }
+  .ts-blog-post-content :global(p) { margin: 0 0 var(--space-4); }
+  .ts-blog-post-content :global(table) { width: 100%; border-collapse: collapse; margin: var(--space-4) 0; }
+  .ts-blog-post-content :global(th), .ts-blog-post-content :global(td) {
+    border: 1px solid var(--border-subtle); padding: var(--space-2) var(--space-3); text-align: left; font-size: var(--fs-small);
+  }
+  .ts-blog-post-content :global(th) { background: var(--bg-card); font-weight: 700; }
+  .ts-blog-post-cta {
+    display: inline-block; margin-top: var(--space-8); padding: var(--space-3) var(--space-6);
+    background: var(--color-primary); color: #fff; border-radius: var(--radius-lg);
+    font-weight: 700; text-decoration: none;
+  }
+</style>
