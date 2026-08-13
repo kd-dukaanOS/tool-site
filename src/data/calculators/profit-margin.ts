@@ -1,33 +1,118 @@
+// src/data/calculators/profit-margin.ts
 export const profitMarginCalculatorContent = {
-  meta: { seoTitle: "Profit Margin Calculator - Margin & Markup Free", metaDescription: "Calculate profit, profit margin percentage and markup instantly. Free profit margin calculator for businesses.", canonicalSlug: "/profit-margin-calculator", ogTitle: "Profit Margin Calculator", ogDescription: "Instantly calculate profit, margin percentage and markup.", twitterTitle: "Free Profit Margin Calculator", twitterDescription: "Calculate profit margin instantly." },
-  hero: { text: "The Profit Margin Calculator finds your profit amount, profit margin percentage and markup percentage from cost and selling price. Enter both values to get instant results. Essential for retailers, freelancers and business owners pricing products." },
-  about: { text: `The Profit Margin Calculator computes profit, profit margin (as % of selling price) and markup (as % of cost price) from your cost and selling price.
+  meta: {
+    seoTitle: "Profit Margin Calculator - Find Profit % from Revenue & Cost",
+    metaDescription: "Calculate your profit and profit margin percentage from revenue and cost. Free online profit margin calculator with gross vs net margin explained.",
+    canonicalSlug: "/profit-margin-calculator",
+    ogTitle: "Profit Margin Calculator - Profit & Margin %",
+    ogDescription: "Instantly find your profit and profit margin percentage from revenue and cost.",
+    twitterTitle: "Free Profit Margin Calculator",
+    twitterDescription: "Calculate profit and profit margin percentage instantly, free and accurate.",
+  },
 
-It's useful for pricing products correctly, comparing profitability across products, and understanding the difference between margin and markup, which are commonly confused.
+  hero: {
+    text: "The Profit Margin Calculator instantly finds your profit and profit margin percentage from revenue and cost. Use it to check pricing health, compare products, evaluate deals, or track business profitability over time. Anyone running a business, store, freelance service or side hustle can use this free tool.",
+  },
 
-The tool shows both metrics side by side so you can see how they differ for the same transaction.
+  about: {
+    text: `The Profit Margin Calculator is a free online tool that computes your profit and profit margin percentage from total revenue and total cost.
 
-Limitations: this is a simple two-input calculation; it doesn't factor in overhead, taxes, or other indirect costs beyond the direct cost price.
+It's useful for business owners checking overall profitability, freelancers pricing projects, store owners comparing product-level performance, and anyone deciding whether a deal, sale or product line is actually worth pursuing.
 
-Use this tool for quick pricing decisions and profitability checks.` },
-  formula: { formula: "Profit = Selling Price − Cost Price\nMargin% = (Profit ÷ Selling Price) × 100\nMarkup% = (Profit ÷ Cost Price) × 100", variables: [{ symbol: "Cost Price", meaning: "What you paid for the item" }, { symbol: "Selling Price", meaning: "What you sell the item for" }], explanation: "Margin is profit as a percentage of selling price; markup is profit as a percentage of cost price — they always give different numbers for the same transaction.", interpretation: "For example, cost ₹100, selling ₹150 gives ₹50 profit, 33.3% margin, but 50% markup." },
-  steps: ["Enter the cost price.", "Enter the selling price.", "Click Calculate to run the tool.", "View the profit amount.", "Check the profit margin percentage.", "Compare with the markup percentage."],
+The calculator expresses margin as a percentage of revenue — the standard way profitability is measured, compared across businesses, and benchmarked against industry norms.
+
+Profit margin differs from markup: margin is profit as a share of the selling price, while markup is profit as a share of cost. The two numbers are never equal, and confusing them is a common pricing mistake.
+
+Limitations: this tool uses total revenue and total cost as entered — it doesn't separate fixed costs from variable costs, doesn't account for taxes, and treats a single transaction or period at a time.
+
+Use this tool for quick profitability checks and pricing decisions, not as a substitute for full financial accounting or tax planning.`,
+  },
+
+  formula: {
+    formula: "Profit = Revenue − Cost; Margin% = (Profit / Revenue) × 100",
+    variables: [
+      { symbol: "Revenue", meaning: "Total sales revenue" },
+      { symbol: "Cost", meaning: "Total cost of goods or services sold" },
+    ],
+    explanation: "Profit is revenue minus cost. Margin percentage expresses that profit as a share of revenue, showing how much of each sales dollar is kept as profit after covering cost.",
+    interpretation: "For example, $1,000 revenue with $600 cost gives $400 profit and a 40% profit margin — 40 cents of every dollar earned is profit, and 60 cents went to cost.",
+  },
+
+  steps: [
+    "Enter your total revenue.",
+    "Enter your total cost.",
+    "Click Calculate to run the tool.",
+    "View your profit amount and profit margin percentage.",
+    "Compare the result against your target margin or industry benchmark.",
+    "Copy the summary if you need to save or share it.",
+  ],
+
   examples: [
-    { inputs: "Cost: ₹100, Selling: ₹150", result: "Profit: ₹50, Margin: 33.3%, Markup: 50%", explanation: "Classic example showing margin vs markup difference." },
-    { inputs: "Cost: ₹500, Selling: ₹750", result: "Profit: ₹250, Margin: 33.3%, Markup: 50%", explanation: "Same ratio at a larger scale." },
-    { inputs: "Cost: ₹200, Selling: ₹220", result: "Profit: ₹20, Margin: 9.1%, Markup: 10%", explanation: "Low-margin retail example." },
+    { inputs: "Revenue: $1,000, Cost: $600", result: "Profit: $400.00, Margin: 40.0%", explanation: "A healthy 40% margin on $1,000 revenue." },
+    { inputs: "Revenue: $5,000, Cost: $4,500", result: "Profit: $500.00, Margin: 10.0%", explanation: "A thin 10% margin, common in high-volume, low-margin businesses like grocery or wholesale." },
+    { inputs: "Revenue: $250, Cost: $100", result: "Profit: $150.00, Margin: 60.0%", explanation: "A strong 60% margin, typical for services with low material cost." },
+    { inputs: "Revenue: $800, Cost: $900", result: "Profit: −$100.00, Margin: −12.5%", explanation: "A negative margin means the sale lost money — cost exceeded revenue." },
+    { inputs: "Revenue: $12,000, Cost: $7,200", result: "Profit: $4,800.00, Margin: 40.0%", explanation: "Same 40% margin as the first example, showing margin percentage is independent of scale." },
   ],
-  practicalUses: ["Setting product selling prices", "Comparing profitability across product lines", "Evaluating discount impact on margin", "Negotiating supplier costs for better margins", "Preparing pricing strategy for a new product", "Checking if a sale price still meets minimum margin targets"],
-  expertTips: ["Margin and markup are never equal (except at 0%) — always clarify which one is being discussed.", "Higher markup doesn't always mean higher margin percentage.", "Track margin trends across products to identify your most profitable items.", "Factor in overhead costs separately when setting minimum acceptable margins.", "Retail businesses often target specific margin percentages by category."],
-  commonMistakes: [{ mistake: "Confusing margin with markup", fix: "Margin is profit ÷ selling price; markup is profit ÷ cost price — they're different formulas." }, { mistake: "Ignoring overhead costs in pricing decisions", fix: "This calculator uses only cost and selling price; add overhead separately for true profitability." }, { mistake: "Setting selling price based on markup alone", fix: "Check the resulting margin percentage too, since markup can be misleading about actual profitability." }],
+
+  practicalUses: [
+    "Checking overall business profitability at a glance",
+    "Comparing margin across different products or services",
+    "Pricing decisions to hit a target margin",
+    "Evaluating whether a discount still keeps margin healthy",
+    "Tracking margin trends month over month or quarter over quarter",
+    "Comparing your margin against industry benchmarks",
+    "Assessing a new product line before launch",
+    "Reviewing freelance project profitability after expenses",
+    "Deciding whether to accept a bulk order at a lower price",
+    "Spotting which sales channel is actually more profitable",
+    "Checking margin health before taking on a new client",
+    "Validating pricing on a marketplace after fees are deducted",
+  ],
+
+  expertTips: [
+    "Track margin percentage over time, not just profit dollars — dollar profit can grow while margin shrinks.",
+    "Compare your margin to industry averages to gauge competitiveness.",
+    "A high-revenue, low-margin business can be less resilient than a smaller, higher-margin one.",
+    "Separate fixed costs (rent, salaries) from variable costs (materials) for deeper analysis beyond this tool.",
+    "Small margin drops compound significantly at scale — audit costs regularly.",
+    "Use margin percentage, not profit dollars, when comparing businesses of different sizes.",
+    "Recalculate margin after marketplace or payment processing fees, not just base cost.",
+    "A margin near zero or negative signals a pricing or cost problem that needs immediate attention.",
+    "Set a minimum acceptable margin threshold before agreeing to bulk discounts.",
+    "Review margin by product line, not just overall, to find which items are actually worth selling.",
+  ],
+
+  commonMistakes: [
+    { mistake: "Confusing profit margin with markup percentage", fix: "Margin is profit as a percentage of revenue; markup is profit as a percentage of cost — they are different numbers for the same deal." },
+    { mistake: "Ignoring fixed costs like rent and salaries", fix: "Include all relevant costs, not just direct product cost, for an accurate margin." },
+    { mistake: "Comparing margin across very different industries", fix: "Benchmark margin against similar businesses — typical margins vary widely by industry." },
+    { mistake: "Forgetting payment processing or marketplace fees", fix: "Subtract these fees from revenue or add them to cost before calculating margin." },
+    { mistake: "Treating a one-time sale margin as representative of overall business health", fix: "Track margin across many transactions or a full period, not a single sale." },
+    { mistake: "Not revisiting margin after a supplier price increase", fix: "Recalculate margin whenever cost inputs change to catch shrinking profitability early." },
+  ],
+
   faq: [
-    { q: "What's the difference between margin and markup?", a: "Margin is profit expressed as a percentage of selling price, while markup is profit expressed as a percentage of cost price — they always differ for the same transaction." },
-    { q: "How do you calculate profit margin?", a: "Divide profit (selling price minus cost price) by the selling price, then multiply by 100." },
-    { q: "How do you calculate markup?", a: "Divide profit (selling price minus cost price) by the cost price, then multiply by 100." },
-    { q: "Why is markup always higher than margin?", a: "Because markup is calculated on the smaller cost price base while margin uses the larger selling price base, for the same profit amount." },
-    { q: "What's a good profit margin for a small business?", a: "It varies widely by industry, but many small retail businesses target margins between 20-50%, while some service businesses aim much higher." },
+    { q: "What is profit margin?", a: "Profit margin is your profit expressed as a percentage of revenue, showing how much of each sales dollar is kept as profit after costs." },
+    { q: "What's a good profit margin?", a: "It varies widely by industry — retail often sees 20–50% margins, services can see 50–90%, and low-margin industries like grocery may be under 10%." },
+    { q: "What's the difference between profit margin and markup?", a: "Profit margin is profit divided by revenue, while markup is profit divided by cost — the same deal gives two different percentages, with margin always being the smaller one." },
+    { q: "Does this include taxes?", a: "No, this calculator computes pre-tax profit margin from revenue and cost only. Add tax considerations separately." },
+    { q: "How is net profit margin different from gross profit margin?", a: "Gross margin uses only direct cost of goods sold, while net margin subtracts all business expenses including overhead, salaries and taxes." },
+    { q: "Can profit margin be negative?", a: "Yes, if cost exceeds revenue, profit is negative, meaning the business or sale is losing money rather than earning it." },
+    { q: "How do I improve my profit margin?", a: "Raise prices, reduce direct costs, negotiate better supplier rates, or cut low-margin products and focus on higher-margin ones." },
+    { q: "Should I include shipping and packaging in cost?", a: "Yes, include any cost directly tied to delivering the product or service so your margin reflects true profitability." },
+    { q: "Is a higher profit margin always better?", a: "Generally yes for sustainability, but very high margins can sometimes signal underpricing risk from competitors or lost volume from overpricing." },
+    { q: "How often should I check my profit margin?", a: "Regularly — monthly or quarterly for an overall business view, and immediately after any cost or pricing change." },
+    { q: "What margin percentage should I aim for as a small business?", a: "There's no universal target — research typical margins for your specific industry and aim to stay competitive while covering all costs." },
+    { q: "Can this calculator be used for a single product or the whole business?", a: "Both — enter the specific revenue and cost for a single product, a project, or your entire business over a period." },
   ],
-  relatedCalculators: ["Break Even Calculator", "Discount Calculator", "GST Calculator", "ROI Calculator"],
+
+  relatedCalculators: ["Markup Calculator", "Gross Margin Calculator", "Net Profit Calculator", "Break-Even Calculator", "ROAS Calculator"],
+
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
-  headingStructure: { h1: "Profit Margin Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
+
+  headingStructure: {
+    h1: "Profit Margin Calculator",
+    h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
+  },
 };

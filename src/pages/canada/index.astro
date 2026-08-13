@@ -1,0 +1,74 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const tools = [
+  {
+    name: "Canada Take-Home Pay Calculator",
+    href: "/finance/ca-take-home-pay-calculator/",
+    desc: "Estimate your net salary after federal tax, provincial tax, CPP and EI.",
+  },
+  {
+    name: "CPP Calculator",
+    href: "/finance/cpp-calculator/",
+    desc: "Estimate your Canada Pension Plan contribution.",
+  },
+  {
+    name: "EI Calculator",
+    href: "/finance/ei-calculator/",
+    desc: "Estimate your Employment Insurance premium.",
+  },
+];
+---
+<Layout
+  title="Canada Financial Calculators - Salary, CPP & EI Tools"
+  description="Free Canadian financial calculators covering take-home pay, CPP and EI deductions for Ontario, Alberta and BC. Fast, accurate and no sign-up required."
+>
+  <section class="ca-hub">
+    <header class="ca-hub__header">
+      <h1>Canada Financial Calculators</h1>
+      <p>
+        Free tools to estimate your take-home pay, CPP and EI deductions in
+        Canada. All calculations run in your browser — nothing is sent to
+        a server.
+      </p>
+    </header>
+
+    <section class="ca-hub__grid">
+      {tools.map((tool) => (
+        <a class="ca-hub__card" href={tool.href}>
+          <h2>{tool.name}</h2>
+          <p>{tool.desc}</p>
+          <span class="ca-hub__link">Open calculator →</span>
+        </a>
+      ))}
+    </section>
+
+    <section class="ca-hub__note">
+      <p>Currently covers Ontario, Alberta and British Columbia provincial tax.</p>
+    </section>
+  </section>
+</Layout>
+
+<style>
+.ca-hub{max-width:960px;margin:0 auto;padding:48px 24px;}
+.ca-hub__header{margin-bottom:40px;}
+.ca-hub__header h1{font-size:2rem;font-weight:800;margin:0 0 12px;color:#111827;}
+.ca-hub__header p{font-size:1rem;line-height:1.7;color:#6B7280;max-width:640px;}
+.ca-hub__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+.ca-hub__card{display:block;padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;text-decoration:none;transition:border-color .15s,transform .15s;}
+.ca-hub__card:hover{border-color:#111827;transform:translateY(-2px);}
+.ca-hub__card h2{font-size:1.05rem;font-weight:700;margin:0 0 8px;color:#111827;}
+.ca-hub__card p{font-size:.9rem;line-height:1.6;color:#6B7280;margin:0 0 14px;}
+.ca-hub__link{font-size:.85rem;font-weight:600;color:#111827;}
+.ca-hub__note{margin-top:32px;padding:18px 20px;border-radius:14px;background:#F9FAFB;border:1px dashed #D1D5DB;}
+.ca-hub__note p{margin:0;font-size:.88rem;color:#6B7280;}
+:global(.dark) .ca-hub__header h1{color:#FAFAFA;}
+:global(.dark) .ca-hub__header p{color:#A1A1AA;}
+:global(.dark) .ca-hub__card{background:#111217;border-color:#27272A;}
+:global(.dark) .ca-hub__card:hover{border-color:#FAFAFA;}
+:global(.dark) .ca-hub__card h2{color:#FAFAFA;}
+:global(.dark) .ca-hub__card p{color:#A1A1AA;}
+:global(.dark) .ca-hub__note{background:#111217;border-color:#27272A;}
+:global(.dark) .ca-hub__note p{color:#A1A1AA;}
+@media(max-width:640px){.ca-hub{padding:32px 16px;}.ca-hub__header h1{font-size:1.5rem;}}
+</style>

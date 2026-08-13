@@ -1,0 +1,111 @@
+{/* src/components/tools/HourlyToSalaryCalculatorWidget.astro */}
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Wallet, CalendarDays, Clock } from "@lucide/astro";
+---
+
+<section class="hts-calculator">
+  <div class="hts-layout">
+
+    <aside class="hts-sidebar">
+      <CalculatorField
+        id="hourlyRate"
+        label="Hourly Rate ($)"
+        type="number"
+        placeholder="e.g. 25"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="Your pay per hour worked."
+      />
+
+      <CalculatorField
+        id="hoursPerWeek"
+        label="Hours per Week"
+        type="number"
+        placeholder="e.g. 40"
+        required={true}
+        min="1"
+        max="168"
+        step="1"
+        helpText="Typical hours worked each week."
+      />
+
+      <CalculatorField
+        id="weeksPerYear"
+        label="Weeks per Year"
+        type="number"
+        placeholder="e.g. 52"
+        required={true}
+        min="1"
+        max="52"
+        step="1"
+        helpText="Weeks worked per year (52 for no unpaid time off)."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="hts-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="💵"
+          title="Hourly to Salary Calculator"
+          description="Convert your hourly rate into weekly, monthly and annual salary."
+          tips={["Weekly Salary", "Monthly Salary", "Annual Salary"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="annualSalaryResult" title="Annual Salary" icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="monthlySalaryResult" title="Monthly Salary" icon={CalendarDays} accent="primary" />
+          <ResultCard id="weeklySalaryResult" title="Weekly Salary" icon={Clock} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Converts your hourly rate into weekly, monthly and annual salary based on hours worked per week
+            and weeks worked per year. All calculations run locally — no external data or paid service is required.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/hourly-to-salary-calculator";
+</script>
+
+<style>
+.hts-calculator{ width:100%; }
+.hts-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.hts-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.hts-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid #E5E7EB; border-radius:18px; background:#FFFFFF; }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:#111827; }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:#6B7280; }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .calculator-info{ background:#111217; border-color:#27272A; }
+:global(.dark) .calculator-info h2{ color:#FAFAFA; }
+:global(.dark) .calculator-info p{ color:#A1A1AA; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .hts-layout{ grid-template-columns:1fr; } .hts-sidebar{ position:static; } }
+@media(max-width:768px){ .hts-layout{ gap:24px; } .hts-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

@@ -81,6 +81,13 @@ import CountdownCalculatorWidget from "../../components/tools/CountdownCalculato
 import DateDifferenceCalculatorWidget from "../../components/tools/DateDifferenceCalculatorWidget.astro";
 import TimeDurationCalculatorWidget from "../../components/tools/TimeDurationCalculatorWidget.astro";
 import TimezoneCalculatorWidget from "../../components/tools/TimezoneCalculatorWidget.astro";
+import MarkupCalculatorWidget from "../../components/tools/MarkupCalculatorWidget.astro";
+import USTakeHomePayWidget from "../../components/tools/USTakeHomePayWidget.astro";
+import CanadaTakeHomePayWidget from "../../components/tools/CanadaTakeHomePayWidget.astro";
+import CPPCalculatorWidget from "../../components/tools/CPPCalculatorWidget.astro";
+import EICalculatorWidget from "../../components/tools/EICalculatorWidget.astro";
+import NationalInsuranceWidget from "../../components/tools/NationalInsuranceWidget.astro";
+import UKTakeHomePayWidget from "../../components/tools/UKTakeHomePayWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 import { contentMap } from "../../data/calculator-content-map.js";
 import CalculatorContent from "../../components/content/CalculatorContent.astro";
@@ -329,7 +336,22 @@ const faqSchema = faqs.length > 0 ? {
     ) : tool.slug === "protein-calculator" ? (
       <ProteinCalculatorWidget />
     ) : tool.slug === "heart-rate-zone-calculator" ? (
-      <HeartRateCalculatorWidget />
+      <HeartRateCalculatorWidget />    ) : tool.slug === "markup-calculator" ? (
+      <MarkupCalculatorWidget />
+    ) : tool.slug === "us-take-home-pay-calculator" ? (
+      <USTakeHomePayWidget />
+    ) : tool.slug === "ca-take-home-pay-calculator" ? (
+      <CanadaTakeHomePayWidget />
+    ) : tool.slug === "cpp-calculator" ? (
+      <CPPCalculatorWidget />
+    ) : tool.slug === "ei-calculator" ? (
+      <EICalculatorWidget />
+      ) : tool.slug === "uk-take-home-pay-calculator" ? (
+      <UKTakeHomePayWidget />
+    ) : tool.slug === "uk-national-insurance-calculator" ? (
+      <NationalInsuranceWidget />
+  
+
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>

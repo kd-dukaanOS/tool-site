@@ -1,0 +1,306 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  DollarSign,
+  Users,
+  Wallet,
+  Target
+} from "@lucide/astro";
+---
+
+<section class="cac-calculator">
+
+  <div class="cac-layout">
+
+    <aside class="cac-sidebar">
+
+      <CalculatorField
+        id="marketingCost"
+        label="Marketing Cost"
+        type="number"
+        required={true}
+        helpText="Total marketing spend for the period."
+      />
+
+      <CalculatorField
+        id="salesCost"
+        label="Sales Cost"
+        type="number"
+        helpText="Total sales team spend for the period (optional)."
+      />
+
+      <CalculatorField
+        id="newCustomers"
+        label="New Customers"
+        type="number"
+        required={true}
+        helpText="Number of new customers acquired in the period."
+      />
+
+      <CalculatorField
+        id="totalLeads"
+        label="Total Leads"
+        type="number"
+        helpText="Total leads generated, to also see cost per lead (optional)."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+
+    </aside>
+
+    <main class="cac-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🎯"
+          title="Customer Acquisition Cost Calculator"
+          description="Find out how much it costs to acquire a new customer."
+          tips={[
+            "CAC per Customer",
+            "Total Spend",
+            "Cost per Lead"
+          ]}
+        />
+
+      </div>
+
+      <div id="resultsContainer" hidden>
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="cacResult"
+            title="Customer Acquisition Cost"
+            icon={Target}
+            subtitle=" "
+          />
+
+          <ResultCard
+            id="totalSpendResult"
+            title="Total Spend"
+            icon={Wallet}
+          />
+
+          <ResultCard
+            id="costPerLeadResult"
+            title="Cost per Lead"
+            icon={Users}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Calculate your Customer Acquisition Cost (CAC) by combining
+            marketing and sales spend and dividing by the number of new
+            customers acquired. Compare this against Customer Lifetime
+            Value to check whether your acquisition spend is sustainable.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/customer-acquisition-cost";
+</script>
+
+<style>
+
+.cac-calculator{
+
+width:100%;
+
+}
+
+.cac-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.cac-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.cac-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.cac-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.cac-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.cac-layout{
+
+gap:24px;
+
+}
+
+.cac-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

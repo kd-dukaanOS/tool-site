@@ -1,41 +1,60 @@
+// src/utils/profit-margin.ts
 export interface ProfitMarginInput {
-  costPrice: number;
-  sellingPrice: number;
+  revenue: number;
+  cost: number;
 }
 
 export interface ProfitMarginResult {
   profit: number;
-  profitMarginPercent: number;
-  markupPercent: number;
+  marginPercent: number;
 }
 
-export function validateProfitMarginInput(i: ProfitMarginInput): string | null {
-  if (i.costPrice <= 0) return "Enter a valid cost price.";
-  if (i.sellingPrice <= 0) return "Enter a valid selling price.";
+export function validateProfitMarginInput(input: ProfitMarginInput): string | null {
+  const { revenue, cost } = input;
+
+  if (!revenue || Number.isNaN(revenue) || revenue <= 0) {
+    return "Please enter a valid revenue greater than 0.";
+  }
+  if (cost === undefined || Number.isNaN(cost) || cost < 0) {
+    return "Please enter a valid cost (0 or more).";
+  }
+  if (cost > revenue) {
+    return "Cost cannot be greater than revenue.";
+  }
+
   return null;
 }
 
-export function calculateProfitMargin(i: ProfitMarginInput): ProfitMarginResult {
-  const profit = i.sellingPrice - i.costPrice;
-  const profitMarginPercent = (profit / i.sellingPrice) * 100;
-  const markupPercent = (profit / i.costPrice) * 100;
+export function calculateProfitMargin(input: ProfitMarginInput): ProfitMarginResult {
+  const { revenue, cost } = input;
+  const profit = revenue - cost;
+  const marginPercent = (profit / revenue) * 100;
 
-  return {
-    profit: Math.round(profit),
-    profitMarginPercent: Math.round(profitMarginPercent * 100) / 100,
-    markupPercent: Math.round(markupPercent * 100) / 100,
-  };
+  return { profit, marginPercent };
 }
 
-export function copyProfitMarginSummary(i: ProfitMarginInput, r: ProfitMarginResult): string {
+export function formatCurrency(value: number): string {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+export function copyProfitMarginSummary(input: ProfitMarginInput, result: ProfitMarginResult): string {
   return `
 Profit Margin Summary
 
-Cost Price: ₹${i.costPrice}
-Selling Price: ₹${i.sellingPrice}
+Revenue:
+${formatCurrency(input.revenue)}
 
-Profit: ₹${r.profit}
-Profit Margin: ${r.profitMarginPercent}%
-Markup: ${r.markupPercent}%
+Cost:
+${formatCurrency(input.cost)}
+
+Profit:
+${formatCurrency(result.profit)}
+
+Profit Margin:
+${result.marginPercent.toFixed(1)}%
 `.trim();
 }

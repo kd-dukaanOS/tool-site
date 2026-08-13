@@ -1,36 +1,27 @@
 ---
-const avatars = [
-  'https://i.pravatar.cc/64?img=12',
-  'https://i.pravatar.cc/64?img=32',
-  'https://i.pravatar.cc/64?img=47',
-  'https://i.pravatar.cc/64?img=5',
+const highlights = [
+  { icon: '🔒', text: 'Calculations run in your browser — nothing you type is uploaded.' },
+  { icon: '⚡', text: 'No sign-up, no install. Open a tool and get your result instantly.' },
+  { icon: '♾️', text: 'Every tool is free with unlimited use, no paywalls or limits.' },
 ];
 ---
 <section class="ts-social">
   <div class="ts-social-inner">
     <div class="ts-social-left">
-      <div class="ts-social-avatars">
-        {avatars.map((src) => <img src={src} alt="" class="ts-social-avatar" />)}
-        <span class="ts-social-more">+5K</span>
-      </div>
       <div>
-        <p class="ts-social-title">Trusted by thousands</p>
-        <p class="ts-social-sub">Developers, creators, students, and professionals use ToolSite every day.</p>
-        <div class="ts-social-rating">★★★★★ <span>4.9/5 from 3,200+ users</span></div>
+        <p class="ts-social-title">Built for speed and privacy</p>
+        <p class="ts-social-sub">77+ browser-based tools, no accounts required.</p>
       </div>
     </div>
 
-    <blockquote class="ts-social-quote">
-      <span class="ts-social-quote-mark">"</span>
-      <p>ToolSite is my daily companion. Fast, private, and beautiful!</p>
-      <footer>
-        <img src="https://i.pravatar.cc/64?img=8" alt="" />
-        <div>
-          <strong>Arjun Sharma</strong>
-          <span>Full Stack Developer</span>
+    <div class="ts-social-quote">
+      {highlights.map((h) => (
+        <div class="ts-social-highlight">
+          <span class="ts-social-highlight-icon">{h.icon}</span>
+          <p>{h.text}</p>
         </div>
-      </footer>
-    </blockquote>
+      ))}
+    </div>
   </div>
 </section>
 
@@ -42,34 +33,18 @@ const avatars = [
     align-items: center;
   }
   .ts-social-left { display: flex; gap: var(--space-4); align-items: flex-start; }
-  .ts-social-avatars { display: flex; align-items: center; flex-shrink: 0; }
-  .ts-social-avatar {
-    width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
-    border: 2px solid var(--bg-card); margin-left: -10px;
-  }
-  .ts-social-avatar:first-child { margin-left: 0; }
-  .ts-social-more {
-    width: 40px; height: 40px; border-radius: 50%; margin-left: -10px;
-    background: var(--color-primary-light); color: var(--color-primary-dark);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; border: 2px solid var(--bg-card);
-  }
   .ts-social-title { font-family: var(--font-sans); font-weight: 700; font-size: var(--fs-h3); color: var(--text-primary); margin: 0 0 4px; }
-  .ts-social-sub { font-size: var(--fs-small); color: var(--text-secondary); margin: 0 0 8px; max-width: 320px; }
-  .ts-social-rating { font-size: 13px; color: #f59e0b; }
-  .ts-social-rating span { color: var(--text-muted); margin-left: 6px; }
+  .ts-social-sub { font-size: var(--fs-small); color: var(--text-secondary); margin: 0; max-width: 320px; }
 
   .ts-social-quote {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl); padding: var(--space-6);
     box-shadow: var(--shadow-sm); margin: 0;
+    display: flex; flex-direction: column; gap: var(--space-3);
   }
-  .ts-social-quote-mark { font-size: 32px; color: var(--color-primary); line-height: 1; font-family: Georgia, serif; }
-  .ts-social-quote p { font-size: var(--fs-body); font-weight: 600; color: var(--text-primary); margin: 4px 0 var(--space-4); }
-  .ts-social-quote footer { display: flex; align-items: center; gap: var(--space-2); }
-  .ts-social-quote footer img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
-  .ts-social-quote footer strong { display: block; font-size: 13px; color: var(--text-primary); }
-  .ts-social-quote footer span { font-size: 12px; color: var(--text-muted); }
+  .ts-social-highlight { display: flex; align-items: flex-start; gap: var(--space-3); }
+  .ts-social-highlight-icon { font-size: 18px; line-height: 1.4; flex-shrink: 0; }
+  .ts-social-highlight p { font-size: var(--fs-small); color: var(--text-primary); margin: 0; line-height: 1.5; }
 
   @media (max-width: 720px) {
     .ts-social-inner { grid-template-columns: 1fr; }

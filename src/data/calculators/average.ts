@@ -104,9 +104,8 @@ Use this tool whenever you need a fast, error-free average of a small to medium 
 
   relatedCalculators: [
     "Percentage Calculator",
-    "GPA Calculator",
     "Standard Deviation Calculator",
-    "Median Calculator",
+    "Mean Median Mode Calculator",
     "Weighted Average Calculator",
     "Sum Calculator",
   ],

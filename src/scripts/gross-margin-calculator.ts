@@ -1,9 +1,9 @@
-// src/scripts/profit-margin-calculator.ts
-import { validateProfitMarginInput, calculateProfitMargin, formatCurrency, copyProfitMarginSummary } from "../utils/profit-margin";
+// src/scripts/gross-margin-calculator.ts
+import { validateGrossMarginInput, calculateGrossMargin, formatCurrency, copyGrossMarginSummary } from "../utils/gross-margin";
 import { setValue, copyToClipboard } from "../utils/calculator";
 
 const revenueInput = document.getElementById("revenue") as HTMLInputElement;
-const costInput = document.getElementById("cost") as HTMLInputElement;
+const cogsInput = document.getElementById("cogs") as HTMLInputElement;
 
 const calculateBtn = document.getElementById("calculateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -13,8 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
-let lastInput: { revenue: number; cost: number } | null = null;
-let lastResult: ReturnType<typeof calculateProfitMargin> | null = null;
+let lastInput: { revenue: number; cogs: number } | null = null;
+let lastResult: ReturnType<typeof calculateGrossMargin> | null = null;
 
 function showError(msg: string) {
   errorBox.textContent = msg;
@@ -30,19 +30,19 @@ function calculate() {
 
   const input = {
     revenue: parseFloat(revenueInput.value),
-    cost: parseFloat(costInput.value),
+    cogs: parseFloat(cogsInput.value),
   };
 
-  const error = validateProfitMarginInput(input);
+  const error = validateGrossMarginInput(input);
   if (error) {
     showError(error);
     return;
   }
 
-  const result = calculateProfitMargin(input);
+  const result = calculateGrossMargin(input);
 
-  setValue("profitResult", formatCurrency(result.profit));
-  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
+  setValue("grossProfitResult", formatCurrency(result.grossProfit));
+  setValue("grossMarginResult", `${result.grossMarginPercent.toFixed(1)}%`);
 
   lastInput = input;
   lastResult = result;
@@ -53,7 +53,7 @@ function calculate() {
 
 function reset() {
   revenueInput.value = "";
-  costInput.value = "";
+  cogsInput.value = "";
   clearError();
   lastInput = null;
   lastResult = null;
@@ -63,7 +63,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult));
+  copyToClipboard(copyGrossMarginSummary(lastInput, lastResult));
 }
 
 calculateBtn?.addEventListener("click", calculate);

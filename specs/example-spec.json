@@ -1,0 +1,14 @@
+{
+  "slug": "markup-calculator",
+  "category": "business",
+  "name": "Markup Calculator",
+  "desc": "Find markup % and sale price from cost",
+  "fields": [
+    { "id": "cost", "label": "Cost ($)", "type": "number", "placeholder": "e.g. 40" },
+    { "id": "markupPercent", "label": "Markup (%)", "type": "number", "placeholder": "e.g. 25" }
+  ],
+  "results": [
+    { "id": "salePriceResult", "title": "Sale Price", "accent": "success", "size": "lg" },
+    { "id": "profitResult", "title": "Profit", "accent": "primary" }
+  ]
+}

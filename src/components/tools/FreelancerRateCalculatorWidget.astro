@@ -1,0 +1,134 @@
+{/* src/components/tools/FreelancerRateCalculatorWidget.astro */}
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";
+---
+
+<section class="fr-calculator">
+  <div class="fr-layout">
+
+    <aside class="fr-sidebar">
+      <CalculatorField
+        id="desiredAnnualIncome"
+        label="Desired Annual Income ($)"
+        type="number"
+        placeholder="e.g. 60000"
+        required={true}
+        min="0"
+        step="1"
+        helpText="Take-home income you want to earn per year."
+      />
+
+      <CalculatorField
+        id="annualExpenses"
+        label="Annual Business Expenses ($)"
+        type="number"
+        placeholder="e.g. 5000"
+        min="0"
+        step="1"
+        helpText="Software, equipment, insurance, and other business costs."
+      />
+
+      <CalculatorField
+        id="billableHoursPerWeek"
+        label="Billable Hours per Week"
+        type="number"
+        placeholder="e.g. 25"
+        required={true}
+        min="1"
+        max="168"
+        step="1"
+        helpText="Hours you can actually bill clients, not total hours worked."
+      />
+
+      <CalculatorField
+        id="weeksPerYear"
+        label="Working Weeks per Year"
+        type="number"
+        placeholder="e.g. 48"
+        required={true}
+        min="1"
+        max="52"
+        step="1"
+        helpText="Weeks you work, after subtracting holidays and time off."
+      />
+
+      <CalculatorField
+        id="taxRate"
+        label="Tax Rate (%)"
+        type="number"
+        placeholder="e.g. 25"
+        min="0"
+        max="99"
+        step="0.1"
+        helpText="Estimated income + self-employment tax rate."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="fr-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🧑‍💻"
+          title="Freelancer Hourly Rate Calculator"
+          description="Find the hourly rate you need to charge to hit your income goal after expenses and taxes."
+          tips={["Hourly Rate", "Daily Rate", "Billable Hours", "Gross Revenue Needed"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="hourlyRateResult" title="Hourly Rate" icon={Clock} accent="success" size="lg" />
+          <ResultCard id="dailyRateResult" title="Daily Rate" icon={Sun} accent="primary" />
+          <ResultCard id="billableHoursResult" title="Annual Billable Hours" icon={CalendarClock} />
+          <ResultCard id="grossRevenueResult" title="Gross Revenue Needed" icon={Wallet} />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Calculates the hourly rate you need to charge clients to hit your desired income after
+            business expenses and taxes, based on your realistic billable hours. All calculations
+            run locally — no external data or paid service is required.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/freelancer-rate-calculator";
+</script>
+
+<style>
+.fr-calculator{ width:100%; }
+.fr-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.fr-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.fr-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid #E5E7EB; border-radius:18px; background:#FFFFFF; }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:#111827; }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:#6B7280; }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .calculator-info{ background:#111217; border-color:#27272A; }
+:global(.dark) .calculator-info h2{ color:#FAFAFA; }
+:global(.dark) .calculator-info p{ color:#A1A1AA; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .fr-layout{ grid-template-columns:1fr; } .fr-sidebar{ position:static; } }
+@media(max-width:768px){ .fr-layout{ gap:24px; } .fr-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

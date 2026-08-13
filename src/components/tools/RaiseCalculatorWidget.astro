@@ -1,4 +1,4 @@
-
+{/* src/components/tools/RaiseCalculatorWidget.astro */}
 ---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
@@ -6,33 +6,32 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
-import { DollarSign, Percent } from "@lucide/astro";
+import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
 ---
 
-<section class="pm-calculator">
-  <div class="pm-layout">
+<section class="raise-calculator">
+  <div class="raise-layout">
 
-    <aside class="pm-sidebar">
+    <aside class="raise-sidebar">
       <CalculatorField
-        id="revenue"
-        label="Revenue ($)"
+        id="currentSalary"
+        label="Current Salary ($)"
         type="number"
-        placeholder="e.g. 1000"
+        placeholder="e.g. 60000"
         required={true}
         min="0"
-        step="0.01"
-        helpText="Total sales revenue."
+        step="1"
+        helpText="Your current annual salary."
       />
 
       <CalculatorField
-        id="cost"
-        label="Cost ($)"
+        id="raisePercent"
+        label="Raise (%)"
         type="number"
-        placeholder="e.g. 600"
+        placeholder="e.g. 5"
         required={true}
-        min="0"
-        step="0.01"
-        helpText="Total cost of goods sold."
+        step="0.1"
+        helpText="Percentage increase you're getting or requesting."
       />
 
       <CalculatorActions
@@ -45,26 +44,27 @@ import { DollarSign, Percent } from "@lucide/astro";
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
-    <main class="pm-content">
+    <main class="raise-content">
       <div id="emptyState">
         <EmptyState
-          icon="📊"
-          title="Profit Margin Calculator"
-          description="Find your profit and profit margin percentage from revenue and cost."
-          tips={["Profit", "Profit Margin %"]}
+          icon="📈"
+          title="Raise Calculator"
+          description="Find your new salary and raise amount from your current salary and raise percentage."
+          tips={["New Salary", "Raise Amount", "Monthly Increase"]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
-        <ResultsGrid columns={2}>
-          <ResultCard id="profitResult" title="Profit" icon={DollarSign} accent="success" size="lg" />
-          <ResultCard id="marginResult" title="Profit Margin" icon={Percent} accent="primary" />
+        <ResultsGrid columns={3}>
+          <ResultCard id="newSalaryResult" title="New Salary" icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="raiseAmountResult" title="Raise Amount" icon={TrendingUp} accent="primary" />
+          <ResultCard id="monthlyIncreaseResult" title="Monthly Increase" icon={CalendarDays} />
         </ResultsGrid>
 
         <section class="calculator-info">
           <h2>About this Calculator</h2>
           <p>
-            Calculates your profit and profit margin percentage from revenue and cost.
+            Calculates your new salary and raise amount from your current salary and raise percentage.
             All calculations run locally — no external data or paid service is required.
           </p>
         </section>
@@ -75,14 +75,14 @@ import { DollarSign, Percent } from "@lucide/astro";
 </section>
 
 <script>
-  import "../../scripts/profit-margin-calculator";
+  import "../../scripts/raise-calculator";
 </script>
 
 <style>
-.pm-calculator{ width:100%; }
-.pm-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
-.pm-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
-.pm-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.raise-calculator{ width:100%; }
+.raise-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.raise-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.raise-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
 .calculator-info{ padding:24px; border:1px solid #E5E7EB; border-radius:18px; background:#FFFFFF; }
 .calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:#111827; }
 .calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:#6B7280; }
@@ -91,7 +91,7 @@ import { DollarSign, Percent } from "@lucide/astro";
 :global(.dark) .calculator-info h2{ color:#FAFAFA; }
 :global(.dark) .calculator-info p{ color:#A1A1AA; }
 :global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
-@media(max-width:1024px){ .pm-layout{ grid-template-columns:1fr; } .pm-sidebar{ position:static; } }
-@media(max-width:768px){ .pm-layout{ gap:24px; } .pm-content{ gap:20px; } }
+@media(max-width:1024px){ .raise-layout{ grid-template-columns:1fr; } .raise-sidebar{ position:static; } }
+@media(max-width:768px){ .raise-layout{ gap:24px; } .raise-content{ gap:20px; } }
 @media(max-width:640px){ .calculator-info{ padding:18px; } }
 </style>

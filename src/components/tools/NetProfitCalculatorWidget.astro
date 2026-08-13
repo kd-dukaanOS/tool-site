@@ -1,4 +1,4 @@
-
+{/* src/components/tools/NetProfitCalculatorWidget.astro */}
 ---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
@@ -9,15 +9,15 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { DollarSign, Percent } from "@lucide/astro";
 ---
 
-<section class="pm-calculator">
-  <div class="pm-layout">
+<section class="np-calculator">
+  <div class="np-layout">
 
-    <aside class="pm-sidebar">
+    <aside class="np-sidebar">
       <CalculatorField
         id="revenue"
         label="Revenue ($)"
         type="number"
-        placeholder="e.g. 1000"
+        placeholder="e.g. 20000"
         required={true}
         min="0"
         step="0.01"
@@ -25,14 +25,14 @@ import { DollarSign, Percent } from "@lucide/astro";
       />
 
       <CalculatorField
-        id="cost"
-        label="Cost ($)"
+        id="totalExpenses"
+        label="Total Expenses ($)"
         type="number"
-        placeholder="e.g. 600"
+        placeholder="e.g. 15000"
         required={true}
         min="0"
         step="0.01"
-        helpText="Total cost of goods sold."
+        helpText="All costs: COGS, operating expenses, taxes, interest."
       />
 
       <CalculatorActions
@@ -45,27 +45,28 @@ import { DollarSign, Percent } from "@lucide/astro";
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
-    <main class="pm-content">
+    <main class="np-content">
       <div id="emptyState">
         <EmptyState
-          icon="📊"
-          title="Profit Margin Calculator"
-          description="Find your profit and profit margin percentage from revenue and cost."
-          tips={["Profit", "Profit Margin %"]}
+          icon="💰"
+          title="Net Profit Calculator"
+          description="Find your net profit and net profit margin from total revenue and total expenses."
+          tips={["Net Profit", "Net Margin %"]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="profitResult" title="Profit" icon={DollarSign} accent="success" size="lg" />
-          <ResultCard id="marginResult" title="Profit Margin" icon={Percent} accent="primary" />
+          <ResultCard id="netProfitResult" title="Net Profit" icon={DollarSign} accent="success" size="lg" />
+          <ResultCard id="netMarginResult" title="Net Profit Margin" icon={Percent} accent="primary" />
         </ResultsGrid>
 
         <section class="calculator-info">
           <h2>About this Calculator</h2>
           <p>
-            Calculates your profit and profit margin percentage from revenue and cost.
-            All calculations run locally — no external data or paid service is required.
+            Calculates your net profit and net profit margin from total revenue and total expenses,
+            covering COGS, operating costs, interest and taxes. All calculations run locally —
+            no external data or paid service is required.
           </p>
         </section>
       </div>
@@ -75,14 +76,14 @@ import { DollarSign, Percent } from "@lucide/astro";
 </section>
 
 <script>
-  import "../../scripts/profit-margin-calculator";
+  import "../../scripts/net-profit-calculator";
 </script>
 
 <style>
-.pm-calculator{ width:100%; }
-.pm-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
-.pm-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
-.pm-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.np-calculator{ width:100%; }
+.np-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.np-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.np-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
 .calculator-info{ padding:24px; border:1px solid #E5E7EB; border-radius:18px; background:#FFFFFF; }
 .calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:#111827; }
 .calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:#6B7280; }
@@ -91,7 +92,7 @@ import { DollarSign, Percent } from "@lucide/astro";
 :global(.dark) .calculator-info h2{ color:#FAFAFA; }
 :global(.dark) .calculator-info p{ color:#A1A1AA; }
 :global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
-@media(max-width:1024px){ .pm-layout{ grid-template-columns:1fr; } .pm-sidebar{ position:static; } }
-@media(max-width:768px){ .pm-layout{ gap:24px; } .pm-content{ gap:20px; } }
+@media(max-width:1024px){ .np-layout{ grid-template-columns:1fr; } .np-sidebar{ position:static; } }
+@media(max-width:768px){ .np-layout{ gap:24px; } .np-content{ gap:20px; } }
 @media(max-width:640px){ .calculator-info{ padding:18px; } }
 </style>

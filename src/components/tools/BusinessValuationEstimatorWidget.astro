@@ -1,0 +1,359 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Building2,
+  TrendingUp,
+  LineChart,
+  Landmark
+} from "@lucide/astro";
+---
+
+<section class="valuation-calculator">
+
+  <div class="valuation-layout">
+
+    <aside class="valuation-sidebar">
+
+      <CalculatorField
+        id="annualRevenue"
+        label="Annual Revenue"
+        type="number"
+        required={true}
+        helpText="Total revenue over the last 12 months."
+      />
+
+      <CalculatorField
+        id="annualProfit"
+        label="Annual Net Profit"
+        type="number"
+        required={true}
+        helpText="Net profit over the last 12 months."
+      />
+
+      <CalculatorField
+        id="revenueMultiple"
+        label="Revenue Multiple"
+        type="number"
+        required={true}
+        helpText="Industry-typical multiple applied to revenue, e.g. 2."
+      />
+
+      <CalculatorField
+        id="earningsMultiple"
+        label="Earnings Multiple"
+        type="number"
+        required={true}
+        helpText="Industry-typical multiple applied to profit, e.g. 4."
+      />
+
+      <label class="field-label" for="valuationMethod">Valuation Method</label>
+      <select id="valuationMethod" class="field-select">
+        <option value="average">Average of both methods</option>
+        <option value="revenue">Revenue method only</option>
+        <option value="earnings">Earnings method only</option>
+      </select>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+
+    </aside>
+
+    <main class="valuation-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🏢"
+          title="Business Valuation Estimator"
+          description="Get a quick estimate of what your business might be worth."
+          tips={[
+            "Revenue Method",
+            "Earnings Method",
+            "Blended Estimate"
+          ]}
+        />
+
+      </div>
+
+      <div id="resultsContainer" hidden>
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="finalValuationResult"
+            title="Estimated Valuation"
+            icon={Building2}
+            subtitle=" "
+          />
+
+          <ResultCard
+            id="revenueValuationResult"
+            title="Revenue Method"
+            icon={LineChart}
+          />
+
+          <ResultCard
+            id="earningsValuationResult"
+            title="Earnings Method"
+            icon={TrendingUp}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Get a quick, directional estimate of your business's value
+            using revenue and earnings multiple methods. This is not a
+            substitute for a formal valuation from a qualified financial
+            professional.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/business-valuation-estimator";
+</script>
+
+<style>
+
+.valuation-calculator{
+
+width:100%;
+
+}
+
+.valuation-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.valuation-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.valuation-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.field-label{
+
+font-size:.85rem;
+
+font-weight:600;
+
+color:#374151;
+
+}
+
+.field-select{
+
+width:100%;
+
+padding:10px 12px;
+
+border-radius:12px;
+
+border:1px solid #E5E7EB;
+
+background:#FFFFFF;
+
+font-size:.92rem;
+
+color:#111827;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .field-label{
+
+color:#D4D4D8;
+
+}
+
+:global(.dark) .field-select{
+
+background:#111217;
+
+border-color:#27272A;
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.valuation-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.valuation-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.valuation-layout{
+
+gap:24px;
+
+}
+
+.valuation-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>

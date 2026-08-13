@@ -24,10 +24,12 @@ export const categories = [
   { slug: "finance", name: "Finance Calculators", description: "Loans, deposits, investments, and everyday finance math." },
   { slug: "health", name: "Health Calculators", description: "BMI, calories, and everyday health tracking tools." },
   { slug: "date-time", name: "Date & Time Calculators", description: "Age, dates, and time-based calculators." },
-  { slug: "math-stats", name: "Math & Stats Calculators", description: "Everyday math and statistics calculators." },
+  { slug: "business", name: "Business Tools", description: "Calculators for pricing, margins, and profitability." },
+  { slug: "math-stats", name: "Math & Stats Calculators", description: "Averages, ratios, and everyday math tools." },
 ];
 
 export const tools = [
+  { slug: "markup-calculator", category: "business", name: "Markup Calculator", desc: "Find markup % and sale price from cost" },
   // Text Tools
   { slug: "word-counter", category: "text-tools", name: "Word Counter", desc: "Count words & characters",
     about: "A word counter instantly tells you how many words, characters, and sentences are in a piece of text — something that matters the moment you're working against a limit. This free online word counter and character counter updates in real time as you type or paste: it shows your word count, total character count, character count excluding spaces, and sentence count, all at once. Students use it to stay inside an essay's word range, writers use it to hit a blog post's target length, social media managers use it to check a caption fits X's or Instagram's character limit, and SEO writers use it to keep a meta description under Google's ~155-160 character display limit. Because everything updates live and runs entirely in your browser, there's no need to copy your draft into Word just to check a count, and nothing you paste is ever uploaded anywhere. It works with text pasted from Word, Google Docs, emails, or any other source, with no length limit and no sign-up.",
@@ -276,6 +278,13 @@ export const tools = [
   { slug: "profit-margin-calculator", category: "finance", name: "Profit Margin Calculator", desc: "Calculate profit margin %" },
   { slug: "inventory-turnover-calculator", category: "finance", name: "Inventory Turnover Calculator", desc: "Measure inventory efficiency" },
   { slug: "invoice-due-date-calculator", category: "finance", name: "Invoice Due Date Calculator", desc: "Calculate invoice due dates" },
+  { slug: "us-take-home-pay-calculator", category: "finance", name: "US Take-Home Pay Calculator", desc: "Net pay after federal tax & FICA" },
+  { slug: "ca-take-home-pay-calculator", category: "finance", name: "Canada Take-Home Pay Calculator", desc: "Net pay after federal, provincial tax, CPP & EI" },
+  { slug: "cpp-calculator", category: "finance", name: "CPP Calculator", desc: "Estimate your Canada Pension Plan contribution" },
+  { slug: "ei-calculator", category: "finance", name: "EI Calculator", desc: "Estimate your Employment Insurance premium" },
+  { slug: "uk-national-insurance-calculator", category: "finance", name: "National Insurance Calculator", desc: "Estimate your UK Class 1 NI contribution" },
+  { slug: "uk-take-home-pay-calculator", category: "finance", name: "UK Take-Home Pay Calculator", desc: "Net pay after Income Tax & National Insurance" },
+  
 
   // Converters batch
   { slug: "area-converter", category: "converters", name: "Area Converter", desc: "Convert between area units" },

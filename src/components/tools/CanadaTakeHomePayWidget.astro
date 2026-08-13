@@ -1,0 +1,64 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Wallet, CalendarDays, Repeat, MinusCircle } from "@lucide/astro";
+---
+<section class="cats-calculator">
+  <div class="cats-layout">
+    <aside class="cats-sidebar">
+      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross salary before deductions (CAD)." />
+      <label class="field-label" for="province">Province</label>
+      <select id="province" class="field-select">
+        <option value="ON">Ontario</option>
+        <option value="AB">Alberta</option>
+        <option value="BC">British Columbia</option>
+      </select>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="cats-content">
+      <div id="emptyState">
+        <EmptyState icon="🍁" title="Canada Take-Home Pay Calculator" description="See your net salary after federal tax, provincial tax, CPP and EI." tips={["Net Annual Pay", "Federal & Provincial Tax", "CPP & EI"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="netAnnualResult" title="Net Annual Pay" icon={Wallet} subtitle=" " />
+          <ResultCard id="netMonthlyResult" title="Net Monthly" icon={CalendarDays} />
+          <ResultCard id="netBiweeklyResult" title="Net Biweekly" icon={Repeat} />
+          <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={MinusCircle} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates net pay after federal tax, provincial tax, CPP and EI deductions. Results are estimates — verify against current CRA and provincial figures.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/ca-take-home-pay";
+</script>
+<style>
+.cats-calculator{width:100%;}
+.cats-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.cats-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.cats-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.field-label{font-size:.85rem;font-weight:600;color:#374151;}
+.field-select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #E5E7EB;background:#FFFFFF;font-size:.92rem;color:#111827;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .field-label{color:#D4D4D8;}
+:global(.dark) .field-select{background:#111217;border-color:#27272A;color:#FAFAFA;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.cats-layout{grid-template-columns:1fr;}.cats-sidebar{position:static;}}
+@media(max-width:768px){.cats-layout{gap:24px;}.cats-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

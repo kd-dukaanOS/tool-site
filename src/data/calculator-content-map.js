@@ -1,6 +1,7 @@
 // src/data/calculator-content-map.js
 // Maps a tools.js slug to its content filename in src/data/calculators/
 export const contentMap = {
+  "markup-calculator": "markup",
   "word-counter": "word-counter",
   "case-converter": "case-converter",
   "markdown-previewer": "markdown-previewer",
@@ -81,4 +82,10 @@ export const contentMap = {
   "prime-number-calculator": "prime-number",
   "ratio-calculator": "ratio",
   "standard-deviation-calculator": "standard-deviation",
-};
+  "us-take-home-pay-calculator": "us-take-home-pay",
+  "ca-take-home-pay-calculator": "ca-take-home-pay",
+  "cpp-calculator": "cpp",
+  "ei-calculator": "ei",
+  "uk-national-insurance-calculator": "uk-national-insurance",
+  "uk-take-home-pay-calculator": "uk-take-home-pay",
+  };

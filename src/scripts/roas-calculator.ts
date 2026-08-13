@@ -1,9 +1,9 @@
-// src/scripts/profit-margin-calculator.ts
-import { validateProfitMarginInput, calculateProfitMargin, formatCurrency, copyProfitMarginSummary } from "../utils/profit-margin";
+// src/scripts/roas-calculator.ts
+import { validateRoasInput, calculateRoas, formatCurrency, copyRoasSummary } from "../utils/roas";
 import { setValue, copyToClipboard } from "../utils/calculator";
 
 const revenueInput = document.getElementById("revenue") as HTMLInputElement;
-const costInput = document.getElementById("cost") as HTMLInputElement;
+const adSpendInput = document.getElementById("adSpend") as HTMLInputElement;
 
 const calculateBtn = document.getElementById("calculateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -13,8 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
-let lastInput: { revenue: number; cost: number } | null = null;
-let lastResult: ReturnType<typeof calculateProfitMargin> | null = null;
+let lastInput: { revenue: number; adSpend: number } | null = null;
+let lastResult: ReturnType<typeof calculateRoas> | null = null;
 
 function showError(msg: string) {
   errorBox.textContent = msg;
@@ -30,19 +30,20 @@ function calculate() {
 
   const input = {
     revenue: parseFloat(revenueInput.value),
-    cost: parseFloat(costInput.value),
+    adSpend: parseFloat(adSpendInput.value),
   };
 
-  const error = validateProfitMarginInput(input);
+  const error = validateRoasInput(input);
   if (error) {
     showError(error);
     return;
   }
 
-  const result = calculateProfitMargin(input);
+  const result = calculateRoas(input);
 
+  setValue("roasResult", `${result.roas.toFixed(2)}x`);
+  setValue("roasPercentResult", `${result.roasPercent.toFixed(1)}%`);
   setValue("profitResult", formatCurrency(result.profit));
-  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
 
   lastInput = input;
   lastResult = result;
@@ -53,7 +54,7 @@ function calculate() {
 
 function reset() {
   revenueInput.value = "";
-  costInput.value = "";
+  adSpendInput.value = "";
   clearError();
   lastInput = null;
   lastResult = null;
@@ -63,7 +64,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult));
+  copyToClipboard(copyRoasSummary(lastInput, lastResult));
 }
 
 calculateBtn?.addEventListener("click", calculate);

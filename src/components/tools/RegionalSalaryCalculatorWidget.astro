@@ -1,0 +1,67 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Clock3, Sun, CalendarDays, Repeat, CalendarRange, Wallet } from "@lucide/astro";
+---
+<section class="salary-calculator">
+  <div class="salary-layout">
+    <aside class="salary-sidebar">
+      <label class="field-label" for="period">I'm entering</label>
+      <select id="period" class="field-select">
+        <option value="annual">Annual Salary</option>
+        <option value="hourly">Hourly Rate</option>
+      </select>
+      <CalculatorField id="amount" label="Amount" type="number" required={true} helpText="Enter the hourly rate or annual salary." />
+      <CalculatorField id="hoursPerWeek" label="Hours per Week" type="number" helpText="Default: 40" />
+      <CalculatorField id="weeksPerYear" label="Weeks per Year" type="number" helpText="Default: 52" />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="salary-content">
+      <div id="emptyState">
+        <EmptyState icon="💰" title="Salary Calculator" description="Convert your pay between hourly, weekly, monthly and annual." tips={["Hourly to Annual", "Annual to Hourly", "Full Pay Breakdown"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="hourlyResult" title="Hourly" icon={Clock3} />
+          <ResultCard id="dailyResult" title="Daily" icon={Sun} />
+          <ResultCard id="weeklyResult" title="Weekly" icon={CalendarDays} />
+          <ResultCard id="biweeklyResult" title="Biweekly" icon={Repeat} />
+          <ResultCard id="monthlyResult" title="Monthly" icon={CalendarRange} />
+          <ResultCard id="annualResult" title="Annual" icon={Wallet} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Converts gross pay between hourly, daily, weekly, biweekly, monthly and annual figures. For net pay after tax, use the country-specific Take-Home Pay Calculator.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/salary-calculator";
+</script>
+<style>
+.salary-calculator{width:100%;}
+.salary-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.salary-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.salary-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.field-label{font-size:.85rem;font-weight:600;color:#374151;}
+.field-select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #E5E7EB;background:#FFFFFF;font-size:.92rem;color:#111827;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .field-label{color:#D4D4D8;}
+:global(.dark) .field-select{background:#111217;border-color:#27272A;color:#FAFAFA;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.salary-layout{grid-template-columns:1fr;}.salary-sidebar{position:static;}}
+@media(max-width:768px){.salary-layout{gap:24px;}.salary-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

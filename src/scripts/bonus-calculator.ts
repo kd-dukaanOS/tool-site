@@ -1,9 +1,10 @@
-// src/scripts/profit-margin-calculator.ts
-import { validateProfitMarginInput, calculateProfitMargin, formatCurrency, copyProfitMarginSummary } from "../utils/profit-margin";
+// src/scripts/bonus-calculator.ts
+import { validateBonusInput, calculateBonus, formatCurrency, copyBonusSummary } from "../utils/bonus";
 import { setValue, copyToClipboard } from "../utils/calculator";
 
-const revenueInput = document.getElementById("revenue") as HTMLInputElement;
-const costInput = document.getElementById("cost") as HTMLInputElement;
+const annualSalaryInput = document.getElementById("annualSalary") as HTMLInputElement;
+const bonusPercentInput = document.getElementById("bonusPercent") as HTMLInputElement;
+const taxRateInput = document.getElementById("taxRate") as HTMLInputElement;
 
 const calculateBtn = document.getElementById("calculateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -13,8 +14,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
-let lastInput: { revenue: number; cost: number } | null = null;
-let lastResult: ReturnType<typeof calculateProfitMargin> | null = null;
+let lastInput: { annualSalary: number; bonusPercent: number; taxRate: number } | null = null;
+let lastResult: ReturnType<typeof calculateBonus> | null = null;
 
 function showError(msg: string) {
   errorBox.textContent = msg;
@@ -29,20 +30,23 @@ function calculate() {
   clearError();
 
   const input = {
-    revenue: parseFloat(revenueInput.value),
-    cost: parseFloat(costInput.value),
+    annualSalary: parseFloat(annualSalaryInput.value),
+    bonusPercent: parseFloat(bonusPercentInput.value),
+    taxRate: parseFloat(taxRateInput.value) || 0,
   };
 
-  const error = validateProfitMarginInput(input);
+  const error = validateBonusInput(input);
   if (error) {
     showError(error);
     return;
   }
 
-  const result = calculateProfitMargin(input);
+  const result = calculateBonus(input);
 
-  setValue("profitResult", formatCurrency(result.profit));
-  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
+  setValue("netBonusResult", formatCurrency(result.netBonus));
+  setValue("bonusAmountResult", formatCurrency(result.bonusAmount));
+  setValue("taxOnBonusResult", formatCurrency(result.taxOnBonus));
+  setValue("totalCompResult", formatCurrency(result.newTotalCompensation));
 
   lastInput = input;
   lastResult = result;
@@ -52,8 +56,9 @@ function calculate() {
 }
 
 function reset() {
-  revenueInput.value = "";
-  costInput.value = "";
+  annualSalaryInput.value = "";
+  bonusPercentInput.value = "";
+  taxRateInput.value = "";
   clearError();
   lastInput = null;
   lastResult = null;
@@ -63,7 +68,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult));
+  copyToClipboard(copyBonusSummary(lastInput, lastResult));
 }
 
 calculateBtn?.addEventListener("click", calculate);

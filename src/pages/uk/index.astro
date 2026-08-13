@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const tools = [
+  {
+    name: "UK Take-Home Pay Calculator",
+    href: "/finance/uk-take-home-pay-calculator/",
+    desc: "Estimate your net salary after Income Tax and National Insurance.",
+  },
+  {
+    name: "National Insurance Calculator",
+    href: "/finance/uk-national-insurance-calculator/",
+    desc: "Estimate your Class 1 National Insurance contribution.",
+  },
+];
+---
+<Layout
+  title="UK Financial Calculators - Salary & National Insurance Tools"
+  description="Free UK financial calculators covering take-home pay and National Insurance contributions. Fast, accurate and no sign-up required."
+>
+  <section class="uk-hub">
+    <header class="uk-hub__header">
+      <h1>UK Financial Calculators</h1>
+      <p>
+        Free tools to estimate your take-home pay and National Insurance
+        contributions in the UK. All calculations run in your browser —
+        nothing is sent to a server.
+      </p>
+    </header>
+
+    <section class="uk-hub__grid">
+      {tools.map((tool) => (
+        <a class="uk-hub__card" href={tool.href}>
+          <h2>{tool.name}</h2>
+          <p>{tool.desc}</p>
+          <span class="uk-hub__link">Open calculator →</span>
+        </a>
+      ))}
+    </section>
+
+    <section class="uk-hub__note">
+      <p>Uses England, Wales and Northern Ireland rates. Scotland has separate Income Tax bands not yet covered.</p>
+    </section>
+  </section>
+</Layout>
+
+<style>
+.uk-hub{max-width:960px;margin:0 auto;padding:48px 24px;}
+.uk-hub__header{margin-bottom:40px;}
+.uk-hub__header h1{font-size:2rem;font-weight:800;margin:0 0 12px;color:#111827;}
+.uk-hub__header p{font-size:1rem;line-height:1.7;color:#6B7280;max-width:640px;}
+.uk-hub__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+.uk-hub__card{display:block;padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;text-decoration:none;transition:border-color .15s,transform .15s;}
+.uk-hub__card:hover{border-color:#111827;transform:translateY(-2px);}
+.uk-hub__card h2{font-size:1.05rem;font-weight:700;margin:0 0 8px;color:#111827;}
+.uk-hub__card p{font-size:.9rem;line-height:1.6;color:#6B7280;margin:0 0 14px;}
+.uk-hub__link{font-size:.85rem;font-weight:600;color:#111827;}
+.uk-hub__note{margin-top:32px;padding:18px 20px;border-radius:14px;background:#F9FAFB;border:1px dashed #D1D5DB;}
+.uk-hub__note p{margin:0;font-size:.88rem;color:#6B7280;}
+:global(.dark) .uk-hub__header h1{color:#FAFAFA;}
+:global(.dark) .uk-hub__header p{color:#A1A1AA;}
+:global(.dark) .uk-hub__card{background:#111217;border-color:#27272A;}
+:global(.dark) .uk-hub__card:hover{border-color:#FAFAFA;}
+:global(.dark) .uk-hub__card h2{color:#FAFAFA;}
+:global(.dark) .uk-hub__card p{color:#A1A1AA;}
+:global(.dark) .uk-hub__note{background:#111217;border-color:#27272A;}
+:global(.dark) .uk-hub__note p{color:#A1A1AA;}
+@media(max-width:640px){.uk-hub{padding:32px 16px;}.uk-hub__header h1{font-size:1.5rem;}}
+</style>

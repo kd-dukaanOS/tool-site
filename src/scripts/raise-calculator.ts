@@ -1,9 +1,9 @@
-// src/scripts/profit-margin-calculator.ts
-import { validateProfitMarginInput, calculateProfitMargin, formatCurrency, copyProfitMarginSummary } from "../utils/profit-margin";
+// src/scripts/raise-calculator.ts
+import { validateRaiseInput, calculateRaise, formatCurrency, copyRaiseSummary } from "../utils/raise";
 import { setValue, copyToClipboard } from "../utils/calculator";
 
-const revenueInput = document.getElementById("revenue") as HTMLInputElement;
-const costInput = document.getElementById("cost") as HTMLInputElement;
+const currentSalaryInput = document.getElementById("currentSalary") as HTMLInputElement;
+const raisePercentInput = document.getElementById("raisePercent") as HTMLInputElement;
 
 const calculateBtn = document.getElementById("calculateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -13,8 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
-let lastInput: { revenue: number; cost: number } | null = null;
-let lastResult: ReturnType<typeof calculateProfitMargin> | null = null;
+let lastInput: { currentSalary: number; raisePercent: number } | null = null;
+let lastResult: ReturnType<typeof calculateRaise> | null = null;
 
 function showError(msg: string) {
   errorBox.textContent = msg;
@@ -29,20 +29,21 @@ function calculate() {
   clearError();
 
   const input = {
-    revenue: parseFloat(revenueInput.value),
-    cost: parseFloat(costInput.value),
+    currentSalary: parseFloat(currentSalaryInput.value),
+    raisePercent: parseFloat(raisePercentInput.value),
   };
 
-  const error = validateProfitMarginInput(input);
+  const error = validateRaiseInput(input);
   if (error) {
     showError(error);
     return;
   }
 
-  const result = calculateProfitMargin(input);
+  const result = calculateRaise(input);
 
-  setValue("profitResult", formatCurrency(result.profit));
-  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
+  setValue("newSalaryResult", formatCurrency(result.newSalary));
+  setValue("raiseAmountResult", formatCurrency(result.raiseAmount));
+  setValue("monthlyIncreaseResult", formatCurrency(result.monthlyIncrease));
 
   lastInput = input;
   lastResult = result;
@@ -52,8 +53,8 @@ function calculate() {
 }
 
 function reset() {
-  revenueInput.value = "";
-  costInput.value = "";
+  currentSalaryInput.value = "";
+  raisePercentInput.value = "";
   clearError();
   lastInput = null;
   lastResult = null;
@@ -63,7 +64,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult));
+  copyToClipboard(copyRaiseSummary(lastInput, lastResult));
 }
 
 calculateBtn?.addEventListener("click", calculate);

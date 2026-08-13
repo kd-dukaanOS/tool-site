@@ -1,0 +1,307 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import {
+  Gem,
+  TrendingUp,
+  Repeat,
+  Wallet
+} from "@lucide/astro";
+---
+
+<section class="clv-calculator">
+
+  <div class="clv-layout">
+
+    <aside class="clv-sidebar">
+
+      <CalculatorField
+        id="avgOrderValue"
+        label="Average Order Value"
+        type="number"
+        required={true}
+        helpText="Average amount spent per purchase."
+      />
+
+      <CalculatorField
+        id="purchaseFrequency"
+        label="Purchase Frequency (per year)"
+        type="number"
+        required={true}
+        helpText="Average number of purchases per year."
+      />
+
+      <CalculatorField
+        id="lifespanYears"
+        label="Customer Lifespan (years)"
+        type="number"
+        required={true}
+        helpText="Average number of years a customer stays active."
+      />
+
+      <CalculatorField
+        id="grossMargin"
+        label="Gross Margin (%)"
+        type="number"
+        helpText="Optional — leave blank to use 100% (revenue-based CLV)."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+
+    </aside>
+
+    <main class="clv-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="💎"
+          title="Customer Lifetime Value Calculator"
+          description="Estimate how much revenue and profit a typical customer generates."
+          tips={[
+            "Gross CLV",
+            "Net (Profit) CLV",
+            "Annual Customer Value"
+          ]}
+        />
+
+      </div>
+
+      <div id="resultsContainer" hidden>
+
+        <ResultsGrid columns={3}>
+
+          <ResultCard
+            id="clvGrossResult"
+            title="Gross CLV"
+            icon={Gem}
+          />
+
+          <ResultCard
+            id="clvNetResult"
+            title="Net CLV"
+            icon={TrendingUp}
+            subtitle=" "
+          />
+
+          <ResultCard
+            id="annualValueResult"
+            title="Annual Customer Value"
+            icon={Repeat}
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Estimate Customer Lifetime Value (CLV) from average order
+            value, purchase frequency and customer lifespan. Apply a
+            gross margin percentage to see net, profit-based CLV, and
+            compare it against your Customer Acquisition Cost.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</section>
+
+<script>
+  import "../../scripts/customer-lifetime-value";
+</script>
+
+<style>
+
+.clv-calculator{
+
+width:100%;
+
+}
+
+.clv-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.clv-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.clv-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.clv-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.clv-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.clv-layout{
+
+gap:24px;
+
+}
+
+.clv-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>
