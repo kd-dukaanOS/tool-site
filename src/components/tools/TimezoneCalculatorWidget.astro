@@ -1,8 +1,10 @@
 ---
-import ActionButtons from "../calculator/ActionButtons.astro";
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
-import EmptyState from "../calculator/EmptyState.astro";
+
 import { Clock, ArrowLeftRight } from "@lucide/astro";
 
 const timezones = [
@@ -19,50 +21,303 @@ const timezones = [
 ];
 ---
 
-<div class="calculator-widget">
-  <div class="calculator-inputs">
-    <div class="field-group">
-      <label for="dateTime">Date & Time</label>
-      <input type="datetime-local" id="dateTime" class="calculator-input" />
-    </div>
+<section class="timezone-calculator">
 
-    <div class="field-group">
-      <label for="fromTimezone">From Timezone</label>
-      <select id="fromTimezone" class="calculator-input">
+  <div class="timezone-layout">
+
+    <!-- Sidebar -->
+
+    <aside class="timezone-sidebar">
+
+      <CalculatorField
+        id="dateTime"
+        label="Date & Time"
+        type="datetime-local"
+        required={true}
+        helpText="Select the date and time in the source timezone."
+      />
+
+      <CalculatorField
+        id="fromTimezone"
+        label="From Timezone"
+        type="select"
+        required={true}
+      >
         {timezones.map((tz) => <option value={tz}>{tz}</option>)}
-      </select>
-    </div>
+      </CalculatorField>
 
-    <div class="field-group">
-      <label for="toTimezone">To Timezone</label>
-      <select id="toTimezone" class="calculator-input">
-        {timezones.map((tz) => <option value={tz} selected={tz === "America/New_York"}>{tz}</option>)}
-      </select>
-    </div>
+      <CalculatorField
+        id="toTimezone"
+        label="To Timezone"
+        type="select"
+        required={true}
+      >
+        {timezones.map((tz) => (
+          <option value={tz} selected={tz === "America/New_York"}>{tz}</option>
+        ))}
+      </CalculatorField>
 
-    <div id="errorBox" class="error-box" role="alert" hidden></div>
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
 
-    <ActionButtons
-      calculateId="calculateBtn"
-      resetId="resetBtn"
-      copyId="copyBtn"
-      showDownload={false}
-      showShare={false}
-    />
+      <div
+        id="errorBox"
+        class="error-box"
+        role="alert"
+        hidden
+      ></div>
+
+    </aside>
+
+    <!-- Results -->
+
+    <main class="timezone-content">
+
+      <div id="emptyState">
+
+        <EmptyState
+          icon="🌐"
+          title="Timezone Calculator"
+          description="Convert a date and time between any two timezones instantly."
+          tips={[
+            "Converted Date & Time",
+            "Hour Difference",
+            "Any IANA Timezone",
+            "DST-Aware Conversion"
+          ]}
+        />
+
+      </div>
+
+      <div
+        id="resultsContainer"
+        hidden
+      >
+
+        <ResultsGrid columns={2}>
+
+          <ResultCard
+            id="convertedResult"
+            title="Converted Time"
+            icon={Clock}
+            accent="primary"
+            size="lg"
+          />
+
+          <ResultCard
+            id="differenceResult"
+            title="Time Difference"
+            icon={ArrowLeftRight}
+            accent="neutral"
+          />
+
+        </ResultsGrid>
+
+        <section class="calculator-info">
+
+          <h2>About this Calculator</h2>
+
+          <p>
+            Convert any date and time from one timezone to another.
+            The conversion accounts for daylight saving time automatically,
+            so the hour difference shown reflects the actual offset on
+            that specific date.
+          </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
   </div>
 
-  <div class="calculator-output">
-    <EmptyState
-      id="emptyState"
-      title="Enter date/time to convert"
-      description="Converted time in the target timezone will appear here."
-    />
+</section>
 
-    <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Time" icon={Clock} accent="primary" size="lg" />
-      <ResultCard id="differenceResult" title="Time Difference" icon={ArrowLeftRight} accent="neutral" />
-    </ResultsGrid>
-  </div>
-</div>
+<script>
+  import "../../scripts/timezone-calculator";
+</script>
 
-<script src="../../scripts/timezone-calculator.ts"></script>
+<style>
+
+.timezone-calculator{
+
+width:100%;
+
+}
+
+.timezone-layout{
+
+display:grid;
+
+grid-template-columns:340px minmax(0,1fr);
+
+gap:32px;
+
+align-items:start;
+
+}
+
+.timezone-sidebar{
+
+position:sticky;
+
+top:24px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.timezone-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:28px;
+
+min-width:0;
+
+}
+
+.calculator-info{
+
+padding:24px;
+
+border:1px solid #E5E7EB;
+
+border-radius:18px;
+
+background:#FFFFFF;
+
+margin-top:28px;
+
+}
+
+.calculator-info h2{
+
+margin:0 0 12px;
+
+font-size:1.15rem;
+
+font-weight:700;
+
+color:#111827;
+
+}
+
+.calculator-info p{
+
+margin:0;
+
+line-height:1.8;
+
+font-size:.95rem;
+
+color:#6B7280;
+
+}
+
+.error-box{
+
+display:flex;
+
+align-items:center;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+background:#FEF2F2;
+
+border:1px solid #FCA5A5;
+
+color:#B91C1C;
+
+font-size:.92rem;
+
+font-weight:600;
+
+}
+
+:global(.dark) .calculator-info{
+
+background:#111217;
+
+border-color:#27272A;
+
+}
+
+:global(.dark) .calculator-info h2{
+
+color:#FAFAFA;
+
+}
+
+:global(.dark) .calculator-info p{
+
+color:#A1A1AA;
+
+}
+
+:global(.dark) .error-box{
+
+background:#2A1111;
+
+border-color:#7F1D1D;
+
+color:#FECACA;
+
+}
+
+@media(max-width:1024px){
+
+.timezone-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.timezone-sidebar{
+
+position:static;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.timezone-layout{
+
+gap:24px;
+
+}
+
+.timezone-content{
+
+gap:20px;
+
+}
+
+}
+
+@media(max-width:640px){
+
+.calculator-info{
+
+padding:18px;
+
+}
+
+}
+
+</style>
