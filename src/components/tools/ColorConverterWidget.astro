@@ -2,6 +2,7 @@
 import CalculatorField from "../calculator/CalculatorField.astro";
 import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Palette, Hash, Droplet } from "@lucide/astro";
 ---
@@ -23,15 +24,13 @@ import { Palette, Hash, Droplet } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <div id="emptyState">
-      <EmptyState icon="??" title="Color Converter" description="Enter a color to convert." />
-    </div>
+    <EmptyState id="emptyState" icon="🎨" title="Color Converter" description="Enter a color to convert." />
 
-    <div id="resultsContainer" hidden>
+    <ResultsGrid id="resultsContainer" hidden>
       <ResultCard id="hexResult" title="HEX" icon={Hash} />
       <ResultCard id="rgbResult" title="RGB" icon={Palette} />
       <ResultCard id="hslResult" title="HSL" icon={Droplet} />
-    </div>
+    </ResultsGrid>
   </div>
 </div>
 

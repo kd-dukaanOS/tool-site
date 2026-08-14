@@ -40,3 +40,6 @@ export const caEI: PayrollContribution = {
   wageBase: 68900, // Maximum Insurable Earnings
   employeeOrEmployer: "employee",
 };
+
+export const CPP2_CEILING = 85000; // YAMPE - second CPP earnings ceiling
+export const CPP2_RATE = 0.04; // CPP2 employee/employer rate, on earnings between YMPE and YAMPE

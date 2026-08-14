@@ -27,3 +27,6 @@ export const ukNationalInsurance: PayrollContribution = {
   wageBase: 12570, // Primary Threshold
   employeeOrEmployer: "employee",
 };
+
+export const UK_UPPER_EARNINGS_LIMIT = 50270; // where employee NI drops from 8% to 2%
+export const UK_NI_ADDITIONAL_RATE = 0.02; // employee rate above the Upper Earnings Limit

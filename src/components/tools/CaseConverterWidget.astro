@@ -27,9 +27,7 @@ import { CaseSensitive } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <div id="emptyState">
-      <EmptyState icon="??" title="Case Converter" description="Enter text to convert case." />
-    </div>
+    <EmptyState id="emptyState" icon="🔡" title="Case Converter" description="Enter text to convert case." />
 
     <div id="resultsContainer" hidden>
       <ResultCard id="outputResult" title="Output" icon={CaseSensitive} />

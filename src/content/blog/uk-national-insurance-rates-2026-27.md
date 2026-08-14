@@ -1,10 +1,9 @@
 ---
 title: "National Insurance Rates 2026/27: Thresholds, Bands & Examples"
 description: "How much National Insurance will you pay in 2026/27? See the 8% and 2% NI bands, thresholds and real £30K and £60K salary examples."
-slug: "uk-national-insurance-rates-2026-27"
-publishDate: "2026-08-13"
-updatedDate: "2026-08-13"
-keyword: "National Insurance rates 2026/27"
+pubDate: 2026-08-13
+relatedTool: "/finance/uk-national-insurance-calculator/"
+relatedToolName: "National Insurance Calculator"
 ---
 
 **Think you pay 8% National Insurance on your entire salary? You don't — and above £50,270, the employee rate drops to 2%.**

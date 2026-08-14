@@ -9,37 +9,28 @@ import { Flame, Activity, Target } from "@lucide/astro";
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <div class="field-group">
-      <label for="gender">Gender</label>
-      <select id="gender" class="calculator-input">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-    </div>
+    <CalculatorField id="gender" label="Gender" type="select">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </CalculatorField>
 
     <CalculatorField id="age" label="Age" type="number" placeholder="e.g. 28" />
     <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />
     <CalculatorField id="weightKg" label="Weight (kg)" type="number" placeholder="e.g. 65" />
 
-    <div class="field-group">
-      <label for="activityLevel">Activity Level</label>
-      <select id="activityLevel" class="calculator-input">
-        <option value="sedentary">Sedentary (little/no exercise)</option>
-        <option value="light">Light (1-3 days/week)</option>
-        <option value="moderate" selected>Moderate (3-5 days/week)</option>
-        <option value="active">Active (6-7 days/week)</option>
-        <option value="veryActive">Very Active (physical job)</option>
-      </select>
-    </div>
+    <CalculatorField id="activityLevel" label="Activity Level" type="select">
+      <option value="sedentary">Sedentary (little/no exercise)</option>
+      <option value="light">Light (1-3 days/week)</option>
+      <option value="moderate" selected>Moderate (3-5 days/week)</option>
+      <option value="active">Active (6-7 days/week)</option>
+      <option value="veryActive">Very Active (physical job)</option>
+    </CalculatorField>
 
-    <div class="field-group">
-      <label for="goal">Goal</label>
-      <select id="goal" class="calculator-input">
-        <option value="lose">Lose Weight</option>
-        <option value="maintain" selected>Maintain Weight</option>
-        <option value="gain">Gain Weight</option>
-      </select>
-    </div>
+    <CalculatorField id="goal" label="Goal" type="select">
+      <option value="lose">Lose Weight</option>
+      <option value="maintain" selected>Maintain Weight</option>
+      <option value="gain">Gain Weight</option>
+    </CalculatorField>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 

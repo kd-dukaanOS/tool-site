@@ -9,13 +9,10 @@ import { Flame } from "@lucide/astro";
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <div class="field-group">
-      <label for="gender">Gender</label>
-      <select id="gender" class="calculator-input">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-    </div>
+    <CalculatorField id="gender" label="Gender" type="select">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </CalculatorField>
 
     <CalculatorField id="age" label="Age" type="number" placeholder="e.g. 28" />
     <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />

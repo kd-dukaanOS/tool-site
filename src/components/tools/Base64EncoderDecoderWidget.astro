@@ -21,9 +21,7 @@ import { Binary } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <div id="emptyState">
-      <EmptyState icon="??" title="Base64 Encoder / Decoder" description="Enter text to encode or decode." />
-    </div>
+    <EmptyState id="emptyState" icon="🔤" title="Base64 Encoder / Decoder" description="Enter text to encode or decode." />
 
     <div id="resultsContainer" hidden>
       <ResultCard id="outputResult" title="Output" icon={Binary} />

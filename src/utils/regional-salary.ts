@@ -1,8 +1,8 @@
-import { caFederalIncomeTax, caCPP, caEI } from "../data/regions/ca";
+import { caFederalIncomeTax, caCPP, caEI, CPP2_CEILING, CPP2_RATE } from "../data/regions/ca";
 import { ontarioIncomeTax } from "../data/regions/ca/provinces/ontario-tax";
 import { albertaIncomeTax } from "../data/regions/ca/provinces/alberta-tax";
 import { bcIncomeTax } from "../data/regions/ca/provinces/bc-tax";
-import { ukIncomeTax, ukNationalInsurance } from "../data/regions/uk";
+import { ukIncomeTax, ukNationalInsurance, UK_UPPER_EARNINGS_LIMIT, UK_NI_ADDITIONAL_RATE } from "../data/regions/uk";
 import { usFederalIncomeTax, usPayroll } from "../data/regions/us";
 import type { TaxBracket, IncomeTaxConfig } from "../data/regions/types";
 
@@ -39,7 +39,7 @@ export function calculateCATakeHome(grossAnnual: number, province: string): Take
 
   const federalTax = calculateBracketTax(grossAnnual, caFederalIncomeTax.brackets);
   const provincialTax = calculateBracketTax(grossAnnual, provincial.brackets);
-  const cpp = Math.min(grossAnnual, caCPP.wageBase ?? grossAnnual) * caCPP.rate;
+  const cpp = calculateCPPDetailed(grossAnnual).employeeContribution;
   const ei = Math.min(grossAnnual, caEI.wageBase ?? grossAnnual) * caEI.rate;
 
   const totalDeductions = federalTax + provincialTax + cpp + ei;
@@ -62,9 +62,16 @@ export function calculateCATakeHome(grossAnnual: number, province: string): Take
   };
 }
 
+export function calculateUKNI(annualIncome: number): number {
+  const primaryThreshold = ukNationalInsurance.wageBase ?? 0;
+  const mainBandEarnings = Math.max(0, Math.min(annualIncome, UK_UPPER_EARNINGS_LIMIT) - primaryThreshold);
+  const upperBandEarnings = Math.max(0, annualIncome - UK_UPPER_EARNINGS_LIMIT);
+  return mainBandEarnings * ukNationalInsurance.rate + upperBandEarnings * UK_NI_ADDITIONAL_RATE;
+}
+
 export function calculateUKTakeHome(grossAnnual: number): TakeHomeResult {
   const incomeTax = calculateBracketTax(grossAnnual, ukIncomeTax.brackets);
-  const ni = Math.max(0, grossAnnual - (ukNationalInsurance.wageBase ?? 0)) * ukNationalInsurance.rate;
+  const ni = calculateUKNI(grossAnnual);
 
   const totalDeductions = incomeTax + ni;
   const netAnnual = grossAnnual - totalDeductions;
@@ -127,6 +134,7 @@ export interface CPPResult {
   pensionableEarnings: number;
   employeeContribution: number;
   employerContribution: number;
+  cpp2Contribution: number;
   totalContribution: number;
 }
 
@@ -140,13 +148,19 @@ export interface EIResult {
 export function calculateCPPDetailed(annualIncome: number): CPPResult {
   const cap = caCPP.wageBase ?? annualIncome;
   const pensionableEarnings = Math.max(0, Math.min(annualIncome, cap) - CPP_BASIC_EXEMPTION);
-  const employeeContribution = pensionableEarnings * caCPP.rate;
-  const employerContribution = employeeContribution; // employer matches employee
+  const baseContribution = pensionableEarnings * caCPP.rate;
+
+  const cpp2Earnings = Math.max(0, Math.min(annualIncome, CPP2_CEILING) - cap);
+  const cpp2Contribution = cpp2Earnings * CPP2_RATE;
+
+  const employeeContribution = baseContribution + cpp2Contribution;
+  const employerContribution = employeeContribution; // employer matches employee, including CPP2
 
   return {
     pensionableEarnings,
     employeeContribution,
     employerContribution,
+    cpp2Contribution,
     totalContribution: employeeContribution + employerContribution,
   };
 }
@@ -177,7 +191,7 @@ const NI_EMPLOYER_THRESHOLD = 0; // NEEDS_VERIFICATION — secondary threshold, 
 export function calculateNIDetailed(annualIncome: number): NIResult {
   const primaryThreshold = ukNationalInsurance.wageBase ?? 0;
   const earningsAboveThreshold = Math.max(0, annualIncome - primaryThreshold);
-  const employeeContribution = earningsAboveThreshold * ukNationalInsurance.rate;
+  const employeeContribution = calculateUKNI(annualIncome);
 
   const employerEarnings = Math.max(0, annualIncome - NI_EMPLOYER_THRESHOLD);
   const employerContribution = employerEarnings * NI_EMPLOYER_RATE;

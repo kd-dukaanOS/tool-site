@@ -38,9 +38,7 @@ import { Ruler } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <div id="emptyState">
-      <EmptyState icon="??" title="Area Calculator" description="Enter a value to convert." />
-    </div>
+    <EmptyState id="emptyState" icon="📐" title="Area Calculator" description="Enter a value to convert." />
 
     <div id="resultsContainer" hidden>
       <ResultCard id="convertedResult" title="Converted Value" icon={Ruler} />

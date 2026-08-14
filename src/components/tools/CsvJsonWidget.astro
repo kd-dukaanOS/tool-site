@@ -21,9 +21,7 @@ import { FileSpreadsheet } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <div id="emptyState">
-      <EmptyState icon="??" title="CSV / JSON Converter" description="Paste data to convert." />
-    </div>
+    <EmptyState id="emptyState" icon="📄" title="CSV / JSON Converter" description="Paste data to convert." />
 
     <div id="resultsContainer" hidden>
       <ResultCard id="outputResult" title="Output" icon={FileSpreadsheet} />
