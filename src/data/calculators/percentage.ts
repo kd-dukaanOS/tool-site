@@ -28,8 +28,8 @@ Use this tool for quick, everyday percentage calculations across multiple format
     { q: "What's the difference between percentage and percentage points?", a: "Percentage change measures relative change, while percentage points measure the raw difference between two percentages." },
     { q: "How do I find the original number from a percentage?", a: "Divide the known value by the percentage (as a decimal) to find the original base number." },
     { q: "Can percentage change be negative?", a: "Yes, a negative percentage change indicates a decrease from the original value." },
-  ],
-  relatedCalculators: ["Discount Calculator", "GST Calculator", "Average Calculator", "CAGR Calculator"],
+    { q: "How do I calculate a percentage increase over multiple steps?", a: "Apply each percentage change to the result of the previous step rather than adding the percentages together, since percentages compound." },
+  ],  relatedCalculators: ["Discount Calculator", "GST Calculator", "Average Calculator", "CAGR Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Percentage Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };

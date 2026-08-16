@@ -26,24 +26,31 @@ const navLinks = [
     </nav>
 
     <div class="ts-nav-actions">
-      <div class="ts-nav-search">
+     <div class="ts-nav-search">
+        <label for="nav-search-input" class="ts-visually-hidden">Search tools</label>
         <input type="text" id="nav-search-input" placeholder="Search tools..." autocomplete="off" />
-        <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none">✕</button>
-        <div class="ts-nav-search-results" id="nav-search-results"></div>
+        <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none" aria-label="Clear search">✕</button>
+        <div class="ts-nav-search-results" id="nav-search-results" role="listbox" aria-live="polite"></div>
       </div>
       <script type="application/json" id="tools-data" set:html={JSON.stringify(tools.map(t => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc })))}></script>
       <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">
         <span id="theme-icon">🌙</span>
       </button>
       <a href="/bookmarks" class="ts-nav-icon-btn ts-nav-bookmarks" aria-label="Bookmarks">🔖</a>
-      <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label="Open menu">☰</button>
+      <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
     </div>
   </div>
 
-  <nav class="ts-nav-mobile" id="mobile-menu">
+   <nav class="ts-nav-mobile" id="mobile-menu">
+    <div class="ts-nav-mobile-search">
+      <label for="nav-search-input-mobile" class="ts-visually-hidden">Search tools</label>
+      <input type="text" id="nav-search-input-mobile" placeholder="Search tools..." autocomplete="off" />
+      <div class="ts-nav-search-results" id="nav-search-results-mobile" role="listbox" aria-live="polite"></div>
+    </div>
     {navLinks.map((link) => (
       <a href={link.href} class="ts-nav-mobile-link">{link.label}</a>
     ))}
+    <a href="/bookmarks" class="ts-nav-mobile-link">🔖 Bookmarks</a>
   </nav>
 </header>
 
@@ -150,6 +157,30 @@ const navLinks = [
     text-decoration: none;
     border-bottom: 1px solid var(--border-subtle);
   }
+  .ts-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .ts-nav-mobile-search {
+    position: relative;
+    margin-bottom: var(--space-4);
+  }
+  .ts-nav-mobile-search input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--fs-body);
+  }
 
   @media (max-width: 1280px) {
     .ts-nav-search { display: none; }
@@ -211,17 +242,21 @@ const navLinks = [
 </style>
 
 <script>
-  const toggle = document.getElementById('mobile-menu-toggle');
+ const toggle = document.getElementById('mobile-menu-toggle');
   const menu = document.getElementById('mobile-menu');
-  toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
-
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
   const themeIcon = document.getElementById('theme-icon');
   if (themeIcon) themeIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
 
-  const toolsData = JSON.parse(document.getElementById('tools-data')?.textContent || '[]');
+    const toolsData = JSON.parse(document.getElementById('tools-data')?.textContent || '[]');
   const searchInput = document.getElementById('nav-search-input');
   const searchResults = document.getElementById('nav-search-results');
   const navClearBtn = document.getElementById('nav-clear-btn');
+  const mobileSearchInput = document.getElementById('nav-search-input-mobile');
+  const mobileSearchResults = document.getElementById('nav-search-results-mobile');
 
   function matchNavTools(q) {
     q = q.trim().toLowerCase();
@@ -232,18 +267,28 @@ const navLinks = [
     }).slice(0, 6);
   }
 
+  function renderResultsInto(resultsEl, matches) {
+    resultsEl.innerHTML = matches.length
+      ? matches.map(t => `<a href="/${t.category}/${t.slug}/" class="ts-nav-search-item" role="option">${t.name}</a>`).join('')
+      : '<div class="ts-nav-search-empty">No tools found</div>';
+    resultsEl.classList.add('open');
+  }
+
   function renderNavSearch() {
     const q = searchInput.value;
     navClearBtn.style.display = q ? 'block' : 'none';
     if (!q) { searchResults.innerHTML = ''; searchResults.classList.remove('open'); return; }
-    const matches = matchNavTools(q);
-    searchResults.innerHTML = matches.length
-      ? matches.map(t => `<a href="/${t.category}/${t.slug}/" class="ts-nav-search-item">${t.name}</a>`).join('')
-      : '<div class="ts-nav-search-empty">No tools found</div>';
-    searchResults.classList.add('open');
+    renderResultsInto(searchResults, matchNavTools(q));
+  }
+
+  function renderMobileNavSearch() {
+    const q = mobileSearchInput.value;
+    if (!q) { mobileSearchResults.innerHTML = ''; mobileSearchResults.classList.remove('open'); return; }
+    renderResultsInto(mobileSearchResults, matchNavTools(q));
   }
 
   searchInput?.addEventListener('input', renderNavSearch);
+  mobileSearchInput?.addEventListener('input', renderMobileNavSearch);
 
   navClearBtn?.addEventListener('click', () => {
     searchInput.value = '';
@@ -258,7 +303,15 @@ const navLinks = [
     }
   });
 
+  mobileSearchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const matches = matchNavTools(mobileSearchInput.value);
+      if (matches.length) window.location.href = `/${matches[0].category}/${matches[0].slug}/`;
+    }
+  });
+
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.ts-nav-search')) searchResults?.classList.remove('open');
+    if (!e.target.closest('.ts-nav-mobile-search')) mobileSearchResults?.classList.remove('open');
   });
 </script>

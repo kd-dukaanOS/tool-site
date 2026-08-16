@@ -1,4 +1,5 @@
 ---
+import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
@@ -8,20 +9,12 @@ import { Regex, Hash, Type, Layers } from "@lucide/astro";
 <section class="regex-tester">
   <div class="regex-layout">
     <aside class="regex-sidebar">
-      <div class="tool-field">
-        <label class="tool-label" for="regexPattern"><Regex size={16} /> Pattern</label>
-        <input id="regexPattern" type="text" class="tool-input" placeholder="\\d+" />
-      </div>
 
-      <div class="tool-field">
-        <label class="tool-label" for="regexFlags">Flags</label>
-        <input id="regexFlags" type="text" class="tool-input" value="g" placeholder="g, i, m, s" />
-      </div>
+      <CalculatorField id="regexPattern" label="Pattern" type="text" placeholder="\\d+" />
 
-      <div class="tool-field">
-        <label class="tool-label" for="regexText">Test Text</label>
-        <textarea id="regexText" class="tool-textarea" placeholder="Paste text to test against..."></textarea>
-      </div>
+      <CalculatorField id="regexFlags" label="Flags" type="text" value="g" placeholder="g, i, m, s" />
+
+      <CalculatorField id="regexText" label="Test Text" type="textarea" placeholder="Paste text to test against..." />
 
       <CalculatorActions calculateId="testBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
@@ -65,9 +58,9 @@ import { Regex, Hash, Type, Layers } from "@lucide/astro";
 <style>
 .regex-tester{width:100%;}
 .regex-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
-.regex-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px;}
-.tool-field{display:flex;flex-direction:column;gap:8px;}
-.tool-field .tool-label{display:flex;align-items:center;gap:6px;}
+.regex-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:4px;}
+.tool-field{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;}
+.tool-field .tool-label{display:flex;align-items:center;gap:6px;font-size:.95rem;font-weight:600;color:#111827;}
 .regex-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
 .regex-output{padding:20px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:.88rem;line-height:1.7;max-height:400px;overflow:auto;}
 .regex-output :global(mark){background:#FDE68A;color:#78350F;border-radius:3px;padding:0 2px;}
@@ -78,6 +71,7 @@ import { Regex, Hash, Type, Layers } from "@lucide/astro";
 :global(.dark) .regex-output,:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
 :global(.dark) .calculator-info h2{color:#FAFAFA;}
 :global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .tool-field .tool-label{color:#F4F4F5;}
 :global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
 @media(max-width:1024px){.regex-layout{grid-template-columns:1fr;}.regex-sidebar{position:static;}}
 </style>

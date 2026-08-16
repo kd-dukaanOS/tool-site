@@ -27,6 +27,8 @@ Use this tool for quick prime checks and factor listing in math learning.` },
     { q: "How do you check if a large number is prime?", a: "Test divisibility by all numbers up to the square root of the number — if none divide evenly, it's prime." },
     { q: "What are factors of a number?", a: "Factors are whole numbers that divide evenly into a given number without leaving a remainder." },
     { q: "Why are prime numbers important in cryptography?", a: "Many encryption systems like RSA rely on the difficulty of factoring large numbers into their prime components." },
+     { q: "Is 0 a prime number?", a: "No, 0 is not prime — it has infinitely many divisors and doesn't meet the definition of a prime number." },
+  
   ],
   relatedCalculators: ["GCD Calculator", "LCM Calculator", "Average Calculator", "Percentage Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

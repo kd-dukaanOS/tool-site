@@ -66,6 +66,7 @@ Use this tool as a starting reference point, not a rigid goal — consult a heal
     { q: "Should athletes use this ideal weight calculator?", a: "Athletes with high muscle mass may naturally weigh more than the formula suggests, so body fat percentage may be more relevant for them." },
     { q: "Does gender affect ideal weight calculation?", a: "Yes, the formula uses different base constants for men and women to reflect typical body composition differences." },
     { q: "Is this calculator accurate for children?", a: "No, ideal weight formulas like this are designed for adults; children need pediatric growth charts instead." },
+    { q: "What if my weight is outside the healthy range shown?", a: "It's a general guideline, not a diagnosis — talk to a doctor or dietitian before making major changes based on this result alone." },
   ],
   relatedCalculators: ["BMI Calculator", "BMR Calculator", "Body Fat Calculator", "Calorie Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

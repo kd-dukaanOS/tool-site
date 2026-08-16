@@ -64,6 +64,7 @@ Use this tool for fraction problems, scheduling calculations, or general math he
     { q: "Can LCM be calculated for more than two numbers?", a: "Yes, LCM can be extended to any number of integers by finding the LCM of pairs sequentially." },
     { q: "What is the LCM of two coprime numbers?", a: "The LCM of coprime numbers (numbers with GCD of 1) equals their product." },
     { q: "How does this calculator find the LCM?", a: "It uses the relationship LCM(a,b) = (a×b) ÷ GCD(a,b) for efficient calculation." },
+    { q: "What is the LCM of a number and itself?", a: "The LCM of a number and itself is the number, since it's the smallest multiple shared by both." },
   ],
   relatedCalculators: ["GCD Calculator", "Percentage Calculator", "Average Calculator", "Fraction Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

@@ -19,6 +19,15 @@ It's useful for writing README files, previewing blog posts before publishing, d
 Limitations: this is a lightweight renderer covering common Markdown syntax; it does not support tables, footnotes or extended GFM syntax.
 
 All rendering happens locally in your browser — nothing is uploaded to a server.` },
+  formula: {
+    formula: "HTML Output = MarkdownParser(Markdown Input)",
+    variables: [
+      { symbol: "Markdown Input", meaning: "The raw Markdown-formatted text typed or pasted into the editor." },
+      { symbol: "MarkdownParser", meaning: "The rendering engine that converts Markdown syntax into corresponding HTML tags." },
+    ],
+    explanation: "The parser scans the input line by line, matching Markdown syntax patterns (like # for headings or ** for bold) and converting each to its equivalent HTML element in real time.",
+    interpretation: "For example, '# Hello' is parsed and rendered as an <h1>Hello</h1> heading in the live preview.",
+  },
   steps: [
     "Type or paste Markdown into the editor.",
     "Click Render or just keep typing for live preview.",
@@ -55,6 +64,11 @@ All rendering happens locally in your browser — nothing is uploaded to a serve
     { q: "Is my Markdown content saved anywhere?", a: "No, rendering happens entirely in your browser and nothing is sent to a server." },
     { q: "Can I copy the rendered HTML?", a: "Yes, use the copy button to copy the generated HTML to your clipboard." },
     { q: "Does the preview update automatically?", a: "Yes, once you've rendered once, the preview updates live as you type." },
+    { q: "Can I use this to write a GitHub README?", a: "Yes, it covers the core Markdown syntax GitHub READMEs commonly use, though GFM-specific features like tables aren't supported." },
+    { q: "How do I create a code block?", a: "Wrap inline code in single backticks, or wrap multi-line code blocks in triple backticks on their own lines." },
+    { q: "Does it support nested lists?", a: "Basic unordered lists are supported; deeply nested or mixed ordered/unordered list structures may not render perfectly." },
+    { q: "Can I preview images in Markdown?", a: "Yes, standard image syntax ![alt text](url) renders as an inline image in the preview, provided the URL is accessible." },
+    { q: "Is there a character or length limit?", a: "There's no strict limit, but very long documents may render more slowly since everything processes in your browser." },
   ],
   relatedCalculators: ["Word Counter", "Lorem Ipsum Generator", "Diff Checker"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

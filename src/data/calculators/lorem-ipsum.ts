@@ -19,6 +19,15 @@ Choose to generate by paragraphs, sentences or word count, and optionally start 
 Limitations: this is randomized pseudo-Latin text with no real meaning — it should never be used as final content.
 
 Use this tool whenever you need quick, realistic-looking filler text for a design or prototype.` },
+  formula: {
+    formula: "Output = Randomized selection from Lorem Ipsum word bank, joined into sentences/paragraphs up to the requested count",
+    variables: [
+      { symbol: "Count", meaning: "Number of paragraphs, sentences, or words to generate." },
+      { symbol: "Type", meaning: "The unit of generation — paragraphs, sentences, or words." },
+    ],
+    explanation: "The generator pulls from a fixed pool of classic Lorem Ipsum words and phrases, randomly assembling them into sentences and paragraphs until the requested count is reached.",
+    interpretation: "For example, requesting 3 paragraphs produces three blocks of randomized Lorem Ipsum text, each roughly matching typical paragraph length.",
+  },
   steps: [
     "Choose to generate paragraphs, sentences or words.",
     "Enter the count you need.",
@@ -54,6 +63,11 @@ Use this tool whenever you need quick, realistic-looking filler text for a desig
     { q: "Can I generate a specific number of words?", a: "Yes, select 'Words' as the type and enter your desired count." },
     { q: "Is the generated text random each time?", a: "Yes, each generation produces a new randomized combination of Lorem Ipsum words and sentences." },
     { q: "Can I copy the output directly?", a: "Yes, use the copy button to copy the generated text to your clipboard." },
+    { q: "Where does Lorem Ipsum text come from?", a: "It's derived from a scrambled passage of Cicero's 'De Finibus Bonorum et Malorum,' a Latin text from 45 BC, first used as typesetting filler in the 1500s." },
+    { q: "Can I generate just a headline or short phrase?", a: "Yes, set the type to 'Words' and enter a small count like 3-5 for short placeholder phrases or headlines." },
+    { q: "Does Lorem Ipsum contain any real words?", a: "Some fragments resemble Latin words, but the text as a whole is scrambled and not grammatically meaningful in any language." },
+    { q: "Is Lorem Ipsum the same every time I generate it?", a: "No, each generation produces a new random arrangement of words and sentence lengths, so output varies between generations." },
+    { q: "Can I use Lorem Ipsum text commercially?", a: "Yes, Lorem Ipsum is public domain placeholder text and free to use in any design, mockup or prototype." },
   ],
   relatedCalculators: ["Word Counter", "Slug Generator", "Markdown Previewer"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],

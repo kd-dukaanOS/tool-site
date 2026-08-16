@@ -59,3 +59,12 @@
 
 /* hover glow utility (uses tokens' primary shadow) */
 .glow-hover:hover { box-shadow: var(--shadow-glow-primary), var(--shadow-lg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger.in-view > *, .ts-hero-float {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

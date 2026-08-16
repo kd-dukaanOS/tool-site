@@ -4,8 +4,8 @@
 [hidden] { display: none !important; }
 
 :root {
-  --color-primary: #4f46e5;      /* indigo-600 */
-  --color-primary-hover: #4338ca; /* indigo-700 */
+  color-scheme: light;
+  --color-primary: #4f46e5;      /* indigo-600 */  --color-primary-hover: #4338ca; /* indigo-700 */
   --color-secondary: #16a34a;    /* green-600 */
   --color-secondary-hover: #15803d; /* green-700 */
   --color-danger: #ef4444;       /* red-500 */
@@ -19,8 +19,8 @@
 }
 
 html.dark {
-  --color-bg: #111827;
-  --color-bg-muted: #1f2937;
+  color-scheme: dark;
+  --color-bg: #111827;  --color-bg-muted: #1f2937;
   --color-text: #f9fafb;
   --color-text-muted: #9ca3af;
   --color-border: #374151;

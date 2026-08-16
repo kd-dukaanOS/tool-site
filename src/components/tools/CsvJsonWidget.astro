@@ -5,28 +5,57 @@ import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { FileSpreadsheet } from "@lucide/astro";
 ---
+<section class="csv-json-converter">
+  <div class="csv-layout">
+    <aside class="csv-sidebar">
 
-<div class="calculator-widget">
-  <div class="calculator-form">
-    <CalculatorField id="mode" label="Mode" type="select">
-      <option value="csvToJson">CSV to JSON</option>
-      <option value="jsonToCsv">JSON to CSV</option>
-    </CalculatorField>
+      <CalculatorField id="mode" label="Mode" type="select">
+        <option value="csvToJson">CSV to JSON</option>
+        <option value="jsonToCsv">JSON to CSV</option>
+      </CalculatorField>
 
-    <CalculatorField id="text" label="Input" type="textarea" placeholder="Paste CSV or JSON here" />
+      <CalculatorField id="text" label="Input" type="textarea" placeholder="Paste CSV or JSON here" />
 
-    <div id="errorBox" class="error-box" hidden></div>
+      <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+    <main class="csv-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🔄"
+          title="CSV / JSON Converter"
+          description="Paste data to convert between CSV and JSON instantly."
+          tips={["CSV to JSON", "JSON to CSV", "Instant Preview", "Copy Output"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultCard id="outputResult" title="Output" icon={FileSpreadsheet} size="lg" />
+
+        <section class="calculator-info">
+          <h2>About this Tool</h2>
+          <p>Convert CSV data to JSON or JSON data to CSV instantly, right in your browser. Nothing is uploaded to a server.</p>
+        </section>
+      </div>
+    </main>
   </div>
-
-  <div class="calculator-results">
-    <EmptyState id="emptyState" icon="📄" title="CSV / JSON Converter" description="Paste data to convert." />
-
-    <div id="resultsContainer" hidden>
-      <ResultCard id="outputResult" title="Output" icon={FileSpreadsheet} />
-    </div>
-  </div>
-</div>
+</section>
 
 <script src="../../scripts/csv-json.ts"></script>
+
+<style>
+.csv-json-converter{width:100%;}
+.csv-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.csv-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:4px;}
+.csv-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:#6B7280;}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .calculator-info{background:#111217;border-color:#27272A;}
+:global(.dark) .calculator-info h2{color:#FAFAFA;}
+:global(.dark) .calculator-info p{color:#A1A1AA;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.csv-layout{grid-template-columns:1fr;}.csv-sidebar{position:static;}}
+</style>

@@ -1,4 +1,5 @@
 ---
+import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
@@ -8,20 +9,15 @@ import { Binary, Hash, Calculator, Code } from "@lucide/astro";
 <section class="base-converter">
   <div class="base-layout">
     <aside class="base-sidebar">
-      <div class="tool-field">
-        <label class="tool-label" for="baseValue">Number</label>
-        <input id="baseValue" type="text" class="tool-input" placeholder="e.g. 255" />
-      </div>
 
-      <div class="tool-field">
-        <label class="tool-label" for="fromBase">From Base</label>
-        <select id="fromBase" class="tool-select">
-          <option value="2">Binary (Base 2)</option>
-          <option value="8">Octal (Base 8)</option>
-          <option value="10" selected>Decimal (Base 10)</option>
-          <option value="16">Hexadecimal (Base 16)</option>
-        </select>
-      </div>
+      <CalculatorField id="baseValue" label="Number" type="text" placeholder="e.g. 255" />
+
+      <CalculatorField id="fromBase" label="From Base" type="select">
+        <option value="2">Binary (Base 2)</option>
+        <option value="8">Octal (Base 8)</option>
+        <option value="10" selected>Decimal (Base 10)</option>
+        <option value="16">Hexadecimal (Base 16)</option>
+      </CalculatorField>
 
       <CalculatorActions calculateId="convertBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
@@ -61,8 +57,7 @@ import { Binary, Hash, Calculator, Code } from "@lucide/astro";
 <style>
 .base-converter{width:100%;}
 .base-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
-.base-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
-.tool-field{display:flex;flex-direction:column;gap:8px;}
+.base-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:4px;}
 .base-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
 .calculator-info{padding:24px;border:1px solid #E5E7EB;border-radius:18px;background:#FFFFFF;}
 .calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:#111827;}

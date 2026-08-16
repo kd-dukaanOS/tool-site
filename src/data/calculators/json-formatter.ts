@@ -3,14 +3,49 @@ export const jsonFormatterContent = {
     seoTitle: "JSON Formatter & Validator - Format, Minify JSON Online",
     metaDescription: "Format, minify and validate JSON online for free. Instantly see key count, nesting depth and size.",
     canonicalSlug: "/json-formatter",
+    ogTitle: "JSON Formatter & Validator - Free Online Tool",
+    ogDescription: "Format, minify and validate JSON instantly with key count, depth and size stats. Free and runs entirely in your browser.",
+    twitterTitle: "Free JSON Formatter & Validator",
+    twitterDescription: "Format, minify and validate JSON in seconds — no signup, no data leaves your browser.",
   },
   hero: { text: "Format, minify and validate JSON instantly. Paste raw JSON and get a clean, indented output with key count, depth and size stats." },
-  about: { text: "The JSON Formatter beautifies messy JSON, minifies it for production, and validates syntax with clear error messages. All processing happens locally in your browser." },
-  steps: [
-    "Paste your JSON into the input field.",
+   about: { text: "The JSON Formatter beautifies messy JSON, minifies it for production, and validates syntax with clear error messages. All processing happens locally in your browser." },
+  formula: {
+    formula: "Parse → Validate → Re-serialize with chosen spacing",
+    variables: [
+      { symbol: "Parse", meaning: "Convert the raw JSON text into a structured in-memory object" },
+      { symbol: "Re-serialize", meaning: "Convert that object back to text, either indented (format) or compact (minify)" },
+    ],
+    explanation: "The tool parses your input to confirm it's valid JSON, then rebuilds it as text — with indentation for readability or with all whitespace stripped for minification.",
+    interpretation: "For example, formatting adds line breaks and 2-space indentation, while minifying the same data removes every non-essential space and newline.",
+  },
+  steps: [    "Paste your JSON into the input field.",
     "Click Format to beautify or Minify to compress.",
     "Review key count, depth and size stats.",
     "Copy the output using the copy button.",
+  ],
+  examples: [
+    { inputs: '{"name":"Alex","age":30}', result: 'Formatted with 2-space indentation across 4 lines', explanation: "A compact object expanded into readable, indented JSON." },
+    { inputs: '{\n  "name": "Alex",\n  "age": 30\n}', result: '{"name":"Alex","age":30}', explanation: "Minifying removes all indentation and line breaks to shrink file size." },
+  ],
+  practicalUses: [
+    "Cleaning up minified API responses for debugging",
+    "Validating JSON config files before deployment",
+    "Minifying JSON payloads to reduce file size in production",
+    "Checking nesting depth and key count in large data files",
+    "Sharing readable JSON snippets with teammates",
+    "Spotting syntax errors before importing data into an app",
+  ],
+  expertTips: [
+    "Minify JSON before sending it over an API to reduce payload size, then format it locally when debugging.",
+    "Check the reported key count and depth to catch unexpectedly large or deeply nested structures.",
+    "Trailing commas and single quotes are the most common reasons pasted JSON fails to validate.",
+    "Use formatted (indented) JSON in version control so diffs stay readable.",
+  ],
+  commonMistakes: [
+    { mistake: "Using single quotes instead of double quotes", fix: "JSON requires double quotes around keys and string values — single quotes will fail validation." },
+    { mistake: "Leaving a trailing comma after the last item", fix: "Remove commas after the final key-value pair or array item; standard JSON doesn't allow them." },
+    { mistake: "Including comments in the JSON", fix: "Strict JSON doesn't support comments — remove them or use a JSONC-specific tool instead." },
   ],
   faq: [
     { q: "Does this validate JSON syntax?", a: "Yes, invalid JSON shows a clear error message with details, including the line and character where the problem occurs." },
@@ -23,4 +58,9 @@ export const jsonFormatterContent = {
     { q: "Is there a limit to how many keys or how much nesting depth this tool supports?", a: "There's no hard-coded limit — performance depends on your browser and device rather than the tool itself." },
   ],
   relatedCalculators: ["Diff Checker", "Regex Tester", "URL Encoder/Decoder"],
+ structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
+  headingStructure: {
+    h1: "JSON Formatter & Validator",
+    h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
+  },
 };

@@ -19,9 +19,17 @@ Customize the QR code size, foreground and background colors, and error correcti
 Limitations: very long text strings produce denser, harder-to-scan QR codes; keep encoded content concise for reliable scanning.
 
 QR codes are generated via a secure image API and can be downloaded instantly as a PNG file.` },
+  formula: {
+    formula: "QR Version & Error Correction determine data capacity",
+    variables: [
+      { symbol: "Data", meaning: "The text, URL or email being encoded" },
+      { symbol: "Error Correction", meaning: "L, M, Q or H — percentage of the code that can be damaged and still scan" },
+    ],
+    explanation: "The generator maps your input data into a grid of black and white modules, choosing the smallest QR version that fits the data at your chosen error correction level.",
+    interpretation: "For example, a short URL at error correction level M produces a small, simple grid, while a long string with level H produces a denser, more resilient one.",
+  },
   steps: [
-    "Enter the text, URL or email you want to encode.",
-    "Adjust size, error correction level and colors as needed.",
+    "Enter the text, URL or email you want to encode.",    "Adjust size, error correction level and colors as needed.",
     "Click Generate to create the QR code.",
     "Preview the QR code and check its details.",
     "Download the QR code as a PNG image.",
@@ -55,12 +63,13 @@ QR codes are generated via a secure image API and can be downloaded instantly as
     { q: "Can I customize the QR code color?", a: "Yes, you can set custom foreground and background colors, as long as there's enough contrast for scanning." },
     { q: "How do I download the QR code?", a: "Click the Download PNG button after generating to save the QR code as an image file." },
     { q: "Do QR codes expire?", a: "No, a QR code encodes static data and works indefinitely as long as the underlying link or content remains valid." },
-    { q: "Is there a size limit for encoded text?", a: "Very long text produces a denser, harder-to-scan code; keep content concise for best results." },
+   { q: "Is there a size limit for encoded text?", a: "Very long text produces a denser, harder-to-scan code; keep content concise for best results." },
+    { q: "Will the QR code still work if part of it is damaged?", a: "Yes, up to a point — higher error correction levels let the code scan correctly even if part of the image is scratched, dirty or obscured." },
   ],
   relatedCalculators: ["URL Encoder/Decoder", "Slug Generator", "UUID Generator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: {
     h1: "QR Code Generator",
-    h2: ["About", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
+    h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
   },
 };
