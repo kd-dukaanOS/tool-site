@@ -31,38 +31,17 @@ const {
 ---
 
 <div class="calculator-field">
-
-  <label
-    for={id}
-    class="calculator-label"
-  >
+  <label for={id} class="calculator-label">
     {label}
-
-    {
-      required && (
-        <span class="required">*</span>
-      )
-    }
-
+    {required && <span class="required">*</span>}
   </label>
 
   {type === "select" ? (
-    <select
-      id={id}
-      class="calculator-input"
-      required={required}
-      disabled={disabled}
-    >
+    <select id={id} class="calculator-input" required={required} disabled={disabled}>
       <slot />
     </select>
   ) : type === "textarea" ? (
-    <textarea
-      id={id}
-      class="calculator-input"
-      placeholder={placeholder}
-      required={required}
-      disabled={disabled}
-    >{value}</textarea>
+    <textarea id={id} class="calculator-input" placeholder={placeholder} required={required} disabled={disabled}>{value}</textarea>
   ) : (
     <input
       id={id}
@@ -79,160 +58,78 @@ const {
     />
   )}
 
-  {
-    helpText && (
-      <p class="calculator-help">
-        {helpText}
-      </p>
-    )
-  }
-
+  {helpText && <p class="calculator-help">{helpText}</p>}
 </div>
 
 <style>
-
-.calculator-field{
-
-display:flex;
-
-flex-direction:column;
-
-gap:.55rem;
-
-margin-bottom:1.25rem;
-
-}
-
-.calculator-label{
-
-font-size:.95rem;
-
-font-weight:600;
-
-color:var(--color-text,#111827);
-
-}
-
-.required{
-
-color:#EF4444;
-
-margin-left:4px;
-
-}
-
-.calculator-input{
-
-width:100%;
-
-height:48px;
-
-padding:0 .95rem;
-
-border:1px solid var(--color-border,#D1D5DB);
-
-border-radius:14px;
-
-background:var(--color-surface,#FFFFFF);
-
-font-size:.95rem;
-
-color:var(--color-text,#111827);
-
-transition:
-border-color .2s,
-box-shadow .2s;
-
-}
-
-.calculator-input:hover{
-
-border-color:#A5B4FC;
-
-}
-
-.calculator-input:focus{
-
-outline:none;
-
-border-color:#4F46E5;
-
-box-shadow:0 0 0 4px rgba(79,70,229,.12);
-
-}
-
-.calculator-input:disabled{
-
-opacity:.6;
-
-cursor:not-allowed;
-
-}
-
-select.calculator-input{
-
-cursor:pointer;
-
-}
-
-textarea.calculator-input{
-
-height:auto;
-
-min-height:120px;
-
-padding:.7rem .95rem;
-
-line-height:1.5;
-
-resize:vertical;
-
-font-family:inherit;
-
-}
-
-.calculator-help{
-
-font-size:.82rem;
-
-line-height:1.5;
-
-color:#6B7280;
-
-margin:0;
-
-}
-
-:global(.dark) .calculator-input{
-
-background:#18181B;
-
-border-color:#27272A;
-
-color:#FAFAFA;
-
-}
-
-:global(.dark) .calculator-label{
-
-color:#F4F4F5;
-
-}
-
-:global(.dark) .calculator-help{
-
-color:#A1A1AA;
-
-}
-
-@media(max-width:640px){
-
-.calculator-input{
-
-height:46px;
-
-}
-
-}
-
+  .calculator-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .calculator-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .required {
+    color: #EF4444;
+    margin-left: 4px;
+  }
+
+  .calculator-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 0.95rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: var(--bg-card);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .calculator-input:hover {
+    border-color: #A5B4FC;
+  }
+
+  .calculator-input:focus {
+    outline: none;
+    border-color: #4F46E5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+  }
+
+  .calculator-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  select.calculator-input {
+    cursor: pointer;
+  }
+
+  textarea.calculator-input {
+    height: auto;
+    min-height: 120px;
+    padding: 0.7rem 0.95rem;
+    line-height: 1.5;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .calculator-help {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .calculator-input {
+      height: 46px;
+    }
+  }
 </style>

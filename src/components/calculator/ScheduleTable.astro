@@ -9,131 +9,59 @@ const { id, headers, caption = "" } = Astro.props as Props;
 ---
 
 <div class="schedule-wrap">
-
-  {
-    caption && (
-      <p class="schedule-caption">{caption}</p>
-    )
-  }
+  {caption && <p class="schedule-caption">{caption}</p>}
 
   <div class="schedule-scroll">
-
     <table class="schedule-table">
-
       <thead>
         <tr>
           {headers.map((h) => <th>{h}</th>)}
         </tr>
       </thead>
-
       <tbody id={id}></tbody>
-
     </table>
-
   </div>
-
 </div>
 
 <style>
+  .schedule-wrap {
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+  }
 
-.schedule-wrap{
+  .schedule-caption {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
 
-padding:22px;
+  .schedule-scroll {
+    width: 100%;
+    overflow-x: auto;
+  }
 
-border-radius:18px;
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
 
-border:1px solid #E5E7EB;
+  .schedule-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg-page);
+    color: var(--text-secondary);
+    font-weight: 600;
+    white-space: nowrap;
+  }
 
-background:#FFFFFF;
-
-}
-
-.schedule-caption{
-
-margin:0 0 16px;
-
-font-size:1rem;
-
-font-weight:700;
-
-color:#111827;
-
-}
-
-.schedule-scroll{
-
-width:100%;
-
-overflow-x:auto;
-
-}
-
-.schedule-table{
-
-width:100%;
-
-border-collapse:collapse;
-
-font-size:.9rem;
-
-}
-
-.schedule-table th{
-
-text-align:left;
-
-padding:10px 14px;
-
-background:#F9FAFB;
-
-color:#6B7280;
-
-font-weight:600;
-
-white-space:nowrap;
-
-}
-
-.schedule-table td{
-
-padding:10px 14px;
-
-border-top:1px solid #F1F5F9;
-
-white-space:nowrap;
-
-color:#111827;
-
-}
-
-:global(.dark) .schedule-wrap{
-
-background:#111217;
-
-border-color:#27272A;
-
-}
-
-:global(.dark) .schedule-caption{
-
-color:#FAFAFA;
-
-}
-
-:global(.dark) .schedule-table th{
-
-background:#18181B;
-
-color:#A1A1AA;
-
-}
-
-:global(.dark) .schedule-table td{
-
-border-color:#27272A;
-
-color:#FAFAFA;
-
-}
-
+  .schedule-table td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-subtle);
+    white-space: nowrap;
+    color: var(--text-primary);
+  }
 </style>

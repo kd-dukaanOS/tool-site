@@ -31,226 +31,112 @@ const {
 ---
 
 <div class="calculator-actions">
-
-  <button
-    id={calculateId}
-    type="button"
-    class="btn btn-primary"
-  >
+  <button id={calculateId} type="button" class="btn btn-primary">
     <span>⚡</span>
     <span>{calculateText}</span>
   </button>
 
-  <button
-    id={resetId}
-    type="reset"
-    class="btn btn-secondary"
-  >
+  <button id={resetId} type="reset" class="btn btn-secondary">
     <span>↺</span>
     <span>{resetText}</span>
   </button>
 
-  {
-    showCopy && (
-      <button
-        id={copyId}
-        type="button"
-        class="btn btn-secondary"
-      >
-        <span>📋</span>
-        <span>Copy</span>
-      </button>
-    )
-  }
+  {showCopy && (
+    <button id={copyId} type="button" class="btn btn-secondary">
+      <span>📋</span>
+      <span>Copy</span>
+    </button>
+  )}
 
-  {
-    showDownload && (
-      <button
-        id={downloadId}
-        type="button"
-        class="btn btn-ghost"
-      >
-        <span>⬇</span>
-        <span>Download</span>
-      </button>
-    )
-  }
+  {showDownload && (
+    <button id={downloadId} type="button" class="btn btn-ghost">
+      <span>⬇</span>
+      <span>Download</span>
+    </button>
+  )}
 
-  {
-    showShare && (
-      <button
-        id={shareId}
-        type="button"
-        class="btn btn-ghost"
-      >
-        <span>🔗</span>
-        <span>Share</span>
-      </button>
-    )
-  }
-
+  {showShare && (
+    <button id={shareId} type="button" class="btn btn-ghost">
+      <span>🔗</span>
+      <span>Share</span>
+    </button>
+  )}
 </div>
 
 <style>
-
-.calculator-actions{
-
-display:flex;
-
-flex-wrap:wrap;
-
-gap:14px;
-
-margin-top:28px;
-
-}
-
-.btn{
-
-display:inline-flex;
-
-align-items:center;
-
-justify-content:center;
-
-gap:10px;
-
-height:48px;
-
-padding:0 20px;
-
-border-radius:14px;
-
-border:1px solid transparent;
-
-font-size:.95rem;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:
-all .2s ease;
-
-white-space:nowrap;
-
-}
-
-.btn:hover{
-
-transform:translateY(-2px);
-
-}
-
-.btn:active{
-
-transform:translateY(0);
-
-}
-
-.btn:focus-visible{
-
-outline:none;
-
-box-shadow:
-0 0 0 4px rgba(79,70,229,.15);
-
-}
-
-.btn-primary{
-
-background:#4F46E5;
-
-color:#fff;
-
-border-color:#4F46E5;
-
-}
-
-.btn-primary:hover{
-
-background:#4338CA;
-
-}
-
-.btn-secondary{
-
-background:#fff;
-
-color:#111827;
-
-border-color:#D1D5DB;
-
-}
-
-.btn-secondary:hover{
-
-background:#F9FAFB;
-
-}
-
-.btn-ghost{
-
-background:transparent;
-
-color:#4F46E5;
-
-border-color:#D1D5DB;
-
-}
-
-.btn-ghost:hover{
-
-background:#EEF2FF;
-
-}
-
-:global(.dark) .btn-secondary{
-
-background:#18181B;
-
-border-color:#27272A;
-
-color:#F4F4F5;
-
-}
-
-:global(.dark) .btn-secondary:hover{
-
-background:#232326;
-
-}
-
-:global(.dark) .btn-ghost{
-
-color:#A5B4FC;
-
-border-color:#27272A;
-
-}
-
-:global(.dark) .btn-ghost:hover{
-
-background:#1E1B4B;
-
-}
-
-@media (max-width:640px){
-
-.calculator-actions{
-
-display:grid;
-
-grid-template-columns:1fr;
-
-}
-
-.btn{
-
-width:100%;
-
-}
-
-}
-
+  .calculator-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bg-page);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-primary);
+    border-color: var(--border-subtle);
+  }
+
+  .btn-ghost:hover {
+    background: var(--color-primary-light);
+  }
+
+  @media (max-width: 640px) {
+    .calculator-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
 </style>

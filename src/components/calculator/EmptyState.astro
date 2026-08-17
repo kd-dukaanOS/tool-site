@@ -12,296 +12,116 @@ const {
   icon = "🧮",
   title = "Ready to Calculate?",
   description = "Fill in the required fields above and click Calculate to see your results.",
-  tips = []
+  tips = [],
 } = Astro.props as Props;
 ---
 
 <section class="empty-state" id={id}>
+  <div class="empty-icon">{icon}</div>
+  <h3 class="empty-title">{title}</h3>
+  <p class="empty-description">{description}</p>
 
-  <div class="empty-icon">
-
-    {icon}
-
-  </div>
-
-  <h3 class="empty-title">
-
-    {title}
-
-  </h3>
-
-  <p class="empty-description">
-
-    {description}
-
-  </p>
-
-  {
-    tips.length > 0 && (
-
-      <ul class="empty-tips">
-
-        {
-          tips.map((tip) => (
-
-            <li>
-
-              <span class="tip-check">
-
-                ✓
-
-              </span>
-
-              <span>
-
-                {tip}
-
-              </span>
-
-            </li>
-
-          ))
-        }
-
-      </ul>
-
-    )
-  }
-
+  {tips.length > 0 && (
+    <ul class="empty-tips">
+      {tips.map((tip) => (
+        <li>
+          <span class="tip-check">✓</span>
+          <span>{tip}</span>
+        </li>
+      ))}
+    </ul>
+  )}
 </section>
 
 <style>
-
-.empty-state{
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
-
-padding:48px 24px;
-
-border:1px dashed #D1D5DB;
-
-border-radius:20px;
-
-background:linear-gradient(
-
-180deg,
-
-#FCFCFD,
-
-#F8FAFC
-
-);
-
-transition:
-
-border-color .2s,
-
-transform .2s;
-
-}
-
-.empty-state:hover{
-
-border-color:#4F46E5;
-
-transform:translateY(-2px);
-
-}
-
-.empty-icon{
-
-width:72px;
-
-height:72px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:2rem;
-
-border-radius:18px;
-
-background:#EEF2FF;
-
-margin-bottom:20px;
-
-}
-
-.empty-title{
-
-margin:0;
-
-font-size:1.4rem;
-
-font-weight:700;
-
-color:#111827;
-
-}
-
-.empty-description{
-
-margin-top:12px;
-
-max-width:520px;
-
-line-height:1.7;
-
-font-size:.95rem;
-
-color:#6B7280;
-
-}
-
-.empty-tips{
-
-margin-top:28px;
-
-padding:0;
-
-list-style:none;
-
-display:grid;
-
-gap:14px;
-
-width:100%;
-
-max-width:420px;
-
-text-align:left;
-
-}
-
-.empty-tips li{
-
-display:flex;
-
-align-items:flex-start;
-
-gap:12px;
-
-font-size:.92rem;
-
-color:#374151;
-
-}
-
-.tip-check{
-
-width:22px;
-
-height:22px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:50%;
-
-background:#DCFCE7;
-
-color:#16A34A;
-
-font-size:.8rem;
-
-font-weight:700;
-
-flex-shrink:0;
-
-margin-top:1px;
-
-}
-
-:global(.dark) .empty-state{
-
-background:#111217;
-
-border-color:#27272A;
-
-}
-
-:global(.dark) .empty-state:hover{
-
-border-color:#6366F1;
-
-}
-
-:global(.dark) .empty-icon{
-
-background:#312E81;
-
-}
-
-:global(.dark) .empty-title{
-
-color:#FAFAFA;
-
-}
-
-:global(.dark) .empty-description{
-
-color:#A1A1AA;
-
-}
-
-:global(.dark) .empty-tips li{
-
-color:#D4D4D8;
-
-}
-
-:global(.dark) .tip-check{
-
-background:#064E3B;
-
-color:#6EE7B7;
-
-}
-
-@media (max-width:640px){
-
-.empty-state{
-
-padding:32px 18px;
-
-}
-
-.empty-icon{
-
-width:60px;
-
-height:60px;
-
-font-size:1.6rem;
-
-}
-
-.empty-title{
-
-font-size:1.2rem;
-
-}
-
-.empty-description{
-
-font-size:.9rem;
-
-}
-
-}
-
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 20px;
+    background: var(--bg-page);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .empty-state:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .empty-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: 18px;
+    background: var(--color-primary-light);
+    margin-bottom: 20px;
+  }
+
+  .empty-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .empty-description {
+    margin-top: 12px;
+    max-width: 520px;
+    line-height: 1.7;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+  }
+
+  .empty-tips {
+    margin-top: 28px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 14px;
+    width: 100%;
+    max-width: 420px;
+    text-align: left;
+  }
+
+  .empty-tips li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+  }
+
+  .tip-check {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #DCFCE7;
+    color: #16A34A;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  :global(.dark) .tip-check {
+    background: #064E3B;
+    color: #6EE7B7;
+  }
+
+  @media (max-width: 640px) {
+    .empty-state { padding: 32px 18px; }
+    .empty-icon { width: 60px; height: 60px; font-size: 1.6rem; }
+    .empty-title { font-size: 1.2rem; }
+    .empty-description { font-size: 0.9rem; }
+  }
 </style>

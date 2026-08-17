@@ -123,11 +123,8 @@ import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";
 .calculator-info{ padding:24px; border:1px solid #E5E7EB; border-radius:18px; background:#FFFFFF; }
 .calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:#111827; }
 .calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:#6B7280; }
-.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
-:global(.dark) .calculator-info{ background:#111217; border-color:#27272A; }
-:global(.dark) .calculator-info h2{ color:#FAFAFA; }
-:global(.dark) .calculator-info p{ color:#A1A1AA; }
-:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
 @media(max-width:1024px){ .fr-layout{ grid-template-columns:1fr; } .fr-sidebar{ position:static; } }
 @media(max-width:768px){ .fr-layout{ gap:24px; } .fr-content{ gap:20px; } }
 @media(max-width:640px){ .calculator-info{ padding:18px; } }
