@@ -61,25 +61,19 @@ export function calculateInflation(input: InflationInput): InflationResult {
   };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
 export function formatPercent(value: number): string {
   return `${value.toFixed(2)}%`;
 }
 
-export function copyInflationSummary(input: InflationInput, result: InflationResult): string {
+export function copyInflationSummary(input: InflationInput, result: InflationResult, currency: CurrencyCode = "INR"): string {
 
   return `
 Inflation Impact Summary
 
 Amount Today:
-${formatCurrency(input.amount)}
+${formatCurrency(input.amount, currency)}
 
 Time Period:
 ${input.years} Years
@@ -88,10 +82,10 @@ Annual Inflation Rate:
 ${input.annualRate}%
 
 Future Value Needed (same purchasing power):
-${formatCurrency(result.futureValueNeeded)}
+${formatCurrency(result.futureValueNeeded, currency)}
 
 Purchasing Power After ${input.years} Years:
-${formatCurrency(result.purchasingPowerFuture)}
+${formatCurrency(result.purchasingPowerFuture, currency)}
 
 Purchasing Power Lost:
 ${formatPercent(result.purchasingPowerLostPercent)}

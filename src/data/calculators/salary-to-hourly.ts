@@ -1,8 +1,8 @@
 // src/data/calculators/salary-to-hourly.ts
 export const salaryToHourlyCalculatorContent = {
   meta: {
-    seoTitle: "Salary to Hourly Calculator - Convert Annual Salary to Hourly Rate",
-    metaDescription: "Convert your annual salary into hourly, daily, weekly and monthly pay. Free salary to hourly calculator with formula, examples and common salary breakdowns.",
+    seoTitle: "Salary to Hourly Calculator - Annual Salary to Hourly Rate (Free)",
+    metaDescription: "Convert annual salary to hourly, daily, weekly and monthly pay free & instant. Free salary to hourly calculator with formula, examples and true rate tips.",
     canonicalSlug: "/salary-to-hourly-calculator",
     ogTitle: "Salary to Hourly Calculator - Annual Salary to Hourly Rate",
     ogDescription: "Instantly convert your annual salary into an hourly, daily, weekly and monthly rate.",
@@ -63,6 +63,9 @@ Use this tool to estimate an equivalent hourly rate for comparison purposes, not
     "Comparing take-home value across job offers with different expected hours",
     "Understanding how much a raise is worth on an hourly basis",
     "Setting a personal minimum hourly rate for side projects or consulting",
+    "Evaluating whether unpaid overtime is worth taking a role for",
+    "Working out per-hour value when splitting freelance vs salaried time",
+    "Deciding between a lower-hour salaried job and a higher-paying hourly job",
   ],
 
   expertTips: [
@@ -72,6 +75,9 @@ Use this tool to estimate an equivalent hourly rate for comparison purposes, not
     "This is a gross, pre-tax estimate — actual take-home pay per hour will be lower after taxes.",
     "Use your actual average hours over several months, not just a single busy week, for an accurate picture.",
     "When setting a freelance rate, add a premium over your salaried equivalent to cover lost benefits and instability.",
+    "Track your actual hours for a few weeks before relying on a guessed average — most people underestimate hours worked.",
+    "Factor in unpaid commute or prep time if it's effectively mandatory, for a more honest hourly picture.",
+    "Revisit this calculation whenever your workload or hours change meaningfully, not just at annual review time.",
   ],
 
   commonMistakes: [
@@ -79,6 +85,8 @@ Use this tool to estimate an equivalent hourly rate for comparison purposes, not
     { mistake: "Assuming 52 full weeks with no unpaid time off", fix: "Reduce weeks per year to reflect actual unpaid leave or seasonal gaps in work." },
     { mistake: "Comparing this pre-tax hourly rate directly to a freelance quote without markup", fix: "Freelance rates should typically be higher than an equivalent salaried hourly rate to cover benefits, taxes and downtime." },
     { mistake: "Ignoring the value of benefits when comparing to hourly work", fix: "Factor in health insurance, paid leave and other benefits, not just the raw hourly number." },
+    { mistake: "Using a single unusually busy week as your typical hours", fix: "Average your hours across several weeks or months to avoid a skewed hourly rate." },
+    { mistake: "Forgetting salary numbers are gross, not net", fix: "Remember the hourly figure is pre-tax; your real take-home hourly value will be lower." },
   ],
 
   faq: [
@@ -94,6 +102,11 @@ Use this tool to estimate an equivalent hourly rate for comparison purposes, not
     { q: "Should I use this to set my freelance hourly rate?", a: "Use it as a starting benchmark, then add a premium to account for lost benefits, inconsistent work, and self-employment taxes." },
     { q: "What's the difference between salary to hourly and hourly to salary calculators?", a: "This tool converts a known annual salary down to an hourly rate; the reverse calculator converts a known hourly rate up to an annual salary." },
     { q: "How accurate is this calculator for part-time salaried roles?", a: "It's accurate as long as you enter your real average hours per week — part-time salaried roles should use their actual contracted or worked hours, not a full 40." },
+    { q: "What is $100,000 a year hourly?", a: "At 40 hours per week for 52 weeks, $100,000 a year equals approximately $48.08 per hour before taxes." },
+    { q: "How do bonuses factor into my effective hourly rate?", a: "Bonuses aren't included in this base calculation — add expected annual bonus to salary first if you want a total-compensation hourly figure." },
+    { q: "Why is my effective hourly rate lower than a coworker's on the same salary?", a: "Differences in actual hours worked per week are the most common cause — someone working 50 hours earns less per hour than someone working 40 on the same salary." },
+    { q: "Does this calculator account for paid holidays?", a: "Not directly — if you're paid for holidays, keep weeks per year at 52; if certain time off is unpaid, reduce the weeks accordingly." },
+    { q: "How do I compare two salaried offers with different expected hours?", a: "Convert both to an hourly rate using each role's realistic weekly hours — the offer with the higher effective hourly rate reflects better pay for your time." },
   ],
 
   relatedCalculators: ["Hourly to Salary Calculator", "Overtime Calculator", "Raise Calculator", "Bonus Calculator", "Freelancer Hourly Rate Calculator"],

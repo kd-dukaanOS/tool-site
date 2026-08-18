@@ -33,26 +33,20 @@ export function calculateProfitMargin(input: ProfitMarginInput): ProfitMarginRes
   return { profit, marginPercent };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 2,
-  }).format(value);
-}
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyProfitMarginSummary(input: ProfitMarginInput, result: ProfitMarginResult): string {
+export function copyProfitMarginSummary(input: ProfitMarginInput, result: ProfitMarginResult, currency: CurrencyCode = "INR"): string {
   return `
 Profit Margin Summary
 
 Revenue:
-${formatCurrency(input.revenue)}
+${formatCurrency(input.revenue, currency)}
 
 Cost:
-${formatCurrency(input.cost)}
+${formatCurrency(input.cost, currency)}
 
 Profit:
-${formatCurrency(result.profit)}
+${formatCurrency(result.profit, currency)}
 
 Profit Margin:
 ${result.marginPercent.toFixed(1)}%

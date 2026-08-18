@@ -65,6 +65,8 @@ Use this tool for a quick bottom-line profitability check, not as a substitute f
     "Reviewing year-end or quarter-end financial performance",
     "Comparing net margin across multiple business locations or divisions",
     "Setting realistic profit targets accounting for all costs",
+    "Comparing net margin before and after a major operational change, like automation or outsourcing",
+    "Validating whether a pricing strategy supports long-term profitability",
   ],
 
   expertTips: [
@@ -75,6 +77,8 @@ Use this tool for a quick bottom-line profitability check, not as a substitute f
     "Compare net margin, not just net profit dollars, when evaluating growth — revenue growth can mask a shrinking margin.",
     "Use net profit trends to time major expense decisions like hiring or new leases.",
     "Seasonal businesses should compare net margin against the same period last year, not the prior quarter.",
+    "Separate one-time expenses from recurring costs when analyzing net margin trends over time.",
+    "Watch net margin alongside cash reserves — a profitable business can still run into short-term cash shortages.",
   ],
 
   commonMistakes: [
@@ -83,6 +87,7 @@ Use this tool for a quick bottom-line profitability check, not as a substitute f
     { mistake: "Judging business health from a single period", fix: "Compare net margin across multiple periods to spot real trends versus one-time fluctuations." },
     { mistake: "Comparing net margin across unrelated industries", fix: "Benchmark against businesses of similar size and industry — typical net margins vary widely." },
     { mistake: "Ignoring one-time or non-recurring expenses in the total", fix: "Separate one-time costs from recurring ones when analyzing trends, even though both belong in a period's net profit." },
+    { mistake: "Treating net profit and taxable income as identical", fix: "Taxable income involves different accounting adjustments, like depreciation and deductions, than the net profit reported here." },
   ],
 
   faq: [
@@ -98,6 +103,10 @@ Use this tool for a quick bottom-line profitability check, not as a substitute f
     { q: "How often should I calculate net profit margin?", a: "Most businesses review it monthly or quarterly, alongside annual reviews for tax and long-term planning purposes." },
     { q: "Is net profit the same as cash flow?", a: "No, net profit is an accounting measure of profitability, while cash flow tracks actual cash moving in and out — a business can be profitable on paper but still have cash flow issues." },
     { q: "What's the difference between net profit and take-home pay for a sole proprietor?", a: "Net profit is the business's bottom line; a sole proprietor's actual take-home pay may differ after accounting for personal tax obligations and reinvestment into the business." },
+    { q: "What is a bad net profit margin?", a: "A consistently negative or near-zero net margin signals the business isn't covering its full costs and may not be sustainable long-term." },
+    { q: "Does net profit include owner's draw or dividends?", a: "No, owner's draws and dividends are distributions of profit rather than expenses, so they aren't subtracted before calculating net profit." },
+    { q: "How does depreciation affect net profit?", a: "Depreciation is a non-cash expense included in total expenses, which reduces reported net profit even though no cash actually left the business that period." },
+    { q: "Can a business have positive cash flow but negative net profit?", a: "Yes, timing differences like collecting cash upfront or delaying expense payments can produce positive cash flow even during an unprofitable accounting period." },
   ],
 
   relatedCalculators: ["Profit Margin Calculator", "Gross Margin Calculator", "Markup Calculator", "Break-Even Calculator", "ROAS Calculator"],

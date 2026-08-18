@@ -5,6 +5,10 @@ import {
   type CommissionInput,
 } from "../utils/commission";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
+let lastResult: ReturnType<typeof calculateCommission> | null = null;
 
 const salesInput = document.getElementById("salesAmount") as HTMLInputElement;
 const rateInput = document.getElementById("commissionRate") as HTMLInputElement;
@@ -52,16 +56,26 @@ function calculate() {
 
   const result = calculateCommission(input);
 
-  setValue("commissionEarnedResult", `₹${result.commissionEarned.toLocaleString("en-IN")}`);
-  setValue("totalEarningsResult", `₹${result.totalEarnings.toLocaleString("en-IN")}`);
-  setValue("effectiveRateResult", `${result.effectiveRate}%`);
-  setSubtitle("totalEarningsResult", input.baseSalary ? "commission + base salary" : "commission only");
+  renderResults(result, input);
 
   lastInput = input;
+  lastResult = result;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateCommission>, input: CommissionInput) {
+  setValue("commissionEarnedResult", formatCurrency(result.commissionEarned, currentCurrency));
+  setValue("totalEarningsResult", formatCurrency(result.totalEarnings, currentCurrency));
+  setValue("effectiveRateResult", `${result.effectiveRate}%`);
+  setSubtitle("totalEarningsResult", input.baseSalary ? "commission + base salary" : "commission only");
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult && lastInput) renderResults(lastResult, lastInput);
+});
 
 function resetCalculator() {
   salesInput.value = "";
@@ -78,7 +92,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateCommission(lastInput);
-  copyToClipboard(copyCommissionSummary(lastInput, result));
+  copyToClipboard(copyCommissionSummary(lastInput, result, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

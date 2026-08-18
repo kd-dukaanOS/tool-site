@@ -108,7 +108,7 @@ Use this tool before committing to any loan to understand the true cost of borro
     { q: "Does this calculator account for loan processing fees?", a: "No, processing fees, insurance and other charges are separate from the EMI calculation and should be added manually." },
   ],
 
-  relatedCalculators: ["SIP Calculator", "Compound Interest Calculator", "CAGR Calculator", "Break Even Calculator", "NPS Calculator", "Discount Calculator"],
+  relatedCalculators: ["SIP Calculator", "Compound Interest Calculator", "CAGR Calculator", "Break-Even Calculator", "NPS Calculator", "Discount Calculator"],
 
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
 

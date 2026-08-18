@@ -34,17 +34,19 @@ export function calculateCAGR(i: CAGRInput): CAGRResult {
   };
 }
 
-export function copyCAGRSummary(i: CAGRInput, r: CAGRResult): string {
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
+export function copyCAGRSummary(i: CAGRInput, r: CAGRResult, currency: CurrencyCode = "INR"): string {
   return `
 CAGR Calculation Summary
 
-Initial Value: ₹${i.initialValue}
-Final Value: ₹${i.finalValue}
+Initial Value: ${formatCurrency(i.initialValue, currency)}
+Final Value: ${formatCurrency(i.finalValue, currency)}
 Time Period: ${i.years} years
 
 CAGR: ${r.cagr}%
 Absolute Return: ${r.absoluteReturn}%
-Total Growth: ₹${r.totalGrowth}
+Total Growth: ${formatCurrency(r.totalGrowth, currency)}
 Wealth Multiple: ${r.wealthMultiple}x
 `.trim();
 }

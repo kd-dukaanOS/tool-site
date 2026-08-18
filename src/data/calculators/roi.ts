@@ -116,7 +116,7 @@ Use this tool for quick investment performance checks across any asset type, fro
     { q: "How do I compare ROI across investments with different currencies?", a: "Convert all figures to a common currency before calculating ROI to ensure a meaningful, apples-to-apples comparison." },
   ],
 
-  relatedCalculators: ["CAGR Calculator", "Profit Margin Calculator", "Break Even Calculator", "Inflation Calculator"],
+  relatedCalculators: ["CAGR Calculator", "Profit Margin Calculator", "Break-Even Calculator", "Inflation Calculator"],
 
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
 

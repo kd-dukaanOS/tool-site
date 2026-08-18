@@ -4,14 +4,16 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { IndianRupee, Percent, Wallet } from "@lucide/astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
+import { Wallet, Percent } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="salesAmount" label="Sales Amount (₹)" type="number" placeholder="e.g. 100000" />
+    <CurrencySelector />
+    <CalculatorField id="salesAmount" label="Sales Amount" type="number" placeholder="e.g. 100000" />
     <CalculatorField id="commissionRate" label="Commission Rate (%)" type="number" placeholder="e.g. 5" />
-    <CalculatorField id="baseSalary" label="Base Salary (₹, optional)" type="number" placeholder="e.g. 15000" />
+    <CalculatorField id="baseSalary" label="Base Salary (optional)" type="number" placeholder="e.g. 15000" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -32,7 +34,7 @@ import { IndianRupee, Percent, Wallet } from "@lucide/astro";
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="commissionEarnedResult" title="Commission Earned" icon={IndianRupee} accent="success" size="lg" />
+      <ResultCard id="commissionEarnedResult" title="Commission Earned" icon={Wallet} accent="success" size="lg" />
       <ResultCard id="totalEarningsResult" title="Total Earnings" icon={Wallet} accent="primary" />
       <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="neutral" />
     </ResultsGrid>

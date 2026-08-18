@@ -62,6 +62,10 @@ Use this tool to estimate equivalent salary for comparison purposes, not as a fi
     "Comparing multiple job offers with different pay structures",
     "Planning finances around a new hourly-rate job",
     "Verifying payroll calculations for hourly employees",
+    "Setting a target hourly rate needed to reach a specific annual income goal",
+    "Comparing your current hourly pay against last year's raise or promotion",
+    "Estimating annual income before signing a gig or contract work agreement",
+    "Preparing proof-of-income figures for a mortgage or loan application",
   ],
 
   expertTips: [
@@ -71,6 +75,9 @@ Use this tool to estimate equivalent salary for comparison purposes, not as a fi
     "This is a gross (pre-tax) estimate — your actual take-home pay will be lower after taxes and deductions.",
     "When comparing offers, always convert to the same time period (annual is usually clearest) before comparing.",
     "Part-time schedules should use actual average hours, not a standard 40-hour assumption.",
+    "Recalculate whenever your hourly rate or typical hours change — small rate changes compound significantly over a full year.",
+    "If your hours fluctuate week to week, use a multi-week average rather than your busiest or slowest week.",
+    "Factor in unpaid holidays or sick days separately from vacation weeks for a more accurate annual estimate.",
   ],
 
   commonMistakes: [
@@ -78,6 +85,8 @@ Use this tool to estimate equivalent salary for comparison purposes, not as a fi
     { mistake: "Comparing gross hourly pay directly to a salaried offer with benefits", fix: "Factor in the value of benefits like health insurance and paid leave when comparing total compensation." },
     { mistake: "Forgetting overtime pay is calculated separately", fix: "Add overtime hours and their higher rate using a dedicated overtime calculator." },
     { mistake: "Using inconsistent hours per week across comparisons", fix: "Use the same, realistic average hours per week when comparing multiple job offers." },
+    { mistake: "Ignoring irregular or seasonal hours when estimating annual income", fix: "Use an average across the full year, including slow periods, rather than a peak-season week." },
+    { mistake: "Treating the annual estimate as guaranteed income", fix: "Hourly income fluctuates with actual hours worked, so treat the result as an estimate, not a fixed salary." },
   ],
 
   faq: [
@@ -91,6 +100,13 @@ Use this tool to estimate equivalent salary for comparison purposes, not as a fi
     { q: "How is monthly salary calculated from annual salary?", a: "Annual salary is divided by 12 to estimate an average monthly figure, even though actual monthly pay may vary by pay schedule." },
     { q: "Why do salaried and hourly comparisons need more than just pay rate?", a: "Salaried roles often include paid leave, insurance and other benefits not reflected in a raw hourly-to-salary conversion." },
     { q: "What's a good hourly rate for a $60,000 annual salary?", a: "At 40 hours per week for 52 weeks, $60,000 annually equals approximately $28.85 per hour." },
+    { q: "What is $20 an hour annually?", a: "At 40 hours per week for 52 weeks, $20 an hour equals approximately $41,600 per year before taxes." },
+    { q: "What is $30 an hour annually?", a: "At 40 hours per week for 52 weeks, $30 an hour equals approximately $62,400 per year before taxes." },
+    { q: "How do I calculate weekly pay from an hourly rate?", a: "Multiply your hourly rate by the number of hours you actually worked that week." },
+    { q: "Does this calculator account for shift differentials or bonuses?", a: "No, it uses your base hourly rate only — add shift differentials or bonuses separately for a full income picture." },
+    { q: "How do I estimate annual income if my hours vary week to week?", a: "Use your average weekly hours over several months rather than a single unusually busy or slow week." },
+    { q: "Is hourly-to-salary conversion useful for gig or contract work?", a: "Yes, it's a useful way to compare gig or contract pay against a salaried equivalent, though gig work typically lacks benefits like paid leave." },
+    { q: "What's the difference between this and a paycheck calculator?", a: "This tool estimates your gross annual salary equivalent, while a paycheck calculator computes actual take-home pay after taxes and deductions for a specific pay period." },
   ],
 
   relatedCalculators: ["Salary to Hourly Calculator", "Overtime Calculator", "Raise Calculator", "Bonus Calculator", "Freelancer Hourly Rate Calculator"],

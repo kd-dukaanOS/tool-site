@@ -110,11 +110,14 @@ function simulatePayoff(
   return { totalInterest: round(totalInterest), months };
 }
 
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
 export function emiInsight(
   principal: number,
   annualRate: number,
   years: number,
-  result: EMIResult
+  result: EMIResult,
+  currency: CurrencyCode = "INR"
 ): string {
 
   const monthlyRate = annualRate / 12 / 100;
@@ -125,12 +128,12 @@ export function emiInsight(
   const monthsSaved = years * 12 - withExtra.months;
 
   if (interestSaved <= 0 || monthsSaved <= 0) {
-    return `You pay a total of ₹${result.totalInterest.toLocaleString("en-IN")} in interest over ${years} years.`;
+    return `You pay a total of ${formatCurrency(result.totalInterest, currency)} in interest over ${years} years.`;
   }
 
   const yearsSaved = round(monthsSaved / 12, 1);
 
-  return `You pay ₹${result.totalInterest.toLocaleString("en-IN")} as interest. Increasing your EMI by ₹${extra}/month could save approximately ₹${interestSaved.toLocaleString("en-IN")} and pay off your loan ${yearsSaved} years sooner.`;
+  return `You pay ${formatCurrency(result.totalInterest, currency)} as interest. Increasing your EMI by ${formatCurrency(extra, currency)}/month could save approximately ${formatCurrency(interestSaved, currency)} and pay off your loan ${yearsSaved} years sooner.`;
 }
 
 export function validateEMIInputs(
@@ -151,19 +154,20 @@ export function copyEMISummary(
   principal: number,
   rate: number,
   years: number,
-  result: EMIResult
+  result: EMIResult,
+  currency: CurrencyCode = "INR"
 ): string {
 
   return `
 Loan EMI Summary
 
-Loan Amount: ₹${principal.toLocaleString("en-IN")}
+Loan Amount: ${formatCurrency(principal, currency)}
 Interest Rate: ${rate}%
 Tenure: ${years} years
 
-Monthly EMI: ₹${result.emi.toLocaleString("en-IN")}
-Total Interest: ₹${result.totalInterest.toLocaleString("en-IN")}
-Total Payment: ₹${result.totalPayment.toLocaleString("en-IN")}
+Monthly EMI: ${formatCurrency(result.emi, currency)}
+Total Interest: ${formatCurrency(result.totalInterest, currency)}
+Total Payment: ${formatCurrency(result.totalPayment, currency)}
 Interest % of Payment: ${result.interestPercent}%
 `.trim();
 }

@@ -1,11 +1,15 @@
 ---
 import type { CalculatorContentData } from "../../types/calculator-content";
 
-type Props = CalculatorContentData;
+type Props = CalculatorContentData & { allTools?: any[] };
 
-const { about, formula, steps, examples, practicalUses, expertTips, commonMistakes, faq, relatedCalculators } = Astro.props;
+const { about, formula, steps, examples, practicalUses, expertTips, commonMistakes, faq, relatedCalculators, allTools } = Astro.props;
 
 const tips = expertTips || practicalUses;
+
+function findToolByName(name: string) {
+  return allTools?.find((t: any) => t.name === name);
+}
 ---
 
 <section class="calc-content">
@@ -86,7 +90,14 @@ const tips = expertTips || practicalUses;
     <div class="calc-block">
       <h2 class="calc-heading">Related Calculators</h2>
       <div class="calc-related-grid">
-        {relatedCalculators.map((name: string) => (<span class="calc-card calc-related-card">{name}</span>))}
+        {relatedCalculators.map((name: string) => {
+          const match = findToolByName(name);
+          return match ? (
+            <a href={`/${match.category}/${match.slug}/`} class="calc-card calc-related-card">{name}</a>
+          ) : (
+            <span class="calc-card calc-related-card">{name}</span>
+          );
+        })}
       </div>
     </div>
   )}

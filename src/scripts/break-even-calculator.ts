@@ -5,6 +5,12 @@ import {
   type BreakEvenInput,
 } from "../utils/break-even";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
+
+
+
 
 const fixedCostsInput = document.getElementById("fixedCosts") as HTMLInputElement;
 const variableCostInput = document.getElementById("variableCostPerUnit") as HTMLInputElement;
@@ -30,6 +36,14 @@ function clearError() {
   errorBox.hidden = true;
 }
 
+function renderResults(result: ReturnType<typeof calculateBreakEven>) {
+  setValue("breakEvenUnitsResult", result.breakEvenUnits.toLocaleString());
+  setValue("breakEvenRevenueResult", formatCurrency(result.breakEvenRevenue, currentCurrency));
+  setValue("contributionMarginResult", formatCurrency(result.contributionMargin, currentCurrency));
+  setValue("contributionRatioResult", `${result.contributionMarginRatio}%`);
+  setSubtitle("breakEvenUnitsResult", "units to sell");
+}
+
 function calculate() {
   clearError();
 
@@ -52,17 +66,23 @@ function calculate() {
 
   const result = calculateBreakEven(input);
 
-  setValue("breakEvenUnitsResult", result.breakEvenUnits.toLocaleString("en-IN"));
-  setValue("breakEvenRevenueResult", `₹${result.breakEvenRevenue.toLocaleString("en-IN")}`);
-  setValue("contributionMarginResult", `₹${result.contributionMargin}`);
-  setValue("contributionRatioResult", `${result.contributionMarginRatio}%`);
-  setSubtitle("breakEvenUnitsResult", "units to sell");
+  renderResults(result);
 
   lastInput = input;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+let lastResult: ReturnType<typeof calculateBreakEven> | null = null;
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastInput) {
+    lastResult = calculateBreakEven(lastInput);
+    renderResults(lastResult);
+  }
+});
 
 function resetCalculator() {
   fixedCostsInput.value = "";
@@ -79,7 +99,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBreakEven(lastInput);
-  copyToClipboard(copyBreakEvenSummary(lastInput, result));
+  copyToClipboard(copyBreakEvenSummary(lastInput, result, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

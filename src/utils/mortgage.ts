@@ -106,36 +106,30 @@ export function calculateMortgage(input: MortgageInput): MortgageResult {
   };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyMortgageSummary(input: MortgageInput, result: MortgageResult): string {
+export function copyMortgageSummary(input: MortgageInput, result: MortgageResult, currency: CurrencyCode = "INR"): string {
 
   return `
 Mortgage Summary
 
 Home Price:
-${formatCurrency(input.homePrice)}
+${formatCurrency(input.homePrice, currency)}
 
 Down Payment:
-${formatCurrency(input.downPayment)}
+${formatCurrency(input.downPayment, currency)}
 
 Loan Amount:
-${formatCurrency(result.loanAmount)}
+${formatCurrency(result.loanAmount, currency)}
 
 Monthly Principal + Interest:
-${formatCurrency(result.monthlyPrincipalInterest)}
+${formatCurrency(result.monthlyPrincipalInterest, currency)}
 
 Total Monthly Payment:
-${formatCurrency(result.totalMonthlyPayment)}
+${formatCurrency(result.totalMonthlyPayment, currency)}
 
 Total Interest Paid:
-${formatCurrency(result.totalInterestPaid)}
+${formatCurrency(result.totalInterestPaid, currency)}
 `.trim();
 
 }

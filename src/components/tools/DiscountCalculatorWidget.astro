@@ -6,6 +6,7 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import ScheduleTable from "../calculator/ScheduleTable.astro";
 
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Tag, PiggyBank, Percent } from "@lucide/astro";
 ---
 
@@ -15,9 +16,11 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
     <aside class="discount-sidebar">
 
+      <CurrencySelector />
+
       <CalculatorField
         id="originalPrice"
-        label="Original Price (₹)"
+        label="Original Price"
         type="number"
         placeholder="e.g. 2000"
         required={true}
@@ -27,7 +30,7 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
       <div class="toggle-row">
         <button type="button" class="toggle-btn active" data-discount-mode="percentage">% Off</button>
-        <button type="button" class="toggle-btn" data-discount-mode="flat">₹ Off</button>
+        <button type="button" class="toggle-btn" data-discount-mode="flat">Flat Off</button>
       </div>
 
       <CalculatorField

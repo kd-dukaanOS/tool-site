@@ -1,7 +1,7 @@
 export const ukTakeHomePayContent = {
   meta: {
-    seoTitle: "UK Take-Home Pay Calculator - Salary After Tax & National Insurance",
-    metaDescription: "Calculate your UK take-home pay after Income Tax and National Insurance. Free salary calculator with monthly, weekly and annual breakdown.",
+    seoTitle: "UK Payslip Calculator - Take-Home Pay After Tax & National Insurance",
+    metaDescription: "Calculate your UK payslip take-home pay after Income Tax and National Insurance. Free salary calculator with monthly, weekly and annual breakdown.",
     canonicalSlug: "/finance/uk-take-home-pay-calculator",
     ogTitle: "UK Take-Home Pay Calculator",
     ogDescription: "See your net salary after Income Tax and National Insurance deductions.",

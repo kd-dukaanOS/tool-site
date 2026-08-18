@@ -69,7 +69,7 @@ Use this tool periodically to track inventory efficiency trends over time.` },
     { q: "Can inventory turnover be too high?", a: "Yes, an excessively high ratio may indicate understocking, which can lead to stockouts and lost sales." },
     { q: "How often should I calculate inventory turnover?", a: "Monthly or quarterly is common for most businesses, though seasonal retailers may benefit from tracking it by season as well." },
   ],
-  relatedCalculators: ["Break Even Calculator", "Profit Margin Calculator", "GST Calculator", "ROI Calculator"],
+  relatedCalculators: ["Break-Even Calculator", "Profit Margin Calculator", "GST Calculator", "ROI Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Inventory Turnover Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };

@@ -1,5 +1,9 @@
 import { calculateCAGR, validateCAGRInput, copyCAGRSummary, type CAGRInput } from "../utils/cagr";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
+let lastResult: ReturnType<typeof calculateCAGR> | null = null;
 
 const initialInput = document.getElementById("initialValue") as HTMLInputElement;
 const finalInput = document.getElementById("finalValue") as HTMLInputElement;
@@ -47,17 +51,27 @@ function calculate() {
 
   const result = calculateCAGR(input);
 
-  setValue("cagrResult", `${result.cagr}%`);
-  setValue("absoluteReturnResult", `${result.absoluteReturn}%`);
-  setValue("totalGrowthResult", `₹${result.totalGrowth.toLocaleString("en-IN")}`);
-  setValue("wealthMultipleResult", `${result.wealthMultiple}x`);
-  setSubtitle("wealthMultipleResult", "your money multiplied");
+  renderResults(result);
 
   lastInput = input;
+  lastResult = result;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateCAGR>) {
+  setValue("cagrResult", `${result.cagr}%`);
+  setValue("absoluteReturnResult", `${result.absoluteReturn}%`);
+  setValue("totalGrowthResult", formatCurrency(result.totalGrowth, currentCurrency));
+  setValue("wealthMultipleResult", `${result.wealthMultiple}x`);
+  setSubtitle("wealthMultipleResult", "your money multiplied");
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function resetCalculator() {
   initialInput.value = "";
@@ -74,7 +88,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateCAGR(lastInput);
-  copyToClipboard(copyCAGRSummary(lastInput, result));
+  copyToClipboard(copyCAGRSummary(lastInput, result, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

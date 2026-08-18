@@ -1,5 +1,9 @@
 import { calculateROI, validateROIInput, copyROISummary, type ROIInput } from "../utils/roi";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
+let lastResult: ReturnType<typeof calculateROI> | null = null;
 
 const investedInput = document.getElementById("investedAmount") as HTMLInputElement;
 const currentValueInput = document.getElementById("currentValue") as HTMLInputElement;
@@ -47,7 +51,17 @@ function calculate() {
 
   const result = calculateROI(input);
 
-  setValue("netProfitResult", `₹${result.netProfit.toLocaleString("en-IN")}`);
+  renderResults(result);
+
+  lastInput = input;
+  lastResult = result;
+
+  emptyState.hidden = true;
+  resultsContainer.hidden = false;
+}
+
+function renderResults(result: ReturnType<typeof calculateROI>) {
+  setValue("netProfitResult", formatCurrency(result.netProfit, currentCurrency));
   setValue("roiPercentResult", `${result.roiPercent}%`);
 
   if (result.annualizedROI !== null) {
@@ -57,12 +71,12 @@ function calculate() {
     setValue("annualizedResult", "—");
     setSubtitle("annualizedResult", "add time period");
   }
-
-  lastInput = input;
-
-  emptyState.hidden = true;
-  resultsContainer.hidden = false;
 }
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function resetCalculator() {
   investedInput.value = "";
@@ -79,7 +93,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateROI(lastInput);
-  copyToClipboard(copyROISummary(lastInput, result));
+  copyToClipboard(copyROISummary(lastInput, result, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

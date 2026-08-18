@@ -1,12 +1,12 @@
 // src/data/calculators/raise.ts
 export const raiseCalculatorContent = {
   meta: {
-    seoTitle: "Raise Calculator - Calculate Salary Increase & New Salary",
-    metaDescription: "Calculate your new salary and raise amount from your current salary and raise percentage. Free raise calculator with formula, examples and negotiation tips.",
+    seoTitle: "Raise Calculator - Salary Increase & New Salary Calculator (Free)",
+    metaDescription: "Calculate your new salary and raise amount free & instant from current salary and raise percentage. Includes monthly impact, negotiation and inflation tips.",
     canonicalSlug: "/raise-calculator",
     ogTitle: "Raise Calculator - Salary Increase Calculator",
     ogDescription: "Instantly calculate your new salary and raise amount from a percentage increase.",
-    twitterTitle: "Free Raise Calculator",
+    twitterTitle: "Free Raise Calculator - Salary Increase",
     twitterDescription: "Calculate your salary raise and new salary instantly, free and accurate.",
   },
 
@@ -60,6 +60,10 @@ Use this tool to quickly verify raise math and plan negotiations, not as a subst
     "Checking how a raise compares to inflation or cost-of-living increases",
     "Estimating the compounding effect of multiple annual raises over time",
     "Benchmarking a raise against typical industry percentages",
+    "Working out the counter-offer number to propose in a negotiation",
+    "Checking if a promotion raise meets typical promotion-raise ranges",
+    "Estimating future salary trajectory across several review cycles",
+    "Deciding between a higher base raise and a signing/retention bonus offer",
   ],
 
   expertTips: [
@@ -69,6 +73,9 @@ Use this tool to quickly verify raise math and plan negotiations, not as a subst
     "Check whether bonus targets or benefits also scale with salary when evaluating a raise's true value.",
     "Research typical raise percentages in your industry and role before entering a negotiation.",
     "A raise combined with a promotion often includes other compensation changes beyond base salary — review the full offer.",
+    "Time raise conversations around performance reviews or after a major completed project, when leverage is highest.",
+    "If a raise is deferred to a future date, calculate its annualized value, not just the eventual dollar amount.",
+    "Get any agreed raise confirmed in writing before treating it as final for budgeting purposes.",
   ],
 
   commonMistakes: [
@@ -76,6 +83,8 @@ Use this tool to quickly verify raise math and plan negotiations, not as a subst
     { mistake: "Not comparing the raise against inflation", fix: "Check current inflation rates to see if the raise represents real (after-inflation) income growth." },
     { mistake: "Assuming the raise applies to gross pay equals the same increase in take-home pay", fix: "Remember taxes apply to the higher salary too, so take-home increase will be somewhat less than the gross raise." },
     { mistake: "Overlooking changes to bonus or benefits tied to salary level", fix: "Check if bonus targets, 401(k) matching, or other benefits scale with your new, higher salary." },
+    { mistake: "Negotiating without market data", fix: "Research comparable salaries for your role and location before proposing a number so your ask is grounded and credible." },
+    { mistake: "Accepting a verbal raise promise without documentation", fix: "Get the new salary and effective date confirmed in writing, such as an updated offer letter or email." },
   ],
 
   faq: [
@@ -89,6 +98,12 @@ Use this tool to quickly verify raise math and plan negotiations, not as a subst
     { q: "What's the difference between a raise and a bonus?", a: "A raise permanently increases your base salary going forward, while a bonus is typically a one-time or periodic payment that doesn't change your base pay." },
     { q: "How do I ask for a specific raise percentage?", a: "Research market rates for your role, document your contributions, and propose a specific percentage or dollar figure backed by that research." },
     { q: "Does a raise affect my tax bracket?", a: "It can push a portion of your income into a higher tax bracket, though typically only the amount above the bracket threshold is taxed at the higher rate." },
+    { q: "What raise percentage should I expect with a promotion?", a: "Promotion raises commonly range from 8-15%, reflecting an increase in role scope and responsibility rather than a standard annual adjustment." },
+    { q: "Is it normal to negotiate a raise offer?", a: "Yes, raise offers are often a starting point for discussion, especially when backed by market research, performance data, or a competing offer." },
+    { q: "How do multiple small raises compare to one large raise over time?", a: "Compounding matters — a series of smaller annual raises can outpace a single larger one-time raise over several years due to each raise building on the last." },
+    { q: "What if my raise is a flat dollar amount instead of a percentage?", a: "Divide the dollar amount by your current salary and multiply by 100 to see it as an equivalent percentage for easier comparison." },
+    { q: "Can a raise push me into a different benefits tier?", a: "In some companies, salary bands determine eligibility for certain bonus tiers, stock grants, or benefit levels, so a raise can unlock more than just base pay." },
+    { q: "How is a raise different from a cost-of-living adjustment (COLA)?", a: "A COLA is specifically meant to offset inflation and maintain purchasing power, while a general raise may also reflect merit, promotion, or market adjustment." },
   ],
 
   relatedCalculators: ["Bonus Calculator", "Hourly to Salary Calculator", "Salary to Hourly Calculator", "Overtime Calculator", "Total Compensation Calculator"],

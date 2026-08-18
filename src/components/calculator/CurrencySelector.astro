@@ -1,0 +1,61 @@
+---
+// src/components/calculator/CurrencySelector.astro
+// Drop this inside any generic finance widget (mortgage, compound
+// interest, discount, EMI, etc.). It's self-contained: reads/writes
+// localStorage directly, no props needed from the page.
+---
+
+<div class="currency-selector">
+  <label for="currencySelect" class="currency-label">Currency</label>
+  <select id="currencySelect" class="currency-select">
+    <option value="INR">₹ INR</option>
+    <option value="USD">$ USD</option>
+    <option value="GBP">£ GBP</option>
+    <option value="CAD">C$ CAD</option>
+  </select>
+</div>
+
+<style>
+  .currency-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .currency-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .currency-select {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  .currency-select:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { getSavedCurrency, setSavedCurrency, broadcastCurrencyChange, type CurrencyCode } from "../../utils/currency";
+
+  const select = document.getElementById("currencySelect") as HTMLSelectElement;
+  if (select) {
+    select.value = getSavedCurrency();
+
+    select.addEventListener("change", () => {
+      const code = select.value as CurrencyCode;
+      setSavedCurrency(code);
+      broadcastCurrencyChange(code);
+    });
+  }
+</script>

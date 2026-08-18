@@ -4,14 +4,16 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { Package, IndianRupee, Percent } from "@lucide/astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
+import { Package, Wallet, Percent } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="fixedCosts" label="Fixed Costs (₹)" type="number" placeholder="e.g. 50000" />
-    <CalculatorField id="variableCostPerUnit" label="Variable Cost per Unit (₹)" type="number" placeholder="e.g. 100" />
-    <CalculatorField id="sellingPricePerUnit" label="Selling Price per Unit (₹)" type="number" placeholder="e.g. 250" />
+    <CurrencySelector />
+    <CalculatorField id="fixedCosts" label="Fixed Costs" type="number" placeholder="e.g. 50000" />
+    <CalculatorField id="variableCostPerUnit" label="Variable Cost per Unit" type="number" placeholder="e.g. 100" />
+    <CalculatorField id="sellingPricePerUnit" label="Selling Price per Unit" type="number" placeholder="e.g. 250" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -33,8 +35,8 @@ import { Package, IndianRupee, Percent } from "@lucide/astro";
 
     <ResultsGrid id="resultsContainer" hidden>
       <ResultCard id="breakEvenUnitsResult" title="Break Even Units" icon={Package} accent="primary" size="lg" />
-      <ResultCard id="breakEvenRevenueResult" title="Break Even Revenue" icon={IndianRupee} accent="success" />
-      <ResultCard id="contributionMarginResult" title="Contribution Margin" icon={IndianRupee} accent="neutral" />
+      <ResultCard id="breakEvenRevenueResult" title="Break Even Revenue" icon={Wallet} accent="success" />
+      <ResultCard id="contributionMarginResult" title="Contribution Margin" icon={Wallet} accent="neutral" />
       <ResultCard id="contributionRatioResult" title="Contribution Ratio" icon={Percent} accent="neutral" />
     </ResultsGrid>
   </div>

@@ -32,15 +32,17 @@ export function calculateROI(i: ROIInput): ROIResult {
   };
 }
 
-export function copyROISummary(i: ROIInput, r: ROIResult): string {
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
+export function copyROISummary(i: ROIInput, r: ROIResult, currency: CurrencyCode = "INR"): string {
   return `
 ROI Calculation Summary
 
-Invested Amount: ₹${i.investedAmount}
-Current Value: ₹${i.currentValue}
+Invested Amount: ${formatCurrency(i.investedAmount, currency)}
+Current Value: ${formatCurrency(i.currentValue, currency)}
 ${i.years ? `Time Period: ${i.years} years` : ""}
 
-Net Profit: ₹${r.netProfit}
+Net Profit: ${formatCurrency(r.netProfit, currency)}
 ROI: ${r.roiPercent}%
 ${r.annualizedROI !== null ? `Annualized ROI: ${r.annualizedROI}%` : ""}
 `.trim();

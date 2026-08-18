@@ -4,20 +4,22 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { TrendingUp, Percent, IndianRupee, Repeat } from "@lucide/astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
+import { TrendingUp, Percent, Wallet, Repeat } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
+    <CurrencySelector />
     <CalculatorField
       id="initialValue"
-      label="Initial Investment (₹)"
+      label="Initial Investment"
       type="number"
       placeholder="e.g. 100000"
     />
     <CalculatorField
       id="finalValue"
-      label="Final Value (₹)"
+      label="Final Value"
       type="number"
       placeholder="e.g. 250000"
     />
@@ -49,7 +51,7 @@ import { TrendingUp, Percent, IndianRupee, Repeat } from "@lucide/astro";
     <ResultsGrid id="resultsContainer" hidden>
       <ResultCard id="cagrResult" title="CAGR" icon={TrendingUp} accent="primary" size="lg" />
       <ResultCard id="absoluteReturnResult" title="Absolute Return" icon={Percent} accent="success" />
-      <ResultCard id="totalGrowthResult" title="Total Growth" icon={IndianRupee} accent="success" />
+      <ResultCard id="totalGrowthResult" title="Total Growth" icon={Wallet} accent="success" />
       <ResultCard id="wealthMultipleResult" title="Wealth Multiple" icon={Repeat} accent="neutral" />
     </ResultsGrid>
   </div>

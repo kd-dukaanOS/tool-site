@@ -8,6 +8,9 @@ import {
 } from "../utils/discount";
 
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
 
 const priceInput = document.getElementById("originalPrice") as HTMLInputElement;
 const discountInput = document.getElementById("discountValue") as HTMLInputElement;
@@ -34,7 +37,7 @@ let lastExtra: number = 0;
 let lastResult: ReturnType<typeof calculateDiscount> | null = null;
 
 function inr(value: number): string {
-  return `₹${value.toLocaleString("en-IN")}`;
+  return formatCurrency(value, currentCurrency);
 }
 
 function showError(message: string) {
@@ -80,14 +83,7 @@ function calculate() {
 
   const result = calculateDiscount(price, discount, currentMode, extra);
 
-  setValue("finalPriceResult", inr(result.finalPrice));
-  setValue("saveResult", inr(result.youSave));
-  setValue("percentResult", `${result.effectivePercent}%`);
-
-  insightBox.textContent = discountInsight(result, price);
-  insightBox.hidden = false;
-
-  renderComparison(price);
+  renderResults(result, price);
 
   lastPrice = price;
   lastDiscount = discount;
@@ -97,6 +93,22 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateDiscount>, price: number) {
+  setValue("finalPriceResult", inr(result.finalPrice));
+  setValue("saveResult", inr(result.youSave));
+  setValue("percentResult", `${result.effectivePercent}%`);
+
+  insightBox.textContent = discountInsight(result, price, currentCurrency);
+  insightBox.hidden = false;
+
+  renderComparison(price);
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult && lastPrice !== null) renderResults(lastResult, lastPrice);
+});
 
 function resetCalculator() {
 
@@ -117,7 +129,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastPrice === null || lastDiscount === null || !lastResult) return;
-  copyToClipboard(copyDiscountSummary(lastPrice, lastDiscount, currentMode, lastExtra, lastResult));
+  copyToClipboard(copyDiscountSummary(lastPrice, lastDiscount, currentMode, lastExtra, lastResult, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

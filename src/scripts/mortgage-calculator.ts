@@ -1,13 +1,15 @@
 import {
   calculateMortgage,
   validateMortgageInput,
-  formatCurrency,
   copyMortgageSummary,
   type MortgageInput,
   type MortgageResult,
 } from "../utils/mortgage";
 
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
 
 const homePriceInput = document.getElementById("homePrice") as HTMLInputElement;
 const downPaymentInput = document.getElementById("downPayment") as HTMLInputElement;
@@ -39,6 +41,17 @@ function clearError() {
   errorBox.hidden = true;
 }
 
+function renderResults(result: MortgageResult) {
+  setValue("totalMonthlyResult", formatCurrency(result.totalMonthlyPayment, currentCurrency));
+  setValue("principalInterestResult", formatCurrency(result.monthlyPrincipalInterest, currentCurrency));
+  setValue("loanAmountResult", formatCurrency(result.loanAmount, currentCurrency));
+  setValue("propertyTaxResult", formatCurrency(result.monthlyPropertyTax, currentCurrency));
+  setValue("insuranceResult", formatCurrency(result.monthlyHomeInsurance, currentCurrency));
+  setValue("pmiResult", formatCurrency(result.monthlyPMI, currentCurrency));
+  setValue("hoaResult", formatCurrency(result.monthlyHOA, currentCurrency));
+  setValue("totalInterestResult", formatCurrency(result.totalInterestPaid, currentCurrency));
+}
+
 function calculate() {
   clearError();
 
@@ -62,14 +75,7 @@ function calculate() {
 
   const result = calculateMortgage(input);
 
-  setValue("totalMonthlyResult", formatCurrency(result.totalMonthlyPayment));
-  setValue("principalInterestResult", formatCurrency(result.monthlyPrincipalInterest));
-  setValue("loanAmountResult", formatCurrency(result.loanAmount));
-  setValue("propertyTaxResult", formatCurrency(result.monthlyPropertyTax));
-  setValue("insuranceResult", formatCurrency(result.monthlyHomeInsurance));
-  setValue("pmiResult", formatCurrency(result.monthlyPMI));
-  setValue("hoaResult", formatCurrency(result.monthlyHOA));
-  setValue("totalInterestResult", formatCurrency(result.totalInterestPaid));
+  renderResults(result);
 
   lastInput = input;
   lastResult = result;
@@ -77,6 +83,11 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function resetCalculator() {
   homePriceInput.value = "";
@@ -98,7 +109,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyMortgageSummary(lastInput, lastResult));
+  copyToClipboard(copyMortgageSummary(lastInput, lastResult, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

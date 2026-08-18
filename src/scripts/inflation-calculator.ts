@@ -1,7 +1,6 @@
 import {
   calculateInflation,
   validateInflationInput,
-  formatCurrency,
   formatPercent,
   copyInflationSummary,
   type InflationInput,
@@ -9,6 +8,9 @@ import {
 } from "../utils/inflation";
 
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
 
 const amountInput = document.getElementById("amount") as HTMLInputElement;
 const yearsInput = document.getElementById("years") as HTMLInputElement;
@@ -53,10 +55,7 @@ function calculate() {
 
   const result = calculateInflation(input);
 
-  setValue("futureValueResult", formatCurrency(result.futureValueNeeded));
-  setValue("purchasingPowerResult", formatCurrency(result.purchasingPowerFuture));
-  setValue("totalInflationResult", formatPercent(result.totalInflationPercent));
-  setValue("powerLostResult", formatPercent(result.purchasingPowerLostPercent));
+  renderResults(result);
 
   lastInput = input;
   lastResult = result;
@@ -64,6 +63,18 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: InflationResult) {
+  setValue("futureValueResult", formatCurrency(result.futureValueNeeded, currentCurrency));
+  setValue("purchasingPowerResult", formatCurrency(result.purchasingPowerFuture, currentCurrency));
+  setValue("totalInflationResult", formatPercent(result.totalInflationPercent));
+  setValue("powerLostResult", formatPercent(result.purchasingPowerLostPercent));
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function resetCalculator() {
   amountInput.value = "";
@@ -80,7 +91,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyInflationSummary(lastInput, lastResult));
+  copyToClipboard(copyInflationSummary(lastInput, lastResult, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

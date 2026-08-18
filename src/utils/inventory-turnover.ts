@@ -31,18 +31,21 @@ export function calculateInventoryTurnover(i: InventoryTurnoverInput): Inventory
   };
 }
 
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
 export function copyInventoryTurnoverSummary(
   i: InventoryTurnoverInput,
-  r: InventoryTurnoverResult
+  r: InventoryTurnoverResult,
+  currency: CurrencyCode = "INR"
 ): string {
   return `
 Inventory Turnover Summary
 
-COGS: ₹${i.cogs}
-Beginning Inventory: ₹${i.beginningInventory}
-Ending Inventory: ₹${i.endingInventory}
+COGS: ${formatCurrency(i.cogs, currency)}
+Beginning Inventory: ${formatCurrency(i.beginningInventory, currency)}
+Ending Inventory: ${formatCurrency(i.endingInventory, currency)}
 
-Average Inventory: ₹${r.averageInventory}
+Average Inventory: ${formatCurrency(r.averageInventory, currency)}
 Turnover Ratio: ${r.turnoverRatio}x
 Days to Sell Inventory: ${r.daysToSellInventory} days
 `.trim();

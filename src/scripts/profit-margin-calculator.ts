@@ -1,6 +1,9 @@
 // src/scripts/profit-margin-calculator.ts
-import { validateProfitMarginInput, calculateProfitMargin, formatCurrency, copyProfitMarginSummary } from "../utils/profit-margin";
+import { validateProfitMarginInput, calculateProfitMargin, copyProfitMarginSummary } from "../utils/profit-margin";
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
 
 const revenueInput = document.getElementById("revenue") as HTMLInputElement;
 const costInput = document.getElementById("cost") as HTMLInputElement;
@@ -41,8 +44,7 @@ function calculate() {
 
   const result = calculateProfitMargin(input);
 
-  setValue("profitResult", formatCurrency(result.profit));
-  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
+  renderResults(result);
 
   lastInput = input;
   lastResult = result;
@@ -50,6 +52,16 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateProfitMargin>) {
+  setValue("profitResult", formatCurrency(result.profit, currentCurrency));
+  setValue("marginResult", `${result.marginPercent.toFixed(1)}%`);
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function reset() {
   revenueInput.value = "";
@@ -63,7 +75,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult));
+  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

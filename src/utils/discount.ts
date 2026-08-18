@@ -55,12 +55,15 @@ export function discountComparison(
   });
 }
 
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
 export function discountInsight(
   result: DiscountResult,
-  originalPrice: number
+  originalPrice: number,
+  currency: CurrencyCode = "INR"
 ): string {
 
-  return `You save ₹${result.youSave.toLocaleString("en-IN")} — that's ${result.effectivePercent}% off the original ₹${originalPrice.toLocaleString("en-IN")} price.`;
+  return `You save ${formatCurrency(result.youSave, currency)} — that's ${result.effectivePercent}% off the original ${formatCurrency(originalPrice, currency)} price.`;
 }
 
 export function validateDiscountInputs(
@@ -82,17 +85,18 @@ export function copyDiscountSummary(
   discountValue: number,
   mode: DiscountMode,
   extraPercent: number,
-  result: DiscountResult
+  result: DiscountResult,
+  currency: CurrencyCode = "INR"
 ): string {
 
   return `
 Discount Summary
 
-Original Price: ₹${originalPrice.toLocaleString("en-IN")}
-Discount: ${mode === "percentage" ? `${discountValue}%` : `₹${discountValue}`}${extraPercent ? ` + additional ${extraPercent}%` : ""}
+Original Price: ${formatCurrency(originalPrice, currency)}
+Discount: ${mode === "percentage" ? `${discountValue}%` : formatCurrency(discountValue, currency)}${extraPercent ? ` + additional ${extraPercent}%` : ""}
 
-Final Price: ₹${result.finalPrice.toLocaleString("en-IN")}
-You Save: ₹${result.youSave.toLocaleString("en-IN")}
+Final Price: ${formatCurrency(result.finalPrice, currency)}
+You Save: ${formatCurrency(result.youSave, currency)}
 Effective Discount: ${result.effectivePercent}%
 `.trim();
 }

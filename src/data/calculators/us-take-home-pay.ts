@@ -1,7 +1,7 @@
 export const usTakeHomePayContent = {
   meta: {
-    seoTitle: "US Take-Home Pay Calculator - Salary After Federal Tax & FICA",
-    metaDescription: "Calculate your US take-home pay after federal income tax, Social Security and Medicare. Free salary calculator with monthly and biweekly breakdown.",
+    seoTitle: "US Payroll Calculator - Take-Home Pay After Federal Tax & FICA",
+    metaDescription: "Calculate your US payroll take-home pay after federal income tax, Social Security and Medicare. Free paycheck calculator with monthly and biweekly breakdown.",
     canonicalSlug: "/finance/us-take-home-pay-calculator",
     ogTitle: "US Take-Home Pay Calculator",
     ogDescription: "See your net salary after federal income tax, Social Security and Medicare deductions.",

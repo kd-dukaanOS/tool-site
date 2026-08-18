@@ -30,16 +30,18 @@ export function calculateCommission(i: CommissionInput): CommissionResult {
   };
 }
 
-export function copyCommissionSummary(i: CommissionInput, r: CommissionResult): string {
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
+export function copyCommissionSummary(i: CommissionInput, r: CommissionResult, currency: CurrencyCode = "INR"): string {
   return `
 Commission Summary
 
-Sales Amount: ₹${i.salesAmount}
+Sales Amount: ${formatCurrency(i.salesAmount, currency)}
 Commission Rate: ${i.commissionRate}%
-${i.baseSalary ? `Base Salary: ₹${i.baseSalary}` : ""}
+${i.baseSalary ? `Base Salary: ${formatCurrency(i.baseSalary, currency)}` : ""}
 
-Commission Earned: ₹${r.commissionEarned}
-Total Earnings: ₹${r.totalEarnings}
+Commission Earned: ${formatCurrency(r.commissionEarned, currency)}
+Total Earnings: ${formatCurrency(r.totalEarnings, currency)}
 Effective Rate: ${r.effectiveRate}%
 `.trim();
 }

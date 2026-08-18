@@ -9,6 +9,9 @@ import {
 } from "../utils/emi";
 
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
 
 const principalInput = document.getElementById("principal") as HTMLInputElement;
 const rateInput = document.getElementById("rate") as HTMLInputElement;
@@ -35,7 +38,7 @@ let lastYears: number | null = null;
 let lastResult: ReturnType<typeof calculateEMI> | null = null;
 
 function inr(value: number): string {
-  return `₹${value.toLocaleString("en-IN")}`;
+  return formatCurrency(value, currentCurrency);
 }
 
 function showError(message: string) {
@@ -111,16 +114,7 @@ function calculate() {
 
   const result = calculateEMI(principal, rate, years);
 
-  setValue("emiResult", inr(result.emi));
-  setValue("interestResult", inr(result.totalInterest));
-  setValue("totalResult", inr(result.totalPayment));
-  setValue("percentResult", `${result.interestPercent}%`);
-
-  insightBox.textContent = emiInsight(principal, rate, years, result);
-  insightBox.hidden = false;
-
-  renderChart(principal, result.totalInterest);
-  renderSchedule(principal, rate, years);
+  renderResults(result, principal, rate, years);
 
   lastPrincipal = principal;
   lastRate = rate;
@@ -130,6 +124,26 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateEMI>, principal: number, rate: number, years: number) {
+  setValue("emiResult", inr(result.emi));
+  setValue("interestResult", inr(result.totalInterest));
+  setValue("totalResult", inr(result.totalPayment));
+  setValue("percentResult", `${result.interestPercent}%`);
+
+  insightBox.textContent = emiInsight(principal, rate, years, result, currentCurrency);
+  insightBox.hidden = false;
+
+  renderChart(principal, result.totalInterest);
+  renderSchedule(principal, rate, years);
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult && lastPrincipal !== null && lastRate !== null && lastYears !== null) {
+    renderResults(lastResult, lastPrincipal, lastRate, lastYears);
+  }
+});
 
 function resetCalculator() {
 
@@ -155,7 +169,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastPrincipal === null || lastRate === null || lastYears === null || !lastResult) return;
-  copyToClipboard(copyEMISummary(lastPrincipal, lastRate, lastYears, lastResult));
+  copyToClipboard(copyEMISummary(lastPrincipal, lastRate, lastYears, lastResult, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

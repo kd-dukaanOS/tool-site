@@ -82,7 +82,7 @@ Limitations: this assumes a consistent number of hours per week and weeks worked
     { q: "How accurate is the daily rate shown?", a: "Daily rate is estimated by dividing weekly pay across a 5-day work week; adjust manually if you work a different number of days." },
     { q: "Should I use gross or net salary when comparing job offers?", a: "Compare net (take-home) pay when possible, since tax treatment can differ between an hourly contract role and a salaried position." },
   ],
-  relatedCalculators: ["US Take-Home Pay", "UK Take-Home Pay", "Canada Take-Home Pay", "Overtime Calculator", "Raise Calculator", "Freelancer Hourly Rate Calculator"],
+  relatedCalculators: ["US Take-Home Pay Calculator", "UK Take-Home Pay Calculator", "Canada Take-Home Pay Calculator", "Overtime Calculator", "Raise Calculator", "Freelancer Hourly Rate Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: {
     h1: "Salary Calculator",

@@ -4,13 +4,15 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { IndianRupee, Percent, TrendingUp } from "@lucide/astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
+import { Wallet, Percent, TrendingUp } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="investedAmount" label="Invested Amount (₹)" type="number" placeholder="e.g. 50000" />
-    <CalculatorField id="currentValue" label="Current Value (₹)" type="number" placeholder="e.g. 75000" />
+    <CurrencySelector />
+    <CalculatorField id="investedAmount" label="Invested Amount" type="number" placeholder="e.g. 50000" />
+    <CalculatorField id="currentValue" label="Current Value" type="number" placeholder="e.g. 75000" />
     <CalculatorField id="years" label="Time Period (Years, optional)" type="number" placeholder="e.g. 3" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -32,7 +34,7 @@ import { IndianRupee, Percent, TrendingUp } from "@lucide/astro";
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="netProfitResult" title="Net Profit" icon={IndianRupee} accent="success" size="lg" />
+      <ResultCard id="netProfitResult" title="Net Profit" icon={Wallet} accent="success" size="lg" />
       <ResultCard id="roiPercentResult" title="ROI" icon={Percent} accent="primary" />
       <ResultCard id="annualizedResult" title="Annualized ROI" icon={TrendingUp} accent="neutral" />
     </ResultsGrid>

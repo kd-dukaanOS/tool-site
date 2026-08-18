@@ -35,17 +35,19 @@ export function calculateBreakEven(i: BreakEvenInput): BreakEvenResult {
   };
 }
 
-export function copyBreakEvenSummary(i: BreakEvenInput, r: BreakEvenResult): string {
+import { formatCurrency, type CurrencyCode } from "./currencyselector";
+
+export function copyBreakEvenSummary(i: BreakEvenInput, r: BreakEvenResult, currency: CurrencyCode = "INR"): string {
   return `
 Break Even Analysis
 
-Fixed Costs: ₹${i.fixedCosts}
-Variable Cost/Unit: ₹${i.variableCostPerUnit}
-Selling Price/Unit: ₹${i.sellingPricePerUnit}
+Fixed Costs: ${formatCurrency(i.fixedCosts, currency)}
+Variable Cost/Unit: ${formatCurrency(i.variableCostPerUnit, currency)}
+Selling Price/Unit: ${formatCurrency(i.sellingPricePerUnit, currency)}
 
 Break Even Units: ${r.breakEvenUnits}
-Break Even Revenue: ₹${r.breakEvenRevenue}
-Contribution Margin: ₹${r.contributionMargin}/unit
+Break Even Revenue: ${formatCurrency(r.breakEvenRevenue, currency)}
+Contribution Margin: ${formatCurrency(r.contributionMargin, currency)}/unit
 Contribution Margin Ratio: ${r.contributionMarginRatio}%
 `.trim();
 }

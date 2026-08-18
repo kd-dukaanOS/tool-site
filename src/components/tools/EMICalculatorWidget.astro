@@ -6,6 +6,7 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import ChartCard from "../calculator/ChartCard.astro";
 import ScheduleTable from "../calculator/ScheduleTable.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 ---
@@ -18,9 +19,11 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
     <aside class="emi-sidebar">
 
+      <CurrencySelector />
+
       <CalculatorField
         id="principal"
-        label="Loan Amount (₹)"
+        label="Loan Amount"
         type="number"
         placeholder="e.g. 2500000"
         required={true}

@@ -74,7 +74,7 @@ Use this tool for quick invoice checks and GST slab comparisons.` },
      { q: "Is GST the same across all states in India?", a: "Yes, GST rates are uniform nationwide for the same product or service category, unlike the earlier VAT system." },
     { q: "Are all goods and services subject to GST?", a: "No, some items like fresh produce, alcohol for human consumption, and petroleum products are either exempt or taxed outside the standard GST slabs." },
   ],
-  relatedCalculators: ["Discount Calculator", "Percentage Calculator", "Break Even Calculator", "Currency Converter"],
+  relatedCalculators: ["Discount Calculator", "Percentage Calculator", "Break-Even Calculator", "Currency Converter"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "GST Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };

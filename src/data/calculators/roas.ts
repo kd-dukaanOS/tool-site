@@ -1,12 +1,12 @@
 // src/data/calculators/roas.ts
 export const roasCalculatorContent = {
   meta: {
-    seoTitle: "ROAS Calculator - Return on Ad Spend Free",
-    metaDescription: "Calculate ROAS (Return on Ad Spend) and campaign profit from ad revenue and ad cost. Free ROAS calculator with formula, examples and good ROAS benchmarks.",
+    seoTitle: "ROAS Calculator - Return on Ad Spend Calculator (Free)",
+    metaDescription: "Calculate ROAS (Return on Ad Spend) free & instant from ad revenue and ad cost. Includes campaign profit, break-even ROAS and good ROAS benchmarks.",
     canonicalSlug: "/roas-calculator",
     ogTitle: "ROAS Calculator - Return on Ad Spend",
     ogDescription: "Instantly calculate Return on Ad Spend (ROAS) and campaign profit.",
-    twitterTitle: "Free ROAS Calculator",
+    twitterTitle: "Free ROAS Calculator - Return on Ad Spend",
     twitterDescription: "Calculate Return on Ad Spend instantly, free and accurate.",
   },
 
@@ -65,6 +65,8 @@ Use this tool for quick campaign-level ROAS checks, not as a substitute for full
     "Benchmarking agency or in-house ad performance",
     "Deciding when to pause an underperforming campaign",
     "Calculating break-even ROAS needed to cover product cost",
+    "Justifying ad budget increases with a clear return figure",
+    "Comparing this month's ad efficiency against last month's",
   ],
 
   expertTips: [
@@ -75,6 +77,8 @@ Use this tool for quick campaign-level ROAS checks, not as a substitute for full
     "High ROAS at low ad spend doesn't always scale — test increased budgets before assuming ROAS holds.",
     "Different platforms report ROAS differently (view-through vs click-through) — compare like for like.",
     "Combine ROAS with ROI when product cost is significant, for a true profitability picture.",
+    "Segment ROAS by new vs returning customers — retargeting campaigns will structurally show higher ROAS than cold prospecting.",
+    "Watch for diminishing ROAS as you increase budget on a single audience — it often signals audience saturation.",
   ],
 
   commonMistakes: [
@@ -83,6 +87,7 @@ Use this tool for quick campaign-level ROAS checks, not as a substitute for full
     { mistake: "Judging a campaign from a single day's ROAS", fix: "Look at ROAS trends over the campaign's full duration, since daily performance can fluctuate significantly." },
     { mistake: "Comparing ROAS across very different campaign objectives", fix: "Compare ROAS only within similar campaign types, like retargeting vs retargeting, not awareness vs retargeting." },
     { mistake: "Ignoring attribution window differences when comparing platforms", fix: "Check each platform's attribution window settings before comparing ROAS figures side by side." },
+    { mistake: "Scaling budget aggressively right after seeing a high ROAS", fix: "Increase spend gradually and monitor ROAS as you scale — performance rarely holds perfectly linear at higher budgets." },
   ],
 
   faq: [
@@ -96,6 +101,12 @@ Use this tool for quick campaign-level ROAS checks, not as a substitute for full
     { q: "Can ROAS be negative?", a: "ROAS itself (revenue divided by spend) is never negative, but resulting profit can be negative if ad spend exceeds revenue generated." },
     { q: "What ROAS should I target for an e-commerce store?", a: "Many e-commerce businesses target 3x to 5x ROAS, but the right target depends on your product margin — lower-margin products need a higher ROAS to be profitable." },
     { q: "How often should I check my campaign's ROAS?", a: "Daily monitoring helps catch issues early, but judge overall performance using trends over at least a week to smooth out daily fluctuations." },
+    { q: "What's the difference between ROAS and MER?", a: "ROAS typically measures a single campaign or channel's efficiency, while MER (Marketing Efficiency Ratio) measures total revenue against total marketing spend across all channels combined." },
+    { q: "Why does my ROAS drop as I increase ad spend?", a: "Scaling budget often means reaching colder or less-targeted audiences, which typically convert at a lower rate than your initial, most-responsive audience segment." },
+    { q: "Is ROAS more important than total profit?", a: "Not necessarily — a lower ROAS at much higher spend can generate more total profit than a higher ROAS at low spend, so both metrics matter together." },
+    { q: "How do I calculate ROAS for multiple campaigns combined?", a: "Sum total revenue across all campaigns and divide by total combined ad spend to get a blended ROAS figure." },
+    { q: "What counts as 'revenue' in a ROAS calculation?", a: "Revenue should reflect actual attributed sales from the campaign, ideally net of refunds, to avoid inflating the reported ROAS." },
+    { q: "Should I include tax or shipping in ROAS revenue?", a: "Most advertisers use gross product revenue (before tax and shipping) for consistency with how ad platforms typically report conversion value." },
   ],
 
   relatedCalculators: ["ROI Calculator", "Profit Margin Calculator", "Customer Acquisition Cost Calculator", "Customer Lifetime Value Calculator", "Markup Calculator"],

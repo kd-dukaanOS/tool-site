@@ -88,6 +88,18 @@ import CPPCalculatorWidget from "../../components/tools/CPPCalculatorWidget.astr
 import EICalculatorWidget from "../../components/tools/EICalculatorWidget.astro";
 import NationalInsuranceWidget from "../../components/tools/NationalInsuranceWidget.astro";
 import UKTakeHomePayWidget from "../../components/tools/UKTakeHomePayWidget.astro";
+import BonusCalculatorWidget from "../../components/tools/BonusCalculatorWidget.astro";
+import GrossMarginCalculatorWidget from "../../components/tools/GrossMarginCalculatorWidget.astro";
+import NetProfitCalculatorWidget from "../../components/tools/NetProfitCalculatorWidget.astro";
+import OvertimeCalculatorWidget from "../../components/tools/OvertimeCalculatorWidget.astro";
+import RaiseCalculatorWidget from "../../components/tools/RaiseCalculatorWidget.astro";
+import RoasCalculatorWidget from "../../components/tools/RoasCalculatorWidget.astro";
+import SalaryToHourlyCalculatorWidget from "../../components/tools/SalaryToHourlyCalculatorWidget.astro";
+import HourlyToSalaryCalculatorWidget from "../../components/tools/HourlyToSalaryCalculatorWidget.astro";
+import CustomerAcquisitionCostWidget from "../../components/tools/CustomerAcquisitionCostWidget.astro";
+import CustomerLifetimeValueWidget from "../../components/tools/CustomerLifetimeValueWidget.astro";
+import FreelancerRateCalculatorWidget from "../../components/tools/FreelancerRateCalculatorWidget.astro";
+import BusinessValuationEstimatorWidget from "../../components/tools/BusinessValuationEstimatorWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 import { contentMap } from "../../data/calculator-content-map.js";
 import CalculatorContent from "../../components/content/CalculatorContent.astro";
@@ -350,15 +362,37 @@ const faqSchema = faqs.length > 0 ? {
       <UKTakeHomePayWidget />
     ) : tool.slug === "uk-national-insurance-calculator" ? (
       <NationalInsuranceWidget />
-  
-
+    ) : tool.slug === "bonus-calculator" ? (
+      <BonusCalculatorWidget />
+    ) : tool.slug === "gross-margin-calculator" ? (
+      <GrossMarginCalculatorWidget />
+    ) : tool.slug === "net-profit-calculator" ? (
+      <NetProfitCalculatorWidget />
+    ) : tool.slug === "overtime-calculator" ? (
+      <OvertimeCalculatorWidget />
+    ) : tool.slug === "raise-calculator" ? (
+      <RaiseCalculatorWidget />
+    ) : tool.slug === "roas-calculator" ? (
+      <RoasCalculatorWidget />
+    ) : tool.slug === "salary-to-hourly-calculator" ? (
+      <SalaryToHourlyCalculatorWidget />
+    ) : tool.slug === "hourly-to-salary-calculator" ? (
+      <HourlyToSalaryCalculatorWidget />
+    ) : tool.slug === "customer-acquisition-cost-calculator" ? (
+      <CustomerAcquisitionCostWidget />
+    ) : tool.slug === "customer-lifetime-value-calculator" ? (
+      <CustomerLifetimeValueWidget />
+    ) : tool.slug === "freelancer-hourly-rate-calculator" ? (
+      <FreelancerRateCalculatorWidget />
+    ) : tool.slug === "business-valuation-calculator" ? (
+      <BusinessValuationEstimatorWidget />
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>
       </div>
     )}
 
-    {content && <CalculatorContent {...content} />}
+    {content && <CalculatorContent {...content} allTools={tools} />}
   </div>
 
   {faqSchema && (

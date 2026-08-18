@@ -1,12 +1,13 @@
-{/* src/components/tools/BonusCalculatorWidget.astro */}
+
 ---
+
+{/* src/components/tools/BonusCalculatorWidget.astro */}
 import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
-
-import { Gift, Wallet, Receipt, TrendingUp } from "@lucide/astro";
+import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
 ---
 
 <section class="bonus-calculator">
@@ -69,7 +70,7 @@ import { Gift, Wallet, Receipt, TrendingUp } from "@lucide/astro";
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
           <ResultCard id="netBonusResult" title="Net Bonus" icon={Wallet} accent="success" size="lg" />
-          <ResultCard id="bonusAmountResult" title="Gross Bonus" icon={Gift} accent="primary" />
+          <ResultCard id="bonusAmountResult" title="Gross Bonus" icon={Package} accent="primary" />
           <ResultCard id="taxOnBonusResult" title="Tax on Bonus" icon={Receipt} />
           <ResultCard id="totalCompResult" title="Total Compensation" icon={TrendingUp} />
         </ResultsGrid>

@@ -68,7 +68,7 @@ Use this tool to stay on top of invoice tracking and client payment schedules.` 
    { q: "Can I use this for recurring invoices?", a: "Yes, simply recalculate for each new invoice date using the same payment terms." },
     { q: "What happens if the due date falls on a weekend or holiday?", a: "Unless your contract states otherwise, the due date stays as calculated — some businesses choose to extend to the next business day as a courtesy." },
   ],
-  relatedCalculators: ["Business Days Calculator", "Date Difference Calculator", "Break Even Calculator", "GST Calculator"],
+  relatedCalculators: ["Business Days Calculator", "Date Difference Calculator", "Break-Even Calculator", "GST Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Invoice Due Date Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };

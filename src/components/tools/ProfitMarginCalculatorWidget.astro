@@ -5,17 +5,20 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
-import { DollarSign, Percent } from "@lucide/astro";
+import { Wallet, Percent } from "@lucide/astro";
 ---
 
 <section class="pm-calculator">
   <div class="pm-layout">
 
     <aside class="pm-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="revenue"
-        label="Revenue ($)"
+        label="Revenue"
         type="number"
         placeholder="e.g. 1000"
         required={true}
@@ -26,7 +29,7 @@ import { DollarSign, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="cost"
-        label="Cost ($)"
+        label="Cost"
         type="number"
         placeholder="e.g. 600"
         required={true}
@@ -57,7 +60,7 @@ import { DollarSign, Percent } from "@lucide/astro";
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="profitResult" title="Profit" icon={DollarSign} accent="success" size="lg" />
+          <ResultCard id="profitResult" title="Profit" icon={Wallet} accent="success" size="lg" />
           <ResultCard id="marginResult" title="Profit Margin" icon={Percent} accent="primary" />
         </ResultsGrid>
 

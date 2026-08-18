@@ -5,6 +5,10 @@ import {
   type InventoryTurnoverInput,
 } from "../utils/inventory-turnover";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
+
+let currentCurrency: CurrencyCode = getSavedCurrency();
+let lastResult: ReturnType<typeof calculateInventoryTurnover> | null = null;
 
 const cogsInput = document.getElementById("cogs") as HTMLInputElement;
 const beginningInput = document.getElementById("beginningInventory") as HTMLInputElement;
@@ -52,17 +56,27 @@ function calculate() {
 
   const result = calculateInventoryTurnover(input);
 
-  setValue("avgInventoryResult", `₹${result.averageInventory.toLocaleString("en-IN")}`);
-  setValue("turnoverRatioResult", `${result.turnoverRatio}x`);
-  setValue("daysToSellResult", `${result.daysToSellInventory} days`);
-  setSubtitle("turnoverRatioResult", "times per year");
-  setSubtitle("daysToSellResult", "to clear stock");
+  renderResults(result);
 
   lastInput = input;
+  lastResult = result;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+function renderResults(result: ReturnType<typeof calculateInventoryTurnover>) {
+  setValue("avgInventoryResult", formatCurrency(result.averageInventory, currentCurrency));
+  setValue("turnoverRatioResult", `${result.turnoverRatio}x`);
+  setValue("daysToSellResult", `${result.daysToSellInventory} days`);
+  setSubtitle("turnoverRatioResult", "times per year");
+  setSubtitle("daysToSellResult", "to clear stock");
+}
+
+onCurrencyChange((code) => {
+  currentCurrency = code;
+  if (lastResult) renderResults(lastResult);
+});
 
 function resetCalculator() {
   cogsInput.value = "";
@@ -79,7 +93,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateInventoryTurnover(lastInput);
-  copyToClipboard(copyInventoryTurnoverSummary(lastInput, result));
+  copyToClipboard(copyInventoryTurnoverSummary(lastInput, result, currentCurrency));
 }
 
 calculateBtn?.addEventListener("click", calculate);

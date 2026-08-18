@@ -31,7 +31,7 @@ Use this tool for home-buying budget planning, not as a final loan approval figu
     { q: "What is an escrow account in a mortgage?", a: "An escrow account collects a portion of your monthly payment to cover property tax and insurance, which the lender pays on your behalf when due." },
     { q: "Can I pay off my mortgage early without penalty?", a: "Most mortgages allow extra principal payments without penalty, but check your specific loan terms since some loans include prepayment penalties." },
   ],
-  relatedCalculators: ["EMI Calculator", "Compound Interest Calculator", "Break Even Calculator", "Inflation Calculator"],
+  relatedCalculators: ["EMI Calculator", "Compound Interest Calculator", "Break-Even Calculator", "Inflation Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Mortgage Calculator", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };

@@ -1,7 +1,7 @@
 export const caTakeHomePayContent = {
   meta: {
-    seoTitle: "Canada Take-Home Pay Calculator - Net Salary After Tax, CPP & EI",
-    metaDescription: "Calculate your Canadian take-home pay after federal tax, provincial tax, CPP and EI. Free salary calculator for Ontario, Alberta and BC.",
+    seoTitle: "Canada Payroll Calculator - Take-Home Pay After Tax, CPP & EI",
+    metaDescription: "Calculate your Canadian payroll take-home pay after federal tax, provincial tax, CPP and EI. Free salary calculator for Ontario, Alberta and BC.",
     canonicalSlug: "/finance/ca-take-home-pay-calculator",
     ogTitle: "Canada Take-Home Pay Calculator",
     ogDescription: "See your net salary after federal tax, provincial tax, CPP and EI deductions.",

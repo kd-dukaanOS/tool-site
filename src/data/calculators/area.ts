@@ -35,7 +35,7 @@ Use this tool whenever you need a quick, accurate area conversion.` },
     { q: "How do I convert land size for a home loan or property valuation?", a: "Convert the property's listed area to the unit your lender or valuer requires (usually square feet or square meters) before submitting documents, since mismatched units can cause valuation errors." },
     { q: "Can I use this converter for room or garden area, not just land?", a: "Yes, it works for any surface area — rooms, gardens, tiles, or fields — as long as you have the value in a supported unit." },
   ],
-  relatedCalculators: ["Length Converter", "Volume Converter", "Break Even Calculator", "Percentage Calculator"],
+  relatedCalculators: ["Length Converter", "Volume Converter", "Break-Even Calculator", "Percentage Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Area Converter", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };
