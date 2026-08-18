@@ -5,6 +5,7 @@ import {
   type VATInput,
 } from "../utils/vat";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const amountInput = document.getElementById("amount") as HTMLInputElement;
 const vatRateInput = document.getElementById("vatRate") as HTMLInputElement;
@@ -51,10 +52,11 @@ function calculate() {
   }
 
   const result = calculateVAT(input);
+  const currency = getSavedCurrency();
 
-  setValue("netAmountResult", `₹${result.netAmount.toLocaleString("en-IN")}`);
-  setValue("vatAmountResult", `₹${result.vatAmount.toLocaleString("en-IN")}`);
-  setValue("grossAmountResult", `₹${result.grossAmount.toLocaleString("en-IN")}`);
+  setValue("netAmountResult", formatCurrency(result.netAmount, currency));
+  setValue("vatAmountResult", formatCurrency(result.vatAmount, currency));
+  setValue("grossAmountResult", formatCurrency(result.grossAmount, currency));
   setSubtitle("grossAmountResult", "final payable amount");
 
   lastInput = input;
@@ -78,9 +80,13 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateVAT(lastInput);
-  copyToClipboard(copyVATSummary(lastInput, result));
+  copyToClipboard(copyVATSummary(lastInput, result, getSavedCurrency()));
 }
 
 calculateBtn?.addEventListener("click", calculate);
 resetBtn?.addEventListener("click", resetCalculator);
 copyBtn?.addEventListener("click", handleCopy);
+
+onCurrencyChange(() => {
+  if (lastInput) calculate();
+});

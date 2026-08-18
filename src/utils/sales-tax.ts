@@ -1,3 +1,6 @@
+import { formatCurrency, getSavedCurrency, type CurrencyCode } from "./currency";
+
+
 export interface SalesTaxInput {
   amount: number;
   taxRate: number;
@@ -38,15 +41,19 @@ export function calculateSalesTax(i: SalesTaxInput): SalesTaxResult {
   };
 }
 
-export function copySalesTaxSummary(i: SalesTaxInput, r: SalesTaxResult): string {
+export function copySalesTaxSummary(
+  i: SalesTaxInput,
+  r: SalesTaxResult,
+  currency: CurrencyCode = getSavedCurrency()
+): string {
   return `
 Sales Tax Summary
 
-Amount: ₹${i.amount} (${i.isTaxIncluded ? "tax included" : "tax excluded"})
+Amount: ${formatCurrency(i.amount, currency)} (${i.isTaxIncluded ? "tax included" : "tax excluded"})
 Tax Rate: ${i.taxRate}%
 
-Net Amount: ₹${r.netAmount}
-Tax Amount: ₹${r.taxAmount}
-Gross Amount: ₹${r.grossAmount}
+Net Amount: ${formatCurrency(r.netAmount, currency)}
+Tax Amount: ${formatCurrency(r.taxAmount, currency)}
+Gross Amount: ${formatCurrency(r.grossAmount, currency)}
 `.trim();
 }

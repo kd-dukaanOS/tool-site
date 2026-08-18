@@ -6,17 +6,18 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
-import { Clock, CalendarDays, Wallet, Sun } from "@lucide/astro";
----
+import { Clock, CalendarDays, Wallet, Sun } from "@lucide/astro";---
 
 <section class="sth-calculator">
   <div class="sth-layout">
 
-    <aside class="sth-sidebar">
+   <aside class="sth-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
-        id="annualSalary"
-        label="Annual Salary ($)"
+        id="annualSalary"        label="Annual Salary ($)"
         type="number"
         placeholder="e.g. 52000"
         required={true}

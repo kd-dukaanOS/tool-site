@@ -1,6 +1,7 @@
 // src/scripts/raise-calculator.ts
-import { validateRaiseInput, calculateRaise, formatCurrency, copyRaiseSummary } from "../utils/raise";
+import { validateRaiseInput, calculateRaise, copyRaiseSummary } from "../utils/raise";
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const currentSalaryInput = document.getElementById("currentSalary") as HTMLInputElement;
 const raisePercentInput = document.getElementById("raisePercent") as HTMLInputElement;
@@ -40,10 +41,11 @@ function calculate() {
   }
 
   const result = calculateRaise(input);
+  const currency = getSavedCurrency();
 
-  setValue("newSalaryResult", formatCurrency(result.newSalary));
-  setValue("raiseAmountResult", formatCurrency(result.raiseAmount));
-  setValue("monthlyIncreaseResult", formatCurrency(result.monthlyIncrease));
+  setValue("newSalaryResult", formatCurrency(result.newSalary, currency));
+  setValue("raiseAmountResult", formatCurrency(result.raiseAmount, currency));
+  setValue("monthlyIncreaseResult", formatCurrency(result.monthlyIncrease, currency));
 
   lastInput = input;
   lastResult = result;
@@ -51,6 +53,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   currentSalaryInput.value = "";

@@ -1,3 +1,4 @@
+import { formatCurrency, getSavedCurrency, type CurrencyCode } from "./currency";
 export interface VATInput {
   amount: number;
   vatRate: number;
@@ -38,15 +39,19 @@ export function calculateVAT(i: VATInput): VATResult {
   };
 }
 
-export function copyVATSummary(i: VATInput, r: VATResult): string {
+export function copyVATSummary(
+  i: VATInput,
+  r: VATResult,
+  currency: CurrencyCode = getSavedCurrency()
+): string {
   return `
 VAT Summary
 
-Amount: ₹${i.amount} (${i.isVatIncluded ? "VAT included" : "VAT excluded"})
+Amount: ${formatCurrency(i.amount, currency)} (${i.isVatIncluded ? "VAT included" : "VAT excluded"})
 VAT Rate: ${i.vatRate}%
 
-Net Amount: ₹${r.netAmount}
-VAT Amount: ₹${r.vatAmount}
-Gross Amount: ₹${r.grossAmount}
+Net Amount: ${formatCurrency(r.netAmount, currency)}
+VAT Amount: ${formatCurrency(r.vatAmount, currency)}
+Gross Amount: ${formatCurrency(r.grossAmount, currency)}
 `.trim();
 }

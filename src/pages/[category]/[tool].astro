@@ -124,11 +124,6 @@ interface Props {
 
 const { tool, category } = Astro.props as Props;
 
-// "Related tools" = other tools in the same category, excluding this one
-const relatedTools = tools
-  .filter((t) => t.category === tool.category && t.slug !== tool.slug)
-  .slice(0, 3);
-
 // Rich per-tool content (formula, steps, examples, tips, faq) written
 // separately in src/data/calculators/*.ts. contentMap looks up the right
 // file for this tool's slug; import.meta.glob loads them all at build time.
@@ -136,6 +131,19 @@ const contentModules = import.meta.glob("../../data/calculators/*.ts", { eager: 
 const contentFile = (contentMap as Record<string, string>)[tool.slug];
 const contentModule = contentFile ? contentModules[`../../data/calculators/${contentFile}.ts`] : null;
 const content = contentModule ? Object.values(contentModule)[0] as any : null;
+
+// "Related tools" = other tools in the same category, excluding this one
+const alreadyShownNames = new Set(
+  (content?.relatedCalculators || []).map((n: string) => n.toLowerCase())
+);
+const relatedTools = tools
+  .filter(
+    (t) =>
+      t.category === tool.category &&
+      t.slug !== tool.slug &&
+      !alreadyShownNames.has(t.name.toLowerCase())
+  )
+  .slice(0, 3);
 
 // FAQs: prefer the rich content file's faq list (q/a shape), fall back to
 // tools.js's thinner faqs list (question/answer shape) for any tool without one.
@@ -392,7 +400,26 @@ const faqSchema = faqs.length > 0 ? {
       </div>
     )}
 
-    {content && <CalculatorContent {...content} allTools={tools} />}
+    {content ? (
+      <CalculatorContent {...content} allTools={tools} />
+    ) : tool.about ? (
+      <section class="tool-about">
+        <h2>About this tool</h2>
+        <p>{tool.about}</p>
+
+        {tool.faqs && tool.faqs.length > 0 && (
+          <div class="tool-faq">
+            <h2>Frequently Asked Questions</h2>
+            {tool.faqs.map((f: any) => (
+              <details class="tool-faq-item">
+                <summary>{f.question}</summary>
+                <p>{f.answer}</p>
+              </details>
+            ))}
+          </div>
+        )}
+      </section>
+    ) : null}
   </div>
 
   {faqSchema && (
@@ -402,7 +429,7 @@ const faqSchema = faqs.length > 0 ? {
   {relatedTools.length > 0 && (
     <section class="section">
       <div class="wrap">
-        <div class="section-head"><h2>Related tools</h2></div>
+        <div class="section-head"><h2>You Might Also Like</h2></div>
         <div class="tool-grid">
           {relatedTools.map((t) => (
             <a href={`/${t.category}/${t.slug}/`} class="tool-card">
@@ -431,6 +458,11 @@ const faqSchema = faqs.length > 0 ? {
   .tool-about { margin: 32px 0; }
   .tool-about h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 0 0 10px; }
   .tool-about p { color: var(--muted); font-size: 14.5px; line-height: 1.7; max-width: 720px; }
+  .tool-faq { margin-top: 32px; }
+  .tool-faq h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin: 0 0 14px; }
+  .tool-faq-item { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: var(--surface); }
+  .tool-faq-item summary { cursor: pointer; font-weight: 600; font-size: 14.5px; color: var(--text); }
+  .tool-faq-item p { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
   .tool-list { color: var(--muted); font-size: 14.5px; line-height: 1.8; max-width: 720px; padding-left: 20px; }
   .tool-examples { display: grid; gap: 12px; max-width: 720px; }
   .tool-example-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--surface); font-size: 14px; }

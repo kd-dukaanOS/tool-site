@@ -6,6 +6,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Wallet, CalendarDays, Clock } from "@lucide/astro";
 ---
@@ -13,10 +14,11 @@ import { Wallet, CalendarDays, Clock } from "@lucide/astro";
 <section class="hts-calculator">
   <div class="hts-layout">
 
-    <aside class="hts-sidebar">
+   <aside class="hts-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
-        id="hourlyRate"
-        label="Hourly Rate ($)"
+        id="hourlyRate"        label="Hourly Rate ($)"
         type="number"
         placeholder="e.g. 25"
         required={true}

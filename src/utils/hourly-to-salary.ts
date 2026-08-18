@@ -1,4 +1,6 @@
 // src/utils/hourly-to-salary.ts
+import { formatCurrency } from "./currency";
+
 export interface HourlyToSalaryInput {
   hourlyRate: number;
   hoursPerWeek: number;
@@ -37,13 +39,7 @@ export function calculateHourlyToSalary(input: HourlyToSalaryInput): HourlyToSal
   return { annualSalary, monthlySalary, weeklySalary };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+
 
 export function copyHourlyToSalarySummary(input: HourlyToSalaryInput, result: HourlyToSalaryResult): string {
   return `

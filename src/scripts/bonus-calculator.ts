@@ -1,7 +1,7 @@
 // src/scripts/bonus-calculator.ts
-import { validateBonusInput, calculateBonus, formatCurrency, copyBonusSummary } from "../utils/bonus";
+import { validateBonusInput, calculateBonus, copyBonusSummary } from "../utils/bonus";
 import { setValue, copyToClipboard } from "../utils/calculator";
-
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 const annualSalaryInput = document.getElementById("annualSalary") as HTMLInputElement;
 const bonusPercentInput = document.getElementById("bonusPercent") as HTMLInputElement;
 const taxRateInput = document.getElementById("taxRate") as HTMLInputElement;
@@ -42,11 +42,12 @@ function calculate() {
   }
 
   const result = calculateBonus(input);
+  const currency = getSavedCurrency();
 
-  setValue("netBonusResult", formatCurrency(result.netBonus));
-  setValue("bonusAmountResult", formatCurrency(result.bonusAmount));
-  setValue("taxOnBonusResult", formatCurrency(result.taxOnBonus));
-  setValue("totalCompResult", formatCurrency(result.newTotalCompensation));
+  setValue("netBonusResult", formatCurrency(result.netBonus, currency));
+  setValue("bonusAmountResult", formatCurrency(result.bonusAmount, currency));
+  setValue("taxOnBonusResult", formatCurrency(result.taxOnBonus, currency));
+  setValue("totalCompResult", formatCurrency(result.newTotalCompensation, currency));
 
   lastInput = input;
   lastResult = result;
@@ -54,6 +55,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   annualSalaryInput.value = "";

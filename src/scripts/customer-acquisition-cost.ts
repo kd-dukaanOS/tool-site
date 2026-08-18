@@ -1,10 +1,10 @@
 import {
-  calculateCAC,
+calculateCAC,
   validatePositiveNumber,
-  formatCurrency,
 } from "../utils/business-batch-c";
 
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const marketingInput = document.getElementById("marketingCost") as HTMLInputElement;
 const salesInput = document.getElementById("salesCost") as HTMLInputElement;
@@ -49,28 +49,33 @@ function calculate() {
     return showError("Please enter the number of new customers (must be greater than 0).");
   }
 
-  const result = calculateCAC(marketingCost, salesCost, newCustomers, totalLeads);
+ const result = calculateCAC(marketingCost, salesCost, newCustomers, totalLeads);
+  const currency = getSavedCurrency();
 
-  setValue("cacResult", formatCurrency(result.cac));
-  setValue("totalSpendResult", formatCurrency(result.totalSpend));
+  setValue("cacResult", formatCurrency(result.cac, currency));
+  setValue("totalSpendResult", formatCurrency(result.totalSpend, currency));
   setValue(
     "costPerLeadResult",
-    result.costPerLead !== null ? formatCurrency(result.costPerLead) : "—"
+    result.costPerLead !== null ? formatCurrency(result.costPerLead, currency) : "—"
   );
   setSubtitle("cacResult", `per new customer`);
 
   lastSummary =
     `Customer Acquisition Cost Summary\n\n` +
-    `Marketing Cost: ${formatCurrency(marketingCost)}\n` +
-    `Sales Cost: ${formatCurrency(salesCost)}\n` +
-    `Total Spend: ${formatCurrency(result.totalSpend)}\n` +
+    `Marketing Cost: ${formatCurrency(marketingCost, currency)}\n` +
+    `Sales Cost: ${formatCurrency(salesCost, currency)}\n` +
+    `Total Spend: ${formatCurrency(result.totalSpend, currency)}\n` +
     `New Customers: ${newCustomers}\n` +
-    `CAC: ${formatCurrency(result.cac)}\n` +
-    (result.costPerLead !== null ? `Cost per Lead: ${formatCurrency(result.costPerLead)}\n` : "");
+    `CAC: ${formatCurrency(result.cac, currency)}\n` +
+    (result.costPerLead !== null ? `Cost per Lead: ${formatCurrency(result.costPerLead, currency)}\n` : "");
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (marketingInput.value && customersInput.value) calculate();
+});
 
 function resetCalculator() {
   marketingInput.value = "";

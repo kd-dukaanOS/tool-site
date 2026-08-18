@@ -1,4 +1,5 @@
-import { validateMarkupInput, calculateMarkup, formatCurrency, copyMarkupSummary } from "../utils/markup";
+import { validateMarkupInput, calculateMarkup, copyMarkupSummary } from "../utils/markup";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const costInput = document.getElementById("cost") as HTMLInputElement;
 const markupPercentInput = document.getElementById("markupPercent") as HTMLInputElement;
@@ -10,6 +11,9 @@ const copyBtn = document.getElementById("copyBtn");
 const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
+
+let lastInput: { cost: number; markupPercent: number } | null = null;
+let lastResult: ReturnType<typeof calculateMarkup> | null = null;
 
 function setText(id: string, value: string) {
   const el = document.getElementById(id);
@@ -39,18 +43,23 @@ function calculate() {
     return;
   }
 
-  const result = calculateMarkup(input);
+   const result = calculateMarkup(input);
+  const currency = getSavedCurrency();
 
-  setText("salePriceResult", formatCurrency(result.salePrice));
-  setText("profitResult", formatCurrency(result.profit));
+  setText("salePriceResult", formatCurrency(result.salePrice, currency));
+  setText("profitResult", formatCurrency(result.profit, currency));
   setText("marginResult", `${result.marginPercent.toFixed(1)}%`);
+
+  lastInput = input;
+  lastResult = result;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
+}
 
-  copyBtn?.addEventListener("click", () => {
-    navigator.clipboard.writeText(copyMarkupSummary(input, result));
-  }, { once: true });
+function handleCopy() {
+  if (!lastInput || !lastResult) return;
+  navigator.clipboard.writeText(copyMarkupSummary(lastInput, lastResult));
 }
 
 function reset() {
@@ -63,3 +72,8 @@ function reset() {
 
 calculateBtn?.addEventListener("click", calculate);
 resetBtn?.addEventListener("click", reset);
+copyBtn?.addEventListener("click", handleCopy);
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});

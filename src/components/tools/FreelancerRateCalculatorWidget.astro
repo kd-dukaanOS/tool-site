@@ -6,14 +6,16 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
-import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";
----
+import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
 
 <section class="fr-calculator">
   <div class="fr-layout">
 
-    <aside class="fr-sidebar">
+     <aside class="fr-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="desiredAnnualIncome"
         label="Desired Annual Income ($)"

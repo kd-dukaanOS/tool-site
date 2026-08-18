@@ -1,5 +1,7 @@
 // src/utils/business-valuation.ts
 
+import { formatCurrency } from "./currency";
+
 export interface BusinessValuationInput {
   annualRevenue: number;
   annualProfit: number;
@@ -51,13 +53,6 @@ export function calculateBusinessValuation(input: BusinessValuationInput): Busin
   return { revenueValuation, earningsValuation, finalValuation };
 }
 
-export function formatCurrency(value: number): string {
-  return value.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
-}
 
 export function copyBusinessValuationSummary(
   input: BusinessValuationInput,

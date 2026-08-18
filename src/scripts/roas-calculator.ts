@@ -1,6 +1,7 @@
 // src/scripts/roas-calculator.ts
-import { validateRoasInput, calculateRoas, formatCurrency, copyRoasSummary } from "../utils/roas";
+import { validateRoasInput, calculateRoas, copyRoasSummary } from "../utils/roas";
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const revenueInput = document.getElementById("revenue") as HTMLInputElement;
 const adSpendInput = document.getElementById("adSpend") as HTMLInputElement;
@@ -40,10 +41,11 @@ function calculate() {
   }
 
   const result = calculateRoas(input);
+  const currency = getSavedCurrency();
 
   setValue("roasResult", `${result.roas.toFixed(2)}x`);
   setValue("roasPercentResult", `${result.roasPercent.toFixed(1)}%`);
-  setValue("profitResult", formatCurrency(result.profit));
+  setValue("profitResult", formatCurrency(result.profit, currency));
 
   lastInput = input;
   lastResult = result;
@@ -51,6 +53,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   revenueInput.value = "";

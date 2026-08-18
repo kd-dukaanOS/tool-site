@@ -1,4 +1,6 @@
 // src/utils/bonus.ts
+import { formatCurrency } from "./currency";
+
 export interface BonusInput {
   annualSalary: number;
   bonusPercent: number;
@@ -39,13 +41,7 @@ export function calculateBonus(input: BonusInput): BonusResult {
   return { bonusAmount, taxOnBonus, netBonus, newTotalCompensation };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+
 
 export function copyBonusSummary(input: BonusInput, result: BonusResult): string {
   return `

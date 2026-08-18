@@ -1,4 +1,6 @@
 // src/utils/freelancer-rate.ts
+import { formatCurrency } from "./currency";
+
 export interface FreelancerRateInput {
   desiredAnnualIncome: number;
   annualExpenses: number;
@@ -42,14 +44,6 @@ export function calculateFreelancerRate(input: FreelancerRateInput): FreelancerR
   const dailyRate = hourlyRate * (billableHoursPerWeek / 5);
 
   return { hourlyRate, dailyRate, annualBillableHours, grossRevenueNeeded };
-}
-
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
 }
 
 export function copyFreelancerRateSummary(

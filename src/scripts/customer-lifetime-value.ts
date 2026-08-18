@@ -1,11 +1,10 @@
 import {
   calculateCLV,
   validatePositiveNumber,
-  formatCurrency,
 } from "../utils/business-batch-c";
 
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
-
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 const orderValueInput = document.getElementById("avgOrderValue") as HTMLInputElement;
 const frequencyInput = document.getElementById("purchaseFrequency") as HTMLInputElement;
 const lifespanInput = document.getElementById("lifespanYears") as HTMLInputElement;
@@ -54,25 +53,30 @@ function calculate() {
     return showError("Gross margin must be between 0 and 100.");
   }
 
-  const result = calculateCLV(avgOrderValue, purchaseFrequency, lifespanYears, grossMargin);
+ const result = calculateCLV(avgOrderValue, purchaseFrequency, lifespanYears, grossMargin);
+  const currency = getSavedCurrency();
 
-  setValue("clvGrossResult", formatCurrency(result.clvGross));
-  setValue("clvNetResult", formatCurrency(result.clvNet));
-  setValue("annualValueResult", formatCurrency(avgOrderValue * purchaseFrequency));
+  setValue("clvGrossResult", formatCurrency(result.clvGross, currency));
+  setValue("clvNetResult", formatCurrency(result.clvNet, currency));
+  setValue("annualValueResult", formatCurrency(avgOrderValue * purchaseFrequency, currency));
   setSubtitle("clvNetResult", `at ${grossMargin}% gross margin`);
 
   lastSummary =
     `Customer Lifetime Value Summary\n\n` +
-    `Average Order Value: ${formatCurrency(avgOrderValue)}\n` +
+    `Average Order Value: ${formatCurrency(avgOrderValue, currency)}\n` +
     `Purchase Frequency: ${purchaseFrequency}/year\n` +
     `Customer Lifespan: ${lifespanYears} years\n` +
     `Gross Margin: ${grossMargin}%\n` +
-    `Gross CLV: ${formatCurrency(result.clvGross)}\n` +
-    `Net CLV: ${formatCurrency(result.clvNet)}\n`;
+    `Gross CLV: ${formatCurrency(result.clvGross, currency)}\n` +
+    `Net CLV: ${formatCurrency(result.clvNet, currency)}\n`;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (orderValueInput.value && frequencyInput.value && lifespanInput.value) calculate();
+});
 
 function resetCalculator() {
   orderValueInput.value = "";

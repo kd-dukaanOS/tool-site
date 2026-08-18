@@ -4,6 +4,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import {
   Building2,
@@ -18,6 +19,7 @@ import {
   <div class="valuation-layout">
 
     <aside class="valuation-sidebar">
+      <CurrencySelector />
 
       <CalculatorField
         id="annualRevenue"

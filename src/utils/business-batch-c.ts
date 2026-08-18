@@ -1,6 +1,8 @@
 // src/utils/business-batch-c.ts
 // Shared utils for Customer Acquisition Cost and Customer Lifetime Value calculators
 
+import { formatCurrency } from "./currency";
+
 export function validatePositiveNumber(value: number, label: string): string | null {
   if (value === undefined || Number.isNaN(value) || value < 0) {
     return `Please enter a valid ${label} (0 or more).`;
@@ -8,13 +10,6 @@ export function validatePositiveNumber(value: number, label: string): string | n
   return null;
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 2,
-  }).format(value);
-}
 
 // --- Customer Acquisition Cost ---
 

@@ -6,6 +6,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
 ---
@@ -14,6 +15,8 @@ import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
   <div class="raise-layout">
 
     <aside class="raise-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="currentSalary"
         label="Current Salary ($)"

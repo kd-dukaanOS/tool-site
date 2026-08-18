@@ -4,12 +4,14 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
-import { IndianRupee, Receipt } from "@lucide/astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
+import { DollarSign, Receipt } from "@lucide/astro";
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="amount" label="Amount (₹)" type="number" placeholder="e.g. 1000" />
+    <CurrencySelector />
+    <CalculatorField id="amount" label="Amount" type="number" placeholder="e.g. 1000" />
     <CalculatorField id="taxRate" label="Tax Rate (%)" type="number" placeholder="e.g. 18" />
 
     <label class="checkbox-field">
@@ -36,9 +38,9 @@ import { IndianRupee, Receipt } from "@lucide/astro";
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="netAmountResult" title="Net Amount" icon={IndianRupee} accent="neutral" />
+      <ResultCard id="netAmountResult" title="Net Amount" icon={DollarSign} accent="neutral" />
       <ResultCard id="taxAmountResult" title="Tax Amount" icon={Receipt} accent="warning" />
-      <ResultCard id="grossAmountResult" title="Gross Amount" icon={IndianRupee} accent="primary" size="lg" />
+      <ResultCard id="grossAmountResult" title="Gross Amount" icon={DollarSign} accent="primary" size="lg" />
     </ResultsGrid>
   </div>
 </div>

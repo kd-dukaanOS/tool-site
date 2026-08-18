@@ -6,6 +6,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { DollarSign, Percent } from "@lucide/astro";
 ---
@@ -14,6 +15,8 @@ import { DollarSign, Percent } from "@lucide/astro";
   <div class="np-layout">
 
     <aside class="np-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="revenue"
         label="Revenue ($)"

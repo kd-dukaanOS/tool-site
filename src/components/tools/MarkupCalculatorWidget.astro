@@ -4,6 +4,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
 ---
@@ -11,10 +12,11 @@ import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
 <section class="markup-calculator">
   <div class="markup-layout">
 
-    <aside class="markup-sidebar">
+     <aside class="markup-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
-        id="cost"
-        label="Cost ($)"
+        id="cost"        label="Cost ($)"
         type="number"
         placeholder="e.g. 40"
         required={true}

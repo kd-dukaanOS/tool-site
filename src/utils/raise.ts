@@ -1,4 +1,6 @@
 // src/utils/raise.ts
+import { formatCurrency } from "./currency";
+
 export interface RaiseInput {
   currentSalary: number;
   raisePercent: number;
@@ -33,13 +35,7 @@ export function calculateRaise(input: RaiseInput): RaiseResult {
   return { raiseAmount, newSalary, monthlyIncrease };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+
 
 export function copyRaiseSummary(input: RaiseInput, result: RaiseResult): string {
   return `

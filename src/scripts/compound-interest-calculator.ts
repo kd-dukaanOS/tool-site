@@ -2,7 +2,6 @@ import {
   calculateCompoundInterest,
   validateCompoundInterestInput,
   frequencyLabel,
-  formatCurrency,
   formatPercent,
   copyCompoundInterestSummary,
   type CompoundInterestInput,
@@ -10,6 +9,7 @@ import {
 } from "../utils/compound-interest";
 
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const principalInput = document.getElementById("principal") as HTMLInputElement;
 const rateInput = document.getElementById("annualRate") as HTMLInputElement;
@@ -55,13 +55,13 @@ function calculate() {
     return;
   }
 
-  const result = calculateCompoundInterest(input);
+ const result = calculateCompoundInterest(input);
+  const currency = getSavedCurrency();
 
-  setValue("maturityResult", formatCurrency(result.maturityValue));
-  setValue("interestResult", formatCurrency(result.totalInterest));
-  setValue("principalResult", formatCurrency(result.principalInvested));
-  setValue("earResult", formatPercent(result.effectiveAnnualRate));
-  setValue("multiplierResult", `${result.growthMultiplier.toFixed(2)}x`);
+  setValue("maturityResult", formatCurrency(result.maturityValue, currency));
+  setValue("interestResult", formatCurrency(result.totalInterest, currency));
+  setValue("principalResult", formatCurrency(result.principalInvested, currency));
+  setValue("earResult", formatPercent(result.effectiveAnnualRate));  setValue("multiplierResult", `${result.growthMultiplier.toFixed(2)}x`);
   setValue("frequencyResult", frequencyLabel(input.frequency));
 
   setSubtitle(
@@ -88,11 +88,12 @@ function renderSchedule(result: CompoundInterestResult) {
 
     const tr = document.createElement("tr");
 
+    const currency = getSavedCurrency();
     tr.innerHTML = `
       <td>Year ${row.year}</td>
-      <td>${formatCurrency(row.openingBalance)}</td>
-      <td>${formatCurrency(row.interestEarned)}</td>
-      <td>${formatCurrency(row.closingBalance)}</td>
+      <td>${formatCurrency(row.openingBalance, currency)}</td>
+      <td>${formatCurrency(row.interestEarned, currency)}</td>
+      <td>${formatCurrency(row.closingBalance, currency)}</td>
     `;
 
     scheduleBody.appendChild(tr);
@@ -123,3 +124,10 @@ function handleCopy() {
 calculateBtn?.addEventListener("click", calculate);
 resetBtn?.addEventListener("click", resetCalculator);
 copyBtn?.addEventListener("click", handleCopy);
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});

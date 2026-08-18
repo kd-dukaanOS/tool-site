@@ -8,7 +8,7 @@
 
 // ---------- Shared currency-selector support ----------
 
-export type CurrencyCode = "INR" | "USD" | "GBP" | "CAD";
+export type CurrencyCode = "INR" | "USD" | "GBP" | "CAD" | "EUR" | "AUD" | "JPY" | "SGD" | "AED";
 
 export interface CurrencyInfo {
   code: CurrencyCode;
@@ -22,6 +22,11 @@ export const CURRENCIES: Record<CurrencyCode, CurrencyInfo> = {
   USD: { code: "USD", symbol: "$", locale: "en-US", label: "$ USD" },
   GBP: { code: "GBP", symbol: "£", locale: "en-GB", label: "£ GBP" },
   CAD: { code: "CAD", symbol: "C$", locale: "en-CA", label: "C$ CAD" },
+  EUR: { code: "EUR", symbol: "€", locale: "de-DE", label: "€ EUR" },
+  AUD: { code: "AUD", symbol: "A$", locale: "en-AU", label: "A$ AUD" },
+  JPY: { code: "JPY", symbol: "¥", locale: "ja-JP", label: "¥ JPY" },
+  SGD: { code: "SGD", symbol: "S$", locale: "en-SG", label: "S$ SGD" },
+  AED: { code: "AED", symbol: "AED ", locale: "ar-AE", label: "AED" },
 };
 
 const STORAGE_KEY = "toolsite-currency";

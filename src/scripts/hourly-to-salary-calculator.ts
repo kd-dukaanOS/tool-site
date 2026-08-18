@@ -1,7 +1,7 @@
 // src/scripts/hourly-to-salary-calculator.ts
-import { validateHourlyToSalaryInput, calculateHourlyToSalary, formatCurrency, copyHourlyToSalarySummary } from "../utils/hourly-to-salary";
+import { validateHourlyToSalaryInput, calculateHourlyToSalary, copyHourlyToSalarySummary } from "../utils/hourly-to-salary";
 import { setValue, copyToClipboard } from "../utils/calculator";
-
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 const hourlyRateInput = document.getElementById("hourlyRate") as HTMLInputElement;
 const hoursPerWeekInput = document.getElementById("hoursPerWeek") as HTMLInputElement;
 const weeksPerYearInput = document.getElementById("weeksPerYear") as HTMLInputElement;
@@ -41,11 +41,12 @@ function calculate() {
     return;
   }
 
-  const result = calculateHourlyToSalary(input);
+   const result = calculateHourlyToSalary(input);
+  const currency = getSavedCurrency();
 
-  setValue("annualSalaryResult", formatCurrency(result.annualSalary));
-  setValue("monthlySalaryResult", formatCurrency(result.monthlySalary));
-  setValue("weeklySalaryResult", formatCurrency(result.weeklySalary));
+  setValue("annualSalaryResult", formatCurrency(result.annualSalary, currency));
+  setValue("monthlySalaryResult", formatCurrency(result.monthlySalary, currency));
+  setValue("weeklySalaryResult", formatCurrency(result.weeklySalary, currency));
 
   lastInput = input;
   lastResult = result;
@@ -54,6 +55,9 @@ function calculate() {
   resultsContainer.hidden = false;
 }
 
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 function reset() {
   hourlyRateInput.value = "";
   hoursPerWeekInput.value = "";

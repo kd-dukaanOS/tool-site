@@ -4,6 +4,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import {
   DollarSign,
@@ -17,11 +18,11 @@ import {
 
   <div class="cac-layout">
 
-    <aside class="cac-sidebar">
+     <aside class="cac-sidebar">
+      <CurrencySelector />
 
       <CalculatorField
-        id="marketingCost"
-        label="Marketing Cost"
+        id="marketingCost"        label="Marketing Cost"
         type="number"
         required={true}
         helpText="Total marketing spend for the period."

@@ -6,6 +6,7 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { TrendingUp, Percent, DollarSign } from "@lucide/astro";
 ---
@@ -14,6 +15,8 @@ import { TrendingUp, Percent, DollarSign } from "@lucide/astro";
   <div class="roas-layout">
 
     <aside class="roas-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="revenue"
         label="Revenue from Ads ($)"

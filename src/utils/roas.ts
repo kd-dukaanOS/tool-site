@@ -1,4 +1,6 @@
 // src/utils/roas.ts
+import { formatCurrency } from "./currency";
+
 export interface RoasInput {
   revenue: number;
   adSpend: number;
@@ -32,13 +34,6 @@ export function calculateRoas(input: RoasInput): RoasResult {
   return { roas, roasPercent, profit };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 2,
-  }).format(value);
-}
 
 export function copyRoasSummary(input: RoasInput, result: RoasResult): string {
   return `

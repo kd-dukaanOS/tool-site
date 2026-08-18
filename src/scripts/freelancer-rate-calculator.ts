@@ -1,7 +1,7 @@
 // src/scripts/freelancer-rate-calculator.ts
-import { validateFreelancerRateInput, calculateFreelancerRate, formatCurrency, copyFreelancerRateSummary } from "../utils/freelancer-rate";
+import { validateFreelancerRateInput, calculateFreelancerRate, copyFreelancerRateSummary } from "../utils/freelancer-rate";
 import { setValue, copyToClipboard } from "../utils/calculator";
-
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 const desiredAnnualIncomeInput = document.getElementById("desiredAnnualIncome") as HTMLInputElement;
 const annualExpensesInput = document.getElementById("annualExpenses") as HTMLInputElement;
 const billableHoursPerWeekInput = document.getElementById("billableHoursPerWeek") as HTMLInputElement;
@@ -51,12 +51,13 @@ function calculate() {
     return;
   }
 
-  const result = calculateFreelancerRate(input);
+   const result = calculateFreelancerRate(input);
+  const currency = getSavedCurrency();
 
-  setValue("hourlyRateResult", formatCurrency(result.hourlyRate));
-  setValue("dailyRateResult", formatCurrency(result.dailyRate));
+  setValue("hourlyRateResult", formatCurrency(result.hourlyRate, currency));
+  setValue("dailyRateResult", formatCurrency(result.dailyRate, currency));
   setValue("billableHoursResult", `${result.annualBillableHours} hrs/yr`);
-  setValue("grossRevenueResult", formatCurrency(result.grossRevenueNeeded));
+  setValue("grossRevenueResult", formatCurrency(result.grossRevenueNeeded, currency));
 
   lastInput = input;
   lastResult = result;
@@ -64,6 +65,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   desiredAnnualIncomeInput.value = "";

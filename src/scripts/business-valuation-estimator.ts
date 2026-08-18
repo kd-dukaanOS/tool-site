@@ -2,11 +2,11 @@
 import {
   validateBusinessValuationInput,
   calculateBusinessValuation,
-  formatCurrency,
   copyBusinessValuationSummary,
   type BusinessValuationInput,
 } from "../utils/business-valuation";
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const annualRevenueInput = document.getElementById("annualRevenue") as HTMLInputElement;
 const annualProfitInput = document.getElementById("annualProfit") as HTMLInputElement;
@@ -52,10 +52,11 @@ function calculate() {
   }
 
   const result = calculateBusinessValuation(input);
+  const currency = getSavedCurrency();
 
-  setValue("finalValuationResult", formatCurrency(result.finalValuation));
-  setValue("revenueValuationResult", formatCurrency(result.revenueValuation));
-  setValue("earningsValuationResult", formatCurrency(result.earningsValuation));
+  setValue("finalValuationResult", formatCurrency(result.finalValuation, currency));
+  setValue("revenueValuationResult", formatCurrency(result.revenueValuation, currency));
+  setValue("earningsValuationResult", formatCurrency(result.earningsValuation, currency));
 
   lastInput = input;
   lastResult = result;
@@ -63,6 +64,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   annualRevenueInput.value = "";

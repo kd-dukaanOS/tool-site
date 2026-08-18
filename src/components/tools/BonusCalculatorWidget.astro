@@ -7,13 +7,16 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
 ---
 
 <section class="bonus-calculator">
   <div class="bonus-layout">
 
-    <aside class="bonus-sidebar">
+   <aside class="bonus-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="annualSalary"
         label="Annual Salary ($)"

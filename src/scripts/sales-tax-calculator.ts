@@ -5,7 +5,7 @@ import {
   type SalesTaxInput,
 } from "../utils/sales-tax";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
-
+import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 const amountInput = document.getElementById("amount") as HTMLInputElement;
 const taxRateInput = document.getElementById("taxRate") as HTMLInputElement;
 const taxIncludedInput = document.getElementById("isTaxIncluded") as HTMLInputElement;
@@ -50,11 +50,12 @@ function calculate() {
     return;
   }
 
-  const result = calculateSalesTax(input);
+ const result = calculateSalesTax(input);
+  const currency = getSavedCurrency();
 
-  setValue("netAmountResult", `₹${result.netAmount.toLocaleString("en-IN")}`);
-  setValue("taxAmountResult", `₹${result.taxAmount.toLocaleString("en-IN")}`);
-  setValue("grossAmountResult", `₹${result.grossAmount.toLocaleString("en-IN")}`);
+  setValue("netAmountResult", formatCurrency(result.netAmount, currency));
+  setValue("taxAmountResult", formatCurrency(result.taxAmount, currency));
+  setValue("grossAmountResult", formatCurrency(result.grossAmount, currency));
   setSubtitle("grossAmountResult", "final payable amount");
 
   lastInput = input;
@@ -78,9 +79,13 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateSalesTax(lastInput);
-  copyToClipboard(copySalesTaxSummary(lastInput, result));
+  copyToClipboard(copySalesTaxSummary(lastInput, result, getSavedCurrency()));
 }
 
 calculateBtn?.addEventListener("click", calculate);
 resetBtn?.addEventListener("click", resetCalculator);
 copyBtn?.addEventListener("click", handleCopy);
+
+onCurrencyChange(() => {
+  if (lastInput) calculate();
+});
