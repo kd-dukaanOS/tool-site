@@ -145,26 +145,21 @@ const relatedTools = tools
   )
   .slice(0, 3);
 
-// FAQs: prefer the rich content file's faq list (q/a shape), fall back to
-// tools.js's thinner faqs list (question/answer shape) for any tool without one.
-const faqs = (content?.faq?.length ? content.faq.map((f: any) => ({ question: f.q, answer: f.a })) : tool.faqs) || [];
-
-// FAQPage structured data â€” this is what lets Google show your FAQs
-// as expandable rich results directly in search, not just a blue link.
-const faqSchema = faqs.length > 0 ? {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f: any) => ({
-    "@type": "Question",
-    name: f.question,
-    acceptedAnswer: { "@type": "Answer", text: f.answer },
-  })),
-} : null;
+// FAQs are passed straight to Layout, which builds the JSON-LD schema.
+// Layout accepts either { q, a } (content files) or { question, answer } (tools.js fallback).
+const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || []);
 ---
 
 <Layout
   title={`${tool.name} — Free Online Tool | ToolSite`}
   description={tool.desc}
+  faqItems={faqItemsForSchema}
+  breadcrumbs={[
+    { name: "Home", url: "/" },
+    { name: category.name, url: `/${category.slug}/` },
+    { name: tool.name, url: `/${tool.category}/${tool.slug}/` },
+  ]}
+  appName={tool.name}
 >
   <div class="wrap">
     <p class="breadcrumb">
@@ -194,7 +189,7 @@ const faqSchema = faqs.length > 0 ? {
 
     <!--
       Each tool gets its own widget component. Add a new "if" line here
-      whenever a new tool's real logic is ready â€” until then it falls
+      whenever a new tool's real logic is ready — until then it falls
       back to the placeholder box automatically.
     -->
     {tool.slug === "json-formatter" ? (
@@ -421,10 +416,6 @@ const faqSchema = faqs.length > 0 ? {
       </section>
     ) : null}
   </div>
-
-  {faqSchema && (
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />
-  )}
 
   {relatedTools.length > 0 && (
     <section class="section">

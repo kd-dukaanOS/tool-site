@@ -14,11 +14,64 @@ const {
   ogTitle,
   ogDescription,
   ogImage,
+  faqItems = [],
+  breadcrumbs = [],
+  appName,
+  appCategory = "UtilitiesApplication",
 } = Astro.props;
 
 const resolvedOgTitle = ogTitle || title;
 const resolvedOgDescription = ogDescription || description;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+
+// FAQPage — accepts either { q, a } (content files) or { question, answer } (tools.js fallback)
+const faqSchema = faqItems.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.q ?? item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a ?? item.answer,
+    },
+  })),
+} : null;
+
+// WebPage — always present, describes the current page itself
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": title,
+  "description": description,
+  "url": canonicalURL.toString(),
+};
+
+// BreadcrumbList — only when the page supplies a trail (e.g. Home / Category / Tool)
+const breadcrumbSchema = breadcrumbs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((crumb, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": crumb.name,
+    "item": new URL(crumb.url, Astro.site || Astro.url.origin).toString(),
+  })),
+} : null;
+
+// SoftwareApplication — only when a page identifies itself as a tool (pass appName)
+const softwareAppSchema = appName ? {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": appName,
+  "applicationCategory": appCategory,
+  "operatingSystem": "Any (runs in browser)",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+  },
+} : null;
 ---
 
 <!DOCTYPE html>
@@ -51,6 +104,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin)
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  {faqSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  )}
+  <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+  {breadcrumbSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  )}
+  {softwareAppSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(softwareAppSchema)} />
+  )}
 </head>
 <body>
   <Navbar />
