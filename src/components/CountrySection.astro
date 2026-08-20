@@ -1,8 +1,8 @@
 ---
 const countries = [
-  { flag: "🇺🇸", name: "United States", desc: "Federal tax, FICA & take-home pay", href: "/us" },
-  { flag: "🇨🇦", name: "Canada", desc: "Federal + provincial tax, CPP & EI", href: "/canada" },
-  { flag: "🇬🇧", name: "United Kingdom", desc: "Income Tax & National Insurance", href: "/uk" },
+  { flagCode: "us", name: "United States", desc: "Federal tax, FICA & take-home pay", href: "/us" },
+  { flagCode: "ca", name: "Canada", desc: "Federal + provincial tax, CPP & EI", href: "/canada" },
+  { flagCode: "gb", name: "United Kingdom", desc: "Income Tax & National Insurance", href: "/uk" },
 ];
 ---
 <section class="ts-country-section">
@@ -13,7 +13,14 @@ const countries = [
     <div class="ts-country-grid">
       {countries.map((c) => (
         <a class="ts-country-card" href={c.href}>
-          <span class="ts-country-flag">{c.flag}</span>
+          <img
+            class="ts-country-flag"
+            src={`https://flagcdn.com/48x36/${c.flagCode}.png`}
+            srcset={`https://flagcdn.com/96x72/${c.flagCode}.png 2x`}
+            width="48" height="36"
+            alt={`${c.name} flag`}
+            loading="lazy"
+          />
           <div>
             <h3>{c.name}</h3>
             <p>{c.desc}</p>
@@ -57,7 +64,7 @@ const countries = [
     border-color: var(--border-hover);
     transform: translateY(-2px);
   }
-  .ts-country-flag { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+  .ts-country-flag { width: 48px; height: 36px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-subtle); }
   .ts-country-card h3 {
     font-family: var(--font-sans);
     font-size: var(--fs-body);
