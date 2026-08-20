@@ -83,9 +83,10 @@ All analysis happens locally in your browser — no text is uploaded or stored.`
     { q: "What's a good word count for a blog post?", a: "Many SEO guidelines suggest 1,500-2,500 words for in-depth content, though the ideal length depends on topic and search intent." },
     { q: "How long should a 5-minute speech be in words?", a: "At the average speaking pace of about 130 words per minute, a 5-minute speech is roughly 650 words." },
     { q: "Does this tool count words in languages other than English?", a: "Word counting is based on whitespace-separated tokens, which works reasonably well for most space-separated languages, though character-based languages may need a dedicated tool." },
-    { q: "Why might my actual reading time differ from the estimate?", a: "Reading speed varies by individual, content complexity and familiarity with the topic — the 200 wpm figure is an average, not a fixed rate." },
-  ],
-  relatedCalculators: ["Lorem Ipsum Generator", "Markdown Previewer", "Slug Generator"],
+   { q: "Why might my actual reading time differ from the estimate?", a: "Reading speed varies by individual, content complexity and familiarity with the topic — the 200 wpm figure is an average, not a fixed rate." },
+    { q: "Are hyphenated words counted as one word or two?", a: "Hyphenated words like 'well-known' are counted as a single word, since they're treated as one whitespace-separated token." },
+  ],   relatedCalculators: ["Lorem Ipsum Generator", "Markdown Previewer", "Slug Generator"],
+  youMightAlsoLike: ["Gross Margin Calculator", "Net Profit Calculator", "Sales Tax Calculator", "VAT Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: {
     h1: "Word Counter",

@@ -133,17 +133,54 @@ const contentModule = contentFile ? contentModules[`../../data/calculators/${con
 const content = contentModule ? Object.values(contentModule)[0] as any : null;
 
 // "Related tools" = other tools in the same category, excluding this one
+// Group all tools by category once
+const categoryGroups: Record<string, typeof tools> = {};
+for (const t of tools) {
+  if (!categoryGroups[t.category]) categoryGroups[t.category] = [];
+  categoryGroups[t.category].push(t);
+}
+const allCategories = Object.keys(categoryGroups);
+
+// Deterministic "random" shuffle — same seed always gives same order,
+// but different tools get different orders, so it looks organic
+function seededShuffle<T>(arr: T[], seed: string): T[] {
+  const a = [...arr];
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  for (let i = a.length - 1; i > 0; i--) {
+    h = (h * 9301 + 49297) % 233280;
+    const j = Math.floor((h / 233280) * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const alreadyShownNames = new Set(
   (content?.relatedCalculators || []).map((n: string) => n.toLowerCase())
 );
-const relatedTools = tools
-  .filter(
-    (t) =>
-      t.category === tool.category &&
-      t.slug !== tool.slug &&
-      !alreadyShownNames.has(t.name.toLowerCase())
-  )
+
+const manualRelated = (content?.youMightAlsoLike || [])
+  .map((name: string) => tools.find((t) => t.name.toLowerCase() === name.toLowerCase()))
+  .filter((t: any): t is (typeof tools)[number] => Boolean(t) && t.slug !== tool.slug)
   .slice(0, 3);
+
+let relatedTools;
+
+if (manualRelated.length > 0) {
+  relatedTools = manualRelated;
+} else {
+  // Pick 3 DIFFERENT categories (not this tool's own category)
+  const otherCategories = allCategories.filter((c) => c !== tool.category);
+  const pickedCategories = seededShuffle(otherCategories, tool.slug).slice(0, 3);
+
+  // From each picked category, pick one tool (seeded per tool+category for variety)
+  relatedTools = pickedCategories
+    .map((cat) => {
+      const shuffledGroup = seededShuffle(categoryGroups[cat], tool.slug + cat);
+      return shuffledGroup.find((t) => !alreadyShownNames.has(t.name.toLowerCase())) || shuffledGroup[0];
+    })
+    .filter(Boolean);
+}
 
 // FAQs are passed straight to Layout, which builds the JSON-LD schema.
 // Layout accepts either { q, a } (content files) or { question, answer } (tools.js fallback).
@@ -182,7 +219,7 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
         data-url={`/${tool.category}/${tool.slug}/`}
         aria-label="Save this tool"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
         <span class="bookmark-btn-label">Save</span>
       </button>
     </div>
@@ -468,7 +505,7 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
     cursor: pointer;
     margin-bottom: 16px;
   }
-  .bookmark-btn.active { border-color: var(--color-primary, #6366f1); color: var(--color-primary, #6366f1); }
+  .bookmark-btn.active { border-color: #f59e0b; color: #f59e0b; }
 </style>
 
 <script>
@@ -479,9 +516,12 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
     const setBookmarks = (arr) => localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
     const isSaved = () => getBookmarks().some(b => b.slug === slug);
     const label = btn.querySelector('.bookmark-btn-label');
+    const star = document.getElementById('bookmark-star');
     const render = () => {
-      if (label) label.textContent = isSaved() ? 'Saved' : 'Save';
-      btn.classList.toggle('active', isSaved());
+      const saved = isSaved();
+      if (label) label.textContent = saved ? 'Saved' : 'Save';
+      if (star) star.setAttribute('fill', saved ? 'currentColor' : 'none');
+      btn.classList.toggle('active', saved);
     };
     render();
     btn.addEventListener('click', () => {

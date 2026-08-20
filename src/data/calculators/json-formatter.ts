@@ -56,8 +56,10 @@ export const jsonFormatterContent = {
     { q: "Does this tool support JSON5 or JSONC (JSON with comments)?", a: "No, this formatter follows strict JSON syntax as defined by the JSON specification, which does not allow comments or trailing commas." },
     { q: "Can I use this JSON formatter offline?", a: "Once the page has loaded, formatting and validation run locally in your browser, so it works even without an active internet connection." },
     { q: "Is there a limit to how many keys or how much nesting depth this tool supports?", a: "There's no hard-coded limit — performance depends on your browser and device rather than the tool itself." },
+    { q: "How is the key count calculated for nested objects?", a: "Every key at every nesting level is counted individually — a parent object's key and its children's keys are all counted, not just top-level keys." },
   ],
-  relatedCalculators: ["Diff Checker", "Regex Tester", "URL Encoder/Decoder"],
+   relatedCalculators: ["Diff Checker", "Regex Tester", "URL Encoder/Decoder"],
+  youMightAlsoLike: ["Customer Acquisition Cost Calculator", "ROAS Calculator", "SIP Calculator", "Break-Even Calculator"],
  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: {
     h1: "JSON Formatter & Validator",

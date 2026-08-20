@@ -68,7 +68,10 @@ All generation happens locally in your browser — no password is ever transmitt
     { q: "Should I exclude ambiguous characters?", a: "Only if you plan to type the password manually — excluding characters like I, l, 1, O, 0 avoids confusion but slightly reduces the character pool." },
     { q: "Can I generate multiple passwords at once?", a: "Click Generate repeatedly to create new random passwords with the same settings." },
     { q: "Is a longer password always better than a more complex one?", a: "Length matters more than complexity for brute-force resistance, but combining both length and varied character types gives the strongest protection." },
-  ],  relatedCalculators: ["Hash Generator", "UUID Generator", "JWT Decoder"],
+  { q: "What happens if I deselect all character types?", a: "The generator requires at least one character type enabled to create a password — if none are selected, no password can be generated." },
+  ],
+  relatedCalculators: ["Hash Generator", "UUID Generator", "JWT Decoder"],
+  youMightAlsoLike: ["US Take-Home Pay Calculator", "UK Take-Home Pay Calculator", "Canada Take-Home Pay Calculator", "CPP Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: {
     h1: "Password Generator",

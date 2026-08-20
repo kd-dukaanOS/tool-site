@@ -67,11 +67,12 @@ Use this tool whenever you need quick, realistic-looking filler text for a desig
     { q: "Can I generate just a headline or short phrase?", a: "Yes, set the type to 'Words' and enter a small count like 3-5 for short placeholder phrases or headlines." },
     { q: "Does Lorem Ipsum contain any real words?", a: "Some fragments resemble Latin words, but the text as a whole is scrambled and not grammatically meaningful in any language." },
     { q: "Is Lorem Ipsum the same every time I generate it?", a: "No, each generation produces a new random arrangement of words and sentence lengths, so output varies between generations." },
-    { q: "Can I use Lorem Ipsum text commercially?", a: "Yes, Lorem Ipsum is public domain placeholder text and free to use in any design, mockup or prototype." },
+     { q: "Can I use Lorem Ipsum text commercially?", a: "Yes, Lorem Ipsum is public domain placeholder text and free to use in any design, mockup or prototype." },
+    { q: "Does the output include HTML paragraph tags?", a: "No, the generator outputs plain text with paragraphs separated by line breaks — wrap each paragraph in your own <p> tags if pasting directly into HTML." },
   ],
-  relatedCalculators: ["Word Counter", "Slug Generator", "Markdown Previewer"],
-  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
-  headingStructure: {
+    relatedCalculators: ["Word Counter", "Slug Generator", "Markdown Previewer"],
+  youMightAlsoLike: ["Freelancer Hourly Rate Calculator", "Customer Lifetime Value Calculator", "Raise Calculator", "Bonus Calculator"],
+  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],  headingStructure: {
     h1: "Lorem Ipsum Generator",
     h2: ["About", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
   },

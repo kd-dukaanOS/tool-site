@@ -84,11 +84,12 @@ All conversion happens locally in your browser — no timestamp data is ever sen
     { q: "What is the Year 2038 problem?", a: "It's an overflow issue where systems storing Unix time as a signed 32-bit integer will run out of range in 2038; modern 64-bit systems are unaffected." },
     { q: "Why do JWT tokens use Unix timestamps?", a: "JWTs use Unix timestamps (in seconds) for claims like exp (expiry) and iat (issued at) because they're compact and timezone-independent." },
     { q: "What is ISO 8601 format used for?", a: "It's a standardized, unambiguous date-time format widely used in APIs and databases to avoid regional date format confusion." },
-    { q: "Can timestamps be negative?", a: "Yes, negative Unix timestamps represent dates before January 1, 1970." },
+     { q: "Can timestamps be negative?", a: "Yes, negative Unix timestamps represent dates before January 1, 1970." },
+    { q: "Which timezone does 'Local Time' use?", a: "Local Time reflects your device's system timezone setting automatically — it isn't a fixed timezone, so the same timestamp shows different local values on devices set to different regions." },
   ],
-  relatedCalculators: ["JWT Decoder", "Date Difference Calculator", "Age Calculator"],
-  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
-  headingStructure: {
+ relatedCalculators: ["JWT Decoder", "Date Difference Calculator", "Age Calculator"],
+  youMightAlsoLike: ["Overtime Calculator", "Invoice Due Date Calculator", "Salary Calculator", "Commission Calculator"],
+  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],  headingStructure: {
     h1: "Timestamp Converter",
     h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
   },

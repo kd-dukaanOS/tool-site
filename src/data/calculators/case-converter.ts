@@ -31,9 +31,10 @@ Use this tool whenever you need to quickly reformat text case for writing or cod
     { q: "What's the difference between camelCase and PascalCase?", a: "camelCase starts with a lowercase letter (helloWorld), while PascalCase capitalizes every word including the first (HelloWorld) — camelCase is typical for variables, PascalCase for classes and components." },
     { q: "Can this tool convert ALL CAPS text to normal case?", a: "Yes, converting to sentence case or title case will bring all-caps text back to standard readable capitalization." },
     { q: "Why would I use kebab-case instead of snake_case?", a: "Kebab-case (hello-world) is the standard for URL slugs and CSS class names since underscores aren't always treated the same as hyphens by browsers and SEO crawlers, while snake_case (hello_world) is preferred in Python and SQL." },
-    { q: "Is there a character limit for text I can convert?", a: "No practical limit for typical use — the tool processes text instantly in your browser regardless of length, from a short phrase to a full paragraph." },
-  ],
-  relatedCalculators: ["Word Counter", "Slug Generator", "Lorem Ipsum Generator", "Markdown Previewer"],
+   { q: "Is there a character limit for text I can convert?", a: "No practical limit for typical use — the tool processes text instantly in your browser regardless of length, from a short phrase to a full paragraph." },
+    { q: "Does this tool handle accented or non-English characters correctly?", a: "Accented Latin characters (é, ñ, ü) convert correctly. Non-Latin scripts (like Cyrillic or CJK) don't have a case distinction, so case conversion has no visible effect on them." },
+  ],relatedCalculators: ["Word Counter", "Slug Generator", "Lorem Ipsum Generator", "Markdown Previewer"],
+  youMightAlsoLike: ["Payroll Calculator", "Freelancer Hourly Rate Calculator", "Salary to Hourly Calculator", "Invoice Due Date Calculator"],
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
   headingStructure: { h1: "Case Converter", h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"] },
 };
