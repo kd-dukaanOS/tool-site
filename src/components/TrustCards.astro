@@ -2,12 +2,10 @@
 import { tools } from '../data/tools.js';
 
 const trustItems = [
-  { icon: '🧰', title: `${tools.length}+`, subtitle: 'Free Tools' },
-  { icon: '💻', title: '100%', subtitle: 'Runs in Your Browser' },
-  { icon: '🔒', title: 'No Sign-up', subtitle: 'Ever Needed' },
-  { icon: '🛡️', title: 'Private', subtitle: 'Your Data Stays Local' },
-  { icon: '⚡', title: 'Lightning Fast', subtitle: 'Instant Results' },
-  { icon: '❤️', title: 'Open Source', subtitle: 'Community Driven' },
+  { icon: '🔒', title: `${tools.length}+ Tools`, subtitle: 'Small problems, solved fast.' },
+  { icon: '⚡', title: 'Runs in Your Browser', subtitle: 'Your data stays in your browser.' },
+  { icon: '❤️', title: 'No Sign-up', subtitle: 'Open. Use. Done.' },
+  { icon: '📦', title: 'Always Free', subtitle: 'No paywall waiting at the finish line.' },
 ];
 ---
 <section class="ts-trust">
@@ -37,7 +35,7 @@ const trustItems = [
     box-shadow: var(--shadow-sm);
     padding: var(--space-6);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-5) var(--space-4);
   }
 
@@ -67,7 +65,7 @@ const trustItems = [
     color: var(--text-muted);
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
     .ts-trust-inner { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 420px) {

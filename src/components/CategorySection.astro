@@ -14,28 +14,28 @@ interface CategoryItem {
 const categoryDefs: CategoryItem[] = [
   { icon: '≡', title: 'Text Tools', accent: 'purple',
     description: 'Word counting, case conversion, diffing, and other everyday text utilities.',
-    tools: ['Word Counter', 'Case Converter', 'Markdown Previewer'], href: '/text-tools' },
+    tools: ['Case Converter', 'Markdown Previewer'], href: '/text-tools' },
   { icon: '{}', title: 'Developer Tools', accent: 'violet',
     description: 'JSON, regex, tokens, and data-format helpers for day-to-day dev work.',
-    tools: ['JSON Formatter', 'Regex Tester', 'JWT Decoder'], href: '/developer-tools' },
+    tools: ['JWT Decoder', 'CSV ↔ JSON Converter'], href: '/developer-tools' },
   { icon: '⇄', title: 'Converters', accent: 'teal',
     description: 'Convert between encodings, timestamps, and color formats.',
-    tools: ['Base64 Tool', 'URL Encoder/Decoder', 'Timestamp Converter'], href: '/converters' },
+    tools: ['Base64 Tool', 'Currency Converter', 'Data Storage Converter'], href: '/converters' },
   { icon: '🛡', title: 'Security Tools', accent: 'red',
     description: 'Generate IDs, passwords, and hashes — all done locally in your browser.',
-    tools: ['UUID Generator', 'Password Generator', 'Hash Generator'], href: '/security-tools' },
+    tools: ['Password Generator', 'Hash Generator'], href: '/security-tools' },
   { icon: '$', title: 'Finance Calculators', accent: 'green',
     description: 'Loans, deposits, investments, and everyday finance math.',
-    tools: ['EMI Calculator', 'ROI Calculator', 'SIP Calculator'], href: '/finance' },
+    tools: ['Payroll Calculator', 'Salary Calculator', 'Break-Even Calculator'], href: '/finance' },
   { icon: '÷', title: 'Math & Numbers', accent: 'orange',
     description: 'Solve equations, percentages, ratios, and more.',
-    tools: ['Percentage Calculator', 'Ratio Calculator', 'Equation Solver'], href: '/math-stats' },
+    tools: ['Percentage Increase Calculator', 'Ratio Calculator', 'Average Calculator'], href: '/math-stats' },
   { icon: '📅', title: 'Date & Time', accent: 'blue',
     description: 'Work with dates, durations, and time conversions.',
-    tools: ['Age Calculator', 'Date Difference', 'Countdown Timer'], href: '/date-time' },
+    tools: ['Date Difference Calculator', 'Countdown Calculator', 'Birthday Calculator'], href: '/date-time' },
   { icon: '🩺', title: 'Health & Fitness', accent: 'yellow',
     description: 'BMI, calorie, macro, and other health calculators.',
-    tools: ['BMI Calculator', 'Calorie Calculator', 'Macro Calculator'], href: '/health' },
+    tools: ['Calorie Calculator', 'Macro Calculator', 'BMR Calculator'], href: '/health' },
 ];
 
 const categories = categoryDefs.map((cat) => ({
@@ -46,7 +46,7 @@ const categories = categoryDefs.map((cat) => ({
 <section class="ts-cat-section">
   <div class="ts-cat-section-inner">
     <div class="ts-cat-section-head">
-      <h2 class="ts-cat-section-title">✦ Browse by category</h2>
+      <h2 class="ts-cat-section-title">✦ Find your kind of useful.</h2>
       <a href="/tools" class="ts-cat-section-viewall">View all tools →</a>
     </div>
 

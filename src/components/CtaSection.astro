@@ -4,12 +4,15 @@ import Button from './ui/Button.astro';
 <section class="ts-cta">
   <div class="ts-cta-inner">
     <div>
-      <h2>All the tools you need. One place.</h2>
-      <p>Save time, boost productivity, and get things done instantly.</p>
+      <h2>You've got the problem.<br />We've got the tool.</h2>
+      <p>Search it. Open it. Get it done.</p>
     </div>
-    <a href="/tools" class="ts-cta-link">
-      <Button variant="secondary">Explore All Tools →</Button>
-    </a>
+    <div class="ts-cta-action">
+      <a href="/tools" class="ts-cta-link">
+        <Button variant="secondary">Explore TooManyToolz →</Button>
+      </a>
+      <span class="ts-cta-note">99+ free tools · No account required</span>
+    </div>
   </div>
 </section>
 
@@ -30,9 +33,11 @@ import Button from './ui/Button.astro';
   .ts-cta p { font-size: var(--fs-body); color: rgba(255,255,255,0.85); margin: 0; }
   .ts-cta-link { text-decoration: none; flex-shrink: 0; }
   .ts-cta-link :global(.ts-btn-secondary) { background: #fff; color: var(--color-primary-dark); border-color: transparent; white-space: nowrap; }
+  .ts-cta-action { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); flex-shrink: 0; }
+  .ts-cta-note { font-size: 12px; color: rgba(255,255,255,0.75); }
 
   @media (max-width: 640px) {
     .ts-cta-inner { flex-direction: column; align-items: stretch; text-align: center; }
-    .ts-cta-link { align-self: center; }
+    .ts-cta-action { align-items: center; align-self: center; }
   }
 </style>

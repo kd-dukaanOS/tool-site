@@ -1,27 +1,43 @@
 ---
 const blocks = [
   {
-    title: 'Recently Added', href: '/generators-calculators/',
+    title: "What's getting clicked", href: '/tools/',
     items: [
-      { icon: '𝐀', name: 'Lorem Ipsum Generator', desc: 'Generate placeholder text', tag: 'NEW', href: '/generators-calculators/lorem-ipsum-generator/' },
-      { icon: '{}', name: 'Number Base Converter', desc: 'Convert between number bases', tag: 'NEW', href: '/developer-tools/number-base-converter/' },
-      { icon: '⇄', name: 'CSV ↔ JSON Converter', desc: 'Convert between CSV and JSON', tag: 'NEW', href: '/developer-tools/csv-json-converter/' },
+      { icon: '%', name: 'Discount Calculator', desc: 'Calculate discounted price', tag: '', href: '/finance/discount-calculator/' },
+      { icon: '⚖', name: 'Weight Converter', desc: 'Convert between weight units', tag: '', href: '/converters/weight-converter/' },
+      { icon: '💧', name: 'Water Intake Calculator', desc: 'Daily water intake target', tag: '', href: '/health/water-intake-calculator/' },
+      { icon: '🕐', name: 'Timezone Calculator', desc: 'Convert between timezones', tag: '', href: '/date-time/timezone-calculator/' },
+      { icon: '📈', name: 'Simple Interest Calculator', desc: 'Calculate simple interest', tag: '', href: '/finance/simple-interest-calculator/' },
     ],
   },
   {
-    title: 'Trending Now', href: '/finance/',
+    title: 'Fresh from the toolbox', href: '/finance/',
     items: [
-      { icon: '1', name: 'EMI Calculator', desc: 'Loan EMI, interest & amortization', tag: '↑ 12%', href: '/finance/emi-calculator/' },
-      { icon: '2', name: 'SIP Calculator', desc: 'Project mutual fund SIP returns', tag: '↑ 9%', href: '/finance/sip-calculator/' },
-      { icon: '3', name: 'GST Calculator', desc: 'Calculate GST inclusive/exclusive', tag: '↑ 7%', href: '/finance/gst-calculator/' },
+      { icon: '≠', name: 'Diff Checker', desc: 'Compare two blocks of text', tag: 'NEW', href: '/text-tools/diff-checker/' },
+      { icon: '/', name: 'Slug Generator', desc: 'Turn text into URL slugs', tag: 'NEW', href: '/text-tools/slug-generator/' },
+      { icon: '🎯', name: 'Customer Acquisition Cost Calculator', desc: 'Calculate CAC from marketing spend', tag: 'NEW', href: '/finance/customer-acquisition-cost-calculator/' },
+      { icon: '⬆', name: 'Raise Calculator', desc: 'Calculate new salary after a raise', tag: 'NEW', href: '/finance/raise-calculator/' },
+      { icon: '📣', name: 'ROAS Calculator', desc: 'Calculate return on ad spend', tag: 'NEW', href: '/finance/roas-calculator/' },
     ],
   },
   {
-    title: 'Developer Picks', href: '/developer-tools/',
+    title: 'Having a moment', href: '/finance/',
     items: [
-      { icon: '{ }', name: 'JSON Formatter', desc: 'Format & validate JSON', tag: '', href: '/developer-tools/json-formatter/' },
-      { icon: '{}', name: 'JWT Decoder', desc: 'Decode & inspect JWT tokens', tag: '', href: '/developer-tools/jwt-decoder/' },
+      { icon: '1', name: 'SIP Calculator', desc: 'Project mutual fund SIP returns', tag: '↑ 9%', href: '/finance/sip-calculator/' },
+      { icon: '2', name: 'ROI Calculator', desc: 'Return on investment', tag: '↑ 7%', href: '/finance/roi-calculator/' },
+      { icon: '3', name: 'Mortgage Calculator', desc: 'Estimate monthly mortgage payment', tag: '↑ 6%', href: '/finance/mortgage-calculator/' },
+      { icon: '4', name: 'Compound Interest Calculator', desc: 'Calculate compound interest growth', tag: '↑ 5%', href: '/finance/compound-interest-calculator/' },
+      { icon: '5', name: 'CAGR Calculator', desc: 'Compound annual growth rate', tag: '↑ 4%', href: '/finance/cagr-calculator/' },
+    ],
+  },
+  {
+    title: 'For people who live in VS Code', href: '/developer-tools/',
+    items: [
+      { icon: '⚙', name: 'Regex Tester', desc: 'Test regex patterns live', tag: '', href: '/developer-tools/regex-tester/' },
+      { icon: '{}', name: 'Number Base Converter', desc: 'Convert between number bases', tag: '', href: '/developer-tools/number-base-converter/' },
       { icon: '🔗', name: 'URL Encoder/Decoder', desc: 'Encode or decode URLs', tag: '', href: '/converters/url-encoder-decoder/' },
+      { icon: '🎨', name: 'Color Converter', desc: 'Convert HEX, RGB, HSL', tag: '', href: '/converters/color-converter/' },
+      { icon: '⏱', name: 'Timestamp Converter', desc: 'Convert Unix timestamps', tag: '', href: '/converters/timestamp-converter/' },
     ],
   },
 ];
@@ -57,7 +73,7 @@ const blocks = [
   .ts-feat { padding: 0 var(--space-6) var(--space-12); }
   .ts-feat-inner {
     max-width: 1280px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4);
   }
   .ts-feat-col {
     background: var(--bg-card); border: 1px solid var(--border-subtle);
@@ -80,5 +96,6 @@ const blocks = [
   .ts-feat-desc { font-family: var(--font-sans); font-size: 0.75rem; color: var(--text-muted); }
   .ts-feat-tag { font-family: var(--font-sans); font-size: 0.7rem; font-weight: 700; color: var(--accent-green-icon); flex-shrink: 0; }
 
-  @media (max-width: 900px) { .ts-feat-inner { grid-template-columns: 1fr; } }
+  @media (max-width: 1100px) { .ts-feat-inner { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .ts-feat-inner { grid-template-columns: 1fr; } }
 </style>

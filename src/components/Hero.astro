@@ -7,7 +7,7 @@ const popularSearches = [
   { name: 'JSON Formatter', href: '/developer-tools/json-formatter/' },
   { name: 'Word Counter', href: '/text-tools/word-counter/' },
   { name: 'UUID Generator', href: '/security-tools/uuid-generator/' },
-  { name: 'Hash Generator', href: '/security-tools/hash-generator/' },
+  { name: 'QR Code Generator', href: '/generators-calculators/qr-code-generator/' },
   { name: 'EMI Calculator', href: '/finance/emi-calculator/' },
   { name: 'GST Calculator', href: '/finance/gst-calculator/' },
   { name: 'BMI Calculator', href: '/health/bmi-calculator/' },
@@ -25,32 +25,32 @@ const popularSearches = [
   <div class="ts-hero-float f8"><span class="dot" style="background:#db2777"></span> Age</div>
   <div class="ts-hero-inner reveal">
     <Badge tone="primary" class="ts-hero-badge">
-      ✦ {tools.length}+ Free Tools · 100% Private · No Sign-up
+      ✦ {tools.length}+ FREE TOOLS · PRIVATE BY DEFAULT · NO SIGN-UP
     </Badge>
 
     <h1 class="ts-hero-heading">
-      Essential Tools.<br />
-      <span class="ts-hero-gradient">Instant</span> Results.
+      Too Many Tools.<br />
+      <span class="ts-hero-gradient">One Less</span> Problem.
     </h1>
 
     <p class="ts-hero-desc">
-      {tools.length}+ fast, free browser-based tools for developers, creators, and everyday
-      tasks — no installs, no accounts, and nothing ever leaves your device.
+      Free calculators, converters, developer utilities and everyday tools —
+      built to help you get things done faster.
     </p>
 
     <div class="ts-hero-search">
       <div class="ts-input-wrap">
         <span class="ts-input-icon">🔍</span>
-        <input class="ts-input" type="text" id="hero-search-input" placeholder="Search any tool..." autocomplete="off" />
+        <input class="ts-input" type="text" id="hero-search-input" placeholder="What do you need to figure out?" autocomplete="off" />
         <button id="hero-clear-btn" class="ts-hero-clear" style="display:none">✕</button>
-        <kbd class="ts-input-kbd">Ctrl /</kbd>
+        <kbd class="ts-input-kbd">⌘K</kbd>
         <button id="hero-search-btn" class="ts-btn ts-btn-primary ts-hero-search-btn">→</button>
       </div>
       <div class="ts-hero-search-results" id="hero-search-results"></div>
     </div>
 
     <div class="ts-hero-popular">
-      <span class="ts-hero-popular-label">Popular:</span>
+      <span class="ts-hero-popular-label">People are using:</span>
       {popularSearches.map((term) => (
         <a href={term.href} class="ts-hero-chip">{term.name}</a>
       ))}
