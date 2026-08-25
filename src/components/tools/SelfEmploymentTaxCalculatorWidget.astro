@@ -1,0 +1,111 @@
+---
+{/* src/components/tools/SelfEmploymentTaxCalculatorWidget.astro */}
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
+---
+
+<section class="set-calculator">
+  <div class="set-layout">
+
+    <aside class="set-sidebar">
+      <CalculatorField
+        id="netEarnings"
+        label="Net Self-Employment Earnings ($)"
+        type="number"
+        placeholder="e.g. 60000"
+        required={true}
+        min="0"
+        step="0.01"
+        helpText="Net profit from self-employment, before SE tax."
+      />
+
+      <CalculatorField
+        id="filingStatus"
+        label="Filing Status"
+        type="select"
+        required={true}
+        options={[
+          { value: "single", label: "Single" },
+          { value: "marriedJointly", label: "Married Filing Jointly" },
+          { value: "marriedSeparately", label: "Married Filing Separately" },
+          { value: "headOfHousehold", label: "Head of Household" },
+        ]}
+      />
+
+      <CalculatorField
+        id="taxYear"
+        label="Tax Year"
+        type="select"
+        required={true}
+        options={[
+          { value: "2026", label: "2026" },
+          { value: "2025", label: "2025" },
+        ]}
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="set-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🧾"
+          title="Self-Employment Tax Calculator"
+          description="Calculate Social Security and Medicare tax owed on your self-employment income."
+          tips={["Total SE Tax", "Deductible Half"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="totalSETaxResult" title="Total SE Tax" icon={Landmark} accent="primary" size="lg" />
+          <ResultCard id="deductibleHalfResult" title="Deductible Half" icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="socialSecurityResult" title="Social Security (12.4%)" icon={Receipt} accent="neutral" />
+          <ResultCard id="medicareResult" title="Medicare (2.9% + Additional)" icon={Receipt} accent="neutral" />
+          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="primary" />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Calculates Social Security and Medicare (self-employment) tax on 92.35% of your net
+            self-employment earnings, using current IRS rates and the Social Security wage base for
+            2025 and 2026. Also shows the deductible half of SE tax you can claim against income tax.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/self-employment-tax-calculator";
+</script>
+
+<style>
+.set-calculator{ width:100%; }
+.set-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.set-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.set-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .set-layout{ grid-template-columns:1fr; } .set-sidebar{ position:static; } }
+@media(max-width:768px){ .set-layout{ gap:24px; } .set-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

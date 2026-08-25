@@ -1,0 +1,142 @@
+---
+{/* src/components/tools/QuarterlyEstimatedTaxCalculatorWidget.astro */}
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
+---
+
+<section class="qet-calculator">
+  <div class="qet-layout">
+
+    <aside class="qet-sidebar">
+      <CalculatorField
+        id="selfEmploymentIncome"
+        label="Self-Employment Income ($)"
+        type="number"
+        placeholder="e.g. 60000"
+        min="0"
+        step="0.01"
+        helpText="Expected net self-employment earnings for the year."
+      />
+
+      <CalculatorField
+        id="otherIncome"
+        label="Other Income ($)"
+        type="number"
+        placeholder="e.g. 0"
+        min="0"
+        step="0.01"
+        helpText="W-2 wages or other taxable income, if any."
+      />
+
+      <CalculatorField
+        id="filingStatus"
+        label="Filing Status"
+        type="select"
+        required={true}
+        options={[
+          { value: "single", label: "Single" },
+          { value: "marriedJointly", label: "Married Filing Jointly" },
+          { value: "marriedSeparately", label: "Married Filing Separately" },
+          { value: "headOfHousehold", label: "Head of Household" },
+        ]}
+      />
+
+      <CalculatorField
+        id="taxYear"
+        label="Tax Year"
+        type="select"
+        required={true}
+        options={[
+          { value: "2026", label: "2026" },
+          { value: "2025", label: "2025" },
+        ]}
+      />
+
+      <CalculatorField
+        id="deductionMode"
+        label="Deduction"
+        type="select"
+        required={true}
+        options={[
+          { value: "standard", label: "Standard Deduction" },
+          { value: "itemized", label: "Itemized Deduction" },
+        ]}
+      />
+
+      <div id="itemizedRow" hidden>
+        <CalculatorField
+          id="itemizedDeduction"
+          label="Itemized Deduction ($)"
+          type="number"
+          placeholder="e.g. 18000"
+          min="0"
+          step="0.01"
+        />
+      </div>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="qet-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="📅"
+          title="Quarterly Estimated Tax Calculator"
+          description="Estimate your quarterly tax payment by combining federal income tax and self-employment tax."
+          tips={["Quarterly Payment", "Total Annual Tax"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="quarterlyPaymentResult" title="Quarterly Payment" icon={CalendarClock} accent="primary" size="lg" />
+          <ResultCard id="totalAnnualTaxResult" title="Total Annual Tax" icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="seTaxResult" title="Self-Employment Tax" icon={Receipt} accent="neutral" />
+          <ResultCard id="federalIncomeTaxResult" title="Federal Income Tax" icon={Receipt} accent="neutral" />
+          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="primary" />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Combines federal income tax and self-employment tax on your expected annual income to
+            estimate what to send the IRS each quarter. Uses current 2025/2026 brackets, the
+            self-employment tax deduction, and your chosen deduction type. Does not include state tax.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/quarterly-estimated-tax-calculator";
+</script>
+
+<style>
+.qet-calculator{ width:100%; }
+.qet-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.qet-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.qet-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .qet-layout{ grid-template-columns:1fr; } .qet-sidebar{ position:static; } }
+@media(max-width:768px){ .qet-layout{ gap:24px; } .qet-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

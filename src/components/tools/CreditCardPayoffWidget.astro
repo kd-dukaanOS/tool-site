@@ -1,0 +1,53 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { CalendarClock, Percent, Wallet, PiggyBank } from "@lucide/astro";
+---
+<section class="ccp-calculator">
+  <div class="ccp-layout">
+    <aside class="ccp-sidebar">
+      <CalculatorField id="balance" label="Current Card Balance" type="number" placeholder="e.g. 5000" required={true} min="0" step="1" helpText="Your current outstanding balance." />
+      <CalculatorField id="apr" label="APR (%)" type="number" placeholder="e.g. 24" required={true} min="0" step="0.01" helpText="Your card's annual percentage rate." />
+      <CalculatorField id="monthlyPayment" label="Monthly Payment" type="number" placeholder="e.g. 200" required={true} min="0" step="1" helpText="The fixed amount you plan to pay each month." />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ccp-content">
+      <div id="emptyState">
+        <EmptyState icon="💳" title="Credit Card Payoff Calculator" description="See how long it takes to pay off your card and how much you'd save vs paying only the minimum." tips={["Payoff Time", "Total Interest", "Interest Saved"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={CalendarClock} accent="success" />
+          <ResultCard id="totalInterestResult" title="Total Interest" icon={Percent} />
+          <ResultCard id="totalPaidResult" title="Total Paid" icon={Wallet} />
+          <ResultCard id="interestSavedResult" title="Interest Saved" icon={PiggyBank} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Runs your real payoff numbers month by month, applying your APR to the remaining balance each month, and compares your chosen fixed payment against paying only the card's minimum payment.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/credit-card-payoff-calculator";
+</script>
+<style>
+.ccp-calculator{width:100%;}
+.ccp-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ccp-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.ccp-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ccp-layout{grid-template-columns:1fr;}.ccp-sidebar{position:static;}}
+@media(max-width:768px){.ccp-layout{gap:24px;}.ccp-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

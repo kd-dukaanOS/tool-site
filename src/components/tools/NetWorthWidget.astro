@@ -1,0 +1,66 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Landmark, Wallet, TrendingDown, Scale } from "@lucide/astro";
+---
+<section class="nw-calculator">
+  <div class="nw-layout">
+    <aside class="nw-sidebar">
+      <div class="nw-group">
+        <h3>Assets</h3>
+        <CalculatorField id="cash" label="Cash & Savings" type="number" placeholder="e.g. 15000" min="0" step="1" />
+        <CalculatorField id="investments" label="Investments" type="number" placeholder="e.g. 60000" min="0" step="1" />
+        <CalculatorField id="realEstate" label="Real Estate Value" type="number" placeholder="e.g. 300000" min="0" step="1" />
+        <CalculatorField id="otherAssets" label="Other Assets" type="number" placeholder="e.g. 10000" min="0" step="1" />
+      </div>
+      <div class="nw-group">
+        <h3>Liabilities</h3>
+        <CalculatorField id="mortgageDebt" label="Mortgage Balance" type="number" placeholder="e.g. 220000" min="0" step="1" />
+        <CalculatorField id="loanDebt" label="Other Loans" type="number" placeholder="e.g. 12000" min="0" step="1" />
+        <CalculatorField id="creditCardDebt" label="Credit Card Debt" type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <CalculatorField id="otherLiabilities" label="Other Liabilities" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="nw-content">
+      <div id="emptyState">
+        <EmptyState icon="💰" title="Net Worth Calculator" description="Add up your assets and liabilities to see your total net worth." tips={["Total Assets", "Total Liabilities", "Net Worth"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="netWorthResult" title="Net Worth" icon={Landmark} accent="success" subtitle=" " />
+          <ResultCard id="totalAssetsResult" title="Total Assets" icon={Wallet} />
+          <ResultCard id="totalLiabilitiesResult" title="Total Liabilities" icon={TrendingDown} />
+          <ResultCard id="debtRatioResult" title="Debt-to-Asset Ratio" icon={Scale} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Totals your assets (cash, investments, real estate, other) and liabilities (mortgage, loans, credit cards, other), then subtracts to give your net worth and a debt-to-asset ratio showing how leveraged your position is.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/net-worth-calculator";
+</script>
+<style>
+.nw-calculator{width:100%;}
+.nw-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.nw-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.nw-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.nw-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.nw-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.nw-layout{grid-template-columns:1fr;}.nw-sidebar{position:static;}}
+@media(max-width:768px){.nw-layout{gap:24px;}.nw-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

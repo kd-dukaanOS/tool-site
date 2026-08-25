@@ -1,0 +1,86 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { CalendarClock, Percent, Wallet, TrendingDown } from "@lucide/astro";
+---
+<section class="dpo-calculator">
+  <div class="dpo-layout">
+    <aside class="dpo-sidebar">
+      <div class="debt-group">
+        <h3>Debt 1</h3>
+        <CalculatorField id="debt1Balance" label="Balance" type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <CalculatorField id="debt1Apr" label="APR (%)" type="number" placeholder="e.g. 22" min="0" step="0.01" />
+        <CalculatorField id="debt1Min" label="Min. Payment" type="number" placeholder="e.g. 75" min="0" step="1" />
+      </div>
+      <div class="debt-group">
+        <h3>Debt 2</h3>
+        <CalculatorField id="debt2Balance" label="Balance" type="number" placeholder="e.g. 8000" min="0" step="1" />
+        <CalculatorField id="debt2Apr" label="APR (%)" type="number" placeholder="e.g. 9" min="0" step="0.01" />
+        <CalculatorField id="debt2Min" label="Min. Payment" type="number" placeholder="e.g. 150" min="0" step="1" />
+      </div>
+      <div class="debt-group">
+        <h3>Debt 3 (optional)</h3>
+        <CalculatorField id="debt3Balance" label="Balance" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="debt3Apr" label="APR (%)" type="number" placeholder="e.g. 0" min="0" step="0.01" />
+        <CalculatorField id="debt3Min" label="Min. Payment" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorField id="extraPayment" label="Extra Monthly Payment" type="number" placeholder="e.g. 200" min="0" step="1" helpText="Amount beyond all minimums." />
+      <div class="field-wrap">
+        <label for="strategy">Strategy</label>
+        <select id="strategy">
+          <option value="avalanche">Avalanche (highest APR first)</option>
+          <option value="snowball">Snowball (smallest balance first)</option>
+        </select>
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="dpo-content">
+      <div id="emptyState">
+        <EmptyState icon="🧾" title="Debt Payoff Calculator" description="Compare the snowball and avalanche methods across all your debts." tips={["Payoff Time", "Total Interest", "Payoff Order"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={CalendarClock} accent="success" />
+          <ResultCard id="totalInterestResult" title="Total Interest" icon={Percent} />
+          <ResultCard id="totalPaidResult" title="Total Paid" icon={Wallet} />
+          <ResultCard id="avalancheSavingsResult" title="Method Difference" icon={TrendingDown} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>Payoff Order</h2>
+          <ul id="payoffOrderList" class="payoff-order-list"></ul>
+        </section>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Simulates month-by-month payoff across all your debts, applying minimums to every debt and directing your extra payment to the top debt in the chosen strategy's order. Once a debt is cleared, its payment automatically rolls into the next one.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/debt-payoff-calculator";
+</script>
+<style>
+.dpo-calculator{width:100%;}
+.dpo-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.dpo-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.dpo-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.debt-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.debt-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.field-wrap{display:flex;flex-direction:column;gap:6px;}
+.field-wrap label{font-size:.85rem;font-weight:600;color:var(--text-primary);}
+.field-wrap select{padding:10px 12px;border-radius:10px;border:1px solid var(--border-subtle);background:var(--bg-card);color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.payoff-order-list{margin:0;padding-left:20px;line-height:1.9;font-size:.92rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.dpo-layout{grid-template-columns:1fr;}.dpo-sidebar{position:static;}}
+@media(max-width:768px){.dpo-layout{gap:24px;}.dpo-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

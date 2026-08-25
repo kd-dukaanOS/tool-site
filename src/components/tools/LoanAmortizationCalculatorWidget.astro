@@ -1,0 +1,138 @@
+---
+{/* src/components/tools/LoanAmortizationCalculatorWidget.astro */}
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
+---
+
+<section class="la-calculator">
+  <div class="la-layout">
+
+    <aside class="la-sidebar">
+      <CalculatorField
+        id="loanAmount"
+        label="Loan Amount ($)"
+        type="number"
+        placeholder="e.g. 300000"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="interestRate"
+        label="Annual Interest Rate (%)"
+        type="number"
+        placeholder="e.g. 6.5"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="termYears"
+        label="Loan Term (Years)"
+        type="number"
+        placeholder="e.g. 30"
+        required={true}
+        min="1"
+        step="1"
+      />
+
+      <CalculatorField
+        id="extraMonthlyPayment"
+        label="Extra Monthly Payment ($)"
+        type="number"
+        placeholder="e.g. 0"
+        min="0"
+        step="0.01"
+        helpText="Optional — pay off the loan faster."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="la-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🏦"
+          title="Loan Amortization Calculator"
+          description="See your monthly payment, total interest, and full year-by-year payoff schedule."
+          tips={["Monthly Payment", "Amortization Schedule"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={Wallet} accent="primary" size="lg" />
+          <ResultCard id="totalInterestResult" title="Total Interest" icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="totalPaymentResult" title="Total Payment" icon={Receipt} accent="neutral" />
+          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={CalendarClock} accent="primary" />
+        </ResultsGrid>
+
+        <section class="amortization-table-section">
+          <h2>Yearly Amortization Schedule</h2>
+          <div class="table-scroll">
+            <table class="amortization-table">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Principal Paid</th>
+                  <th>Interest Paid</th>
+                  <th>Ending Balance</th>
+                </tr>
+              </thead>
+              <tbody id="scheduleTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Calculates your monthly loan payment and full amortization schedule using the standard
+            fixed-rate amortization formula. Add an optional extra monthly payment to see how much
+            faster you'd pay off the loan and how much interest you'd save.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/loan-amortization-calculator";
+</script>
+
+<style>
+.la-calculator{ width:100%; }
+.la-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.la-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.la-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.amortization-table-section{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.amortization-table-section h2{ margin:0 0 16px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.table-scroll{ overflow-x:auto; max-height:420px; overflow-y:auto; }
+.amortization-table{ width:100%; border-collapse:collapse; font-size:.9rem; }
+.amortization-table th{ text-align:left; padding:10px 12px; border-bottom:2px solid var(--border-subtle); color:var(--text-secondary); position:sticky; top:0; background:var(--bg-card); }
+.amortization-table td{ padding:10px 12px; border-bottom:1px solid var(--border-subtle); color:var(--text-primary); }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .la-layout{ grid-template-columns:1fr; } .la-sidebar{ position:static; } }
+@media(max-width:768px){ .la-layout{ gap:24px; } .la-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info, .amortization-table-section{ padding:18px; } }
+</style>

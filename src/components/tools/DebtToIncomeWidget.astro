@@ -1,0 +1,53 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Scale, TrendingUp, Wallet, BadgeCheck } from "@lucide/astro";
+---
+<section class="dti-calculator">
+  <div class="dti-layout">
+    <aside class="dti-sidebar">
+      <CalculatorField id="monthlyIncome" label="Gross Monthly Income" type="number" placeholder="e.g. 6000" required={true} min="0" step="1" helpText="Your income before tax and deductions." />
+      <CalculatorField id="housingPayment" label="Monthly Housing Payment" type="number" placeholder="e.g. 1500" min="0" step="1" helpText="Rent or mortgage payment (P&I, taxes, insurance)." />
+      <CalculatorField id="otherDebts" label="Other Monthly Debt Payments" type="number" placeholder="e.g. 500" min="0" step="1" helpText="Credit cards, auto loans, student loans, etc." />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="dti-content">
+      <div id="emptyState">
+        <EmptyState icon="⚖️" title="Debt-to-Income Ratio Calculator" description="Find your front-end and back-end DTI ratio and see how it compares to lender guidelines." tips={["Front-End Ratio", "Back-End Ratio", "Lender Rating"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="frontEndResult" title="Front-End DTI" icon={Scale} accent="success" />
+          <ResultCard id="backEndResult" title="Back-End DTI" icon={TrendingUp} />
+          <ResultCard id="totalDebtResult" title="Total Monthly Debt" icon={Wallet} />
+          <ResultCard id="ratingResult" title="Rating" icon={BadgeCheck} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Compares your monthly debt payments to your gross monthly income using the same front-end/back-end method mortgage lenders use. A back-end DTI at or below 36% is generally considered good; above 43% is difficult to get approved for most conventional loans.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/debt-to-income-calculator";
+</script>
+<style>
+.dti-calculator{width:100%;}
+.dti-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.dti-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.dti-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.dti-layout{grid-template-columns:1fr;}.dti-sidebar{position:static;}}
+@media(max-width:768px){.dti-layout{gap:24px;}.dti-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

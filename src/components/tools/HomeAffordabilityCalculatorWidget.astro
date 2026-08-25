@@ -1,0 +1,154 @@
+---
+{/* src/components/tools/HomeAffordabilityCalculatorWidget.astro */}
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
+---
+
+<section class="ha-calculator">
+  <div class="ha-layout">
+
+    <aside class="ha-sidebar">
+      <CalculatorField
+        id="annualIncome"
+        label="Annual Income ($)"
+        type="number"
+        placeholder="e.g. 90000"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="monthlyDebts"
+        label="Monthly Debt Payments ($)"
+        type="number"
+        placeholder="e.g. 400"
+        min="0"
+        step="0.01"
+        helpText="Car loans, credit cards, student loans, etc."
+      />
+
+      <CalculatorField
+        id="downPayment"
+        label="Down Payment ($)"
+        type="number"
+        placeholder="e.g. 40000"
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="interestRate"
+        label="Interest Rate (%)"
+        type="number"
+        placeholder="e.g. 6.5"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="loanTermYears"
+        label="Loan Term (Years)"
+        type="number"
+        placeholder="30"
+        required={true}
+        min="1"
+        step="1"
+      />
+
+      <CalculatorField
+        id="propertyTaxRate"
+        label="Property Tax Rate (% / year)"
+        type="number"
+        placeholder="e.g. 1.1"
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="annualInsurance"
+        label="Annual Home Insurance ($)"
+        type="number"
+        placeholder="e.g. 1500"
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="maxDTI"
+        label="Max Debt-to-Income Ratio (%)"
+        type="number"
+        placeholder="36"
+        required={true}
+        min="1"
+        max="100"
+        step="1"
+        helpText="Lenders typically cap this at 36–43%."
+      />
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="ha-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="🏡"
+          title="Home Affordability Calculator"
+          description="Find the maximum home price you can afford based on your income, debts and down payment."
+          tips={["Max Home Price", "Estimated Monthly Payment"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="maxHomePriceResult" title="Max Home Price" icon={Home} accent="primary" size="lg" />
+          <ResultCard id="maxLoanAmountResult" title="Max Loan Amount" icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="monthlyPaymentResult" title="Est. Monthly Payment (PITI)" icon={Wallet} accent="success" />
+          <ResultCard id="monthlyPIResult" title="Principal & Interest Only" icon={Receipt} accent="neutral" />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Estimates the maximum home price you can afford by capping your total monthly housing
+            payment (principal, interest, property tax and insurance) at your target debt-to-income
+            ratio. Does not include HOA fees, PMI, or a lender's specific underwriting rules.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/home-affordability-calculator";
+</script>
+
+<style>
+.ha-calculator{ width:100%; }
+.ha-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.ha-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.ha-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .ha-layout{ grid-template-columns:1fr; } .ha-sidebar{ position:static; } }
+@media(max-width:768px){ .ha-layout{ gap:24px; } .ha-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

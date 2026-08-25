@@ -3,7 +3,7 @@ import { ontarioIncomeTax } from "../data/regions/ca/provinces/ontario-tax";
 import { albertaIncomeTax } from "../data/regions/ca/provinces/alberta-tax";
 import { bcIncomeTax } from "../data/regions/ca/provinces/bc-tax";
 import { ukIncomeTax, ukNationalInsurance, UK_UPPER_EARNINGS_LIMIT, UK_NI_ADDITIONAL_RATE } from "../data/regions/uk";
-import { usFederalIncomeTax, usPayroll } from "../data/regions/us";
+import { usFederalIncomeTax, usPayroll, usFederalIncomeTaxByStatus, type USFilingStatus } from "../data/regions/us";
 import type { TaxBracket, IncomeTaxConfig } from "../data/regions/types";
 
 export interface TakeHomeResult {
@@ -61,6 +61,54 @@ export function calculateCATakeHome(grossAnnual: number, province: string): Take
     effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,
   };
 }
+export interface CAIncomeTaxResult {
+  grossAnnual: number;
+  province: string;
+  federalTax: number;
+  provincialTax: number;
+  totalTax: number;
+  effectiveRate: number;
+  marginalRate: number; // combined federal + provincial marginal rate
+  afterTaxIncome: number;
+  federalBracketBreakdown: BracketBreakdownItem[];
+  provincialBracketBreakdown: BracketBreakdownItem[];
+}
+
+export function calculateCAIncomeTax(grossAnnual: number, province: string): CAIncomeTaxResult {
+  const provincial = CA_PROVINCES[province] ?? ontarioIncomeTax;
+
+  const federalTax = calculateBracketTax(grossAnnual, caFederalIncomeTax.brackets);
+  const provincialTax = calculateBracketTax(grossAnnual, provincial.brackets);
+  const totalTax = federalTax + provincialTax;
+
+  const federalMarginal = getMarginalRate(grossAnnual, caFederalIncomeTax.brackets);
+  const provincialMarginal = getMarginalRate(grossAnnual, provincial.brackets);
+  const marginalRate = federalMarginal + provincialMarginal;
+
+  const effectiveRate = grossAnnual > 0 ? (totalTax / grossAnnual) * 100 : 0;
+
+  const buildBreakdown = (brackets: TaxBracket[]): BracketBreakdownItem[] =>
+    brackets
+      .filter((b) => grossAnnual > b.min)
+      .map((b) => {
+        const upper = b.max ?? grossAnnual;
+        const taxableInBracket = Math.min(grossAnnual, upper) - b.min;
+        return { min: b.min, max: b.max, rate: b.rate, taxableInBracket, taxInBracket: taxableInBracket * b.rate };
+      });
+
+  return {
+    grossAnnual,
+    province,
+    federalTax,
+    provincialTax,
+    totalTax,
+    effectiveRate,
+    marginalRate,
+    afterTaxIncome: grossAnnual - totalTax,
+    federalBracketBreakdown: buildBreakdown(caFederalIncomeTax.brackets),
+    provincialBracketBreakdown: buildBreakdown(provincial.brackets),
+  };
+}
 
 export function calculateUKNI(annualIncome: number): number {
   const primaryThreshold = ukNationalInsurance.wageBase ?? 0;
@@ -90,6 +138,44 @@ export function calculateUKTakeHome(grossAnnual: number): TakeHomeResult {
     effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,
   };
 }
+export interface UKIncomeTaxResult {
+  grossAnnual: number;
+  personalAllowance: number;
+  taxableIncome: number;
+  incomeTax: number;
+  effectiveRate: number;
+  marginalRate: number;
+  afterTaxIncome: number;
+  bracketBreakdown: BracketBreakdownItem[];
+}
+
+export function calculateUKIncomeTax(grossAnnual: number): UKIncomeTaxResult {
+  const { brackets, standardDeduction } = ukIncomeTax;
+
+  const taxableIncome = Math.max(0, grossAnnual - standardDeduction);
+  const incomeTax = calculateBracketTax(grossAnnual, brackets);
+  const marginalRate = getMarginalRate(grossAnnual, brackets);
+  const effectiveRate = grossAnnual > 0 ? (incomeTax / grossAnnual) * 100 : 0;
+
+  const bracketBreakdown: BracketBreakdownItem[] = brackets
+    .filter((b) => grossAnnual > b.min)
+    .map((b) => {
+      const upper = b.max ?? grossAnnual;
+      const taxableInBracket = Math.min(grossAnnual, upper) - b.min;
+      return { min: b.min, max: b.max, rate: b.rate, taxableInBracket, taxInBracket: taxableInBracket * b.rate };
+    });
+
+  return {
+    grossAnnual,
+    personalAllowance: standardDeduction,
+    taxableIncome,
+    incomeTax,
+    effectiveRate,
+    marginalRate,
+    afterTaxIncome: grossAnnual - incomeTax,
+    bracketBreakdown,
+  };
+}
 
 export function calculateUSTakeHome(grossAnnual: number): TakeHomeResult {
   const federalTax = calculateBracketTax(grossAnnual, usFederalIncomeTax.brackets);
@@ -115,6 +201,109 @@ export function calculateUSTakeHome(grossAnnual: number): TakeHomeResult {
       { label: "Medicare", amount: medicareTax },
     ],
     effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,
+  };
+}
+
+export interface BracketBreakdownItem {
+  min: number;
+  max: number | null;
+  rate: number;
+  taxableInBracket: number;
+  taxInBracket: number;
+}
+
+export interface IncomeTaxResult {
+  grossAnnual: number;
+  standardDeduction: number;
+  taxableIncome: number;
+  federalTax: number;
+  effectiveRate: number;
+  marginalRate: number;
+  afterTaxIncome: number;
+  bracketBreakdown: BracketBreakdownItem[];
+}
+
+export function getMarginalRate(income: number, brackets: TaxBracket[]): number {
+  let rate = 0;
+  for (const b of brackets) {
+    if (income > b.min) rate = b.rate;
+    else break;
+  }
+  return rate;
+}
+
+export function calculateUSIncomeTax(grossAnnual: number): IncomeTaxResult {
+  const { brackets, standardDeduction } = usFederalIncomeTax;
+
+  const taxableIncome = Math.max(0, grossAnnual - standardDeduction);
+  const federalTax = calculateBracketTax(grossAnnual, brackets);
+  const marginalRate = getMarginalRate(grossAnnual, brackets);
+  const effectiveRate = grossAnnual > 0 ? (federalTax / grossAnnual) * 100 : 0;
+
+  const bracketBreakdown: BracketBreakdownItem[] = brackets
+    .filter((b) => grossAnnual > b.min)
+    .map((b) => {
+      const upper = b.max ?? grossAnnual;
+      const taxableInBracket = Math.min(grossAnnual, upper) - b.min;
+      return {
+        min: b.min,
+        max: b.max,
+        rate: b.rate,
+        taxableInBracket,
+        taxInBracket: taxableInBracket * b.rate,
+      };
+    });
+
+  return {
+    grossAnnual,
+    standardDeduction,
+    taxableIncome,
+    federalTax,
+    effectiveRate,
+    marginalRate,
+    afterTaxIncome: grossAnnual - federalTax,
+    bracketBreakdown,
+  };
+}
+export interface USFederalTaxResult {
+  grossAnnual: number;
+  filingStatus: USFilingStatus;
+  standardDeduction: number;
+  taxableIncome: number;
+  federalTax: number;
+  effectiveRate: number;
+  marginalRate: number;
+  afterTaxIncome: number;
+  bracketBreakdown: BracketBreakdownItem[];
+}
+
+export function calculateUSFederalTax(grossAnnual: number, filingStatus: USFilingStatus): USFederalTaxResult {
+  const config = usFederalIncomeTaxByStatus[filingStatus];
+  const { brackets, standardDeduction } = config;
+
+  const taxableIncome = Math.max(0, grossAnnual - standardDeduction);
+  const federalTax = calculateBracketTax(grossAnnual, brackets);
+  const marginalRate = getMarginalRate(grossAnnual, brackets);
+  const effectiveRate = grossAnnual > 0 ? (federalTax / grossAnnual) * 100 : 0;
+
+  const bracketBreakdown: BracketBreakdownItem[] = brackets
+    .filter((b) => grossAnnual > b.min)
+    .map((b) => {
+      const upper = b.max ?? grossAnnual;
+      const taxableInBracket = Math.min(grossAnnual, upper) - b.min;
+      return { min: b.min, max: b.max, rate: b.rate, taxableInBracket, taxInBracket: taxableInBracket * b.rate };
+    });
+
+  return {
+    grossAnnual,
+    filingStatus,
+    standardDeduction,
+    taxableIncome,
+    federalTax,
+    effectiveRate,
+    marginalRate,
+    afterTaxIncome: grossAnnual - federalTax,
+    bracketBreakdown,
   };
 }
 
@@ -185,8 +374,11 @@ export interface NIResult {
   totalContribution: number;
 }
 
-const NI_EMPLOYER_RATE = 0; // NEEDS_VERIFICATION — Class 1 secondary employer rate
-const NI_EMPLOYER_THRESHOLD = 0; // NEEDS_VERIFICATION — secondary threshold, differs from employee's
+// Source: National Insurance Contributions (Secondary Class 1 Contributions) Act 2025
+// (legislation.gov.uk), confirmed against HMRC "Rates and Thresholds for Employers
+// 2026 to 2027" (published 30 Jan 2026, updated 7 Apr 2026). Verified August 2026.
+const NI_EMPLOYER_RATE = 0.15; // Class 1 secondary employer rate, 2026/27
+const NI_EMPLOYER_THRESHOLD = 5000; // Secondary Threshold (annual), 2026/27
 
 export function calculateNIDetailed(annualIncome: number): NIResult {
   const primaryThreshold = ukNationalInsurance.wageBase ?? 0;

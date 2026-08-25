@@ -1,0 +1,79 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Landmark, TrendingUp, FileText, Wallet } from "@lucide/astro";
+---
+<section class="usit-calculator">
+  <div class="usit-layout">
+    <aside class="usit-sidebar">
+      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross salary before deductions (USD)." />
+      <div class="usit-filing-status">
+        <label for="filingStatus">Filing Status</label>
+        <select id="filingStatus" disabled>
+          <option>Single</option>
+        </select>
+        <p class="usit-filing-note">Married filing jointly, Head of Household, and state income tax are not yet supported. Federal, single-filer only.</p>
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="usit-content">
+      <div id="emptyState">
+        <EmptyState icon="🧾" title="US Income Tax Calculator" description="See your estimated federal income tax, effective rate, and marginal rate." tips={["Federal Tax Owed", "Effective Rate", "Marginal Rate"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="federalTaxResult" title="Federal Tax Owed" icon={Landmark} subtitle=" " />
+          <ResultCard id="marginalRateResult" title="Marginal Tax Rate" icon={TrendingUp} />
+          <ResultCard id="taxableIncomeResult" title="Taxable Income" icon={FileText} />
+          <ResultCard id="afterTaxResult" title="After-Tax Income" icon={Wallet} />
+        </ResultsGrid>
+
+        <section class="usit-bracket-section">
+          <h2>Tax Bracket Breakdown</h2>
+          <p class="usit-bracket-intro">Your income is taxed progressively — only the portion of income within each bracket is taxed at that bracket's rate.</p>
+          <table class="usit-bracket-table">
+            <thead>
+              <tr><th>Income Range</th><th>Rate</th><th>Tax in Bracket</th></tr>
+            </thead>
+            <tbody id="bracketTableBody"></tbody>
+          </table>
+        </section>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates US federal income tax for a single filer using current federal tax brackets and the standard deduction. Federal only — state and local income tax are not included. Verify against current IRS figures for your exact situation.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/us-income-tax-script";
+</script>
+<style>
+.usit-calculator{width:100%;}
+.usit-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.usit-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.usit-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.usit-filing-status{display:flex;flex-direction:column;gap:6px;}
+.usit-filing-status label{font-size:.85rem;font-weight:600;color:var(--text-primary);}
+.usit-filing-status select{padding:10px 12px;border-radius:10px;border:1px solid var(--border-subtle);background:var(--bg-card);color:var(--text-secondary);font-size:.9rem;}
+.usit-filing-note{font-size:.78rem;color:var(--text-secondary);line-height:1.5;margin:0;}
+.usit-bracket-section{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.usit-bracket-section h2{margin:0 0 8px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.usit-bracket-intro{margin:0 0 16px;font-size:.9rem;color:var(--text-secondary);line-height:1.6;}
+.usit-bracket-table{width:100%;border-collapse:collapse;font-size:.88rem;}
+.usit-bracket-table th{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);font-weight:600;}
+.usit-bracket-table td{padding:8px 10px;border-bottom:1px solid var(--border-subtle);color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.usit-layout{grid-template-columns:1fr;}.usit-sidebar{position:static;}}
+@media(max-width:768px){.usit-layout{gap:24px;}.usit-content{gap:20px;}}
+@media(max-width:640px){.calculator-info,.usit-bracket-section{padding:18px;}}
+</style>

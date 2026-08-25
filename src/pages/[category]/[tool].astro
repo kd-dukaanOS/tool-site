@@ -31,6 +31,8 @@ import RDCalculatorWidget from "../../components/tools/RDCalculatorWidget.astro"
 import SIPCalculatorWidget from "../../components/tools/SIPCalculatorWidget.astro";
 import PPFCalculatorWidget from "../../components/tools/PPFCalculatorWidget.astro";
 import MortgageCalculatorWidget from "../../components/tools/MortgageCalculatorWidget.astro";
+import MortgageAffordabilityWidget from "../../components/tools/MortgageAffordabilityWidget.astro";
+import LoanAmortizationCalculatorWidget from "../../components/tools/LoanAmortizationCalculatorWidget.astro";
 import BMICalculatorWidget from "../../components/tools/BMICalculatorWidget.astro";
 import BMRCalculatorWidget from "../../components/tools/BMRCalculatorWidget.astro";
 import BodyFatCalculatorWidget from "../../components/tools/BodyFatCalculatorWidget.astro";
@@ -84,10 +86,12 @@ import TimezoneCalculatorWidget from "../../components/tools/TimezoneCalculatorW
 import MarkupCalculatorWidget from "../../components/tools/MarkupCalculatorWidget.astro";
 import USTakeHomePayWidget from "../../components/tools/USTakeHomePayWidget.astro";
 import CanadaTakeHomePayWidget from "../../components/tools/CanadaTakeHomePayWidget.astro";
+import CAIncomeTaxWidget from "../../components/tools/CAIncomeTaxWidget.astro";
 import CPPCalculatorWidget from "../../components/tools/CPPCalculatorWidget.astro";
 import EICalculatorWidget from "../../components/tools/EICalculatorWidget.astro";
 import NationalInsuranceWidget from "../../components/tools/NationalInsuranceWidget.astro";
 import UKTakeHomePayWidget from "../../components/tools/UKTakeHomePayWidget.astro";
+import UKIncomeTaxWidget from "../../components/tools/UKIncomeTaxWidget.astro";
 import BonusCalculatorWidget from "../../components/tools/BonusCalculatorWidget.astro";
 import GrossMarginCalculatorWidget from "../../components/tools/GrossMarginCalculatorWidget.astro";
 import NetProfitCalculatorWidget from "../../components/tools/NetProfitCalculatorWidget.astro";
@@ -100,6 +104,18 @@ import CustomerAcquisitionCostWidget from "../../components/tools/CustomerAcquis
 import CustomerLifetimeValueWidget from "../../components/tools/CustomerLifetimeValueWidget.astro";
 import FreelancerRateCalculatorWidget from "../../components/tools/FreelancerRateCalculatorWidget.astro";
 import BusinessValuationEstimatorWidget from "../../components/tools/BusinessValuationEstimatorWidget.astro";
+import USIncomeTaxWidget from "../../components/tools/USIncomeTaxWidget.astro";
+import USFederalTaxWidget from "../../components/tools/USFederalTaxCalculatorWidget.astro";
+import CreditCardPayoffWidget from "../../components/tools/CreditCardPayoffWidget.astro";
+import DebtPayoffWidget from "../../components/tools/DebtPayoffWidget.astro";
+import DebtToIncomeWidget from "../../components/tools/DebtToIncomeWidget.astro";
+import HomeAffordabilityCalculatorWidget from "../../components/tools/HomeAffordabilityCalculatorWidget.astro";
+import QuarterlyEstimatedTaxCalculatorWidget from "../../components/tools/QuarterlyEstimatedTaxCalculatorWidget.astro";
+import RetirementWidget from "../../components/tools/RetirementWidget.astro";
+import SelfEmploymentTaxCalculatorWidget from "../../components/tools/SelfEmploymentTaxCalculatorWidget.astro";
+import CapitalGainsTaxCalculatorWidget from "../../components/tools/CapitalGainsTaxCalculatorWidget.astro";
+import NetWorthWidget from "../../components/tools/NetWorthWidget.astro";
+import RegionalSalaryCalculatorWidget from "../../components/tools/RegionalSalaryCalculatorWidget.astro";
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 import { contentMap } from "../../data/calculator-content-map.js";
 import CalculatorContent from "../../components/content/CalculatorContent.astro";
@@ -188,7 +204,7 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
 ---
 
 <Layout
-  title={`${tool.name} — Free Online Tool | ToolSite`}
+  title={`${tool.name} — Free Online Tool | TooManyToolz`}
   description={tool.desc}
   faqItems={faqItemsForSchema}
   breadcrumbs={[
@@ -289,6 +305,10 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
       <PPFCalculatorWidget />
     ) : tool.slug === "mortgage-calculator" ? (
       <MortgageCalculatorWidget />
+    ) : tool.slug === "mortgage-affordability-calculator" ? (
+      <MortgageAffordabilityWidget /> 
+    ) : tool.slug === "loan-amortization-calculator" ? (
+      <LoanAmortizationCalculatorWidget />  
     ) : tool.slug === "bmi-calculator" ? (
       <BMICalculatorWidget />
     ) : tool.slug === "bmr-calculator" ? (
@@ -392,14 +412,22 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
       <MarkupCalculatorWidget />
     ) : tool.slug === "us-take-home-pay-calculator" ? (
       <USTakeHomePayWidget />
+    ) : tool.slug === "us-income-tax-calculator" ? (
+      <USIncomeTaxWidget />
     ) : tool.slug === "ca-take-home-pay-calculator" ? (
       <CanadaTakeHomePayWidget />
+    ) : tool.slug === "ca-income-tax-calculator" ? (
+      <CAIncomeTaxWidget />
     ) : tool.slug === "cpp-calculator" ? (
       <CPPCalculatorWidget />
     ) : tool.slug === "ei-calculator" ? (
       <EICalculatorWidget />
-      ) : tool.slug === "uk-take-home-pay-calculator" ? (
+    ) : tool.slug === "uk-take-home-pay-calculator" ? (
       <UKTakeHomePayWidget />
+    ) : tool.slug === "uk-income-tax-calculator" ? (
+      <UKIncomeTaxWidget />
+    ) : tool.slug === "us-federal-tax-calculator" ? (
+      <USFederalTaxWidget />
     ) : tool.slug === "uk-national-insurance-calculator" ? (
       <NationalInsuranceWidget />
     ) : tool.slug === "bonus-calculator" ? (
@@ -426,6 +454,26 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
       <FreelancerRateCalculatorWidget />
     ) : tool.slug === "business-valuation-calculator" ? (
       <BusinessValuationEstimatorWidget />
+        ) : tool.slug === "credit-card-payoff-calculator" ? (
+      <CreditCardPayoffWidget />
+    ) : tool.slug === "debt-payoff-calculator" ? (
+      <DebtPayoffWidget />
+    ) : tool.slug === "debt-to-income-calculator" ? (
+      <DebtToIncomeWidget />
+    ) : tool.slug === "home-affordability-calculator" ? (
+      <HomeAffordabilityCalculatorWidget />
+    ) : tool.slug === "quarterly-estimated-tax-calculator" ? (
+      <QuarterlyEstimatedTaxCalculatorWidget />
+    ) : tool.slug === "retirement-calculator" ? (
+      <RetirementWidget />
+    ) : tool.slug === "net-worth-calculator" ? (
+      <NetWorthWidget />  
+    ) : tool.slug === "capital-gains-tax-calculator" ? (
+      <CapitalGainsTaxCalculatorWidget />
+    ) : tool.slug === "regional-salary-calculator" ? (
+      <RegionalSalaryCalculatorWidget />  
+    ) : tool.slug === "self-employment-tax-calculator" ? (
+      <SelfEmploymentTaxCalculatorWidget />  
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>

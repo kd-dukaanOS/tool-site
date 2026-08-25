@@ -1,0 +1,55 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { PiggyBank, TrendingUp, Wallet, Landmark } from "@lucide/astro";
+---
+<section class="ret-calculator">
+  <div class="ret-layout">
+    <aside class="ret-sidebar">
+      <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" required={true} min="1" step="1" />
+      <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" required={true} min="1" step="1" />
+      <CalculatorField id="currentSavings" label="Current Retirement Savings" type="number" placeholder="e.g. 20000" min="0" step="1" />
+      <CalculatorField id="monthlyContribution" label="Monthly Contribution" type="number" placeholder="e.g. 500" min="0" step="1" />
+      <CalculatorField id="annualReturn" label="Expected Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ret-content">
+      <div id="emptyState">
+        <EmptyState icon="🏖️" title="Retirement Calculator" description="Project your retirement savings and estimated monthly income." tips={["Projected Savings", "Total Growth", "Monthly Income"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="projectedSavingsResult" title="Projected Savings" icon={PiggyBank} accent="success" />
+          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={Wallet} />
+          <ResultCard id="totalGrowthResult" title="Total Growth" icon={TrendingUp} />
+          <ResultCard id="monthlyIncomeResult" title="Est. Monthly Income" icon={Landmark} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Projects your retirement savings using compound growth on your current balance plus future monthly contributions, then estimates a sustainable monthly income using the 4% withdrawal rule.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/retirement-calculator";
+</script>
+<style>
+.ret-calculator{width:100%;}
+.ret-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ret-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.ret-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ret-layout{grid-template-columns:1fr;}.ret-sidebar{position:static;}}
+@media(max-width:768px){.ret-layout{gap:24px;}.ret-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

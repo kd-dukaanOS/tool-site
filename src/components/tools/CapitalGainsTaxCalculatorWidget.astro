@@ -1,0 +1,163 @@
+---
+{/* src/components/tools/CapitalGainsTaxCalculatorWidget.astro */}
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+
+import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
+---
+
+<section class="cgt-calculator">
+  <div class="cgt-layout">
+
+    <aside class="cgt-sidebar">
+      <CalculatorField
+        id="purchasePrice"
+        label="Purchase Price ($)"
+        type="number"
+        placeholder="e.g. 10000"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="salePrice"
+        label="Sale Price ($)"
+        type="number"
+        placeholder="e.g. 15000"
+        required={true}
+        min="0"
+        step="0.01"
+      />
+
+      <CalculatorField
+        id="holdingPeriod"
+        label="Holding Period"
+        type="select"
+        required={true}
+        options={[
+          { value: "long", label: "Long-Term (over 1 year)" },
+          { value: "short", label: "Short-Term (1 year or less)" },
+        ]}
+      />
+
+      <CalculatorField
+        id="otherIncome"
+        label="Other Annual Income ($)"
+        type="number"
+        placeholder="e.g. 75000"
+        min="0"
+        step="0.01"
+        helpText="Your income excluding this gain — determines your bracket."
+      />
+
+      <CalculatorField
+        id="filingStatus"
+        label="Filing Status"
+        type="select"
+        required={true}
+        options={[
+          { value: "single", label: "Single" },
+          { value: "marriedJointly", label: "Married Filing Jointly" },
+          { value: "marriedSeparately", label: "Married Filing Separately" },
+          { value: "headOfHousehold", label: "Head of Household" },
+        ]}
+      />
+
+      <CalculatorField
+        id="taxYear"
+        label="Tax Year"
+        type="select"
+        required={true}
+        options={[
+          { value: "2026", label: "2026" },
+          { value: "2025", label: "2025" },
+        ]}
+      />
+
+      <CalculatorField
+        id="deductionMode"
+        label="Deduction"
+        type="select"
+        required={true}
+        options={[
+          { value: "standard", label: "Standard Deduction" },
+          { value: "itemized", label: "Itemized Deduction" },
+        ]}
+      />
+
+      <div id="itemizedRow" hidden>
+        <CalculatorField
+          id="itemizedDeduction"
+          label="Itemized Deduction ($)"
+          type="number"
+          placeholder="e.g. 18000"
+          min="0"
+          step="0.01"
+        />
+      </div>
+
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="cgt-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="📈"
+          title="Capital Gains Tax Calculator"
+          description="Estimate federal tax owed on a short-term or long-term capital gain based on your income and filing status."
+          tips={["Capital Gains Tax", "After-Tax Gain"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={2}>
+          <ResultCard id="gainResult" title="Capital Gain" icon={TrendingUp} accent="neutral" size="lg" />
+          <ResultCard id="taxResult" title="Capital Gains Tax" icon={Landmark} accent="primary" size="lg" />
+          <ResultCard id="rateResult" title="Effective Rate on Gain" icon={Percent} accent="primary" />
+          <ResultCard id="afterTaxResult" title="After-Tax Gain" icon={Wallet} accent="success" />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Estimates federal capital gains tax by stacking your gain on top of your other taxable
+            income, using current IRS ordinary tax brackets (short-term) or long-term capital gains
+            brackets (0%/15%/20%) for 2025 and 2026. Does not include state tax or the Net
+            Investment Income Tax.
+          </p>
+        </section>
+      </div>
+    </main>
+
+  </div>
+</section>
+
+<script>
+  import "../../scripts/capital-gains-calculator";
+</script>
+
+<style>
+.cgt-calculator{ width:100%; }
+.cgt-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.cgt-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.cgt-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .cgt-layout{ grid-template-columns:1fr; } .cgt-sidebar{ position:static; } }
+@media(max-width:768px){ .cgt-layout{ gap:24px; } .cgt-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>
