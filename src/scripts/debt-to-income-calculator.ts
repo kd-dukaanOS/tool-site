@@ -1,14 +1,9 @@
-import {
-  calculateDTI,
-  validateDTIInputs,
-  type DTIResult,
-} from "../utils/debt-to-income";
-
+import { calculateDTI, validateDTIInputs } from "../utils/debt-to-income";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
-const monthlyIncomeInput = document.getElementById("monthlyIncome") as HTMLInputElement;
-const housingPaymentInput = document.getElementById("housingPayment") as HTMLInputElement;
-const otherDebtsInput = document.getElementById("otherDebts") as HTMLInputElement;
+function val(id: string): number {
+  return parseFloat((document.getElementById(id) as HTMLInputElement)?.value) || 0;
+}
 
 const calculateBtn = document.getElementById("calculateBtn");
 const resetBtn = document.getElementById("resetBtn");
@@ -18,7 +13,16 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
-let lastResult: DTIResult | null = null;
+const fieldIds = [
+  "grossMonthlyIncome", "housingPayment", "carLoanPayment",
+  "studentLoanPayment", "creditCardMinPayments", "otherDebtPayments",
+];
+
+let lastSummary = "";
+
+function fmtCurrency(n: number): string {
+  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+}
 
 function showError(message: string) {
   errorBox.textContent = message;
@@ -33,55 +37,58 @@ function clearError() {
 function calculate() {
   clearError();
 
-  const income = parseFloat(monthlyIncomeInput.value);
-  const housing = parseFloat(housingPaymentInput.value) || 0;
-  const otherDebts = parseFloat(otherDebtsInput.value) || 0;
+  const [
+    grossMonthlyIncome, housingPayment, carLoanPayment,
+    studentLoanPayment, creditCardMinPayments, otherDebtPayments,
+  ] = fieldIds.map(val);
 
-  const validationError = validateDTIInputs(income, housing, otherDebts);
+  const validationError = validateDTIInputs(grossMonthlyIncome);
   if (validationError) {
     showError(validationError);
     return;
   }
 
-  const result = calculateDTI(income, housing, otherDebts);
+  const result = calculateDTI(
+    grossMonthlyIncome, housingPayment, carLoanPayment,
+    studentLoanPayment, creditCardMinPayments, otherDebtPayments
+  );
 
-  setValue("frontEndResult", `${result.frontEndRatio.toFixed(1)}%`);
-  setValue("backEndResult", `${result.backEndRatio.toFixed(1)}%`);
-  setValue("totalDebtResult", result.totalMonthlyDebt.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }));
-  setValue("ratingResult", result.rating);
-  setSubtitle("ratingResult", "vs. common lender guidelines");
+  setValue("frontEndResult", `${result.frontEndDTI.toFixed(1)}%`);
+  setValue("backEndResult", `${result.backEndDTI.toFixed(1)}%`);
+  setValue("totalDebtResult", fmtCurrency(result.totalMonthlyDebt));
+  setValue("ratingResult", result.backEndRating);
+  setSubtitle("frontEndResult", result.frontEndRating);
+  setSubtitle("backEndResult", result.backEndRating);
+  setSubtitle("ratingResult", `Room to 43%: ${fmtCurrency(result.maxAdditionalDebtFor43)}/mo`);
 
-  lastResult = result;
+  lastSummary = `
+Debt-to-Income Summary
+
+Front-End DTI (Housing): ${result.frontEndDTI.toFixed(1)}% - ${result.frontEndRating}
+Back-End DTI (Total Debt): ${result.backEndDTI.toFixed(1)}% - ${result.backEndRating}
+Total Monthly Debt: ${fmtCurrency(result.totalMonthlyDebt)}
+Room to reach 36% DTI: ${fmtCurrency(result.maxAdditionalDebtFor36)}/mo
+Room to reach 43% DTI: ${fmtCurrency(result.maxAdditionalDebtFor43)}/mo
+`.trim();
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
 
 function resetCalculator() {
-  monthlyIncomeInput.value = "";
-  housingPaymentInput.value = "";
-  otherDebtsInput.value = "";
+  fieldIds.forEach((id) => {
+    const el = document.getElementById(id) as HTMLInputElement;
+    if (el) el.value = "";
+  });
   clearError();
-
-  lastResult = null;
-
+  lastSummary = "";
   resultsContainer.hidden = true;
   emptyState.hidden = false;
 }
 
 function handleCopy() {
-  if (!lastResult) return;
-
-  const summary = `
-Debt-to-Income Summary
-
-Front-End DTI: ${lastResult.frontEndRatio.toFixed(1)}%
-Back-End DTI: ${lastResult.backEndRatio.toFixed(1)}%
-Total Monthly Debt: $${lastResult.totalMonthlyDebt.toFixed(0)}
-Rating: ${lastResult.rating}
-`.trim();
-
-  copyToClipboard(summary);
+  if (!lastSummary) return;
+  copyToClipboard(lastSummary);
 }
 
 calculateBtn?.addEventListener("click", calculate);

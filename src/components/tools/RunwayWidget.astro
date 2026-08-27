@@ -1,0 +1,66 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Timer, Gauge, Flame, Wallet } from "@lucide/astro";
+---
+<section class="rwc-calculator">
+  <div class="rwc-layout">
+    <aside class="rwc-sidebar">
+      <div class="rwc-group">
+        <h3>Cash Position</h3>
+        <CalculatorField id="currentCashBalance" label="Current Cash Balance" type="number" placeholder="e.g. 300000" min="0" step="1" />
+      </div>
+      <div class="rwc-group">
+        <h3>Monthly Numbers</h3>
+        <CalculatorField id="monthlyRevenue" label="Monthly Revenue" type="number" placeholder="e.g. 15000" min="0" step="1" />
+        <CalculatorField id="monthlyExpenses" label="Monthly Expenses" type="number" placeholder="e.g. 40000" min="0" step="1" />
+      </div>
+      <div class="rwc-group">
+        <h3>Growth Assumptions</h3>
+        <CalculatorField id="monthlyRevenueGrowthRate" label="Monthly Revenue Growth (%)" type="number" placeholder="e.g. 5" step="0.1" />
+        <CalculatorField id="monthlyExpenseGrowthRate" label="Monthly Expense Growth (%)" type="number" placeholder="e.g. 2" step="0.1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="rwc-content">
+      <div id="emptyState">
+        <EmptyState icon="⏳" title="Runway Calculator" description="Project your runway using current burn rate and revenue/expense growth trends." tips={["Dynamic Runway", "Static Runway", "6-Month Forecast"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="dynamicRunwayResult" title="Dynamic Runway" icon={Timer} accent="warning" subtitle=" " />
+          <ResultCard id="staticRunwayResult" title="Static Runway" icon={Gauge} />
+          <ResultCard id="netBurnResult" title="Current Net Burn" icon={Flame} />
+          <ResultCard id="balanceIn6MoResult" title="Balance in 6 Months" icon={Wallet} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Projects runway two ways: a static estimate based on your current net burn rate, and a dynamic month-by-month simulation that applies your expected monthly revenue and expense growth rates.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/runway-calculator";
+</script>
+<style>
+.rwc-calculator{width:100%;}
+.rwc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.rwc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.rwc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.rwc-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.rwc-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.rwc-layout{grid-template-columns:1fr;}.rwc-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.rwc-layout{gap:24px;}.rwc-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

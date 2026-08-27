@@ -1,0 +1,78 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Receipt, Percent, DollarSign, Calculator } from "@lucide/astro";
+---
+<section class="gsth-calculator">
+  <div class="gsth-layout">
+    <aside class="gsth-sidebar">
+      <div class="gsth-group">
+        <h3>Amount</h3>
+        <CalculatorField id="amount" label="Amount ($)" type="number" placeholder="e.g. 100" min="0" step="0.01" />
+      </div>
+      <div class="gsth-group">
+        <h3>Location & Mode</h3>
+        <CalculatorField type="select" id="province" label="Province / Territory">
+          <option value="AB">Alberta (5% GST)</option>
+          <option value="BC">British Columbia (5% GST)</option>
+          <option value="MB">Manitoba (5% GST)</option>
+          <option value="NB">New Brunswick (15% HST)</option>
+          <option value="NL">Newfoundland and Labrador (15% HST)</option>
+          <option value="NT">Northwest Territories (5% GST)</option>
+          <option value="NS">Nova Scotia (14% HST)</option>
+          <option value="NU">Nunavut (5% GST)</option>
+          <option value="ON">Ontario (13% HST)</option>
+          <option value="PE">Prince Edward Island (15% HST)</option>
+          <option value="QC">Quebec (5% GST)</option>
+          <option value="SK">Saskatchewan (5% GST)</option>
+          <option value="YT">Yukon (5% GST)</option>
+        </CalculatorField>
+        <CalculatorField type="select" id="mode" label="Calculation Mode">
+          <option value="add">Add tax to amount</option>
+          <option value="remove">Remove tax from amount</option>
+        </CalculatorField>
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="gsth-content">
+      <div id="emptyState">
+        <EmptyState icon="🧾" title="GST/HST Calculator" description="Add or remove Canadian sales tax for any province." tips={["Pre-Tax Amount", "Tax Amount", "Total"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="preTaxAmountResult" title="Pre-Tax Amount" icon={DollarSign} />
+          <ResultCard id="taxAmountResult" title="Tax Amount" icon={Receipt} />
+          <ResultCard id="totalAmountResult" title="Total Amount" icon={Calculator} accent="success" subtitle=" " />
+          <ResultCard id="taxRateResult" title="Applied Rate" icon={Percent} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Applies the correct GST or HST rate for your selected Canadian province, either adding tax to a pre-tax amount or working backward from a tax-included total.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/gst-hst-calculator";
+</script>
+<style>
+.gsth-calculator{width:100%;}
+.gsth-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.gsth-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.gsth-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.gsth-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.gsth-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.gsth-layout{grid-template-columns:1fr;}.gsth-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.gsth-layout{gap:24px;}.gsth-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

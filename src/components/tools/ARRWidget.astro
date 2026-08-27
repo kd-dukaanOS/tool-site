@@ -1,0 +1,67 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Landmark, TrendingUp, Percent, Rocket } from "@lucide/astro";
+---
+<section class="arr-calculator">
+  <div class="arr-layout">
+    <aside class="arr-sidebar">
+      <div class="arr-group">
+        <h3>Current Revenue</h3>
+        <CalculatorField id="currentMRR" label="Current MRR" type="number" placeholder="e.g. 50000" min="0" step="1" />
+      </div>
+      <div class="arr-group">
+        <h3>MRR Movement</h3>
+        <CalculatorField id="newBusinessMRR" label="New Business MRR" type="number" placeholder="e.g. 6000" min="0" step="1" />
+        <CalculatorField id="expansionMRR" label="Expansion MRR" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <CalculatorField id="contractionMRR" label="Contraction MRR" type="number" placeholder="e.g. 1000" min="0" step="1" />
+        <CalculatorField id="churnedMRR" label="Churned MRR" type="number" placeholder="e.g. 2000" min="0" step="1" />
+      </div>
+      <div class="arr-group">
+        <h3>Projection</h3>
+        <CalculatorField id="projectionMonths" label="Projection Months" type="number" placeholder="e.g. 12" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="arr-content">
+      <div id="emptyState">
+        <EmptyState icon="📊" title="ARR Calculator" description="Find your Annual Recurring Revenue and growth projection." tips={["Current ARR", "Net New ARR", "Projected ARR"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="currentARRResult" title="Current ARR" icon={Landmark} accent="success" />
+          <ResultCard id="netNewARRResult" title="Net New ARR" icon={TrendingUp} subtitle=" " />
+          <ResultCard id="projectedARRResult" title="Projected ARR" icon={Rocket} subtitle=" " />
+          <ResultCard id="arrGrowthRateResult" title="ARR Growth Rate" icon={Percent} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your current Annual Recurring Revenue from MRR, net new ARR from business movement, and a compounded ARR projection.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/arr-calculator";
+</script>
+<style>
+.arr-calculator{width:100%;}
+.arr-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.arr-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.arr-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.arr-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.arr-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.arr-layout{grid-template-columns:1fr;}.arr-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.arr-layout{gap:24px;}.arr-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

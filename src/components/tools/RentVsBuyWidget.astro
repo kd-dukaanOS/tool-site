@@ -1,0 +1,78 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Home, Key, Scale, Calendar } from "@lucide/astro";
+---
+<section class="rvb-calculator">
+  <div class="rvb-layout">
+    <aside class="rvb-sidebar">
+      <div class="rvb-group">
+        <h3>Buying</h3>
+        <CalculatorField id="homePrice" label="Home Price" type="number" placeholder="e.g. 350000" min="0" step="1" />
+        <CalculatorField id="downPaymentPercent" label="Down Payment (%)" type="number" placeholder="e.g. 20" min="0" step="0.1" />
+        <CalculatorField id="mortgageRate" label="Mortgage Rate (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="loanTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+      </div>
+      <div class="rvb-group">
+        <h3>Ownership Costs</h3>
+        <CalculatorField id="propertyTaxRate" label="Property Tax Rate (% / yr)" type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
+        <CalculatorField id="annualInsurance" label="Annual Insurance" type="number" placeholder="e.g. 1400" min="0" step="1" />
+        <CalculatorField id="maintenanceRate" label="Maintenance Rate (% / yr)" type="number" placeholder="e.g. 1" min="0" step="0.1" />
+        <CalculatorField id="closingCostPercent" label="Closing Costs (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="sellingCostPercent" label="Selling Costs (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="appreciationRate" label="Home Appreciation (%/yr)" type="number" placeholder="e.g. 3.5" min="0" step="0.1" />
+      </div>
+      <div class="rvb-group">
+        <h3>Renting</h3>
+        <CalculatorField id="monthlyRent" label="Monthly Rent" type="number" placeholder="e.g. 1800" min="0" step="1" />
+        <CalculatorField id="rentGrowthRate" label="Annual Rent Growth (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="investmentReturnRate" label="Investment Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
+      </div>
+      <div class="rvb-group">
+        <h3>Timeframe</h3>
+        <CalculatorField id="comparisonYears" label="Years to Compare" type="number" placeholder="e.g. 10" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="rvb-content">
+      <div id="emptyState">
+        <EmptyState icon="⚖️" title="Rent vs Buy Calculator" description="Compare the long-term net worth impact of renting versus buying." tips={["Buying Net Worth", "Renting Net Worth", "Break-Even Year"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="betterOptionResult" title="Better Option" icon={Scale} accent="success" subtitle=" " />
+          <ResultCard id="buyNetWorthResult" title="Net Worth if Buying" icon={Home} />
+          <ResultCard id="rentNetWorthResult" title="Net Worth if Renting" icon={Key} />
+          <ResultCard id="breakEvenResult" title="Break-Even Year" icon={Calendar} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Compares the projected net worth of buying a home versus renting and investing the difference, accounting for equity, appreciation, ownership costs, and investment growth over your chosen timeframe.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/rent-vs-buy-calculator";
+</script>
+<style>
+.rvb-calculator{width:100%;}
+.rvb-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.rvb-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.rvb-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.rvb-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.rvb-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.rvb-layout{grid-template-columns:1fr;}.rvb-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.rvb-layout{gap:24px;}.rvb-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

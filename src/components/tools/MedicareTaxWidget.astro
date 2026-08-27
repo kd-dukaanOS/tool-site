@@ -1,0 +1,58 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { HeartPulse, Wallet, TrendingUp, Gauge } from "@lucide/astro";
+---
+<section class="mct-calculator">
+  <div class="mct-layout">
+    <aside class="mct-sidebar">
+      <div class="mct-group">
+        <h3>Income & Filing</h3>
+        <CalculatorField id="annualWages" label="Annual Wages / Net Earnings" type="number" placeholder="e.g. 220000" min="0" step="1" />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{value:"single",label:"Single"},{value:"mfj",label:"Married Filing Jointly"},{value:"mfs",label:"Married Filing Separately"},{value:"hoh",label:"Head of Household"}]} />
+        <CalculatorField type="select" id="employmentType" label="Employment Type" options={[{value:"employee",label:"Employee"},{value:"self",label:"Self-Employed"}]} />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="mct-content">
+      <div id="emptyState">
+        <EmptyState icon="🏥" title="Medicare Tax Calculator" description="Find your regular and Additional Medicare Tax for 2026." tips={["Total Medicare Tax", "Regular Tax", "Additional Tax"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="totalMedicareResult" title="Total Medicare Tax" icon={HeartPulse} accent="success" subtitle=" " />
+          <ResultCard id="regularMedicareResult" title="Regular Medicare Tax" icon={Wallet} />
+          <ResultCard id="additionalMedicareResult" title="Additional Medicare Tax" icon={TrendingUp} subtitle=" " />
+          <ResultCard id="thresholdResult" title="Your Threshold" icon={Gauge} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates regular Medicare tax (1.45%/2.9%) plus the 0.9% Additional Medicare Tax above IRS income thresholds for 2026.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/medicare-tax-calculator";
+</script>
+<style>
+.mct-calculator{width:100%;}
+.mct-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.mct-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.mct-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.mct-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.mct-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.mct-layout{grid-template-columns:1fr;}.mct-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.mct-layout{gap:24px;}.mct-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

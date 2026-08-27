@@ -1,0 +1,58 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Clock, TrendingDown, Receipt, CreditCard } from "@lucide/astro";
+---
+<section class="cci-calculator">
+  <div class="cci-layout">
+    <aside class="cci-sidebar">
+      <div class="cci-group">
+        <h3>Card Details</h3>
+        <CalculatorField id="balance" label="Current Balance" type="number" placeholder="e.g. 5000" min="0" step="1" />
+        <CalculatorField id="apr" label="APR (%)" type="number" placeholder="e.g. 22.9" min="0" step="0.01" />
+        <CalculatorField id="monthlyPayment" label="Monthly Payment" type="number" placeholder="e.g. 200" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="cci-content">
+      <div id="emptyState">
+        <EmptyState icon="💳" title="Credit Card Interest Calculator" description="Enter your balance, APR and monthly payment to see how much interest you'll pay." tips={["Time to Payoff", "Total Interest", "Total Repayment"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="timeToPayoffResult" title="Time to Payoff" icon={Clock} accent="success" subtitle=" " />
+          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={CreditCard} />
+          <ResultCard id="totalInterestResult" title="Total Interest" icon={TrendingDown} />
+          <ResultCard id="totalRepaymentResult" title="Total Repayment" icon={Receipt} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates how long it will take to pay off a credit card balance at a fixed monthly payment, along with total interest charged and total amount repaid, based on your APR.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/credit-card-interest-calculator";
+</script>
+<style>
+.cci-calculator{width:100%;}
+.cci-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.cci-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.cci-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.cci-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.cci-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.cci-layout{grid-template-columns:1fr;}.cci-sidebar{position:static;}}
+@media(max-width:768px){.cci-layout{gap:24px;}.cci-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

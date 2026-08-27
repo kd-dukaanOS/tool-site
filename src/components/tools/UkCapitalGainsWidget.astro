@@ -1,0 +1,61 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { TrendingUp, Receipt, Percent, Wallet } from "@lucide/astro";
+---
+<section class="ukcg-calculator">
+  <div class="ukcg-layout">
+    <aside class="ukcg-sidebar">
+      <div class="ukcg-group">
+        <h3>Gain Details</h3>
+        <CalculatorField id="totalGain" label="Total Capital Gain (£)" type="number" placeholder="e.g. 12600" min="0" step="1" />
+      </div>
+      <div class="ukcg-group">
+        <h3>Income</h3>
+        <CalculatorField id="otherTaxableIncome" label="Other Taxable Income (£)" type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="personalAllowance" label="Personal Allowance (£)" type="number" placeholder="e.g. 12570" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ukcg-content">
+      <div id="emptyState">
+        <EmptyState icon="📈" title="UK Capital Gains Tax Calculator" description="Estimate CGT owed using the 2026/27 exemption and rates." tips={["Total Tax Owed", "Taxable Gain", "Rate Breakdown"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="totalTaxOwedResult" title="Total Tax Owed" icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="taxableGainResult" title="Taxable Gain" icon={TrendingUp} />
+          <ResultCard id="taxAtBasicRateResult" title="Tax at 18%" icon={Percent} />
+          <ResultCard id="taxAtHigherRateResult" title="Tax at 24%" icon={Wallet} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Applies the £3,000 annual exemption to your gain, then splits the remaining taxable amount across the 18% and 24% Capital Gains Tax rates based on your other income and unused basic rate band.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/uk-capital-gains-calculator";
+</script>
+<style>
+.ukcg-calculator{width:100%;}
+.ukcg-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ukcg-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.ukcg-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.ukcg-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.ukcg-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ukcg-layout{grid-template-columns:1fr;}.ukcg-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.ukcg-layout{gap:24px;}.ukcg-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

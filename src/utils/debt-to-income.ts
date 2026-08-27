@@ -1,46 +1,63 @@
 export interface DTIResult {
-  frontEndRatio: number;
-  backEndRatio: number;
+  frontEndDTI: number;
+  backEndDTI: number;
   totalMonthlyDebt: number;
-  rating: "Excellent" | "Good" | "Acceptable" | "High";
+  frontEndRating: string;
+  backEndRating: string;
+  maxAdditionalDebtFor36: number;
+  maxAdditionalDebtFor43: number;
+}
+
+function rateDTI(dti: number, thresholds: [number, string][]): string {
+  for (const [max, label] of thresholds) {
+    if (dti <= max) return label;
+  }
+  return thresholds[thresholds.length - 1][1];
 }
 
 export function calculateDTI(
   grossMonthlyIncome: number,
   housingPayment: number,
-  otherMonthlyDebts: number
+  carLoanPayment: number,
+  studentLoanPayment: number,
+  creditCardMinPayments: number,
+  otherDebtPayments: number
 ): DTIResult {
-  const totalMonthlyDebt = housingPayment + otherMonthlyDebts;
+  const totalMonthlyDebt = housingPayment + carLoanPayment + studentLoanPayment + creditCardMinPayments + otherDebtPayments;
+  const nonHousingDebt = carLoanPayment + studentLoanPayment + creditCardMinPayments + otherDebtPayments;
 
-  const frontEndRatio = (housingPayment / grossMonthlyIncome) * 100;
-  const backEndRatio = (totalMonthlyDebt / grossMonthlyIncome) * 100;
+  const frontEndDTI = (housingPayment / grossMonthlyIncome) * 100;
+  const backEndDTI = (totalMonthlyDebt / grossMonthlyIncome) * 100;
 
-  let rating: DTIResult["rating"] = "High";
-  if (backEndRatio <= 20) rating = "Excellent";
-  else if (backEndRatio <= 36) rating = "Good";
-  else if (backEndRatio <= 43) rating = "Acceptable";
+  const frontEndRating = rateDTI(frontEndDTI, [
+    [28, "Excellent"],
+    [33, "Good"],
+    [40, "Borderline"],
+    [Infinity, "High Risk"],
+  ]);
 
-  return { frontEndRatio, backEndRatio, totalMonthlyDebt, rating };
+  const backEndRating = rateDTI(backEndDTI, [
+    [36, "Excellent"],
+    [43, "Good"],
+    [50, "Borderline"],
+    [Infinity, "High Risk"],
+  ]);
+
+  const maxAdditionalDebtFor36 = Math.max(grossMonthlyIncome * 0.36 - totalMonthlyDebt, 0);
+  const maxAdditionalDebtFor43 = Math.max(grossMonthlyIncome * 0.43 - totalMonthlyDebt, 0);
+
+  return {
+    frontEndDTI,
+    backEndDTI,
+    totalMonthlyDebt,
+    frontEndRating,
+    backEndRating,
+    maxAdditionalDebtFor36,
+    maxAdditionalDebtFor43,
+  };
 }
 
-export function maxAffordableDebt(
-  grossMonthlyIncome: number,
-  targetBackEndRatio = 36
-): number {
-  return grossMonthlyIncome * (targetBackEndRatio / 100);
-}
-
-export function annualToMonthlyIncome(annualIncome: number): number {
-  return annualIncome / 12;
-}
-
-export function validateDTIInputs(
-  income: number,
-  housing: number,
-  debts: number
-): string | null {
-  if (!income || income <= 0) return "Please enter a valid monthly income.";
-  if (housing < 0) return "Housing payment cannot be negative.";
-  if (debts < 0) return "Debt payments cannot be negative.";
+export function validateDTIInputs(grossMonthlyIncome: number): string | null {
+  if (grossMonthlyIncome <= 0) return "Gross monthly income must be greater than zero.";
   return null;
 }

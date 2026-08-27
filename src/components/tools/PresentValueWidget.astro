@@ -1,0 +1,61 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Landmark, TrendingDown, DollarSign } from "@lucide/astro";
+---
+<section class="pv-calculator">
+  <div class="pv-layout">
+    <aside class="pv-sidebar">
+      <div class="pv-group">
+        <h3>Future Amount</h3>
+        <CalculatorField id="futureValue" label="Future Value" type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="years" label="Years Until Received" type="number" placeholder="e.g. 10" min="1" step="1" />
+      </div>
+      <div class="pv-group">
+        <h3>Discount Rate</h3>
+        <CalculatorField id="discountRate" label="Discount Rate (%)" type="number" placeholder="e.g. 6" min="-100" step="0.1" />
+        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency" options={[{ value: "1", label: "Annually" }, { value: "12", label: "Monthly" }, { value: "4", label: "Quarterly" }, { value: "365", label: "Daily" }]} />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="pv-content">
+      <div id="emptyState">
+        <EmptyState icon="⏳" title="Present Value Calculator" description="Find what a future sum of money is worth today." tips={["Present Value", "Future Value", "Discount Amount"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="presentValueResult" title="Present Value" icon={Landmark} accent="success" subtitle=" " />
+          <ResultCard id="futureValueOutResult" title="Future Value" icon={DollarSign} />
+          <ResultCard id="discountAmountResult" title="Discount Amount" icon={TrendingDown} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Discounts a future sum of money back to its equivalent value today, based on your chosen discount rate and compounding frequency.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/present-value-calculator";
+</script>
+<style>
+.pv-calculator{width:100%;}
+.pv-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.pv-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.pv-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.pv-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.pv-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.pv-layout{grid-template-columns:1fr;}.pv-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.pv-layout{gap:24px;}.pv-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

@@ -1,0 +1,62 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Baby, Wallet, TrendingDown, RefreshCw } from "@lucide/astro";
+---
+<section class="ctc-calculator">
+  <div class="ctc-layout">
+    <aside class="ctc-sidebar">
+      <div class="ctc-group">
+        <h3>Income & Filing</h3>
+        <CalculatorField id="magi" label="Modified AGI" type="number" placeholder="e.g. 150000" min="0" step="1" />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{value:"single",label:"Single"},{value:"mfj",label:"Married Filing Jointly"},{value:"hoh",label:"Head of Household"},{value:"mfs",label:"Married Filing Separately"}]} />
+      </div>
+      <div class="ctc-group">
+        <h3>Dependents</h3>
+        <CalculatorField id="numQualifyingChildren" label="Qualifying Children (under 17)" type="number" placeholder="e.g. 2" min="0" step="1" />
+        <CalculatorField id="numOtherDependents" label="Other Dependents" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ctc-content">
+      <div id="emptyState">
+        <EmptyState icon="👶" title="Child Tax Credit Calculator" description="Find your 2026 Child Tax Credit amount after income phase-out." tips={["Final Credit", "Phase-Out", "Refundable Amount"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="finalCreditResult" title="Final Credit Amount" icon={Baby} accent="success" subtitle=" " />
+          <ResultCard id="baseCreditResult" title="Base Credit" icon={Wallet} />
+          <ResultCard id="phaseOutResult" title="Phase-Out Reduction" icon={TrendingDown} />
+          <ResultCard id="refundableCapResult" title="Max Refundable (ACTC)" icon={RefreshCw} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your 2026 Child Tax Credit ($2,200/child) and Credit for Other Dependents ($500), applying the income-based phase-out.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/child-tax-credit-calculator";
+</script>
+<style>
+.ctc-calculator{width:100%;}
+.ctc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ctc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.ctc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.ctc-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.ctc-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ctc-layout{grid-template-columns:1fr;}.ctc-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.ctc-layout{gap:24px;}.ctc-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

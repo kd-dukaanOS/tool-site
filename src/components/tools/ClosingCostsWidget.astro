@@ -1,0 +1,76 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Receipt, Landmark, FileText, Wallet } from "@lucide/astro";
+---
+<section class="cc-calculator">
+  <div class="cc-layout">
+    <aside class="cc-sidebar">
+      <div class="cc-group">
+        <h3>Home & Loan</h3>
+        <CalculatorField id="homePrice" label="Home Price" type="number" placeholder="e.g. 350000" min="0" step="1" />
+        <CalculatorField id="loanAmount" label="Loan Amount" type="number" placeholder="e.g. 280000" min="0" step="1" />
+        <CalculatorField id="downPayment" label="Down Payment" type="number" placeholder="e.g. 70000" min="0" step="1" />
+      </div>
+      <div class="cc-group">
+        <h3>Lender Fees</h3>
+        <CalculatorField id="originationRate" label="Origination Fee (%)" type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
+        <CalculatorField id="discountPointsCount" label="Discount Points" type="number" placeholder="e.g. 0" min="0" step="0.125" />
+      </div>
+      <div class="cc-group">
+        <h3>Title & Government</h3>
+        <CalculatorField id="titleInsuranceRate" label="Title Insurance (%)" type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
+        <CalculatorField id="recordingFees" label="Recording Fees" type="number" placeholder="e.g. 200" min="0" step="1" />
+        <CalculatorField id="transferTaxRate" label="Transfer Tax (%)" type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
+      </div>
+      <div class="cc-group">
+        <h3>Prepaids</h3>
+        <CalculatorField id="monthsPrepaidInsurance" label="Months Insurance Prepaid" type="number" placeholder="e.g. 12" min="0" step="1" />
+        <CalculatorField id="annualInsurance" label="Annual Insurance" type="number" placeholder="e.g. 1400" min="0" step="1" />
+        <CalculatorField id="monthsPrepaidTax" label="Months Tax Prepaid" type="number" placeholder="e.g. 6" min="0" step="1" />
+        <CalculatorField id="annualPropertyTax" label="Annual Property Tax" type="number" placeholder="e.g. 3800" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="cc-content">
+      <div id="emptyState">
+        <EmptyState icon="🧾" title="Closing Costs Calculator" description="Estimate total closing costs and cash needed to close." tips={["Total Closing Costs", "Cash Needed", "Fee Breakdown"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="totalClosingCostsResult" title="Total Closing Costs" icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="lenderFeesResult" title="Lender Fees + Points" icon={Landmark} />
+          <ResultCard id="prepaidsResult" title="Prepaids & Escrow" icon={FileText} />
+          <ResultCard id="cashNeededResult" title="Total Cash Needed" icon={Wallet} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates lender fees, title costs, transfer taxes, and prepaid escrow amounts to find your total closing costs and cash needed to close.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/closing-costs-calculator";
+</script>
+<style>
+.cc-calculator{width:100%;}
+.cc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.cc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.cc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.cc-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.cc-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.cc-layout{grid-template-columns:1fr;}.cc-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.cc-layout{gap:24px;}.cc-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

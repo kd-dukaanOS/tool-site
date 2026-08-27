@@ -1,0 +1,63 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Target, Wallet, TrendingUp, Flag } from "@lucide/astro";
+---
+<section class="sg-calculator">
+  <div class="sg-layout">
+    <aside class="sg-sidebar">
+      <div class="sg-group">
+        <h3>Your Goal</h3>
+        <CalculatorField id="targetAmount" label="Target Amount" type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="currentSavings" label="Current Savings" type="number" placeholder="e.g. 5000" min="0" step="1" />
+      </div>
+      <div class="sg-group">
+        <h3>Timeframe & Rate</h3>
+        <CalculatorField id="timeframeYears" label="Years" type="number" placeholder="e.g. 5" min="0" step="1" />
+        <CalculatorField id="timeframeMonths" label="Additional Months" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="annualInterestRate" label="Annual Interest Rate (%)" type="number" placeholder="e.g. 4" min="0" step="0.01" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="sg-content">
+      <div id="emptyState">
+        <EmptyState icon="🎯" title="Savings Goal Calculator" description="Enter your target, current savings and timeframe to see the monthly amount you need to save." tips={["Monthly Savings", "Total Contributions", "Interest Earned"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="monthlySavingsResult" title="Monthly Savings Needed" icon={Target} accent="success" subtitle=" " />
+          <ResultCard id="targetAmountResult" title="Target Amount" icon={Flag} />
+          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={Wallet} />
+          <ResultCard id="interestEarnedResult" title="Interest Earned" icon={TrendingUp} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates the monthly savings amount needed to reach a target, factoring in your current savings, timeframe, and expected interest rate on a savings or investment account.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/savings-goal-calculator";
+</script>
+<style>
+.sg-calculator{width:100%;}
+.sg-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.sg-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;}
+.sg-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.sg-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.sg-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.sg-layout{grid-template-columns:1fr;}.sg-sidebar{position:static;}}
+@media(max-width:768px){.sg-layout{gap:24px;}.sg-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

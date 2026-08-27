@@ -1,0 +1,68 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { PiggyBank, Wallet, Receipt, TrendingDown } from "@lucide/astro";
+---
+<section class="dcn-calculator">
+  <div class="dcn-layout">
+    <aside class="dcn-sidebar">
+      <div class="dcn-group">
+        <h3>Current Debts</h3>
+        <div id="debtList" class="debt-list"></div>
+        <button type="button" id="addDebtBtn" class="add-debt-btn">+ Add Debt</button>
+      </div>
+      <div class="dcn-group">
+        <h3>Consolidation Loan</h3>
+        <CalculatorField id="consolidationRate" label="Loan Interest Rate (%)" type="number" placeholder="e.g. 12" min="0" step="0.01" />
+        <CalculatorField id="consolidationTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 4" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="dcn-content">
+      <div id="emptyState">
+        <EmptyState icon="🏦" title="Debt Consolidation Calculator" description="Compare your current debts against a single consolidation loan." tips={["Interest Saved", "New Monthly Payment", "Total Interest"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="interestSavedResult" title="Interest Saved" icon={PiggyBank} accent="success" subtitle=" " />
+          <ResultCard id="consolidatedPaymentResult" title="New Monthly Payment" icon={Wallet} />
+          <ResultCard id="currentInterestResult" title="Current Total Interest" icon={Receipt} />
+          <ResultCard id="consolidatedInterestResult" title="Consolidated Total Interest" icon={TrendingDown} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Compares the total interest cost of your current debts paid at their existing rates against a single new consolidation loan, so you can see whether consolidating actually saves money.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/debt-consolidation-calculator";
+</script>
+<style>
+.dcn-calculator{width:100%;}
+.dcn-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.dcn-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.dcn-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.dcn-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.dcn-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.debt-list{display:flex;flex-direction:column;gap:8px;}
+.debt-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px;border:1px solid var(--border-subtle);border-radius:10px;position:relative;}
+.debt-row input{padding:6px 8px;border:1px solid var(--border-subtle);border-radius:8px;font-size:.85rem;background:var(--bg-primary,#fff);color:var(--text-primary);}
+.debt-row .debt-name{grid-column:1 / -1;}
+.debt-remove{position:absolute;top:4px;right:4px;background:none;border:none;font-size:1rem;cursor:pointer;color:var(--text-secondary);line-height:1;}
+.add-debt-btn{padding:8px 12px;border:1px dashed var(--border-subtle);border-radius:10px;background:none;cursor:pointer;font-size:.85rem;color:var(--text-primary);font-weight:600;}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.dcn-layout{grid-template-columns:1fr;}.dcn-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.dcn-layout{gap:24px;}.dcn-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

@@ -1,102 +1,100 @@
+import { pickYouMayLike } from "../calculator-pool";
+
 export const debtToIncomeCalculatorContent = {
   meta: {
-    seoTitle: "Debt-to-Income Ratio Calculator - Free DTI Calculator",
-    metaDescription: "Calculate your debt-to-income ratio instantly. See your front-end and back-end DTI and whether it meets mortgage lending guidelines.",
+    seoTitle: "Debt-to-Income Ratio Calculator - DTI Calculator Free 2026",
+    metaDescription: "Free DTI calculator. Find your front-end and back-end debt-to-income ratio for mortgage qualification, with instant lender-standard ratings.",
     canonicalSlug: "/debt-to-income-calculator",
-    ogTitle: "Debt-to-Income Ratio Calculator",
-    ogDescription: "Find your DTI ratio in seconds and see how it compares to lender guidelines.",
+    ogTitle: "Debt-to-Income (DTI) Ratio Calculator",
+    ogDescription: "Calculate your front-end and back-end DTI ratio for mortgage approval instantly.",
     twitterTitle: "Free DTI Calculator",
-    twitterDescription: "Calculate your front-end and back-end debt-to-income ratio instantly.",
+    twitterDescription: "Check your debt-to-income ratio for mortgage qualification.",
   },
 
   hero: {
-    text: "The Debt-to-Income (DTI) Ratio Calculator shows what percentage of your gross monthly income goes toward debt payments. Lenders use this number to decide mortgage, auto loan, and credit approval — this tool gives you both your front-end and back-end ratios instantly.",
+    text: "The Debt-to-Income (DTI) Ratio Calculator finds both your front-end (housing-only) and back-end (total debt) DTI ratios — the key numbers mortgage lenders use to determine how much home you qualify for.",
   },
 
   about: {
-    text: `Debt-to-income ratio (DTI) compares your total monthly debt payments to your gross monthly income. It's one of the most important numbers lenders check when you apply for a mortgage, auto loan, or major line of credit.
+    text: `Debt-to-income ratio is one of the most important numbers in mortgage qualification, comparing your monthly debt obligations to your gross monthly income to measure how much of your income is already committed.
 
-There are two versions: front-end ratio (housing costs only, divided by income) and back-end ratio (all monthly debts — housing, credit cards, car loans, student loans — divided by income). Most conventional mortgage lenders want a back-end ratio at or below 36%, though some programs allow up to 43-50%.
+Lenders calculate two versions: front-end DTI, which only counts housing costs (mortgage, tax, insurance, HOA), and back-end DTI, which adds all other debts — car loans, student loans, credit card minimums, and other recurring payments.
 
-This calculator takes your gross monthly income, expected or current housing payment, and other monthly debt obligations, and instantly returns both ratios along with a plain-language rating of where you stand.
+Most conventional lenders prefer a back-end DTI at or below 36%, though many approve loans up to 43-45% with strong credit and cash reserves, while some government-backed loans (FHA) allow even higher.
 
-Limitations: this is a general guideline based on common lending standards. Actual approval depends on your specific lender, loan program, credit score, and other factors.`,
+This calculator also shows how much additional monthly debt you could take on while staying under the 36% and 43% thresholds — useful before shopping for a home or taking on new debt.`,
   },
 
   formula: {
-    formula: "DTI = (Total Monthly Debt Payments ÷ Gross Monthly Income) × 100",
+    formula: "Front-End DTI = Housing Payment ÷ Gross Monthly Income × 100; Back-End DTI = Total Monthly Debt ÷ Gross Monthly Income × 100",
     variables: [
-      { symbol: "Front-End DTI", meaning: "Housing payment only ÷ gross monthly income" },
-      { symbol: "Back-End DTI", meaning: "All monthly debts ÷ gross monthly income" },
+      { symbol: "Front-End DTI", meaning: "Housing costs only (mortgage, tax, insurance, HOA) as a % of gross income" },
+      { symbol: "Back-End DTI", meaning: "All monthly debt obligations including housing as a % of gross income" },
+      { symbol: "Gross Monthly Income", meaning: "Pre-tax monthly income from all qualifying sources" },
     ],
-    explanation: "Both ratios use gross (pre-tax) monthly income as the denominator. Front-end only counts housing costs; back-end adds every other recurring debt payment.",
-    interpretation: "For example, with $6,000 gross monthly income, a $1,500 housing payment, and $500 in other debts, front-end DTI is 25% and back-end DTI is 33% — generally within 'Good' lender guidelines.",
+    explanation: "Lenders use gross (pre-tax) income, not take-home pay, and count only minimum required payments on debts — not full balances. The 28/36 rule is a common lending guideline: front-end DTI under 28% and back-end DTI under 36%.",
+    interpretation: "For example, with $6,000 gross monthly income, $1,500 mortgage payment, and $400 in other debt: front-end DTI is 25% (Excellent) and back-end DTI is 31.7% (Excellent), comfortably qualifying under most conventional loan standards.",
   },
 
   steps: [
-    "Enter your gross monthly income (before tax).",
-    "Enter your monthly housing payment (rent or mortgage).",
-    "Enter your other monthly debt payments (cards, auto, student loans, etc.).",
-    "Click Calculate to run the tool.",
-    "View your front-end and back-end DTI ratios.",
-    "Check your rating against common lender guidelines.",
-    "Copy or share your results using the copy button.",
+    "Enter your gross (pre-tax) monthly income from all sources.",
+    "Enter your total monthly housing payment (mortgage, tax, insurance, HOA).",
+    "Enter your car loan, student loan, and credit card minimum payments.",
+    "Enter any other recurring monthly debt obligations.",
+    "Click Calculate to see your front-end and back-end DTI ratios.",
   ],
 
   examples: [
-    { inputs: "Income: $6,000/mo, Housing: $1,500, Other Debts: $500", result: "Front-end: 25%, Back-end: 33% (Good)", explanation: "Well within typical conventional mortgage guidelines." },
-    { inputs: "Income: $4,500/mo, Housing: $1,800, Other Debts: $700", result: "Front-end: 40%, Back-end: 55.6% (High)", explanation: "Exceeds most lenders' maximum threshold." },
-    { inputs: "Income: $8,000/mo, Housing: $1,200, Other Debts: $200", result: "Front-end: 15%, Back-end: 17.5% (Excellent)", explanation: "Very low debt load relative to income." },
+    { inputs: "Income: $6,000, Housing: $1,500, Other Debt: $400", result: "Front-End: 25%, Back-End: 31.7%", explanation: "Both ratios fall well within conventional lending guidelines." },
+    { inputs: "Income: $5,000, Housing: $1,800, Other Debt: $900", result: "Front-End: 36%, Back-End: 54%", explanation: "Back-end DTI above 50% is high risk and would require exceptional compensating factors to qualify." },
+    { inputs: "Income: $8,000, Housing: $2,200, Other Debt: $600", result: "Front-End: 27.5%, Back-End: 35%", explanation: "A strong DTI profile that fits within the traditional 28/36 lending rule." },
   ],
 
   practicalUses: [
-    "Checking mortgage pre-approval eligibility before applying",
-    "Deciding how much house payment you can safely take on",
-    "Seeing how paying off a car loan would improve your DTI",
-    "Comparing your DTI against different lender program limits",
-    "Budgeting before applying for a personal loan or credit line",
-    "Understanding why a loan application was denied",
-    "Planning debt payoff priorities to qualify for refinancing",
+    "Checking mortgage qualification eligibility before applying",
+    "Determining how much additional debt you can take on while staying loan-eligible",
+    "Comparing DTI impact of different home price and down payment scenarios",
+    "Understanding why a mortgage application was denied or approved at a certain rate",
+    "Planning debt payoff strategy before a home purchase to improve DTI",
+    "Evaluating auto loan or personal loan affordability alongside existing housing costs",
   ],
 
   expertTips: [
-    "Lenders use gross income (before tax), not take-home pay, for DTI calculations.",
-    "Paying off a small recurring debt (like a car loan) often helps DTI more than paying down a large balance a little.",
-    "Back-end DTI above 43% disqualifies you from many conventional loan programs, though FHA and other programs allow higher.",
-    "Minimum credit card payments count toward DTI, even if you pay the balance in full each month.",
-    "DTI doesn't include expenses like groceries, utilities, or insurance unless they're a fixed loan payment.",
-    "Improving your DTI before applying for a mortgage is often more effective than trying to boost your credit score alone.",
-    "A lower DTI can qualify you for better interest rates, not just approval.",
+    "Lenders use gross income, not net take-home pay, so your DTI will look better than a budget calculated on after-tax income.",
+    "Only minimum required payments count toward DTI — paying extra on a loan doesn't lower your DTI calculation.",
+    "FHA loans allow back-end DTI up to 50% in some cases with compensating factors like strong credit or cash reserves.",
+    "Paying off or consolidating a small debt with a high minimum payment can meaningfully lower back-end DTI before applying for a mortgage.",
+    "Student loans in deferment or income-driven repayment still count toward DTI, though lenders may use a different calculated payment.",
+    "The 28/36 rule is a guideline, not a hard law — actual approval depends on the full loan program and lender overlays.",
   ],
 
   commonMistakes: [
-    { mistake: "Using take-home (net) pay instead of gross income", fix: "Always use gross monthly income before taxes and deductions." },
-    { mistake: "Forgetting to include minimum credit card payments", fix: "Include the minimum required payment on every revolving debt, even if you pay more." },
-    { mistake: "Including non-debt expenses like utilities or groceries", fix: "Only include actual debt obligations — loans, credit cards, and housing." },
-    { mistake: "Confusing front-end and back-end ratios", fix: "Front-end is housing only; back-end is all debts combined." },
-    { mistake: "Not updating DTI after paying off a loan", fix: "Recalculate DTI whenever a debt is paid off or a new one is added." },
+    { mistake: "Using net income instead of gross income", fix: "DTI is always calculated on gross (pre-tax) monthly income, not your take-home paycheck." },
+    { mistake: "Forgetting to include all recurring debts", fix: "Include car loans, student loans, credit card minimums, and any other monthly debt obligations, not just housing." },
+    { mistake: "Confusing front-end and back-end DTI", fix: "Front-end only counts housing costs; back-end counts all debt — lenders evaluate both separately." },
+    { mistake: "Assuming a high DTI means automatic denial", fix: "Some loan programs allow DTI up to 50% with strong compensating factors — check specific loan program guidelines." },
   ],
 
   faq: [
-    { q: "What is a good debt-to-income ratio?", a: "A back-end DTI of 36% or below is generally considered good by most lenders, with 20% or below considered excellent." },
-    { q: "What is the maximum DTI for a mortgage?", a: "Conventional loans typically cap back-end DTI at 43-45%, while some FHA and other government-backed programs allow up to 50% in certain cases." },
-    { q: "What's the difference between front-end and back-end DTI?", a: "Front-end DTI only counts your housing payment against income, while back-end DTI counts all monthly debt payments, including housing." },
-    { q: "Does DTI include rent if I don't own a home yet?", a: "Yes, if you're renting, your rent payment counts as your housing cost in the front-end ratio calculation." },
-    { q: "Does DTI affect my credit score?", a: "No, DTI is not part of your credit score calculation, but lenders check it separately alongside your credit score during loan underwriting." },
-    { q: "How can I lower my DTI quickly?", a: "Paying off or paying down a small recurring debt, or increasing your income, are the two fastest ways to lower your DTI ratio." },
-    { q: "Does DTI use gross or net income?", a: "DTI calculations use gross (pre-tax) monthly income, not your take-home net pay." },
-    { q: "Do utility bills count toward DTI?", a: "No, DTI only includes debt obligations like loan and credit payments — not utilities, insurance, or groceries." },
-    { q: "Can I get a mortgage with a high DTI?", a: "It's harder but possible, especially with government-backed loan programs, a larger down payment, or compensating factors like strong credit or cash reserves." },
-    { q: "How is DTI different from credit utilization?", a: "DTI compares debt payments to income, while credit utilization compares your credit card balances to your credit limits — they're separate metrics lenders check." },
+    { q: "What is a good debt-to-income ratio?", a: "A back-end DTI of 36% or lower is generally considered good, with 43% often being the maximum for qualified mortgages." },
+    { q: "How do I calculate my DTI ratio?", a: "Divide your total monthly debt payments (including housing) by your gross monthly income, then multiply by 100 to get a percentage." },
+    { q: "What is the difference between front-end and back-end DTI?", a: "Front-end DTI counts only housing costs, while back-end DTI includes housing plus all other monthly debt obligations like car loans and credit cards." },
+    { q: "What DTI do I need to qualify for a mortgage?", a: "Most conventional lenders prefer back-end DTI at or below 43%, though some programs allow up to 45-50% with strong compensating factors." },
+    { q: "Does DTI include rent if I'm buying a new home?", a: "No, current rent is excluded once you're applying for a mortgage — lenders use the new projected housing payment instead." },
+    { q: "What counts as debt in a DTI calculation?", a: "Minimum payments on car loans, student loans, credit cards, personal loans, and the proposed or current mortgage payment all count; utilities and groceries do not." },
+    { q: "Can I get a mortgage with a 45% DTI?", a: "Yes, some loan programs (especially FHA) allow DTI up to 45-50% with compensating factors like strong credit score or cash reserves." },
+    { q: "How can I lower my DTI before buying a home?", a: "Pay down or pay off debts with high minimum payments, avoid new debt before applying, and consider increasing income or waiting to save a larger down payment." },
+    { q: "Does DTI affect my mortgage interest rate?", a: "Yes, some lenders offer better pricing tiers for lower DTI borrowers since they represent lower default risk." },
+    { q: "What is the 28/36 rule?", a: "It's a common lending guideline suggesting housing costs should be at or below 28% of gross income, and total debt at or below 36%." },
+    { q: "Do student loans in deferment count toward DTI?", a: "Yes, most lenders still count a calculated payment for deferred student loans, often using a percentage of the loan balance if no fixed payment exists." },
+    { q: "Is DTI the same as credit utilization?", a: "No, DTI compares debt payments to income, while credit utilization compares credit card balances to credit limits — both affect loan approval differently." },
+    { q: "What income counts toward DTI calculation?", a: "Lenders typically count gross salary, consistent bonus/commission income, self-employment income (averaged over 2 years), and other verifiable, ongoing income sources." },
+    { q: "How much house can I afford based on DTI?", a: "Using the 36% guideline, multiply your gross monthly income by 0.36 and subtract existing debts to estimate your maximum affordable housing payment." },
   ],
 
-  relatedCalculators: [
-    "Mortgage Affordability Calculator",
-    "Loan Amortization Calculator",
-    "Debt Payoff Calculator",
-    "Credit Card Payoff Calculator",
-    "Mortgage Calculator",
-  ],
+  relatedCalculators: ["Mortgage Calculator", "Down Payment Calculator", "Debt Snowball Calculator", "Debt Consolidation Calculator"],
+
+  youMayLike: pickYouMayLike("debt-to-income-calculator"),
 
   structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
 

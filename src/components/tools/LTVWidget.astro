@@ -1,0 +1,58 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Percent, Layers, Home, ShieldCheck } from "@lucide/astro";
+---
+<section class="ltv-calculator">
+  <div class="ltv-layout">
+    <aside class="ltv-sidebar">
+      <div class="ltv-group">
+        <h3>Property & Loan</h3>
+        <CalculatorField id="homeValue" label="Home Value" type="number" placeholder="e.g. 400000" min="0" step="1" />
+        <CalculatorField id="loanBalance" label="Current Loan Balance" type="number" placeholder="e.g. 280000" min="0" step="1" />
+        <CalculatorField id="secondLienBalance" label="Second Lien / HELOC (optional)" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ltv-content">
+      <div id="emptyState">
+        <EmptyState icon="📊" title="LTV Calculator" description="Find your loan-to-value ratio, equity, and PMI status." tips={["LTV Ratio", "Home Equity", "PMI Status"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="ltvResult" title="LTV Ratio" icon={Percent} accent="success" />
+          <ResultCard id="cltvResult" title="Combined LTV" icon={Layers} />
+          <ResultCard id="equityResult" title="Home Equity" icon={Home} subtitle=" " />
+          <ResultCard id="pmiStatusResult" title="PMI Status" icon={ShieldCheck} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your loan-to-value ratio, combined LTV, home equity, and PMI status based on current home value and loan balances.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/ltv-calculator";
+</script>
+<style>
+.ltv-calculator{width:100%;}
+.ltv-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ltv-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.ltv-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.ltv-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.ltv-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ltv-layout{grid-template-columns:1fr;}.ltv-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.ltv-layout{gap:24px;}.ltv-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

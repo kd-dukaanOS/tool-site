@@ -1,0 +1,70 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Wallet, DollarSign, Calendar, TrendingDown } from "@lucide/astro";
+---
+<section class="ric-calculator">
+  <div class="ric-layout">
+    <aside class="ric-sidebar">
+      <div class="ric-group">
+        <h3>Savings & Withdrawal</h3>
+        <CalculatorField id="currentSavings" label="Current Retirement Savings" type="number" placeholder="e.g. 1000000" min="0" step="1" />
+        <CalculatorField id="withdrawalRate" label="Withdrawal Rate (%)" type="number" placeholder="e.g. 4" min="0" step="0.1" />
+        <CalculatorField id="birthYear" label="Birth Year" type="number" placeholder="e.g. 1965" min="1930" step="1" />
+      </div>
+      <div class="ric-group">
+        <h3>Other Income</h3>
+        <CalculatorField id="annualSocialSecurity" label="Annual Social Security" type="number" placeholder="e.g. 24000" min="0" step="1" />
+        <CalculatorField id="annualPension" label="Annual Pension" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="otherAnnualIncome" label="Other Annual Income" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <div class="ric-group">
+        <h3>Assumptions</h3>
+        <CalculatorField id="expectedAnnualReturn" label="Expected Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <CalculatorField id="inflationRate" label="Inflation Rate (%/yr)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="retirementYears" label="Retirement Horizon (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ric-content">
+      <div id="emptyState">
+        <EmptyState icon="🏖️" title="Retirement Income Calculator" description="Estimate your sustainable retirement income and portfolio longevity." tips={["Monthly Income", "Annual Income", "Portfolio Outlook"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="monthlyIncomeResult" title="Monthly Retirement Income" icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="totalAnnualIncomeResult" title="Annual Retirement Income" icon={DollarSign} />
+          <ResultCard id="rmdAgeResult" title="RMDs Begin" icon={Calendar} />
+          <ResultCard id="depletionResult" title="Portfolio Outlook" icon={TrendingDown} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates your sustainable monthly and annual retirement income by combining a safe withdrawal rate from savings with Social Security, pension, and other income, then simulates portfolio longevity.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/retirement-income-calculator";
+</script>
+<style>
+.ric-calculator{width:100%;}
+.ric-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ric-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.ric-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.ric-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.ric-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ric-layout{grid-template-columns:1fr;}.ric-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.ric-layout{gap:24px;}.ric-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

@@ -1,0 +1,66 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { PiggyBank, Landmark, Wallet, CreditCard } from "@lucide/astro";
+---
+<section class="dp-calculator">
+  <div class="dp-layout">
+    <aside class="dp-sidebar">
+      <div class="dp-group">
+        <h3>Home & Loan</h3>
+        <CalculatorField id="homePrice" label="Home Price" type="number" placeholder="e.g. 400000" min="0" step="1" />
+        <CalculatorField id="downPaymentPercent" label="Down Payment (%)" type="number" placeholder="e.g. 10" min="0" step="0.1" />
+        <CalculatorField id="mortgageRate" label="Mortgage Rate (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="loanTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+      </div>
+      <div class="dp-group">
+        <h3>Costs</h3>
+        <CalculatorField id="propertyTaxRate" label="Property Tax Rate (% / yr)" type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
+        <CalculatorField id="annualInsurance" label="Annual Insurance" type="number" placeholder="e.g. 1400" min="0" step="1" />
+        <CalculatorField id="closingCostPercent" label="Closing Costs (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="pmiRate" label="PMI Rate (% / yr)" type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="dp-content">
+      <div id="emptyState">
+        <EmptyState icon="🏡" title="Down Payment Calculator" description="Find your required down payment, loan amount, and cash needed at closing." tips={["Down Payment", "Loan Amount", "Cash at Closing"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="downPaymentResult" title="Down Payment" icon={PiggyBank} accent="success" />
+          <ResultCard id="loanAmountResult" title="Loan Amount" icon={Landmark} />
+          <ResultCard id="cashNeededResult" title="Cash Needed at Closing" icon={Wallet} subtitle=" " />
+          <ResultCard id="monthlyPaymentResult" title="Total Monthly Payment" icon={CreditCard} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your down payment amount, resulting loan size, PMI requirement, and total cash needed at closing based on home price and loan terms.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/down-payment-calculator";
+</script>
+<style>
+.dp-calculator{width:100%;}
+.dp-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.dp-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.dp-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.dp-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.dp-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.dp-layout{grid-template-columns:1fr;}.dp-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.dp-layout{gap:24px;}.dp-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

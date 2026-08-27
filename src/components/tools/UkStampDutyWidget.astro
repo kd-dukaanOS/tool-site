@@ -1,0 +1,61 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Home, Percent, Wallet, Receipt } from "@lucide/astro";
+---
+<section class="uksd-calculator">
+  <div class="uksd-layout">
+    <aside class="uksd-sidebar">
+      <div class="uksd-group">
+        <h3>Property Details</h3>
+        <CalculatorField id="purchasePrice" label="Purchase Price (£)" type="number" placeholder="e.g. 350000" min="0" step="1" />
+        <CalculatorField type="select" id="buyerType" label="Buyer Type">
+          <option value="standard">Standard (home mover)</option>
+          <option value="first-time">First-time buyer</option>
+          <option value="additional">Additional property (2nd home/buy-to-let)</option>
+        </CalculatorField>
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="uksd-content">
+      <div id="emptyState">
+        <EmptyState icon="🏠" title="UK Stamp Duty Calculator" description="Calculate SDLT owed on your property purchase." tips={["Stamp Duty Owed", "Effective Rate", "Total Cost"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="stampDutyOwedResult" title="Stamp Duty Owed" icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
+          <ResultCard id="totalCostResult" title="Total Cost" icon={Wallet} />
+          <ResultCard id="purchasePriceResult" title="Purchase Price" icon={Home} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Applies the current SDLT bands progressively to your purchase price, adjusting for first-time buyer relief or the 5% additional dwellings surcharge based on your buyer type.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/uk-stamp-duty-calculator";
+</script>
+<style>
+.uksd-calculator{width:100%;}
+.uksd-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.uksd-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.uksd-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.uksd-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.uksd-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.uksd-layout{grid-template-columns:1fr;}.uksd-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.uksd-layout{gap:24px;}.uksd-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

@@ -1,0 +1,66 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { PiggyBank, TrendingDown, Landmark, AlertTriangle } from "@lucide/astro";
+---
+<section class="rrsp-calculator">
+  <div class="rrsp-layout">
+    <aside class="rrsp-sidebar">
+      <div class="rrsp-group">
+        <h3>Tax Year</h3>
+        <CalculatorField type="select" id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025" }, { value: "2026", label: "2026" }]} />
+      </div>
+      <div class="rrsp-group">
+        <h3>Income & Room</h3>
+        <CalculatorField id="previousYearEarnedIncome" label="Previous Year Earned Income" type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField id="unusedContributionRoom" label="Unused Contribution Room" type="number" placeholder="e.g. 5000" min="0" step="1" />
+      </div>
+      <div class="rrsp-group">
+        <h3>Contribution</h3>
+        <CalculatorField id="plannedContribution" label="Planned Contribution" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <CalculatorField id="marginalTaxRate" label="Marginal Tax Rate (%)" type="number" placeholder="e.g. 30" min="0" step="0.1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="rrsp-content">
+      <div id="emptyState">
+        <EmptyState icon="🍁" title="RRSP Calculator" description="Find your RRSP contribution room and estimated tax savings." tips={["Contribution Room", "Tax Savings", "Penalty Check"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="contributionRoomResult" title="Available Contribution Room" icon={PiggyBank} accent="success" />
+          <ResultCard id="maxContributionResult" title="Contribution Applied" icon={Landmark} />
+          <ResultCard id="taxSavingsResult" title="Estimated Tax Savings" icon={TrendingDown} />
+          <ResultCard id="penaltyTaxResult" title="Penalty Tax" icon={AlertTriangle} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates your RRSP contribution room, tax savings, and any CRA over-contribution penalty using current annual dollar limits for 2025 and 2026.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/rrsp-calculator";
+</script>
+<style>
+.rrsp-calculator{width:100%;}
+.rrsp-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.rrsp-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.rrsp-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.rrsp-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.rrsp-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.rrsp-layout{grid-template-columns:1fr;}.rrsp-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.rrsp-layout{gap:24px;}.rrsp-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

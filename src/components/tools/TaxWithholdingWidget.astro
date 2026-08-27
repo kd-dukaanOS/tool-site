@@ -1,0 +1,76 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Wallet, Percent, Calendar, Receipt } from "@lucide/astro";
+---
+<section class="twh-calculator">
+  <div class="twh-layout">
+    <aside class="twh-sidebar">
+      <div class="twh-group">
+        <h3>W-4 Basics</h3>
+        <CalculatorField id="filingStatus" label="Filing Status" type="select" options={[
+          { value: "single", label: "Single or Married Filing Separately" },
+          { value: "married", label: "Married Filing Jointly" },
+          { value: "headOfHousehold", label: "Head of Household" },
+        ]} />
+        <CalculatorField id="payFrequency" label="Pay Frequency" type="select" options={[
+          { value: "weekly", label: "Weekly" },
+          { value: "biweekly", label: "Biweekly" },
+          { value: "semimonthly", label: "Semimonthly" },
+          { value: "monthly", label: "Monthly" },
+          { value: "annual", label: "Annual" },
+        ]} />
+        <CalculatorField id="grossPayPerPeriod" label="Gross Pay per Period" type="number" placeholder="e.g. 2500" min="0" step="1" />
+        <CalculatorField id="multipleJobs" label="Multiple Jobs / Spouse Works" type="checkbox" />
+      </div>
+      <div class="twh-group">
+        <h3>W-4 Adjustments</h3>
+        <CalculatorField id="dependentsAmountAnnual" label="Dependents Credit (annual)" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <CalculatorField id="otherIncomeAnnual" label="Other Income (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="deductionsAnnual" label="Deductions (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="extraWithholdingPerPeriod" label="Extra Withholding (per paycheck)" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="twh-content">
+      <div id="emptyState">
+        <EmptyState icon="🧾" title="Tax Withholding Calculator" description="Estimate your federal paycheck withholding based on your W-4." tips={["Withholding per Paycheck", "Annual Tax Withheld", "Effective Rate"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="perPeriodResult" title="Withholding per Paycheck" icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="annualTaxResult" title="Annual Withholding" icon={Receipt} />
+          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
+          <ResultCard id="annualGrossResult" title="Annual Gross Income" icon={Calendar} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates federal income tax withheld from each paycheck using the IRS Percentage Method, based on your filing status, pay frequency, dependents, and W-4 adjustments.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/tax-withholding-calculator";
+</script>
+<style>
+.twh-calculator{width:100%;}
+.twh-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.twh-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.twh-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.twh-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.twh-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.twh-layout{grid-template-columns:1fr;}.twh-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.twh-layout{gap:24px;}.twh-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

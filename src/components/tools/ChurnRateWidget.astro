@@ -1,0 +1,67 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { UserMinus, Percent, TrendingDown, Users } from "@lucide/astro";
+---
+<section class="churn-calculator">
+  <div class="churn-layout">
+    <aside class="churn-sidebar">
+      <div class="churn-group">
+        <h3>Customers</h3>
+        <CalculatorField id="customersStartOfPeriod" label="Customers at Start of Period" type="number" placeholder="e.g. 200" min="0" step="1" />
+        <CalculatorField id="customersLost" label="Customers Lost" type="number" placeholder="e.g. 10" min="0" step="1" />
+      </div>
+      <div class="churn-group">
+        <h3>Revenue</h3>
+        <CalculatorField id="mrrStartOfPeriod" label="Starting MRR" type="number" placeholder="e.g. 100000" min="0" step="1" />
+        <CalculatorField id="mrrChurned" label="MRR Churned" type="number" placeholder="e.g. 6000" min="0" step="1" />
+        <CalculatorField id="mrrExpansion" label="Expansion MRR" type="number" placeholder="e.g. 3000" min="0" step="1" />
+      </div>
+      <div class="churn-group">
+        <h3>Projection</h3>
+        <CalculatorField id="projectionMonths" label="Projection Months" type="number" placeholder="e.g. 12" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="churn-content">
+      <div id="emptyState">
+        <EmptyState icon="📉" title="Churn Rate Calculator" description="Find your customer and revenue churn rate." tips={["Customer Churn", "Revenue Churn", "Net Revenue Churn"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="customerChurnResult" title="Customer Churn Rate" icon={UserMinus} accent="danger" />
+          <ResultCard id="revenueChurnResult" title="Revenue Churn Rate" icon={TrendingDown} />
+          <ResultCard id="netRevenueChurnResult" title="Net Revenue Churn Rate" icon={Percent} subtitle=" " />
+          <ResultCard id="projectedCustomersResult" title="Projected Customers Remaining" icon={Users} subtitle=" " />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your customer churn rate, revenue churn rate, and net revenue churn rate, plus a projection of remaining customers if churn stays constant.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/churn-rate-calculator";
+</script>
+<style>
+.churn-calculator{width:100%;}
+.churn-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.churn-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.churn-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.churn-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.churn-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.churn-layout{grid-template-columns:1fr;}.churn-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.churn-layout{gap:24px;}.churn-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

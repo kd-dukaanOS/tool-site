@@ -1,0 +1,61 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Flame, TrendingDown, Calendar, Wallet } from "@lucide/astro";
+---
+<section class="brc-calculator">
+  <div class="brc-layout">
+    <aside class="brc-sidebar">
+      <div class="brc-group">
+        <h3>Cash Position</h3>
+        <CalculatorField id="currentCashBalance" label="Current Cash Balance" type="number" placeholder="e.g. 300000" min="0" step="1" />
+      </div>
+      <div class="brc-group">
+        <h3>Monthly Numbers</h3>
+        <CalculatorField id="monthlyRevenue" label="Monthly Revenue" type="number" placeholder="e.g. 15000" min="0" step="1" />
+        <CalculatorField id="monthlyOperatingExpenses" label="Monthly Operating Expenses" type="number" placeholder="e.g. 40000" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="brc-content">
+      <div id="emptyState">
+        <EmptyState icon="🔥" title="Burn Rate Calculator" description="Find your gross and net burn rate and how many months of runway you have left." tips={["Gross Burn", "Net Burn", "Runway"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="netBurnResult" title="Net Burn Rate" icon={Flame} accent="warning" subtitle=" " />
+          <ResultCard id="grossBurnResult" title="Gross Burn Rate" icon={TrendingDown} />
+          <ResultCard id="runwayResult" title="Runway" icon={Calendar} />
+          <ResultCard id="cashBalanceResult" title="Current Cash Balance" icon={Wallet} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates gross burn rate (total monthly expenses) and net burn rate (expenses minus revenue), then estimates how many months of runway your current cash balance provides at that net burn rate.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/burn-rate-calculator";
+</script>
+<style>
+.brc-calculator{width:100%;}
+.brc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.brc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.brc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.brc-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.brc-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.brc-layout{grid-template-columns:1fr;}.brc-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.brc-layout{gap:24px;}.brc-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

@@ -1,0 +1,64 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Wallet, CheckCircle2, TrendingUp, Percent } from "@lucide/astro";
+---
+<section class="eitc-calculator">
+  <div class="eitc-layout">
+    <aside class="eitc-sidebar">
+      <div class="eitc-group">
+        <h3>Filing Info</h3>
+        <CalculatorField type="select" id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025 (filed 2026)" }, { value: "2026", label: "2026 (filed 2027)" }]} />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{ value: "single", label: "Single" }, { value: "hoh", label: "Head of Household" }, { value: "mfj", label: "Married Filing Jointly" }, { value: "mfs", label: "Married Filing Separately" }, { value: "widowed", label: "Qualifying Widow(er)" }]} />
+        <CalculatorField id="qualifyingChildren" label="Qualifying Children" type="number" placeholder="e.g. 1" min="0" max="3" step="1" />
+      </div>
+      <div class="eitc-group">
+        <h3>Income</h3>
+        <CalculatorField id="earnedIncome" label="Earned Income" type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="agi" label="Adjusted Gross Income (AGI)" type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="investmentIncome" label="Investment Income" type="number" placeholder="e.g. 0" min="0" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="eitc-content">
+      <div id="emptyState">
+        <EmptyState icon="💰" title="EITC Calculator" description="Estimate your Earned Income Tax Credit for 2025 or 2026." tips={["Estimated Credit", "Eligibility", "Max Credit for Family Size"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="eitcResult" title="Estimated EITC" icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="eligibleResult" title="Eligibility" icon={CheckCircle2} subtitle=" " />
+          <ResultCard id="maxCreditResult" title="Max Credit for Family Size" icon={TrendingUp} />
+          <ResultCard id="phaseoutRateResult" title="Phase-Out Rate" icon={Percent} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates your federal Earned Income Tax Credit using current IRS phase-in, plateau, and phase-out figures based on your income, filing status, and number of qualifying children.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/eitc-calculator";
+</script>
+<style>
+.eitc-calculator{width:100%;}
+.eitc-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.eitc-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.eitc-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.eitc-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.eitc-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.eitc-layout{grid-template-columns:1fr;}.eitc-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.eitc-layout{gap:24px;}.eitc-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

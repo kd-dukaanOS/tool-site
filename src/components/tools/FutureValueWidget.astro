@@ -1,0 +1,63 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { TrendingUp, PiggyBank, Sparkles, Calendar } from "@lucide/astro";
+---
+<section class="fv-calculator">
+  <div class="fv-layout">
+    <aside class="fv-sidebar">
+      <div class="fv-group">
+        <h3>Starting Amount</h3>
+        <CalculatorField id="presentValue" label="Present Value" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <CalculatorField id="monthlyContribution" label="Monthly Contribution" type="number" placeholder="e.g. 500" min="0" step="1" />
+      </div>
+      <div class="fv-group">
+        <h3>Growth Assumptions</h3>
+        <CalculatorField id="annualReturn" label="Annual Return (%)" type="number" placeholder="e.g. 7" min="-100" step="0.1" />
+        <CalculatorField id="years" label="Years to Grow" type="number" placeholder="e.g. 20" min="1" step="1" />
+        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency" options={[{ value: "12", label: "Monthly" }, { value: "4", label: "Quarterly" }, { value: "1", label: "Annually" }, { value: "365", label: "Daily" }]} />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="fv-content">
+      <div id="emptyState">
+        <EmptyState icon="📈" title="Future Value Calculator" description="Project how much your investment will be worth in the future." tips={["Future Value", "Total Contributions", "Investment Growth"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="futureValueResult" title="Future Value" icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={PiggyBank} />
+          <ResultCard id="investmentGrowthResult" title="Investment Growth" icon={Sparkles} />
+          <ResultCard id="yearsInvestedResult" title="Years Invested" icon={Calendar} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Projects the future value of your investment by compounding your present value and monthly contributions at your expected return rate and compounding frequency.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/future-value-calculator";
+</script>
+<style>
+.fv-calculator{width:100%;}
+.fv-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.fv-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.fv-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.fv-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.fv-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.fv-layout{grid-template-columns:1fr;}.fv-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.fv-layout{gap:24px;}.fv-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

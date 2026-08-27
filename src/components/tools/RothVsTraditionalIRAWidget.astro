@@ -1,0 +1,71 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Scale, Sparkles, Landmark, CheckCircle2 } from "@lucide/astro";
+---
+<section class="rvt-calculator">
+  <div class="rvt-layout">
+    <aside class="rvt-sidebar">
+      <div class="rvt-group">
+        <h3>Filing Info</h3>
+        <CalculatorField id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025 (filed 2026)" }, { value: "2026", label: "2026 (filed 2027)" }]} />
+        <CalculatorField id="filingStatus" label="Filing Status" options={[{ value: "single", label: "Single" }, { value: "hoh", label: "Head of Household" }, { value: "mfj", label: "Married Filing Jointly" }, { value: "mfs", label: "Married Filing Separately" }]} />
+        <CalculatorField id="magi" label="Modified AGI (MAGI)" type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField id="age" label="Your Age" type="number" placeholder="e.g. 35" min="18" step="1" />
+      </div>
+      <div class="rvt-group">
+        <h3>Contribution & Tax Rates</h3>
+        <CalculatorField id="annualContribution" label="Annual Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
+        <CalculatorField id="currentTaxRate" label="Current Tax Rate (%)" type="number" placeholder="e.g. 22" min="0" step="0.1" />
+        <CalculatorField id="retirementTaxRate" label="Retirement Tax Rate (%)" type="number" placeholder="e.g. 12" min="0" step="0.1" />
+      </div>
+      <div class="rvt-group">
+        <h3>Growth</h3>
+        <CalculatorField id="annualReturnRate" label="Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="yearsToGrow" label="Years to Grow" type="number" placeholder="e.g. 25" min="1" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="rvt-content">
+      <div id="emptyState">
+        <EmptyState icon="⚖️" title="Roth vs Traditional IRA Calculator" description="Compare after-tax retirement value between Roth and Traditional IRAs." tips={["Better Option", "Roth After-Tax Value", "Traditional After-Tax Value"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="betterOptionResult" title="Better Option" icon={Scale} accent="success" subtitle=" " />
+          <ResultCard id="rothFVResult" title="Roth After-Tax Value" icon={Sparkles} />
+          <ResultCard id="traditionalFVResult" title="Traditional After-Tax Value" icon={Landmark} />
+          <ResultCard id="rothEligibilityResult" title="Roth Eligibility" icon={CheckCircle2} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Compares the after-tax retirement value of a Roth versus Traditional IRA using your current and expected future tax rates, growth rate, and time horizon.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/roth-vs-traditional-ira-calculator";
+</script>
+<style>
+.rvt-calculator{width:100%;}
+.rvt-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.rvt-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.rvt-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.rvt-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.rvt-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.rvt-layout{grid-template-columns:1fr;}.rvt-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.rvt-layout{gap:24px;}.rvt-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

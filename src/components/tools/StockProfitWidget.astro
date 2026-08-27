@@ -1,0 +1,63 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { TrendingUp, Percent, Receipt, Target } from "@lucide/astro";
+---
+<section class="sp-calculator">
+  <div class="sp-layout">
+    <aside class="sp-sidebar">
+      <div class="sp-group">
+        <h3>Trade Details</h3>
+        <CalculatorField id="buyPrice" label="Buy Price per Share" type="number" placeholder="e.g. 50" min="0" step="0.01" />
+        <CalculatorField id="sellPrice" label="Sell Price per Share" type="number" placeholder="e.g. 58" min="0" step="0.01" />
+        <CalculatorField id="numberOfShares" label="Number of Shares" type="number" placeholder="e.g. 100" min="0" step="1" />
+      </div>
+      <div class="sp-group">
+        <h3>Fees</h3>
+        <CalculatorField id="buyFees" label="Buy-Side Fees" type="number" placeholder="e.g. 5" min="0" step="0.01" />
+        <CalculatorField id="sellFees" label="Sell-Side Fees" type="number" placeholder="e.g. 5" min="0" step="0.01" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="sp-content">
+      <div id="emptyState">
+        <EmptyState icon="📊" title="Stock Profit Calculator" description="Find your net profit, return, and break-even price on a trade." tips={["Net Profit", "Return %", "Break-Even Price"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="netProfitResult" title="Net Profit/Loss" icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="returnPercentResult" title="Return" icon={Percent} />
+          <ResultCard id="totalFeesResult" title="Total Fees" icon={Receipt} />
+          <ResultCard id="breakEvenPriceResult" title="Break-Even Price" icon={Target} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your net profit or loss, return percentage, and break-even price on a stock trade, accounting for buy and sell-side brokerage fees.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/stock-profit-calculator";
+</script>
+<style>
+.sp-calculator{width:100%;}
+.sp-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.sp-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.sp-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.sp-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.sp-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.sp-layout{grid-template-columns:1fr;}.sp-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.sp-layout{gap:24px;}.sp-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

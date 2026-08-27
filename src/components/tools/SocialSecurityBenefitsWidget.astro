@@ -1,0 +1,64 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { Calendar, DollarSign, TrendingUp, PiggyBank, Clock } from "@lucide/astro";
+---
+<section class="ssb-calculator">
+  <div class="ssb-layout">
+    <aside class="ssb-sidebar">
+      <div class="ssb-group">
+        <h3>Your Info</h3>
+        <CalculatorField id="birthYear" label="Birth Year" type="number" placeholder="e.g. 1985" min="1930" max="2010" step="1" />
+        <CalculatorField id="monthlyAIME" label="Avg. Indexed Monthly Earnings ($)" type="number" placeholder="e.g. 5000" min="0" step="1" />
+      </div>
+      <div class="ssb-group">
+        <h3>Claiming Plan</h3>
+        <CalculatorField id="plannedClaimingAge" label="Planned Claiming Age" type="number" placeholder="e.g. 67" min="62" max="70" step="1" />
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="ssb-content">
+      <div id="emptyState">
+        <EmptyState icon="🏛️" title="Social Security Benefits Calculator" description="Estimate your PIA and monthly benefit at 62, full retirement age, and 70." tips={["Primary Insurance Amount", "Benefit at Planned Age", "Break-Even Age"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="piaResult" title="Full Retirement Benefit (PIA)" icon={PiggyBank} subtitle=" " />
+          <ResultCard id="plannedBenefitResult" title="Benefit at Planned Age" icon={DollarSign} accent="success" subtitle=" " />
+          <ResultCard id="breakEvenResult" title="Break-Even Age vs Claiming at 62" icon={Clock} />
+        </ResultsGrid>
+        <ResultsGrid columns={2}>
+          <ResultCard id="age62Result" title="Benefit if Claimed at 62" icon={Calendar} />
+          <ResultCard id="age70Result" title="Benefit if Claimed at 70" icon={TrendingUp} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Estimates your Primary Insurance Amount using the 2026 Social Security bend-point formula, then projects your benefit at ages 62, full retirement age, and 70, along with the break-even age for delaying your claim.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/social-security-calculator";
+</script>
+<style>
+.ssb-calculator{width:100%;}
+.ssb-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.ssb-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.ssb-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.ssb-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.ssb-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.ssb-layout{grid-template-columns:1fr;}.ssb-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.ssb-layout{gap:24px;}.ssb-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

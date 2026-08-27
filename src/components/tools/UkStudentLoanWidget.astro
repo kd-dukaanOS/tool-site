@@ -1,0 +1,63 @@
+---
+import CalculatorField from "../calculator/CalculatorField.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
+import ResultCard from "../calculator/ResultCard.astro";
+import ResultsGrid from "../calculator/ResultsGrid.astro";
+import { GraduationCap, Percent, Calendar, Wallet } from "@lucide/astro";
+---
+<section class="uksl-calculator">
+  <div class="uksl-layout">
+    <aside class="uksl-sidebar">
+      <div class="uksl-group">
+        <h3>Income & Plan</h3>
+        <CalculatorField id="annualSalary" label="Annual Salary (£)" type="number" placeholder="e.g. 35000" min="0" step="1" />
+        <CalculatorField type="select" id="plan" label="Student Loan Plan">
+          <option value="plan1">Plan 1</option>
+          <option value="plan2">Plan 2</option>
+          <option value="plan4">Plan 4 (Scotland)</option>
+          <option value="plan5">Plan 5</option>
+          <option value="postgrad">Postgraduate Loan</option>
+        </CalculatorField>
+      </div>
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+    <main class="uksl-content">
+      <div id="emptyState">
+        <EmptyState icon="🎓" title="UK Student Loan Calculator" description="Estimate your monthly student loan repayment by plan." tips={["Monthly Repayment", "Annual Repayment", "Threshold"]} />
+      </div>
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={4}>
+          <ResultCard id="monthlyRepaymentResult" title="Monthly Repayment" icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="annualRepaymentResult" title="Annual Repayment" icon={Calendar} />
+          <ResultCard id="thresholdResult" title="Repayment Threshold" icon={GraduationCap} />
+          <ResultCard id="repaymentRateResult" title="Repayment Rate" icon={Percent} />
+        </ResultsGrid>
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>Calculates your student loan repayment as a percentage of income above your plan's threshold, using current 2026/27 thresholds for Plan 1, 2, 4, 5, and Postgraduate loans.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+</section>
+<script>
+  import "../../scripts/uk-student-loan-calculator";
+</script>
+<style>
+.uksl-calculator{width:100%;}
+.uksl-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px;align-items:start;}
+.uksl-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;}
+.uksl-content{display:flex;flex-direction:column;gap:28px;min-width:0;}
+.uksl-group{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--border-subtle);border-radius:14px;background:var(--bg-card);}
+.uksl-group h3{margin:0;font-size:.9rem;font-weight:700;color:var(--text-primary);}
+.calculator-info{padding:24px;border:1px solid var(--border-subtle);border-radius:18px;background:var(--bg-card);}
+.calculator-info h2{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--text-primary);}
+.calculator-info p{margin:0;line-height:1.8;font-size:.95rem;color:var(--text-secondary);}
+.error-box{display:flex;align-items:center;padding:14px 16px;border-radius:14px;background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;font-size:.92rem;font-weight:600;}
+:global(.dark) .error-box{background:#2A1111;border-color:#7F1D1D;color:#FECACA;}
+@media(max-width:1024px){.uksl-layout{grid-template-columns:1fr;}.uksl-sidebar{position:static;max-height:none;}}
+@media(max-width:768px){.uksl-layout{gap:24px;}.uksl-content{gap:20px;}}
+@media(max-width:640px){.calculator-info{padding:18px;}}
+</style>

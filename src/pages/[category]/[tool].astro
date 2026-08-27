@@ -116,6 +116,55 @@ import SelfEmploymentTaxCalculatorWidget from "../../components/tools/SelfEmploy
 import CapitalGainsTaxCalculatorWidget from "../../components/tools/CapitalGainsTaxCalculatorWidget.astro";
 import NetWorthWidget from "../../components/tools/NetWorthWidget.astro";
 import RegionalSalaryCalculatorWidget from "../../components/tools/RegionalSalaryCalculatorWidget.astro";
+import AutoLoanWidget from "../../components/tools/AutoLoanWidget.astro";
+import FourOhOneKWidget from "../../components/tools/FourOhOneKWidget.astro";
+import CreditCardInterestWidget from "../../components/tools/CreditCardInterestWidget.astro";
+import SavingsGoalWidget from "../../components/tools/SavingsGoalWidget.astro";
+import EmergencyFundWidget from "../../components/tools/EmergencyFundWidget.astro";
+import MortgageRefinanceWidget from "../../components/tools/MortgageRefinanceWidget.astro";
+import TaxWithholdingWidget from "../../components/tools/TaxWithholdingWidget.astro";
+import TaxRefundWidget from "../../components/tools/TaxRefundWidget.astro";
+import TaxBracketWidget from "../../components/tools/TaxBracketWidget.astro";
+import StudentLoanWidget from "../../components/tools/StudentLoanWidget.astro";
+import DebtSnowballWidget from "../../components/tools/DebtSnowballWidget.astro";
+import DebtAvalancheWidget from "../../components/tools/DebtAvalancheWidget.astro";
+import DebtConsolidationWidget from "../../components/tools/DebtConsolidationWidget.astro";
+import MortgageOverpaymentWidget from "../../components/tools/MortgageOverpaymentWidget.astro";
+import RentVsBuyWidget from "../../components/tools/RentVsBuyWidget.astro";
+import RothIRAWidget from "../../components/tools/RothIRAWidget.astro";
+import InvestmentReturnWidget from "../../components/tools/InvestmentReturnWidget.astro";
+import LTVWidget from "../../components/tools/LTVWidget.astro";
+import ClosingCostsWidget from "../../components/tools/ClosingCostsWidget.astro";
+import TraditionalIRAWidget from "../../components/tools/TraditionalIRAWidget.astro";
+import EffectiveTaxRateWidget from "../../components/tools/EffectiveTaxRateWidget.astro";
+import SocialSecurityTaxWidget from "../../components/tools/SocialSecurityTaxWidget.astro";
+import MedicareTaxWidget from "../../components/tools/MedicareTaxWidget.astro";
+import ChildTaxCreditWidget from "../../components/tools/ChildTaxCreditWidget.astro";
+import EITCWidget from "../../components/tools/EITCWidget.astro";
+import RothVsTraditionalIRAWidget from "../../components/tools/RothVsTraditionalIRAWidget.astro";
+import RetirementIncomeWidget from "../../components/tools/RetirementIncomeWidget.astro";
+import FireWidget from "../../components/tools/FireWidget.astro";
+import CoastFireWidget from "../../components/tools/CoastFireWidget.astro";
+import DownPaymentWidget from "../../components/tools/DownPaymentWidget.astro";
+import ARRWidget from "../../components/tools/ARRWidget.astro";
+import RRSPWidget from "../../components/tools/RRSPWidget.astro";
+import TFSAWidget from "../../components/tools/TFSAWidget.astro";
+import SocialSecurityBenefitsidget from "../../components/tools/SocialSecurityBenefitsWidget.astro";
+import GstHstWidget from "../../components/tools/GstHstWidget.astro";
+import CanadaCapitalGainsWidget from "../../components/tools/CanadaCapitalGainsWidget.astro";
+import CanadaRetirementWidget from "../../components/tools/CanadaRetirementWidget.astro";
+import UkPensionWidget from "../../components/tools/UkPensionWidget.astro";
+import UkStampDutyWidget from "../../components/tools/UkStampDutyWidget.astro";
+import UkStudentLoanWidget from "../../components/tools/UkStudentLoanWidget.astro";
+import UkCapitalGainsWidget from "../../components/tools/UkCapitalGainsWidget.astro";
+import UkDividendTaxWidget from "../../components/tools/UkDividendTaxWidget.astro";
+import CashFlowWidget from "../../components/tools/CashFlowWidget.astro";
+import BurnRateWidget from "../../components/tools/BurnRateWidget.astro";
+import RunwayWidget from "../../components/tools/RunwayWidget.astro";
+import MrrWidget from "../../components/tools/MrrWidget.astro";
+import ChurnRateWidget from "../../components/tools/ChurnRateWidget.astro";
+
+
 import { categories, tools, categoryIcons } from "../../data/tools.js";
 import { contentMap } from "../../data/calculator-content-map.js";
 import CalculatorContent from "../../components/content/CalculatorContent.astro";
@@ -474,6 +523,100 @@ const faqItemsForSchema = content?.faq?.length ? content.faq : (tool.faqs || [])
       <RegionalSalaryCalculatorWidget />  
     ) : tool.slug === "self-employment-tax-calculator" ? (
       <SelfEmploymentTaxCalculatorWidget />  
+    ) : tool.slug === "auto-loan-calculator" ? (
+      <AutoLoanWidget />
+    ) : tool.slug === "401k-calculator" ? (
+      <FourOhOneKWidget />
+    ) : tool.slug === "credit-card-interest-calculator" ? (
+      <CreditCardInterestWidget />
+    ) : tool.slug === "savings-goal-calculator" ? (
+      <SavingsGoalWidget />
+    ) : tool.slug === "emergency-fund-calculator" ? (
+      <EmergencyFundWidget />
+    ) : tool.slug === "mortgage-refinance-calculator" ? (
+      <MortgageRefinanceWidget />
+    ) : tool.slug === "mortgage-overpayment-calculator" ? (
+      <MortgageOverpaymentWidget />
+    ) : tool.slug === "rent-vs-buy-calculator" ? (
+      <RentVsBuyWidget />
+   ) : tool.slug === "roth-ira-calculator" ? (
+      <RothIRAWidget />
+    ) : tool.slug === "tax-withholding-calculator" ? (
+      <TaxWithholdingWidget />
+    ) : tool.slug === "tax-refund-calculator" ? (
+      <TaxRefundWidget />
+    ) : tool.slug === "tax-bracket-calculator" ? (
+      <TaxBracketWidget />
+    ) : tool.slug === "student-loan-calculator" ? (
+      <StudentLoanWidget />
+    ) : tool.slug === "debt-snowball-calculator" ? (
+      <DebtSnowballWidget />
+    ) : tool.slug === "debt-avalanche-calculator" ? (
+      <DebtAvalancheWidget />
+    ) : tool.slug === "debt-consolidation-calculator" ? (
+      <DebtConsolidationWidget />
+    ) : tool.slug === "ltv-calculator" ? (
+      <LTVWidget />
+    ) : tool.slug === "closing-costs-calculator" ? (
+      <ClosingCostsWidget />
+    ) : tool.slug === "down-payment-calculator" ? (
+      <DownPaymentWidget />
+      ) : tool.slug === "arr-calculator" ? (
+      <ARRWidget />
+    ) : tool.slug === "churn-rate-calculator" ? (
+      <ChurnRateWidget />
+    ) : tool.slug === "rrsp-calculator" ? (
+      <RRSPWidget />
+    ) : tool.slug === "tfsa-calculator" ? (
+      <TFSAWidget />
+    ) : tool.slug === "traditional-ira-calculator" ? (
+      <TraditionalIRAWidget />
+    ) : tool.slug === "effective-tax-rate-calculator" ? (
+      <EffectiveTaxRateWidget />
+    ) : tool.slug === "social-security-tax-calculator" ? (
+      <SocialSecurityTaxWidget />
+    ) : tool.slug === "medicare-tax-calculator" ? (
+      <MedicareTaxWidget />
+    ) : tool.slug === "child-tax-credit-calculator" ? (
+      <ChildTaxCreditWidget />
+    ) : tool.slug === "eitc-calculator" ? (
+      <EITCWidget />
+    ) : tool.slug === "roth-vs-traditional-ira-calculator" ? (
+      <RothVsTraditionalIRAWidget />
+    ) : tool.slug === "retirement-income-calculator" ? (
+      <RetirementIncomeWidget />
+    ) : tool.slug === "fire-calculator" ? (
+      <FireWidget />
+    ) : tool.slug === "coast-fire-calculator" ? (
+      <CoastFireWidget />
+    ) : tool.slug === "social-security-calculator" ? (
+      <SocialSecurityBenefitsidget />
+   ) : tool.slug === "investment-return-calculator" ? (
+      <InvestmentReturnWidget />
+    ) : tool.slug === "gst-hst-calculator" ? (
+      <GstHstWidget />
+    ) : tool.slug === "canada-capital-gains-calculator" ? (
+      <CanadaCapitalGainsWidget />
+    ) : tool.slug === "canada-retirement-calculator" ? (
+      <CanadaRetirementWidget />
+    ) : tool.slug === "uk-pension-calculator" ? (
+      <UkPensionWidget />
+    ) : tool.slug === "uk-stamp-duty-calculator" ? (
+      <UkStampDutyWidget />
+    ) : tool.slug === "uk-student-loan-calculator" ? (
+      <UkStudentLoanWidget />
+    ) : tool.slug === "uk-capital-gains-calculator" ? (
+      <UkCapitalGainsWidget />
+    ) : tool.slug === "uk-dividend-tax-calculator" ? (
+      <UkDividendTaxWidget />
+    ) : tool.slug === "cash-flow-calculator" ? (
+      <CashFlowWidget />
+    ) : tool.slug === "burn-rate-calculator" ? (
+      <BurnRateWidget />  
+    ) : tool.slug === "runway-calculator" ? (
+      <RunwayWidget />
+    ) : tool.slug === "mrr-calculator" ? (
+      <MrrWidget />
     ) : (
       <div class="tool-widget-placeholder">
         <p>🔧 The working "{tool.name}" tool will go here.</p>
