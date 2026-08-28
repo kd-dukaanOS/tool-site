@@ -11,18 +11,18 @@ import { Wallet, Percent, Calendar, Receipt } from "@lucide/astro";
     <aside class="twh-sidebar">
       <div class="twh-group">
         <h3>W-4 Basics</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select" options={[
-          { value: "single", label: "Single or Married Filing Separately" },
-          { value: "married", label: "Married Filing Jointly" },
-          { value: "headOfHousehold", label: "Head of Household" },
-        ]} />
-        <CalculatorField id="payFrequency" label="Pay Frequency" type="select" options={[
-          { value: "weekly", label: "Weekly" },
-          { value: "biweekly", label: "Biweekly" },
-          { value: "semimonthly", label: "Semimonthly" },
-          { value: "monthly", label: "Monthly" },
-          { value: "annual", label: "Annual" },
-        ]} />
+        <CalculatorField id="filingStatus" label="Filing Status" type="select">
+          <option value="single">Single or Married Filing Separately</option>
+          <option value="married">Married Filing Jointly</option>
+          <option value="headOfHousehold">Head of Household</option>
+        </CalculatorField>
+        <CalculatorField id="payFrequency" label="Pay Frequency" type="select">
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Biweekly</option>
+          <option value="semimonthly">Semimonthly</option>
+          <option value="monthly">Monthly</option>
+          <option value="annual">Annual</option>
+        </CalculatorField>
         <CalculatorField id="grossPayPerPeriod" label="Gross Pay per Period" type="number" placeholder="e.g. 2500" min="0" step="1" />
         <CalculatorField id="multipleJobs" label="Multiple Jobs / Spouse Works" type="checkbox" />
       </div>

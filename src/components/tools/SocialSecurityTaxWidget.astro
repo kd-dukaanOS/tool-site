@@ -12,7 +12,10 @@ import { Shield, Wallet, TrendingUp, Gauge } from "@lucide/astro";
       <div class="sst-group">
         <h3>Income</h3>
         <CalculatorField id="annualWages" label="Annual Wages / Net Earnings" type="number" placeholder="e.g. 80000" min="0" step="1" />
-        <CalculatorField type="select" id="employmentType" label="Employment Type" options={[{value:"employee",label:"Employee"},{value:"self",label:"Self-Employed"}]} />
+        <CalculatorField type="select" id="employmentType" label="Employment Type">
+  <option value="employee">Employee</option>
+  <option value="self">Self-Employed</option>
+</CalculatorField>
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>

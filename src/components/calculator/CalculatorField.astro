@@ -12,6 +12,8 @@ interface Props {
   step?: string | number;
   disabled?: boolean;
   autocomplete?: string;
+  /** @deprecated Not supported — this component renders <select> children via <slot />. Pass <option> elements as children instead. This prop only exists so passing it triggers a build warning instead of being silently ignored. */
+  options?: unknown;
 }
 
 const {
@@ -27,7 +29,15 @@ const {
   step,
   disabled = false,
   autocomplete = "off",
+  options,
 } = Astro.props as Props;
+
+if (options !== undefined) {
+  console.warn(
+    `[CalculatorField] "options" prop was passed for field id="${id}" but is not supported and will be ignored. ` +
+    `Pass <option> elements as children instead, e.g. <CalculatorField type="select" id="${id}" label="${label}"><option value="...">...</option></CalculatorField>.`
+  );
+}
 ---
 
 <div class="calculator-field">

@@ -11,7 +11,10 @@ import { PiggyBank, TrendingDown, Landmark, AlertTriangle } from "@lucide/astro"
     <aside class="rrsp-sidebar">
       <div class="rrsp-group">
         <h3>Tax Year</h3>
-        <CalculatorField type="select" id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025" }, { value: "2026", label: "2026" }]} />
+        <CalculatorField type="select" id="taxYear" label="">
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </CalculatorField>
       </div>
       <div class="rrsp-group">
         <h3>Income & Room</h3>

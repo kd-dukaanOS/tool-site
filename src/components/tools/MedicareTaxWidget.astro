@@ -12,8 +12,16 @@ import { HeartPulse, Wallet, TrendingUp, Gauge } from "@lucide/astro";
       <div class="mct-group">
         <h3>Income & Filing</h3>
         <CalculatorField id="annualWages" label="Annual Wages / Net Earnings" type="number" placeholder="e.g. 220000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{value:"single",label:"Single"},{value:"mfj",label:"Married Filing Jointly"},{value:"mfs",label:"Married Filing Separately"},{value:"hoh",label:"Head of Household"}]} />
-        <CalculatorField type="select" id="employmentType" label="Employment Type" options={[{value:"employee",label:"Employee"},{value:"self",label:"Self-Employed"}]} />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status">
+  <option value="single">Single</option>
+  <option value="mfj">Married Filing Jointly</option>
+  <option value="mfs">Married Filing Separately</option>
+  <option value="hoh">Head of Household</option>
+</CalculatorField>
+        <CalculatorField type="select" id="employmentType" label="Employment Type">
+  <option value="employee">Employee</option>
+  <option value="self">Self-Employed</option>
+</CalculatorField>
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>

@@ -12,8 +12,16 @@ import { Scale, Sparkles, Landmark, CheckCircle2 } from "@lucide/astro";
     <aside class="rvt-sidebar">
       <div class="rvt-group">
         <h3>Filing Info</h3>
-        <CalculatorField id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025 (filed 2026)" }, { value: "2026", label: "2026 (filed 2027)" }]} />
-        <CalculatorField id="filingStatus" label="Filing Status" options={[{ value: "single", label: "Single" }, { value: "hoh", label: "Head of Household" }, { value: "mfj", label: "Married Filing Jointly" }, { value: "mfs", label: "Married Filing Separately" }]} />
+        <CalculatorField type="select" id="taxYear" label="Tax Year">
+  <option value="2025">2025 (filed 2026)</option>
+  <option value="2026">2026 (filed 2027)</option>
+</CalculatorField>
+        <CalculatorField type="select" id="filingStatus" label="Filing Status">
+  <option value="single">Single</option>
+  <option value="hoh">Head of Household</option>
+  <option value="mfj">Married Filing Jointly</option>
+  <option value="mfs">Married Filing Separately</option>
+</CalculatorField>
         <CalculatorField id="magi" label="Modified AGI (MAGI)" type="number" placeholder="e.g. 80000" min="0" step="1" />
         <CalculatorField id="age" label="Your Age" type="number" placeholder="e.g. 35" min="18" step="1" />
       </div>

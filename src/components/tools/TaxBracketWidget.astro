@@ -11,11 +11,11 @@ import { Receipt, TrendingUp, Percent, FileText } from "@lucide/astro";
     <aside class="tbk-sidebar">
       <div class="tbk-group">
         <h3>Income</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select" options={[
-          { value: "single", label: "Single or Married Filing Separately" },
-          { value: "married", label: "Married Filing Jointly" },
-          { value: "headOfHousehold", label: "Head of Household" },
-        ]} />
+        <CalculatorField id="filingStatus" label="Filing Status" type="select">
+          <option value="single">Single or Married Filing Separately</option>
+          <option value="married">Married Filing Jointly</option>
+          <option value="headOfHousehold">Head of Household</option>
+        </CalculatorField>
         <CalculatorField id="taxableIncome" label="Taxable Income" type="number" placeholder="e.g. 80000" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />

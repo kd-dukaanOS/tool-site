@@ -1151,6 +1151,12 @@ export const tools = [
     "desc": "Estimate your quarterly IRS tax payments"
   },
   {
+    "slug": "quarterly-estimated-tax-calculator",
+    "category": "finance",
+    "name": "Quarterly Estimated Tax Calculator",
+    "desc": "Estimate your quarterly IRS tax payments"
+  },
+  {
     "slug": "raise-calculator",
     "category": "finance",
     "name": "Raise Calculator",
@@ -1239,6 +1245,12 @@ export const tools = [
     "category": "finance",
     "name": "Savings Goal Calculator",
     "desc": "Find the monthly savings needed to hit a target amount"
+  },
+  {
+    "slug": "self-employment-tax-calculator",
+    "category": "finance",
+    "name": "Self-Employment Tax Calculator",
+    "desc": "Calculate SE tax on freelance/1099 income"
   },
   {
     "slug": "self-employment-tax-calculator",
@@ -1359,6 +1371,18 @@ export const tools = [
     "category": "finance",
     "name": "US Federal Tax Calculator",
     "desc": "Federal tax by filing status — Single, MFJ, HoH"
+  },
+  {
+    "slug": "us-federal-tax-calculator",
+    "category": "finance",
+    "name": "US Federal Tax Calculator",
+    "desc": "Estimate your federal income tax by bracket"
+  },
+  {
+    "slug": "us-federal-tax-calculator",
+    "category": "finance",
+    "name": "US Federal Tax Calculator",
+    "desc": "Estimate federal tax by filing status & tax year"
   },
   {
     "slug": "us-income-tax-calculator",

@@ -18,7 +18,12 @@ import { TrendingUp, PiggyBank, Sparkles, Calendar } from "@lucide/astro";
         <h3>Growth Assumptions</h3>
         <CalculatorField id="annualReturn" label="Annual Return (%)" type="number" placeholder="e.g. 7" min="-100" step="0.1" />
         <CalculatorField id="years" label="Years to Grow" type="number" placeholder="e.g. 20" min="1" step="1" />
-        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency" options={[{ value: "12", label: "Monthly" }, { value: "4", label: "Quarterly" }, { value: "1", label: "Annually" }, { value: "365", label: "Daily" }]} />
+        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency">
+  <option value="12">Monthly</option>
+  <option value="4">Quarterly</option>
+  <option value="1">Annually</option>
+  <option value="365">Daily</option>
+</CalculatorField>
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>

@@ -12,11 +12,18 @@ import { Percent, TrendingUp, Receipt, Wallet } from "@lucide/astro";
       <div class="etr-group">
         <h3>Income & Filing</h3>
         <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" placeholder="e.g. 100000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{value:"single",label:"Single"},{value:"mfj",label:"Married Filing Jointly"},{value:"hoh",label:"Head of Household"}]} />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status">
+  <option value="single">Single</option>
+  <option value="mfj">Married Filing Jointly</option>
+  <option value="hoh">Head of Household</option>
+</CalculatorField>
       </div>
       <div class="etr-group">
         <h3>Deductions</h3>
-        <CalculatorField type="select" id="deductionType" label="Deduction Type" options={[{value:"standard",label:"Standard Deduction (2026)"},{value:"itemized",label:"Itemized Deduction"}]} />
+        <CalculatorField type="select" id="deductionType" label="Deduction Type">
+  <option value="standard">Standard Deduction (2026)</option>
+  <option value="itemized">Itemized Deduction</option>
+</CalculatorField>
         <CalculatorField id="itemizedDeductions" label="Itemized Deductions (if selected)" type="number" placeholder="e.g. 20000" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />

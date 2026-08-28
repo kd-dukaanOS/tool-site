@@ -29,24 +29,22 @@ import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
         label="Filing Status"
         type="select"
         required={true}
-        options={[
-          { value: "single", label: "Single" },
-          { value: "marriedJointly", label: "Married Filing Jointly" },
-          { value: "marriedSeparately", label: "Married Filing Separately" },
-          { value: "headOfHousehold", label: "Head of Household" },
-        ]}
-      />
+      >
+        <option value="single">Single</option>
+        <option value="marriedJointly">Married Filing Jointly</option>
+        <option value="marriedSeparately">Married Filing Separately</option>
+        <option value="headOfHousehold">Head of Household</option>
+      </CalculatorField>
 
       <CalculatorField
         id="taxYear"
         label="Tax Year"
         type="select"
         required={true}
-        options={[
-          { value: "2026", label: "2026" },
-          { value: "2025", label: "2025" },
-        ]}
-      />
+      >
+        <option value="2026">2026</option>
+        <option value="2025">2025</option>
+      </CalculatorField>
 
       <CalculatorActions
         calculateId="calculateBtn"

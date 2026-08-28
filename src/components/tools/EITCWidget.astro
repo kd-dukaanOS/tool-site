@@ -11,8 +11,17 @@ import { Wallet, CheckCircle2, TrendingUp, Percent } from "@lucide/astro";
     <aside class="eitc-sidebar">
       <div class="eitc-group">
         <h3>Filing Info</h3>
-        <CalculatorField type="select" id="taxYear" label="Tax Year" options={[{ value: "2025", label: "2025 (filed 2026)" }, { value: "2026", label: "2026 (filed 2027)" }]} />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{ value: "single", label: "Single" }, { value: "hoh", label: "Head of Household" }, { value: "mfj", label: "Married Filing Jointly" }, { value: "mfs", label: "Married Filing Separately" }, { value: "widowed", label: "Qualifying Widow(er)" }]} />
+        <CalculatorField type="select" id="taxYear" label="Tax Year">
+  <option value="2025">2025 (filed 2026)</option>
+  <option value="2026">2026 (filed 2027)</option>
+</CalculatorField>
+        <CalculatorField type="select" id="filingStatus" label="Filing Status">
+  <option value="single">Single</option>
+  <option value="hoh">Head of Household</option>
+  <option value="mfj">Married Filing Jointly</option>
+  <option value="mfs">Married Filing Separately</option>
+  <option value="widowed">Qualifying Widow(er)</option>
+</CalculatorField>
         <CalculatorField id="qualifyingChildren" label="Qualifying Children" type="number" placeholder="e.g. 1" min="0" max="3" step="1" />
       </div>
       <div class="eitc-group">

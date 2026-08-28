@@ -11,11 +11,11 @@ import { Wallet, Percent, FileText, Receipt } from "@lucide/astro";
     <aside class="trf-sidebar">
       <div class="trf-group">
         <h3>Income</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select" options={[
-          { value: "single", label: "Single or Married Filing Separately" },
-          { value: "married", label: "Married Filing Jointly" },
-          { value: "headOfHousehold", label: "Head of Household" },
-        ]} />
+        <CalculatorField id="filingStatus" label="Filing Status" type="select">
+          <option value="single">Single or Married Filing Separately</option>
+          <option value="married">Married Filing Jointly</option>
+          <option value="headOfHousehold">Head of Household</option>
+        </CalculatorField>
         <CalculatorField id="annualGrossIncome" label="Annual Gross Income" type="number" placeholder="e.g. 70000" min="0" step="1" />
         <CalculatorField id="otherIncome" label="Other Income (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
         <CalculatorField id="adjustments" label="Adjustments (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />

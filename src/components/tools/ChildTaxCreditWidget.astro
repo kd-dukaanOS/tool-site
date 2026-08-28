@@ -12,7 +12,12 @@ import { Baby, Wallet, TrendingDown, RefreshCw } from "@lucide/astro";
       <div class="ctc-group">
         <h3>Income & Filing</h3>
         <CalculatorField id="magi" label="Modified AGI" type="number" placeholder="e.g. 150000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status" options={[{value:"single",label:"Single"},{value:"mfj",label:"Married Filing Jointly"},{value:"hoh",label:"Head of Household"},{value:"mfs",label:"Married Filing Separately"}]} />
+        <CalculatorField type="select" id="filingStatus" label="Filing Status">
+  <option value="single">Single</option>
+  <option value="mfj">Married Filing Jointly</option>
+  <option value="hoh">Head of Household</option>
+  <option value="mfs">Married Filing Separately</option>
+</CalculatorField>
       </div>
       <div class="ctc-group">
         <h3>Dependents</h3>
