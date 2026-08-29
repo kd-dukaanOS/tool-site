@@ -16,6 +16,13 @@ const { Content } = await render(post);
 <Layout title={`${post.data.title} — ToolSite Blog`} description={post.data.description}>
   <article class="ts-blog-post">
     <div class="ts-blog-post-inner">
+      {post.data.heroImage && (
+        <img
+          src={post.data.heroImage}
+          alt={post.data.title}
+          class="ts-blog-post-hero"
+        />
+      )}
       <h1>{post.data.title}</h1>
       <p class="ts-blog-post-date">
         {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -35,6 +42,10 @@ const { Content } = await render(post);
 <style>
   .ts-blog-post { padding: var(--space-12) var(--space-6); }
   .ts-blog-post-inner { max-width: 720px; margin: 0 auto; }
+  .ts-blog-post-hero {
+    width: 100%; height: auto; border-radius: var(--radius-lg);
+    margin: 0 0 var(--space-6); display: block;
+  }
   .ts-blog-post-inner h1 {
     font-family: var(--font-sans); font-size: var(--fs-h1, var(--fs-h2)); font-weight: 800;
     color: var(--text-primary); margin: 0 0 var(--space-2);

@@ -4,7 +4,7 @@ description: "See the 2026 Canada federal tax brackets, rates and thresholds. Le
 pubDate: 2026-08-29
 relatedTool: "/finance/canada-income-tax-calculator/"
 relatedToolName: "Canada Income Tax Calculator"
-heroImage: "/images/blog/2026-federal-tax-brackets/hero.png"
+heroImage: "/images/blog/2026-canada-federal-tax-brackets/hero.png"
 ---
 
 Think earning $100,000 in Canada means paying 20.5% tax on your entire salary? It doesn't. Canada uses a progressive income tax system — different portions of your taxable income are taxed at different federal rates, so being "in the 20.5% bracket" never means 20.5% of your whole income goes to the government.
@@ -27,7 +27,7 @@ This guide covers the 2026 federal tax brackets, how marginal rates actually wor
 | **29%** | $181,440.01 – $258,482 |
 | **33%** | Over $258,482 |
 
-![2026 Canada federal tax brackets shown as a staircase chart, with marginal rates from 14% to 33%](/images/blog/2026-federal-tax-brackets/brackets-chart.png)
+![2026 Canada federal tax brackets shown as a staircase chart, with marginal rates from 14% to 33%](/images/blog/2026-canada-federal-tax-brackets/brackets-chart.png)
 
 Each rate applies only to the portion of taxable income inside that bracket — not to your whole income. Getting a raise into a higher bracket doesn't reset your entire salary to the new rate; only the income above the threshold is taxed at it.
 
