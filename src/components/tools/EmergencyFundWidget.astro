@@ -5,42 +5,52 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Shield, PiggyBank, Wallet, Clock } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { expensesGroup:"Your Expenses", monthlyExpenses:"Monthly Essential Expenses", currentSavings:"Current Emergency Savings", goalGroup:"Goal", targetMonths:"Target Months of Coverage", monthlySavingsCapacity:"Monthly Savings Capacity", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Emergency Fund Calculator", emptyDesc:"Enter your expenses and savings to see your target, progress, and time to reach your goal.", tip1:"Target Amount", tip2:"Progress %", tip3:"Time to Goal", targetAmount:"Target Amount", progress:"Current Progress", remaining:"Remaining to Save", timeToGoal:"Time to Goal", aboutTitle:"About this Calculator", aboutText:"Calculates your emergency fund target based on monthly essential expenses and a chosen coverage period (commonly 3-6 months), then shows your current progress and how long it will take to reach the goal.", monthsOfExpenses:(m:number)=>`${m} months of expenses`, goalReached:"Goal reached", months:(m:number)=>`${m} months`, dash:"—", na:"N/A" },
+  es: { expensesGroup:"Tus Gastos", monthlyExpenses:"Gastos Mensuales Esenciales", currentSavings:"Ahorros Actuales de Emergencia", goalGroup:"Meta", targetMonths:"Meses Objetivo de Cobertura", monthlySavingsCapacity:"Capacidad de Ahorro Mensual", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Fondo de Emergencia", emptyDesc:"Ingresa tus gastos y ahorros para ver tu objetivo, progreso y tiempo para alcanzar tu meta.", tip1:"Monto Objetivo", tip2:"Progreso %", tip3:"Tiempo para la Meta", targetAmount:"Monto Objetivo", progress:"Progreso Actual", remaining:"Restante por Ahorrar", timeToGoal:"Tiempo para la Meta", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu objetivo de fondo de emergencia según tus gastos mensuales esenciales y un período de cobertura elegido (comúnmente 3-6 meses), luego muestra tu progreso actual y cuánto tiempo tomará alcanzar la meta.", monthsOfExpenses:(m:number)=>`${m} meses de gastos`, goalReached:"Meta alcanzada", months:(m:number)=>`${m} meses`, dash:"—", na:"N/D" },
+}[lang];
 ---
 <section class="ef-calculator">
   <div class="ef-layout">
     <aside class="ef-sidebar">
       <div class="ef-group">
-        <h3>Your Expenses</h3>
-        <CalculatorField id="monthlyExpenses" label="Monthly Essential Expenses" type="number" placeholder="e.g. 3000" min="0" step="1" />
-        <CalculatorField id="currentSavings" label="Current Emergency Savings" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <h3>{copy.expensesGroup}</h3>
+        <CalculatorField id="monthlyExpenses" label={copy.monthlyExpenses} type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 2000" min="0" step="1" />
       </div>
       <div class="ef-group">
-        <h3>Goal</h3>
-        <CalculatorField id="targetMonths" label="Target Months of Coverage" type="number" placeholder="e.g. 6" min="1" step="1" />
-        <CalculatorField id="monthlySavingsCapacity" label="Monthly Savings Capacity" type="number" placeholder="e.g. 300" min="0" step="1" />
+        <h3>{copy.goalGroup}</h3>
+        <CalculatorField id="targetMonths" label={copy.targetMonths} type="number" placeholder="e.g. 6" min="1" step="1" />
+        <CalculatorField id="monthlySavingsCapacity" label={copy.monthlySavingsCapacity} type="number" placeholder="e.g. 300" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ef-content">
       <div id="emptyState">
-        <EmptyState icon="🛟" title="Emergency Fund Calculator" description="Enter your expenses and savings to see your target, progress, and time to reach your goal." tips={["Target Amount", "Progress %", "Time to Goal"]} />
+        <EmptyState icon="🛟" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="targetAmountResult" title="Target Amount" icon={Shield} accent="success" subtitle=" " />
-          <ResultCard id="progressResult" title="Current Progress" icon={PiggyBank} />
-          <ResultCard id="remainingResult" title="Remaining to Save" icon={Wallet} />
-          <ResultCard id="monthsToGoalResult" title="Time to Goal" icon={Clock} />
+          <ResultCard id="targetAmountResult" title={copy.targetAmount} icon={Shield} accent="success" subtitle=" " />
+          <ResultCard id="progressResult" title={copy.progress} icon={PiggyBank} />
+          <ResultCard id="remainingResult" title={copy.remaining} icon={Wallet} />
+          <ResultCard id="monthsToGoalResult" title={copy.timeToGoal} icon={Clock} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your emergency fund target based on monthly essential expenses and a chosen coverage period (commonly 3-6 months), then shows your current progress and how long it will take to reach the goal.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/emergency-fund-calculator";
 </script>

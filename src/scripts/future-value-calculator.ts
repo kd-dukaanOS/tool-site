@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["presentValue", "monthlyContribution", "annualReturn", "years", "compoundingFrequency"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -35,7 +37,7 @@ function calculate() {
 
   const [presentValue, monthlyContribution, annualReturn, years, compoundingFrequency] = fieldIds.map(val);
 
-  const validationError = validateFutureValueInputs(presentValue, years, annualReturn);
+  const validationError = validateFutureValueInputs(presentValue, years, annualReturn, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -43,20 +45,32 @@ function calculate() {
 
   const result = calculateFutureValue(presentValue, monthlyContribution, annualReturn, years, compoundingFrequency || 12);
 
-  setValue("futureValueResult", fmtCurrency(result.futureValue));
-  setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
-  setValue("investmentGrowthResult", fmtCurrency(result.investmentGrowth));
-  setValue("yearsInvestedResult", `${result.yearsInvested} years`);
-  setSubtitle("futureValueResult", `Over ${result.yearsInvested} years`);
-
-  lastSummary = `
+  const t = {
+    en: { yearsSuffix: `${result.yearsInvested} years`, over: `Over ${result.yearsInvested} years`, summary: `
 Future Value Projection Summary
 
 Future Value: ${fmtCurrency(result.futureValue)}
 Total Contributions: ${fmtCurrency(result.totalContributions)}
 Investment Growth: ${fmtCurrency(result.investmentGrowth)}
 Years Invested: ${result.yearsInvested}
-`.trim();
+`.trim() },
+    es: { yearsSuffix: `${result.yearsInvested} años`, over: `En ${result.yearsInvested} años`, summary: `
+Resumen de Proyección de Valor Futuro
+
+Valor Futuro: ${fmtCurrency(result.futureValue)}
+Aportes Totales: ${fmtCurrency(result.totalContributions)}
+Crecimiento de Inversión: ${fmtCurrency(result.investmentGrowth)}
+Años Invertidos: ${result.yearsInvested}
+`.trim() },
+  }[lang];
+
+  setValue("futureValueResult", fmtCurrency(result.futureValue));
+  setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
+  setValue("investmentGrowthResult", fmtCurrency(result.investmentGrowth));
+  setValue("yearsInvestedResult", t.yearsSuffix);
+  setSubtitle("futureValueResult", t.over);
+
+  lastSummary = t.summary;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

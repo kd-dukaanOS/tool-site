@@ -5,37 +5,44 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Mountain, Calendar, Receipt, ListOrdered } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { yourDebts:"Your Debts", addDebt:"+ Add Debt", extraPaymentGroup:"Extra Payment", extraPayment:"Extra Monthly Payment", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Debt Avalanche Calculator", emptyDesc:"Pay off debt highest-interest-first to minimize total interest.", tip1:"Debt-Free Timeline", tip2:"Total Interest", tip3:"Payoff Order", debtFreeIn:"Debt-Free In", totalInterest:"Total Interest", totalPaid:"Total Paid", debts:"Debts", payoffOrderTitle:"Payoff Order", debtCol:"Debt", paidOffCol:"Paid Off In", interestCol:"Interest Paid" },
+  es: { yourDebts:"Tus Deudas", addDebt:"+ Agregar Deuda", extraPaymentGroup:"Pago Extra", extraPayment:"Pago Mensual Extra", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Avalancha de Deudas", emptyDesc:"Paga primero las deudas con mayor interés para minimizar el interés total.", tip1:"Cronograma Sin Deudas", tip2:"Interés Total", tip3:"Orden de Pago", debtFreeIn:"Libre de Deudas En", totalInterest:"Interés Total", totalPaid:"Total Pagado", debts:"Deudas", payoffOrderTitle:"Orden de Pago", debtCol:"Deuda", paidOffCol:"Pagada En", interestCol:"Interés Pagado" },
+}[lang];
 ---
 <section class="dav-calculator">
   <div class="dav-layout">
     <aside class="dav-sidebar">
       <div class="dav-group">
-        <h3>Your Debts</h3>
+        <h3>{copy.yourDebts}</h3>
         <div id="debtList" class="debt-list"></div>
-        <button type="button" id="addDebtBtn" class="add-debt-btn">+ Add Debt</button>
+        <button type="button" id="addDebtBtn" class="add-debt-btn">{copy.addDebt}</button>
       </div>
       <div class="dav-group">
-        <h3>Extra Payment</h3>
-        <CalculatorField id="extraMonthlyPayment" label="Extra Monthly Payment" type="number" placeholder="e.g. 150" min="0" step="1" />
+        <h3>{copy.extraPaymentGroup}</h3>
+        <CalculatorField id="extraMonthlyPayment" label={copy.extraPayment} type="number" placeholder="e.g. 150" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dav-content">
       <div id="emptyState">
-        <EmptyState icon="🏔️" title="Debt Avalanche Calculator" description="Pay off debt highest-interest-first to minimize total interest." tips={["Debt-Free Timeline", "Total Interest", "Payoff Order"]} />
+        <EmptyState icon="🏔️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalMonthsResult" title="Debt-Free In" icon={Calendar} accent="success" subtitle=" " />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={Receipt} />
-          <ResultCard id="totalPaidResult" title="Total Paid" icon={Mountain} />
-          <ResultCard id="debtCountResult" title="Debts" icon={ListOrdered} />
+          <ResultCard id="totalMonthsResult" title={copy.debtFreeIn} icon={Calendar} accent="success" subtitle=" " />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={Receipt} />
+          <ResultCard id="totalPaidResult" title={copy.totalPaid} icon={Mountain} />
+          <ResultCard id="debtCountResult" title={copy.debts} icon={ListOrdered} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>Payoff Order</h2>
+          <h2>{copy.payoffOrderTitle}</h2>
           <table class="order-table">
-            <thead><tr><th>Debt</th><th>Paid Off In</th><th>Interest Paid</th></tr></thead>
+            <thead><tr><th>{copy.debtCol}</th><th>{copy.paidOffCol}</th><th>{copy.interestCol}</th></tr></thead>
             <tbody id="orderBody"></tbody>
           </table>
         </section>
@@ -43,6 +50,9 @@ import { Mountain, Calendar, Receipt, ListOrdered } from "@lucide/astro";
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/debt-avalanche-calculator";
 </script>

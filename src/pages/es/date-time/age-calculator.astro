@@ -1,0 +1,49 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import AgeCalculatorWidget from "../../../components/tools/AgeCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { ageCalculatorContent } from "../../../data/calculators/es/age.ts";
+
+const tool = tools.find((t) => t.slug === "age-calculator")!;
+const content = ageCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Fecha y Hora", url: "/es/date-time/" },
+    { name: "Calculadora de Edad", url: "/es/date-time/age-calculator/" },
+  ]}
+  appName="Calculadora de Edad"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/date-time/">Fecha y Hora</a> / Calculadora de Edad
+    </p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["date-time"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Edad</h1>
+        <p>Edad exacta en años, meses y días</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="age-calculator" data-name="Calculadora de Edad" data-url="/es/date-time/age-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+
+    <AgeCalculatorWidget lang="es" />
+
+    <CalculatorContent {...content} allTools={tools} />
+  </div>
+</Layout>

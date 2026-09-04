@@ -5,41 +5,70 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Flame, TrendingDown, Calendar, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    cashPosition: "Cash Position", currentCashLabel: "Current Cash Balance", currentCashPh: "e.g. 300000",
+    monthlyNumbers: "Monthly Numbers", revenueLabel: "Monthly Revenue", revenuePh: "e.g. 15000",
+    expensesLabel: "Monthly Operating Expenses", expensesPh: "e.g. 40000",
+    emptyTitle: "Burn Rate Calculator",
+    emptyDesc: "Find your gross and net burn rate and how many months of runway you have left.",
+    tips: ["Gross Burn", "Net Burn", "Runway"],
+    netBurn: "Net Burn Rate", grossBurn: "Gross Burn Rate", runway: "Runway", cashBalance: "Current Cash Balance",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculates gross burn rate (total monthly expenses) and net burn rate (expenses minus revenue), then estimates how many months of runway your current cash balance provides at that net burn rate.",
+  },
+  es: {
+    cashPosition: "Posición de Caja", currentCashLabel: "Saldo de Caja Actual", currentCashPh: "ej. 300000",
+    monthlyNumbers: "Cifras Mensuales", revenueLabel: "Ingresos Mensuales", revenuePh: "ej. 15000",
+    expensesLabel: "Gastos Operativos Mensuales", expensesPh: "ej. 40000",
+    emptyTitle: "Calculadora de Tasa de Consumo",
+    emptyDesc: "Calcula tu tasa de consumo bruta y neta, y cuántos meses de reserva de caja te quedan.",
+    tips: ["Consumo Bruto", "Consumo Neto", "Reserva de Caja"],
+    netBurn: "Tasa de Consumo Neta", grossBurn: "Tasa de Consumo Bruta", runway: "Reserva de Caja", cashBalance: "Saldo de Caja Actual",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Calcula la tasa de consumo bruta (gastos mensuales totales) y la tasa de consumo neta (gastos menos ingresos), y estima cuántos meses de reserva de caja te ofrece tu saldo actual con esa tasa neta.",
+  },
+}[lang];
 ---
 <section class="brc-calculator">
   <div class="brc-layout">
     <aside class="brc-sidebar">
       <div class="brc-group">
-        <h3>Cash Position</h3>
-        <CalculatorField id="currentCashBalance" label="Current Cash Balance" type="number" placeholder="e.g. 300000" min="0" step="1" />
+        <h3>{copy.cashPosition}</h3>
+        <CalculatorField id="currentCashBalance" label={copy.currentCashLabel} type="number" placeholder={copy.currentCashPh} min="0" step="1" />
       </div>
       <div class="brc-group">
-        <h3>Monthly Numbers</h3>
-        <CalculatorField id="monthlyRevenue" label="Monthly Revenue" type="number" placeholder="e.g. 15000" min="0" step="1" />
-        <CalculatorField id="monthlyOperatingExpenses" label="Monthly Operating Expenses" type="number" placeholder="e.g. 40000" min="0" step="1" />
+        <h3>{copy.monthlyNumbers}</h3>
+        <CalculatorField id="monthlyRevenue" label={copy.revenueLabel} type="number" placeholder={copy.revenuePh} min="0" step="1" />
+        <CalculatorField id="monthlyOperatingExpenses" label={copy.expensesLabel} type="number" placeholder={copy.expensesPh} min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="brc-content">
       <div id="emptyState">
-        <EmptyState icon="🔥" title="Burn Rate Calculator" description="Find your gross and net burn rate and how many months of runway you have left." tips={["Gross Burn", "Net Burn", "Runway"]} />
+        <EmptyState icon="🔥" title={copy.emptyTitle} description={copy.emptyDesc} tips={copy.tips} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="netBurnResult" title="Net Burn Rate" icon={Flame} accent="warning" subtitle=" " />
-          <ResultCard id="grossBurnResult" title="Gross Burn Rate" icon={TrendingDown} />
-          <ResultCard id="runwayResult" title="Runway" icon={Calendar} />
-          <ResultCard id="cashBalanceResult" title="Current Cash Balance" icon={Wallet} />
+          <ResultCard id="netBurnResult" title={copy.netBurn} icon={Flame} accent="warning" subtitle=" " />
+          <ResultCard id="grossBurnResult" title={copy.grossBurn} icon={TrendingDown} />
+          <ResultCard id="runwayResult" title={copy.runway} icon={Calendar} />
+          <ResultCard id="cashBalanceResult" title={copy.cashBalance} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates gross burn rate (total monthly expenses) and net burn rate (expenses minus revenue), then estimates how many months of runway your current cash balance provides at that net burn rate.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>window.calcLang = calcLang;</script>
 <script>
   import "../../scripts/burn-rate-calculator";
 </script>

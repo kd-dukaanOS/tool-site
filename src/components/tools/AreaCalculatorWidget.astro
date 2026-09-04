@@ -4,32 +4,52 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Ruler } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    value: "Value", valuePh: "Enter value", from: "From", to: "To",
+    emptyTitle: "Area Calculator", emptyDesc: "Enter a value to convert.",
+    converted: "Converted Value",
+    units: { sqmm: "Sq Millimeter", sqcm: "Sq Centimeter", sqm: "Sq Meter", sqkm: "Sq Kilometer", sqft: "Sq Foot", sqyd: "Sq Yard", acre: "Acre", hectare: "Hectare" },
+  },
+  es: {
+    value: "Valor", valuePh: "Ingresa un valor", from: "De", to: "A",
+    emptyTitle: "Calculadora de Área", emptyDesc: "Ingresa un valor para convertir.",
+    converted: "Valor Convertido",
+    units: { sqmm: "Milímetro Cuadrado", sqcm: "Centímetro Cuadrado", sqm: "Metro Cuadrado", sqkm: "Kilómetro Cuadrado", sqft: "Pie Cuadrado", sqyd: "Yarda Cuadrada", acre: "Acre", hectare: "Hectárea" },
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder={copy.valuePh} />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="sqmm">Sq Millimeter</option>
-      <option value="sqcm">Sq Centimeter</option>
-      <option value="sqm" selected>Sq Meter</option>
-      <option value="sqkm">Sq Kilometer</option>
-      <option value="sqft">Sq Foot</option>
-      <option value="sqyd">Sq Yard</option>
-      <option value="acre">Acre</option>
-      <option value="hectare">Hectare</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="sqmm">{copy.units.sqmm}</option>
+      <option value="sqcm">{copy.units.sqcm}</option>
+      <option value="sqm" selected>{copy.units.sqm}</option>
+      <option value="sqkm">{copy.units.sqkm}</option>
+      <option value="sqft">{copy.units.sqft}</option>
+      <option value="sqyd">{copy.units.sqyd}</option>
+      <option value="acre">{copy.units.acre}</option>
+      <option value="hectare">{copy.units.hectare}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="sqmm">Sq Millimeter</option>
-      <option value="sqcm">Sq Centimeter</option>
-      <option value="sqm">Sq Meter</option>
-      <option value="sqkm">Sq Kilometer</option>
-      <option value="sqft" selected>Sq Foot</option>
-      <option value="sqyd">Sq Yard</option>
-      <option value="acre">Acre</option>
-      <option value="hectare">Hectare</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="sqmm">{copy.units.sqmm}</option>
+      <option value="sqcm">{copy.units.sqcm}</option>
+      <option value="sqm">{copy.units.sqm}</option>
+      <option value="sqkm">{copy.units.sqkm}</option>
+      <option value="sqft" selected>{copy.units.sqft}</option>
+      <option value="sqyd">{copy.units.sqyd}</option>
+      <option value="acre">{copy.units.acre}</option>
+      <option value="hectare">{copy.units.hectare}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -38,12 +58,15 @@ import { Ruler } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <EmptyState id="emptyState" icon="📐" title="Area Calculator" description="Enter a value to convert." />
+    <EmptyState id="emptyState" icon="📐" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Ruler} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Ruler} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/area-calculator.ts"></script>

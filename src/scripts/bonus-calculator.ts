@@ -2,6 +2,8 @@
 import { validateBonusInput, calculateBonus, copyBonusSummary } from "../utils/bonus";
 import { setValue, copyToClipboard } from "../utils/calculator";
 import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 const annualSalaryInput = document.getElementById("annualSalary") as HTMLInputElement;
 const bonusPercentInput = document.getElementById("bonusPercent") as HTMLInputElement;
 const taxRateInput = document.getElementById("taxRate") as HTMLInputElement;
@@ -35,7 +37,7 @@ function calculate() {
     taxRate: parseFloat(taxRateInput.value) || 0,
   };
 
-  const error = validateBonusInput(input);
+    const error = validateBonusInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -73,7 +75,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyBonusSummary(lastInput, lastResult));
+copyToClipboard(copyBonusSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

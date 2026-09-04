@@ -19,8 +19,8 @@ export function parseNumberList(value: string): number[] {
     .filter((n) => !Number.isNaN(n));
 }
 
-export function validateAverageInput(i: AverageInput): string | null {
-  if (i.numbers.length === 0) return "Enter at least one valid number.";
+export function validateAverageInput(i: AverageInput, lang: "en" | "es" = "en"): string | null {
+  if (i.numbers.length === 0) return lang === "es" ? "Ingresa al menos un número válido." : "Enter at least one valid number.";
   return null;
 }
 
@@ -37,7 +37,20 @@ export function calculateAverage(i: AverageInput): AverageResult {
   };
 }
 
-export function copyAverageSummary(i: AverageInput, r: AverageResult): string {
+export function copyAverageSummary(i: AverageInput, r: AverageResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen del Promedio
+
+Números: ${i.numbers.join(", ")}
+
+Promedio: ${r.average}
+Suma: ${r.sum}
+Cantidad: ${r.count}
+Mínimo: ${r.min}
+Máximo: ${r.max}
+`.trim();
+  }
   return `
 Average Summary
 

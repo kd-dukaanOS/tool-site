@@ -100,8 +100,16 @@ export function formatMonthsAsYearsMonths(months: number): string {
   return parts.join(" ") || "0 mos";
 }
 
-export function validateDebts(debts: Debt[]): string | null {
+export function validateDebts(debts: Debt[], lang: "en" | "es" = "en"): string | null {
   const active = debts.filter((d) => d.balance > 0);
+  if (lang === "es") {
+    if (active.length === 0) return "Por favor ingresa al menos una deuda con saldo.";
+    for (const d of active) {
+      if (d.apr < 0) return "La TAE no puede ser negativa.";
+      if (!d.minPayment || d.minPayment <= 0) return `Por favor ingresa un pago mínimo para ${d.name}.`;
+    }
+    return null;
+  }
   if (active.length === 0) return "Please enter at least one debt with a balance.";
   for (const d of active) {
     if (d.apr < 0) return "APR cannot be negative.";

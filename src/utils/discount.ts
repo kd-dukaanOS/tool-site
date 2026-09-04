@@ -60,17 +60,30 @@ import { formatCurrency, type CurrencyCode } from "./currencyselector";
 export function discountInsight(
   result: DiscountResult,
   originalPrice: number,
-  currency: CurrencyCode = "INR"
+  currency: CurrencyCode = "INR",
+  lang: "en" | "es" = "en"
 ): string {
 
+  if (lang === "es") {
+    return `Ahorras ${formatCurrency(result.youSave, currency)} — eso es ${result.effectivePercent}% de descuento sobre el precio original de ${formatCurrency(originalPrice, currency)}.`;
+  }
   return `You save ${formatCurrency(result.youSave, currency)} — that's ${result.effectivePercent}% off the original ${formatCurrency(originalPrice, currency)} price.`;
 }
 
 export function validateDiscountInputs(
   originalPrice: number,
   discountValue: number,
-  mode: DiscountMode
+  mode: DiscountMode,
+  lang: "en" | "es" = "en"
 ): string | null {
+
+  if (lang === "es") {
+    if (!originalPrice || originalPrice <= 0) return "Por favor ingresa un precio original válido.";
+    if (discountValue === undefined || Number.isNaN(discountValue) || discountValue < 0) return "Por favor ingresa un valor de descuento válido.";
+    if (mode === "percentage" && discountValue > 100) return "El descuento porcentual no puede superar el 100%.";
+    if (mode === "flat" && discountValue > originalPrice) return "El descuento no puede superar el precio original.";
+    return null;
+  }
 
   if (!originalPrice || originalPrice <= 0) return "Please enter a valid original price.";
   if (discountValue === undefined || Number.isNaN(discountValue) || discountValue < 0) return "Please enter a valid discount value.";
@@ -86,8 +99,22 @@ export function copyDiscountSummary(
   mode: DiscountMode,
   extraPercent: number,
   result: DiscountResult,
-  currency: CurrencyCode = "INR"
+  currency: CurrencyCode = "INR",
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Descuento
+
+Precio Original: ${formatCurrency(originalPrice, currency)}
+Descuento: ${mode === "percentage" ? `${discountValue}%` : formatCurrency(discountValue, currency)}${extraPercent ? ` + cupón adicional ${extraPercent}%` : ""}
+
+Precio Final: ${formatCurrency(result.finalPrice, currency)}
+Ahorras: ${formatCurrency(result.youSave, currency)}
+Descuento Efectivo: ${result.effectivePercent}%
+`.trim();
+  }
 
   return `
 Discount Summary

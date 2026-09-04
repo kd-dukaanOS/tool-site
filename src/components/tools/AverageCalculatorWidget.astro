@@ -5,43 +5,49 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Calculator, Hash, ArrowDown, ArrowUp } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    numbers: "Numbers (comma or space separated)", placeholder: "e.g. 10, 20, 30, 40",
+    emptyTitle: "Enter numbers to calculate average", emptyDesc: "Average, sum, min, and max will appear here.",
+    average: "Average", sum: "Sum", count: "Count", min: "Min", max: "Max",
+  },
+  es: {
+    numbers: "Números (separados por coma o espacio)", placeholder: "ej. 10, 20, 30, 40",
+    emptyTitle: "Ingresa números para calcular el promedio", emptyDesc: "Aquí verás el promedio, la suma, el mínimo y el máximo.",
+    average: "Promedio", sum: "Suma", count: "Cantidad", min: "Mínimo", max: "Máximo",
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField
-      id="numbers"
-      label="Numbers (comma or space separated)"
-      type="text"
-      placeholder="e.g. 10, 20, 30, 40"
-    />
+    <CalculatorField id="numbers" label={copy.numbers} type="text" placeholder={copy.placeholder} />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
-    <ActionButtons
-      calculateId="calculateBtn"
-      resetId="resetBtn"
-      copyId="copyBtn"
-      showDownload={false}
-      showShare={false}
-    />
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
   </div>
 
   <div class="calculator-output">
-    <EmptyState
-      id="emptyState"
-      title="Enter numbers to calculate average"
-      description="Average, sum, min, and max will appear here."
-    />
+    <EmptyState id="emptyState" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="averageResult" title="Average" icon={Calculator} accent="primary" size="lg" />
-      <ResultCard id="sumResult" title="Sum" icon={Hash} accent="neutral" />
-      <ResultCard id="countResult" title="Count" icon={Hash} accent="neutral" />
-      <ResultCard id="minResult" title="Min" icon={ArrowDown} accent="warning" />
-      <ResultCard id="maxResult" title="Max" icon={ArrowUp} accent="success" />
+      <ResultCard id="averageResult" title={copy.average} icon={Calculator} accent="primary" size="lg" />
+      <ResultCard id="sumResult" title={copy.sum} icon={Hash} accent="neutral" />
+      <ResultCard id="countResult" title={copy.count} icon={Hash} accent="neutral" />
+      <ResultCard id="minResult" title={copy.min} icon={ArrowDown} accent="warning" />
+      <ResultCard id="maxResult" title={copy.max} icon={ArrowUp} accent="success" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/average-calculator.ts"></script>

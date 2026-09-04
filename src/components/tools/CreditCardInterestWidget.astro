@@ -5,38 +5,51 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Clock, TrendingDown, Receipt, CreditCard } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { cardGroup:"Card Details", balance:"Current Balance", apr:"APR (%)", monthlyPayment:"Monthly Payment", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Credit Card Interest Calculator", emptyDesc:"Enter your balance, APR and monthly payment to see how much interest you'll pay.", tip1:"Time to Payoff", tip2:"Total Interest", tip3:"Total Repayment", timeToPayoff:"Time to Payoff", totalInterest:"Total Interest", totalRepayment:"Total Repayment", aboutTitle:"About this Calculator", aboutText:"Calculates how long it will take to pay off a credit card balance at a fixed monthly payment, along with total interest charged and total amount repaid, based on your APR." },
+  es: { cardGroup:"Detalles de la Tarjeta", balance:"Saldo Actual", apr:"TAE (%)", monthlyPayment:"Pago Mensual", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Interés de Tarjeta de Crédito", emptyDesc:"Ingresa tu saldo, TAE y pago mensual para ver cuánto interés pagarás.", tip1:"Tiempo para Pagar", tip2:"Interés Total", tip3:"Pago Total", timeToPayoff:"Tiempo para Pagar", totalInterest:"Interés Total", totalRepayment:"Pago Total", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula cuánto tiempo tomará pagar el saldo de una tarjeta de crédito con un pago mensual fijo, junto con el interés total cobrado y el monto total pagado, según tu TAE." },
+}[lang];
 ---
 <section class="cci-calculator">
   <div class="cci-layout">
     <aside class="cci-sidebar">
       <div class="cci-group">
-        <h3>Card Details</h3>
-        <CalculatorField id="balance" label="Current Balance" type="number" placeholder="e.g. 5000" min="0" step="1" />
-        <CalculatorField id="apr" label="APR (%)" type="number" placeholder="e.g. 22.9" min="0" step="0.01" />
-        <CalculatorField id="monthlyPayment" label="Monthly Payment" type="number" placeholder="e.g. 200" min="0" step="1" />
+        <h3>{copy.cardGroup}</h3>
+        <CalculatorField id="balance" label={copy.balance} type="number" placeholder="e.g. 5000" min="0" step="1" />
+        <CalculatorField id="apr" label={copy.apr} type="number" placeholder="e.g. 22.9" min="0" step="0.01" />
+        <CalculatorField id="monthlyPayment" label={copy.monthlyPayment} type="number" placeholder="e.g. 200" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cci-content">
       <div id="emptyState">
-        <EmptyState icon="💳" title="Credit Card Interest Calculator" description="Enter your balance, APR and monthly payment to see how much interest you'll pay." tips={["Time to Payoff", "Total Interest", "Total Repayment"]} />
+        <EmptyState icon="💳" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="timeToPayoffResult" title="Time to Payoff" icon={Clock} accent="success" subtitle=" " />
-          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={CreditCard} />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={TrendingDown} />
-          <ResultCard id="totalRepaymentResult" title="Total Repayment" icon={Receipt} />
+          <ResultCard id="timeToPayoffResult" title={copy.timeToPayoff} icon={Clock} accent="success" subtitle=" " />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={CreditCard} />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={TrendingDown} />
+          <ResultCard id="totalRepaymentResult" title={copy.totalRepayment} icon={Receipt} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates how long it will take to pay off a credit card balance at a fixed monthly payment, along with total interest charged and total amount repaid, based on your APR.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/credit-card-interest-calculator";
 </script>

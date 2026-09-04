@@ -71,7 +71,14 @@ export function calculateDebtConsolidation(
   };
 }
 
-export function validateDebtConsolidationInputs(debts: DebtInput[], consolidationTermMonths: number): string | null {
+export function validateDebtConsolidationInputs(debts: DebtInput[], consolidationTermMonths: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (debts.length === 0) return "Agrega al menos una deuda.";
+    if (debts.some((d) => d.balance <= 0)) return "El saldo de cada deuda debe ser mayor que cero.";
+    if (debts.some((d) => d.minPayment <= 0)) return "Cada deuda debe tener un pago mínimo mayor que cero.";
+    if (consolidationTermMonths <= 0) return "El plazo del préstamo de consolidación debe ser mayor que cero.";
+    return null;
+  }
   if (debts.length === 0) return "Add at least one debt.";
   if (debts.some((d) => d.balance <= 0)) return "Each debt balance must be greater than zero.";
   if (debts.some((d) => d.minPayment <= 0)) return "Each debt must have a minimum payment greater than zero.";

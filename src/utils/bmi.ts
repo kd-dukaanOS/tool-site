@@ -40,13 +40,30 @@ export function healthyWeightRange(
   };
 }
 
+const CATEGORY_ES: Record<BMIResult["category"], string> = {
+  "Underweight": "Bajo peso", "Normal weight": "Peso normal", "Overweight": "Sobrepeso", "Obese": "Obesidad",
+};
+
 export function bmiInsight(
   weightKg: number,
   heightCm: number,
-  bmi: BMIResult
+  bmi: BMIResult,
+  lang: "en" | "es" = "en"
 ): string {
 
   const range = healthyWeightRange(heightCm);
+
+  if (lang === "es") {
+    if (bmi.category === "Normal weight") {
+      return `Estás dentro del rango de peso saludable (${range.min}\u2013${range.max} kg) para tu estatura.`;
+    }
+    if (bmi.category === "Underweight") {
+      const diff = round(range.min - weightKg, 1);
+      return `Estás aproximadamente ${diff} kg por debajo del rango saludable. Llegar a ${range.min} kg llevaría tu IMC al rango normal.`;
+    }
+    const diffEs = round(weightKg - range.max, 1);
+    return `Estás aproximadamente ${diffEs} kg por encima del rango saludable. Llegar a ${range.max} kg llevaría tu IMC al rango normal.`;
+  }
 
   if (bmi.category === "Normal weight") {
     return `You're within the healthy weight range (${range.min}\u2013${range.max} kg) for your height.`;
@@ -63,13 +80,18 @@ export function bmiInsight(
 
 export function validateBMIInputs(
   weightKg: number,
-  heightCm: number
+  heightCm: number,
+  lang: "en" | "es" = "en"
 ): string | null {
 
-  if (!weightKg || weightKg <= 0) return "Please enter a valid weight.";
-  if (!heightCm || heightCm <= 0) return "Please enter a valid height.";
-  if (weightKg > 500) return "Please enter a realistic weight.";
-  if (heightCm > 300) return "Please enter a realistic height.";
+  const msg = lang === "es"
+    ? { weight: "Por favor ingresa un peso válido.", height: "Por favor ingresa una estatura válida.", weightMax: "Por favor ingresa un peso realista.", heightMax: "Por favor ingresa una estatura realista." }
+    : { weight: "Please enter a valid weight.", height: "Please enter a valid height.", weightMax: "Please enter a realistic weight.", heightMax: "Please enter a realistic height." };
+
+  if (!weightKg || weightKg <= 0) return msg.weight;
+  if (!heightCm || heightCm <= 0) return msg.height;
+  if (weightKg > 500) return msg.weightMax;
+  if (heightCm > 300) return msg.heightMax;
 
   return null;
 }
@@ -77,10 +99,25 @@ export function validateBMIInputs(
 export function copyBMISummary(
   weightKg: number,
   heightCm: number,
-  bmi: BMIResult
+  bmi: BMIResult,
+  lang: "en" | "es" = "en"
 ): string {
 
   const range = healthyWeightRange(heightCm);
+
+  if (lang === "es") {
+    return `
+Resumen de IMC
+
+Peso: ${weightKg} kg
+Estatura: ${heightCm} cm
+
+IMC: ${bmi.value}
+Categoría: ${CATEGORY_ES[bmi.category]}
+
+Rango de Peso Saludable: ${range.min} - ${range.max} kg
+`.trim();
+  }
 
   return `
 BMI Summary

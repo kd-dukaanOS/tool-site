@@ -1,11 +1,17 @@
 ---
 import type { CalculatorContentData } from "../../types/calculator-content";
 
-type Props = CalculatorContentData & { allTools?: any[] };
+type Props = CalculatorContentData & { allTools?: any[]; lang?: "en" | "es" };
 
-const { about, formula, steps, examples, practicalUses, expertTips, commonMistakes, faq, relatedCalculators, allTools } = Astro.props;
+const { about, formula, steps, examples, practicalUses, expertTips, commonMistakes, faq, relatedCalculators, allTools, lang = "en" } = Astro.props;
 
 const tips = expertTips || practicalUses;
+const prefix = lang === "es" ? "/es" : "";
+
+const labels = {
+  en: { about: "About this tool", formula: "Formula", steps: "How It Works", examples: "Examples", inputs: "Inputs:", result: "Result:", tips: "Tips", mistakes: "Common Mistakes", faq: "Frequently Asked Questions", related: "Related Calculators" },
+  es: { about: "Acerca de esta herramienta", formula: "Fórmula", steps: "Cómo Funciona", examples: "Ejemplos", inputs: "Datos:", result: "Resultado:", tips: "Consejos", mistakes: "Errores Comunes", faq: "Preguntas Frecuentes", related: "Calculadoras Relacionadas" },
+}[lang];
 
 function findToolByName(name: string) {
   return allTools?.find((t: any) => t.name === name);
@@ -15,14 +21,14 @@ function findToolByName(name: string) {
 <section class="calc-content">
   {about?.text && (
     <div class="calc-block">
-      <h2 class="calc-heading">About this tool</h2>
+       <h2 class="calc-heading">{labels.about}</h2>
       <p class="calc-text">{about.text}</p>
     </div>
   )}
 
   {formula && (
     <div class="calc-block">
-      <h2 class="calc-heading">Formula</h2>
+      <h2 class="calc-heading">{labels.formula}</h2>
       <div class="calc-card calc-formula"><code>{formula.formula}</code></div>
       {formula.variables && formula.variables.length > 0 && (
         <ul class="calc-variables">
@@ -36,19 +42,19 @@ function findToolByName(name: string) {
 
   {steps && steps.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">How It Works</h2>
+     <h2 class="calc-heading">{labels.steps}</h2>
       <ol class="calc-steps">{steps.map((s: string) => <li>{s}</li>)}</ol>
     </div>
   )}
 
   {examples && examples.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">Examples</h2>
+       <h2 class="calc-heading">{labels.examples}</h2>
       <div class="calc-examples-grid">
         {examples.map((ex: any) => (
           <div class="calc-card calc-example">
-            <p><strong>Inputs:</strong> {ex.inputs}</p>
-            <p><strong>Result:</strong> {ex.result}</p>
+           <p><strong>{labels.inputs}</strong> {ex.inputs}</p>
+            <p><strong>{labels.result}</strong> {ex.result}</p>
             {ex.explanation && <p class="calc-text">{ex.explanation}</p>}
           </div>
         ))}
@@ -58,14 +64,14 @@ function findToolByName(name: string) {
 
   {tips && tips.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">Tips</h2>
+         <h2 class="calc-heading">{labels.tips}</h2>
       <ul class="calc-tips">{tips.map((t: string) => <li>{t}</li>)}</ul>
     </div>
   )}
 
   {commonMistakes && commonMistakes.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">Common Mistakes</h2>
+      <h2 class="calc-heading">{labels.mistakes}</h2>
       <ul class="calc-mistakes">
         {commonMistakes.map((m: any) => <li><strong>{m.mistake}</strong> — {m.fix}</li>)}
       </ul>
@@ -74,7 +80,7 @@ function findToolByName(name: string) {
 
   {faq && faq.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">Frequently Asked Questions</h2>
+       <h2 class="calc-heading">{labels.faq}</h2>
       <div class="calc-faq-list">
         {faq.map((f: any) => (
           <details class="calc-card calc-faq-item">
@@ -88,12 +94,12 @@ function findToolByName(name: string) {
 
   {relatedCalculators && relatedCalculators.length > 0 && (
     <div class="calc-block">
-      <h2 class="calc-heading">Related Calculators</h2>
+        <h2 class="calc-heading">{labels.related}</h2>
       <div class="calc-related-grid">
         {relatedCalculators.map((name: string) => {
           const match = findToolByName(name);
           return match ? (
-            <a href={`/${match.category}/${match.slug}/`} class="calc-card calc-related-card">{name}</a>
+            <a href={`${prefix}/${match.category}/${match.slug}/`} class="calc-card calc-related-card">{name}</a>
           ) : (
             <span class="calc-card calc-related-card">{name}</span>
           );

@@ -12,6 +12,20 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: {
+    effectiveRateSuffix: (v: string) => `${v}% effective rate`,
+    header: (province: string) => `Canada Take-Home Pay (${province})`,
+    gross: "Gross", netAnnual: "Net Annual", netMonthly: "Net Monthly",
+  },
+  es: {
+    effectiveRateSuffix: (v: string) => `${v}% tasa efectiva`,
+    header: (province: string) => `Sueldo Neto de Canadá (${province})`,
+    gross: "Bruto", netAnnual: "Neto Anual", netMonthly: "Neto Mensual",
+  },
+}[lang];
+
 let lastSummary = "";
 
 function showError(msg: string) { errorBox.textContent = msg; errorBox.hidden = false; }
@@ -22,20 +36,20 @@ function calculate() {
   const grossIncome = parseFloat(incomeInput.value);
   const province = provinceSelect?.value || "ON";
 
-  const err = validateIncome(grossIncome);
+  const err = validateIncome(grossIncome, lang);
   if (err) return showError(err);
 
-  const r = calculateCATakeHome(grossIncome, province);
+  const r = calculateCATakeHome(grossIncome, province, lang);
 
   setValue("netAnnualResult", formatCurrency(r.netAnnual, "CAD"));
   setValue("netMonthlyResult", formatCurrency(r.netMonthly, "CAD"));
   setValue("netBiweeklyResult", formatCurrency(r.netBiweekly, "CAD"));
   setValue("totalDeductionsResult", formatCurrency(r.totalDeductions, "CAD"));
-  setSubtitle("netAnnualResult", `${r.effectiveRate.toFixed(1)}% effective rate`);
+  setSubtitle("netAnnualResult", t.effectiveRateSuffix(r.effectiveRate.toFixed(1)));
 
-  lastSummary = `Canada Take-Home Pay (${province})\n\nGross: ${formatCurrency(r.grossAnnual, "CAD")}\n` +
+  lastSummary = `${t.header(province)}\n\n${t.gross}: ${formatCurrency(r.grossAnnual, "CAD")}\n` +
     r.breakdown.map(b => `${b.label}: ${formatCurrency(b.amount, "CAD")}`).join("\n") +
-    `\nNet Annual: ${formatCurrency(r.netAnnual, "CAD")}\nNet Monthly: ${formatCurrency(r.netMonthly, "CAD")}\n`;
+    `\n${t.netAnnual}: ${formatCurrency(r.netAnnual, "CAD")}\n${t.netMonthly}: ${formatCurrency(r.netMonthly, "CAD")}\n`;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

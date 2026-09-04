@@ -1,4 +1,4 @@
-﻿export interface ColorConverterInput {
+export interface ColorConverterInput {
   color: string; // hex like #ff0000, or "r,g,b"
   inputFormat: "hex" | "rgb";
 }
@@ -9,7 +9,13 @@ export interface ColorConverterResult {
   hsl: string;
 }
 
-export function validateColorConverterInput(i: ColorConverterInput): string | null {
+export function validateColorConverterInput(i: ColorConverterInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (!i.color) return "Ingresa un valor de color.";
+    if (i.inputFormat === "hex" && !/^#?[0-9A-Fa-f]{6}$/.test(i.color)) return "Ingresa un color hexadecimal válido de 6 dígitos.";
+    if (i.inputFormat === "rgb" && !/^\d{1,3},\s*\d{1,3},\s*\d{1,3}$/.test(i.color)) return "Ingresa un RGB válido como r,g,b.";
+    return null;
+  }
   if (!i.color) return "Enter a color value.";
   if (i.inputFormat === "hex" && !/^#?[0-9A-Fa-f]{6}$/.test(i.color)) return "Enter a valid 6-digit hex color.";
   if (i.inputFormat === "rgb" && !/^\d{1,3},\s*\d{1,3},\s*\d{1,3}$/.test(i.color)) return "Enter valid RGB as r,g,b.";
@@ -66,7 +72,16 @@ export function calculateColorConverter(i: ColorConverterInput): ColorConverterR
   };
 }
 
-export function copyColorConverterSummary(_i: ColorConverterInput, r: ColorConverterResult): string {
+export function copyColorConverterSummary(_i: ColorConverterInput, r: ColorConverterResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Color
+
+HEX: ${r.hex}
+RGB: ${r.rgb}
+HSL: ${r.hsl}
+`.trim();
+  }
   return `
 Color Conversion
 

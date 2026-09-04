@@ -7,6 +7,12 @@ import {
 } from "../utils/average";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { across: "across", numbers: "numbers", invalid: "Enter at least one valid number." },
+  es: { across: "de", numbers: "números", invalid: "Ingresa al menos un número válido." },
+}[lang];
+
 const numbersInput = document.getElementById("numbers") as HTMLInputElement;
 
 const calculateBtn = document.getElementById("calculateBtn");
@@ -36,7 +42,7 @@ function calculate() {
     numbers: parseNumberList(numbersInput.value),
   };
 
-  const err = validateAverageInput(input);
+  const err = validateAverageInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +55,7 @@ function calculate() {
   setValue("countResult", result.count);
   setValue("minResult", result.min);
   setValue("maxResult", result.max);
-  setSubtitle("averageResult", `across ${result.count} numbers`);
+  setSubtitle("averageResult", `${t.across} ${result.count} ${t.numbers}`);
 
   lastInput = input;
 
@@ -70,7 +76,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateAverage(lastInput);
-  copyToClipboard(copyAverageSummary(lastInput, result));
+  copyToClipboard(copyAverageSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -19,6 +19,8 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const diffOutput = document.getElementById("diffOutput") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastText1 = "";
 let lastText2 = "";
 let lastResult: ReturnType<typeof computeDiff> | null = null;
@@ -39,7 +41,7 @@ function compare() {
   const text1 = input1.value;
   const text2 = input2.value;
 
-  const validationError = validateDiffInput(text1, text2);
+  const validationError = validateDiffInput(text1, text2, lang);
 
   if (validationError) {
     showError(validationError);
@@ -53,7 +55,7 @@ function compare() {
   setValue("unchangedResult", result.stats.unchanged);
   setValue("similarityResult", `${result.stats.similarity}%`);
 
-  diffOutput.innerHTML = formatDiffHtml(result);
+  diffOutput.innerHTML = formatDiffHtml(result, lang);
 
   lastText1 = text1;
   lastText2 = text2;
@@ -76,7 +78,7 @@ function resetChecker() {
 
 function handleCopy() {
   if (!lastResult) return;
-  copyToClipboard(copyDiffSummary(lastText1, lastText2, lastResult));
+  copyToClipboard(copyDiffSummary(lastText1, lastText2, lastResult, lang));
 }
 
 compareBtn?.addEventListener("click", compare);

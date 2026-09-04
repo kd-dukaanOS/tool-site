@@ -23,6 +23,36 @@ const fieldIds = [
   "expectedReturn",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: {
+    yearsToRetirement: (y: number) => `${y} years to retirement`,
+    summary: (r: any) => `
+Canada Retirement Projection Summary
+
+Total Projected Balance: ${fmtCurrency(r.totalBalance)}
+RRSP Balance: ${fmtCurrency(r.rrspBalance)}
+TFSA Balance: ${fmtCurrency(r.tfsaBalance)}
+Total Contributions: ${fmtCurrency(r.totalContributions)}
+Investment Growth: ${fmtCurrency(r.totalGrowth)}
+Years to Retirement: ${r.yearsToRetirement}
+`.trim(),
+  },
+  es: {
+    yearsToRetirement: (y: number) => `${y} años para la jubilación`,
+    summary: (r: any) => `
+Resumen de Proyección de Jubilación de Canadá
+
+Saldo Total Proyectado: ${fmtCurrency(r.totalBalance)}
+Saldo RRSP: ${fmtCurrency(r.rrspBalance)}
+Saldo TFSA: ${fmtCurrency(r.tfsaBalance)}
+Contribuciones Totales: ${fmtCurrency(r.totalContributions)}
+Crecimiento de Inversión: ${fmtCurrency(r.totalGrowth)}
+Años para la Jubilación: ${r.yearsToRetirement}
+`.trim(),
+  },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -77,18 +107,9 @@ function calculate() {
   setValue("rrspBalanceResult", fmtCurrency(result.rrspBalance));
   setValue("tfsaBalanceResult", fmtCurrency(result.tfsaBalance));
   setValue("totalGrowthResult", fmtCurrency(result.totalGrowth));
-  setSubtitle("totalBalanceResult", `${result.yearsToRetirement} years to retirement`);
+  setSubtitle("totalBalanceResult", t.yearsToRetirement(result.yearsToRetirement));
 
-  lastSummary = `
-Canada Retirement Projection Summary
-
-Total Projected Balance: ${fmtCurrency(result.totalBalance)}
-RRSP Balance: ${fmtCurrency(result.rrspBalance)}
-TFSA Balance: ${fmtCurrency(result.tfsaBalance)}
-Total Contributions: ${fmtCurrency(result.totalContributions)}
-Investment Growth: ${fmtCurrency(result.totalGrowth)}
-Years to Retirement: ${result.yearsToRetirement}
-`.trim();
+  lastSummary = t.summary(result);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

@@ -25,6 +25,10 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const scheduleBody = document.getElementById("scheduleBody") as HTMLElement | null;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const earSubtitle = lang === "es" ? "Rendimiento anual real una vez aplicada la capitalización" : "True yearly return once compounding is applied";
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const earSubtitle = lang === "es" ? "Rendimiento anual real una vez aplicada la capitalización" : "True yearly return once compounding is applied";
 let lastInput: CompoundInterestInput | null = null;
 let lastResult: CompoundInterestResult | null = null;
 
@@ -48,7 +52,7 @@ function calculate() {
     frequency: parseFloat(frequencyInput.value) || 1,
   };
 
-  const validationError = validateCompoundInterestInput(input);
+  const validationError = validateCompoundInterestInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -62,11 +66,11 @@ function calculate() {
   setValue("interestResult", formatCurrency(result.totalInterest, currency));
   setValue("principalResult", formatCurrency(result.principalInvested, currency));
   setValue("earResult", formatPercent(result.effectiveAnnualRate));  setValue("multiplierResult", `${result.growthMultiplier.toFixed(2)}x`);
-  setValue("frequencyResult", frequencyLabel(input.frequency));
+  setValue("frequencyResult", frequencyLabel(input.frequency, lang));
 
   setSubtitle(
     "earResult",
-    "True yearly return once compounding is applied"
+    earSubtitle
   );
 
   renderSchedule(result);
@@ -90,7 +94,7 @@ function renderSchedule(result: CompoundInterestResult) {
 
     const currency = getSavedCurrency();
     tr.innerHTML = `
-      <td>Year ${row.year}</td>
+      <td>${lang === "es" ? "Año" : "Year"} ${row.year}</td>
       <td>${formatCurrency(row.openingBalance, currency)}</td>
       <td>${formatCurrency(row.interestEarned, currency)}</td>
       <td>${formatCurrency(row.closingBalance, currency)}</td>
@@ -118,7 +122,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyCompoundInterestSummary(lastInput, lastResult));
+  copyToClipboard(copyCompoundInterestSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

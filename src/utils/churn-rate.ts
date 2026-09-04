@@ -35,7 +35,12 @@ export function calculateChurnRate(
   };
 }
 
-export function validateChurnRateInputs(customersStartOfPeriod: number, mrrStartOfPeriod: number): string | null {
+export function validateChurnRateInputs(customersStartOfPeriod: number, mrrStartOfPeriod: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (customersStartOfPeriod <= 0) return "Los clientes al inicio del período deben ser mayores que cero.";
+    if (mrrStartOfPeriod < 0) return "El MRR inicial no puede ser negativo.";
+    return null;
+  }
   if (customersStartOfPeriod <= 0) return "Customers at start of period must be greater than zero.";
   if (mrrStartOfPeriod < 0) return "Starting MRR cannot be negative.";
   return null;

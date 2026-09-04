@@ -61,7 +61,11 @@ export function calculateEffectiveTaxRate(
   return { taxableIncome, totalTax, effectiveRate, marginalRate: marginalRate * 100, bracketBreakdown, afterTaxIncome };
 }
 
-export function validateEffectiveTaxRateInputs(grossIncome: number): string | null {
+export function validateEffectiveTaxRateInputs(grossIncome: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (grossIncome <= 0) return "El ingreso bruto debe ser mayor que cero.";
+    return null;
+  }
   if (grossIncome <= 0) return "Gross income must be greater than zero.";
   return null;
 }

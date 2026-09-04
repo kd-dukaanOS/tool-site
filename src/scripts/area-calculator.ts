@@ -3,6 +3,7 @@ import {
   validateAreaInput,
   copyAreaSummary,
   AREA_LABELS,
+  AREA_LABELS_ES,
   type AreaInput,
 } from "../utils/area";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
@@ -18,6 +19,8 @@ const copyBtn = document.getElementById("copyBtn");
 const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 let lastInput: AreaInput | null = null;
 
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateAreaInput(input);
+  const err = validateAreaInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculateArea(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", AREA_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", (lang === "es" ? AREA_LABELS_ES : AREA_LABELS)[input.toUnit]);
 
   lastInput = input;
 
@@ -68,7 +71,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateArea(lastInput);
-  copyToClipboard(copyAreaSummary(lastInput, result));
+  copyToClipboard(copyAreaSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

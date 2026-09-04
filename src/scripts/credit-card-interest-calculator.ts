@@ -15,6 +15,50 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["balance", "apr", "monthlyPayment"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { tooLow:"This monthly payment is too low to ever pay off the balance — increase it above the monthly interest charge.", yMo:(y:number,m:number)=>`${y}y ${m}mo`, monthsOnly:(m:number)=>`${m} months`, totalMonths:(m:number)=>`${m} months total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
+Credit Card Interest Summary
+
+Starting Balance: ${bal}
+Monthly Payment: ${pay}
+Time to Payoff: ${time}
+Total Interest: ${int}
+Total Repayment: ${rep}
+`.trim() },
+  es: { tooLow:"Este pago mensual es demasiado bajo para pagar el saldo — auméntalo por encima del cargo de interés mensual.", yMo:(y:number,m:number)=>`${y}a ${m}m`, monthsOnly:(m:number)=>`${m} meses`, totalMonths:(m:number)=>`${m} meses en total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
+Resumen de Interés de Tarjeta de Crédito
+
+Saldo Inicial: ${bal}
+Pago Mensual: ${pay}
+Tiempo para Pagar: ${time}
+Interés Total: ${int}
+Pago Total: ${rep}
+`.trim() },
+}[lang];
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { tooLow:"This monthly payment is too low to ever pay off the balance — increase it above the monthly interest charge.", yMo:(y:number,m:number)=>`${y}y ${m}mo`, monthsOnly:(m:number)=>`${m} months`, totalMonths:(m:number)=>`${m} months total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
+Credit Card Interest Summary
+
+Starting Balance: ${bal}
+Monthly Payment: ${pay}
+Time to Payoff: ${time}
+Total Interest: ${int}
+Total Repayment: ${rep}
+`.trim() },
+  es: { tooLow:"Este pago mensual es demasiado bajo para pagar el saldo — auméntalo por encima del cargo de interés mensual.", yMo:(y:number,m:number)=>`${y}a ${m}m`, monthsOnly:(m:number)=>`${m} meses`, totalMonths:(m:number)=>`${m} meses en total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
+Resumen de Interés de Tarjeta de Crédito
+
+Saldo Inicial: ${bal}
+Pago Mensual: ${pay}
+Tiempo para Pagar: ${time}
+Interés Total: ${int}
+Pago Total: ${rep}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +80,7 @@ function calculate() {
 
   const [balance, apr, monthlyPayment] = fieldIds.map(val);
 
-  const validationError = validateCreditCardInterestInputs(balance, monthlyPayment);
+  const validationError = validateCreditCardInterestInputs(balance, monthlyPayment, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -45,7 +89,7 @@ function calculate() {
   const result = calculateCreditCardInterest(balance, apr, monthlyPayment);
 
   if (!result.payoffPossible) {
-    showError("This monthly payment is too low to ever pay off the balance — increase it above the monthly interest charge.");
+    showError(t.tooLow);
     emptyState.hidden = false;
     resultsContainer.hidden = true;
     return;
@@ -53,23 +97,15 @@ function calculate() {
 
   const years = Math.floor(result.monthsToPayoff / 12);
   const months = result.monthsToPayoff % 12;
-  const timeLabel = years > 0 ? `${years}y ${months}mo` : `${months} months`;
+  const timeLabel = years > 0 ? t.yMo(years, months) : t.monthsOnly(months);
 
   setValue("timeToPayoffResult", timeLabel);
   setValue("totalInterestResult", fmtCurrency(result.totalInterest));
   setValue("totalRepaymentResult", fmtCurrency(result.totalRepayment));
   setValue("monthlyPaymentResult", fmtCurrency(monthlyPayment));
-  setSubtitle("timeToPayoffResult", `${result.monthsToPayoff} months total`);
+  setSubtitle("timeToPayoffResult", t.totalMonths(result.monthsToPayoff));
 
-  lastSummary = `
-Credit Card Interest Summary
-
-Starting Balance: ${fmtCurrency(balance)}
-Monthly Payment: ${fmtCurrency(monthlyPayment)}
-Time to Payoff: ${timeLabel}
-Total Interest: ${fmtCurrency(result.totalInterest)}
-Total Repayment: ${fmtCurrency(result.totalRepayment)}
-`.trim();
+  lastSummary = t.summary(fmtCurrency(balance), fmtCurrency(monthlyPayment), timeLabel, fmtCurrency(result.totalInterest), fmtCurrency(result.totalRepayment));
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

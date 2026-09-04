@@ -20,6 +20,50 @@ const fieldIds = [
   "annualPropertyTax", "downPayment",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { percentOfPrice:(p:string)=>`${p}% of home price`, cashSub:"Closing Costs + Down Payment", summary:(r:any)=>`
+Closing Costs Summary
+
+Total Closing Costs: ${fmtCurrency(r.totalClosingCosts)} (${r.closingCostPercentOfPrice.toFixed(1)}% of price)
+Lender Fees + Points: ${fmtCurrency(r.lenderFees + r.discountPoints)}
+Title & Transfer/Recording: ${fmtCurrency(r.titleFees + r.taxesAndRecording)}
+Prepaids & Escrow: ${fmtCurrency(r.prepaidsAndEscrow)}
+Total Cash Needed (incl. Down Payment): ${fmtCurrency(r.totalCashNeeded)}
+`.trim() },
+  es: { percentOfPrice:(p:string)=>`${p}% del precio`, cashSub:"Costos de Cierre + Pago Inicial", summary:(r:any)=>`
+Resumen de Costos de Cierre
+
+Costos de Cierre Totales: ${fmtCurrency(r.totalClosingCosts)} (${r.closingCostPercentOfPrice.toFixed(1)}% del precio)
+Comisiones de Prestamista + Puntos: ${fmtCurrency(r.lenderFees + r.discountPoints)}
+Título y Transferencia/Registro: ${fmtCurrency(r.titleFees + r.taxesAndRecording)}
+Prepagos y Depósito en Garantía: ${fmtCurrency(r.prepaidsAndEscrow)}
+Efectivo Total Necesario (incl. Pago Inicial): ${fmtCurrency(r.totalCashNeeded)}
+`.trim() },
+}[lang];
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { percentOfPrice:(p:string)=>`${p}% of home price`, cashSub:"Closing Costs + Down Payment", summary:(r:any)=>`
+Closing Costs Summary
+
+Total Closing Costs: ${fmtCurrency(r.totalClosingCosts)} (${r.closingCostPercentOfPrice.toFixed(1)}% of price)
+Lender Fees + Points: ${fmtCurrency(r.lenderFees + r.discountPoints)}
+Title & Transfer/Recording: ${fmtCurrency(r.titleFees + r.taxesAndRecording)}
+Prepaids & Escrow: ${fmtCurrency(r.prepaidsAndEscrow)}
+Total Cash Needed (incl. Down Payment): ${fmtCurrency(r.totalCashNeeded)}
+`.trim() },
+  es: { percentOfPrice:(p:string)=>`${p}% del precio`, cashSub:"Costos de Cierre + Pago Inicial", summary:(r:any)=>`
+Resumen de Costos de Cierre
+
+Costos de Cierre Totales: ${fmtCurrency(r.totalClosingCosts)} (${r.closingCostPercentOfPrice.toFixed(1)}% del precio)
+Comisiones de Prestamista + Puntos: ${fmtCurrency(r.lenderFees + r.discountPoints)}
+Título y Transferencia/Registro: ${fmtCurrency(r.titleFees + r.taxesAndRecording)}
+Prepagos y Depósito en Garantía: ${fmtCurrency(r.prepaidsAndEscrow)}
+Efectivo Total Necesario (incl. Pago Inicial): ${fmtCurrency(r.totalCashNeeded)}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -46,7 +90,7 @@ function calculate() {
     annualPropertyTax, downPayment,
   ] = fieldIds.map(val);
 
-  const validationError = validateClosingCostsInputs(homePrice, loanAmount);
+  const validationError = validateClosingCostsInputs(homePrice, loanAmount, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -63,18 +107,10 @@ function calculate() {
   setValue("cashNeededResult", fmtCurrency(result.totalCashNeeded));
   setValue("lenderFeesResult", fmtCurrency(result.lenderFees + result.discountPoints));
   setValue("prepaidsResult", fmtCurrency(result.prepaidsAndEscrow));
-  setSubtitle("totalClosingCostsResult", `${result.closingCostPercentOfPrice.toFixed(1)}% of home price`);
-  setSubtitle("cashNeededResult", "Closing Costs + Down Payment");
+  setSubtitle("totalClosingCostsResult", t.percentOfPrice(result.closingCostPercentOfPrice.toFixed(1)));
+  setSubtitle("cashNeededResult", t.cashSub);
 
-  lastSummary = `
-Closing Costs Summary
-
-Total Closing Costs: ${fmtCurrency(result.totalClosingCosts)} (${result.closingCostPercentOfPrice.toFixed(1)}% of price)
-Lender Fees + Points: ${fmtCurrency(result.lenderFees + result.discountPoints)}
-Title & Transfer/Recording: ${fmtCurrency(result.titleFees + result.taxesAndRecording)}
-Prepaids & Escrow: ${fmtCurrency(result.prepaidsAndEscrow)}
-Total Cash Needed (incl. Down Payment): ${fmtCurrency(result.totalCashNeeded)}
-`.trim();
+  lastSummary = t.summary(result);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

@@ -5,33 +5,43 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { ShieldCheck, Users, Building2, Coins } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { grossIncome:"Gross Annual Income", grossIncomeHelp:"Your gross annual income (CAD).", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"EI Calculator", emptyDesc:"Estimate your Employment Insurance premium.", tip1:"Insurable Earnings", tip2:"Employee Portion", tip3:"Employer Portion", insurable:"Insurable Earnings", employee:"Employee Premium", employer:"Employer Premium", total:"Total Premium", aboutTitle:"About this Calculator", aboutText:"Estimates your EI premium capped at maximum insurable earnings. Quebec uses a separate rate not covered here. Verify against current federal figures." },
+  es: { grossIncome:"Ingreso Bruto Anual", grossIncomeHelp:"Tu ingreso bruto anual (CAD).", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de EI", emptyDesc:"Estima tu prima del Seguro de Empleo.", tip1:"Ingresos Asegurables", tip2:"Parte del Empleado", tip3:"Parte del Empleador", insurable:"Ingresos Asegurables", employee:"Prima del Empleado", employer:"Prima del Empleador", total:"Prima Total", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu prima de EI limitada a los ingresos asegurables máximos. Quebec usa una tasa separada no cubierta aquí. Verifica con las cifras federales actuales." },
+}[lang];
 ---
 <section class="ei-calculator">
   <div class="ei-layout">
     <aside class="ei-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross annual income (CAD)." />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="grossIncome" label={copy.grossIncome} type="number" required={true} helpText={copy.grossIncomeHelp} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ei-content">
       <div id="emptyState">
-        <EmptyState icon="🛡️" title="EI Calculator" description="Estimate your Employment Insurance premium." tips={["Insurable Earnings", "Employee Portion", "Employer Portion"]} />
+        <EmptyState icon="🛡️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="insurableResult" title="Insurable Earnings" icon={ShieldCheck} />
-          <ResultCard id="employeeResult" title="Employee Premium" icon={Users} subtitle=" " />
-          <ResultCard id="employerResult" title="Employer Premium" icon={Building2} />
-          <ResultCard id="totalResult" title="Total Premium" icon={Coins} />
+          <ResultCard id="insurableResult" title={copy.insurable} icon={ShieldCheck} />
+          <ResultCard id="employeeResult" title={copy.employee} icon={Users} subtitle=" " />
+          <ResultCard id="employerResult" title={copy.employer} icon={Building2} />
+          <ResultCard id="totalResult" title={copy.total} icon={Coins} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your EI premium capped at maximum insurable earnings. Quebec uses a separate rate not covered here. Verify against current federal figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/ca-ei-calculator";
 </script>

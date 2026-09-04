@@ -28,7 +28,23 @@ export const ENERGY_LABELS: Record<string, string> = {
   btu: "BTU",
 };
 
-export function validateEnergyInput(i: EnergyInput): string | null {
+export const ENERGY_LABELS_ES: Record<string, string> = {
+  joule: "Julio",
+  kj: "Kilojulio",
+  cal: "Caloría",
+  kcal: "Kilocaloría",
+  wh: "Vatio-hora",
+  kwh: "Kilovatio-hora",
+  btu: "BTU",
+};
+
+export function validateEnergyInput(i: EnergyInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.value === undefined || Number.isNaN(i.value)) return "Ingresa un número válido.";
+    if (!i.fromUnit || !i.toUnit) return "Selecciona ambas unidades.";
+    if (i.fromUnit === i.toUnit) return "Elige dos unidades diferentes.";
+    return null;
+  }
   if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
   if (!i.fromUnit || !i.toUnit) return "Select both units.";
   if (i.fromUnit === i.toUnit) return "Choose two different units.";
@@ -41,7 +57,14 @@ export function calculateEnergy(i: EnergyInput): EnergyResult {
   return { convertedValue };
 }
 
-export function copyEnergySummary(i: EnergyInput, r: EnergyResult): string {
+export function copyEnergySummary(i: EnergyInput, r: EnergyResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Energía
+
+${i.value} ${ENERGY_LABELS_ES[i.fromUnit]} = ${r.convertedValue} ${ENERGY_LABELS_ES[i.toUnit]}
+`.trim();
+  }
   return `
 Energy Conversion
 

@@ -5,42 +5,73 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingUp, Percent, DollarSign, Landmark } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    saleDetails: "Sale Details", proceeds: "Proceeds of Disposition ($)", costBase: "Adjusted Cost Base ($)", expenses: "Outlays & Expenses ($)",
+    taxRateGroup: "Tax Rate", marginalRate: "Marginal Tax Rate (%)",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Canada Capital Gains Tax Calculator", emptyDesc: "Estimate tax owed on a capital gain using the current inclusion rate.",
+    tip1: "Capital Gain", tip2: "Taxable Gain", tip3: "Estimated Tax",
+    capitalGain: "Capital Gain", inclusionRate: "Inclusion Rate", taxableCapitalGain: "Taxable Capital Gain", estimatedTax: "Estimated Tax Owed",
+    aboutTitle: "About this Calculator",
+    aboutText: "Estimates the tax owed on a capital gain by applying Canada's current 50% inclusion rate and your marginal tax rate to the gain from your proceeds, cost base, and expenses.",
+  },
+  es: {
+    saleDetails: "Detalles de la Venta", proceeds: "Producto de la Disposición ($)", costBase: "Base de Costo Ajustada ($)", expenses: "Gastos y Desembolsos ($)",
+    taxRateGroup: "Tasa de Impuesto", marginalRate: "Tasa de Impuesto Marginal (%)",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Ganancias de Capital de Canadá", emptyDesc: "Estima el impuesto adeudado sobre una ganancia de capital usando la tasa de inclusión actual.",
+    tip1: "Ganancia de Capital", tip2: "Ganancia Imponible", tip3: "Impuesto Estimado",
+    capitalGain: "Ganancia de Capital", inclusionRate: "Tasa de Inclusión", taxableCapitalGain: "Ganancia de Capital Imponible", estimatedTax: "Impuesto Estimado Adeudado",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Estima el impuesto adeudado sobre una ganancia de capital aplicando la tasa de inclusión actual del 50% de Canadá y tu tasa de impuesto marginal a la ganancia de tus ingresos, base de costo y gastos.",
+  },
+}[lang];
 ---
 <section class="ccg-calculator">
   <div class="ccg-layout">
     <aside class="ccg-sidebar">
       <div class="ccg-group">
-        <h3>Sale Details</h3>
-        <CalculatorField id="proceedsOfDisposition" label="Proceeds of Disposition ($)" type="number" placeholder="e.g. 150000" min="0" step="1" />
-        <CalculatorField id="adjustedCostBase" label="Adjusted Cost Base ($)" type="number" placeholder="e.g. 90000" min="0" step="1" />
-        <CalculatorField id="outlaysAndExpenses" label="Outlays & Expenses ($)" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <h3>{copy.saleDetails}</h3>
+        <CalculatorField id="proceedsOfDisposition" label={copy.proceeds} type="number" placeholder="e.g. 150000" min="0" step="1" />
+        <CalculatorField id="adjustedCostBase" label={copy.costBase} type="number" placeholder="e.g. 90000" min="0" step="1" />
+        <CalculatorField id="outlaysAndExpenses" label={copy.expenses} type="number" placeholder="e.g. 2000" min="0" step="1" />
       </div>
       <div class="ccg-group">
-        <h3>Tax Rate</h3>
-        <CalculatorField id="marginalTaxRate" label="Marginal Tax Rate (%)" type="number" placeholder="e.g. 30" min="0" step="0.1" />
+        <h3>{copy.taxRateGroup}</h3>
+        <CalculatorField id="marginalTaxRate" label={copy.marginalRate} type="number" placeholder="e.g. 30" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ccg-content">
       <div id="emptyState">
-        <EmptyState icon="📈" title="Canada Capital Gains Tax Calculator" description="Estimate tax owed on a capital gain using the current inclusion rate." tips={["Capital Gain", "Taxable Gain", "Estimated Tax"]} />
+        <EmptyState icon="📈" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="capitalGainResult" title="Capital Gain" icon={DollarSign} />
-          <ResultCard id="inclusionRateResult" title="Inclusion Rate" icon={Percent} />
-          <ResultCard id="taxableCapitalGainResult" title="Taxable Capital Gain" icon={Landmark} />
-          <ResultCard id="estimatedTaxResult" title="Estimated Tax Owed" icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="capitalGainResult" title={copy.capitalGain} icon={DollarSign} />
+          <ResultCard id="inclusionRateResult" title={copy.inclusionRate} icon={Percent} />
+          <ResultCard id="taxableCapitalGainResult" title={copy.taxableCapitalGain} icon={Landmark} />
+          <ResultCard id="estimatedTaxResult" title={copy.estimatedTax} icon={TrendingUp} accent="success" subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates the tax owed on a capital gain by applying Canada's current 50% inclusion rate and your marginal tax rate to the gain from your proceeds, cost base, and expenses.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/canada-capital-gains-calculator";
 </script>

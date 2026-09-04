@@ -18,6 +18,26 @@ const fieldIds = [
   "annualContribution", "expectedReturnRate", "inflationRate", "withdrawalRate",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { reached:"Reached", notYet:"Not Yet", notYetReached:"Not Yet Reached", beyond:"Beyond timeline", canStop:"You can stop contributing", keepGoing:"Keep contributing", summary:(r:any)=>`
+Coast FIRE Summary
+
+Coast FIRE Number: ${fmtCurrency(r.coastFireNumber)}
+Status: ${r.isCoastFireReached ? "Reached" : "Not Yet Reached"}
+Coast FIRE Age: ${r.coastFireAge ?? "Beyond timeline"}
+Projected Balance at Retirement (no more contributions): ${fmtCurrency(r.projectedBalanceAtRetirement)}
+`.trim() },
+  es: { reached:"Alcanzado", notYet:"Aún No", notYetReached:"Aún No Alcanzado", beyond:"Fuera del plazo", canStop:"Puedes dejar de aportar", keepGoing:"Sigue aportando", summary:(r:any)=>`
+Resumen Coast FIRE
+
+Número Coast FIRE: ${fmtCurrency(r.coastFireNumber)}
+Estado: ${r.isCoastFireReached ? "Alcanzado" : "Aún No Alcanzado"}
+Edad Coast FIRE: ${r.coastFireAge ?? "Fuera del plazo"}
+Saldo Proyectado en Jubilación (sin más aportes): ${fmtCurrency(r.projectedBalanceAtRetirement)}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -40,7 +60,7 @@ function calculate() {
     annualContribution, expectedReturnRate, inflationRate, withdrawalRate,
   ] = fieldIds.map(val);
 
-  const validationError = validateCoastFireInputs(currentAge, targetRetirementAge, annualExpenses, withdrawalRate);
+  const validationError = validateCoastFireInputs(currentAge, targetRetirementAge, annualExpenses, withdrawalRate, lang);
   if (validationError) { showError(validationError); return; }
 
   const result = calculateCoastFire(
@@ -49,19 +69,12 @@ function calculate() {
   );
 
   setValue("coastFireNumberResult", fmtCurrency(result.coastFireNumber));
-  setValue("statusResult", result.isCoastFireReached ? "Reached" : "Not Yet");
-  setValue("coastFireAgeResult", result.coastFireAge === null ? "Beyond timeline" : `${result.coastFireAge}`);
+  setValue("statusResult", result.isCoastFireReached ? t.reached : t.notYet);
+  setValue("coastFireAgeResult", result.coastFireAge === null ? t.beyond : `${result.coastFireAge}`);
   setValue("projectedBalanceResult", fmtCurrency(result.projectedBalanceAtRetirement));
-  setSubtitle("statusResult", result.isCoastFireReached ? "You can stop contributing" : "Keep contributing");
+  setSubtitle("statusResult", result.isCoastFireReached ? t.canStop : t.keepGoing);
 
-  lastSummary = `
-Coast FIRE Summary
-
-Coast FIRE Number: ${fmtCurrency(result.coastFireNumber)}
-Status: ${result.isCoastFireReached ? "Reached" : "Not Yet Reached"}
-Coast FIRE Age: ${result.coastFireAge ?? "Beyond timeline"}
-Projected Balance at Retirement (no more contributions): ${fmtCurrency(result.projectedBalanceAtRetirement)}
-`.trim();
+  lastSummary = t.summary(result);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

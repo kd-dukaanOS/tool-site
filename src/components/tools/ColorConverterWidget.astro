@@ -5,33 +5,46 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Palette, Hash, Droplet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { inputFormat:"Input Format", colorValue:"Color Value", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Color Converter", emptyDesc:"Enter a color to convert.", hex:"HEX", rgb:"RGB", hsl:"HSL" },
+  es: { inputFormat:"Formato de Entrada", colorValue:"Valor del Color", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Convertidor de Colores", emptyDesc:"Ingresa un color para convertir.", hex:"HEX", rgb:"RGB", hsl:"HSL" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="inputFormat" label="Input Format" type="select">
+    <CalculatorField id="inputFormat" label={copy.inputFormat} type="select">
       <option value="hex">HEX</option>
       <option value="rgb">RGB (r,g,b)</option>
     </CalculatorField>
 
-    <CalculatorField id="color" label="Color Value" type="text" placeholder="#ff0000 or 255,0,0" />
+    <CalculatorField id="color" label={copy.colorValue} type="text" placeholder="#ff0000 or 255,0,0" />
 
     <div id="colorSwatch" class="color-swatch"></div>
 
     <div id="errorBox" class="error-box" hidden></div>
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
   </div>
 
   <div class="calculator-results">
-    <EmptyState id="emptyState" icon="🎨" title="Color Converter" description="Enter a color to convert." />
+    <EmptyState id="emptyState" icon="🎨" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="hexResult" title="HEX" icon={Hash} />
-      <ResultCard id="rgbResult" title="RGB" icon={Palette} />
-      <ResultCard id="hslResult" title="HSL" icon={Droplet} />
+      <ResultCard id="hexResult" title={copy.hex} icon={Hash} />
+      <ResultCard id="rgbResult" title={copy.rgb} icon={Palette} />
+      <ResultCard id="hslResult" title={copy.hsl} icon={Droplet} />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/color-converter.ts"></script>

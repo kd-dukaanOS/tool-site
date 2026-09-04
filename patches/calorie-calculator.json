@@ -1,0 +1,84 @@
+{
+  "tool": "calorie-calculator",
+  "edits": [
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "add lang prop + copy object",
+      "find": "import { Flame, Activity, Target } from \"@lucide/astro\";\n---",
+      "replace": "import { Flame, Activity, Target } from \"@lucide/astro\";\n\ninterface Props {\n  lang?: \"en\" | \"es\";\n}\nconst { lang = \"en\" } = Astro.props as Props;\n\nconst copy = {\n  en: {\n    gender: \"Gender\", male: \"Male\", female: \"Female\",\n    age: \"Age\", height: \"Height (cm)\", weight: \"Weight (kg)\",\n    activity: \"Activity Level\",\n    sedentary: \"Sedentary (little/no exercise)\", light: \"Light (1-3 days/week)\",\n    moderate: \"Moderate (3-5 days/week)\", active: \"Active (6-7 days/week)\", veryActive: \"Very Active (physical job)\",\n    goal: \"Goal\", lose: \"Lose Weight\", maintain: \"Maintain Weight\", gain: \"Gain Weight\",\n    emptyTitle: \"Enter details to calculate calories\", emptyDesc: \"Your BMR and daily calorie targets will appear here.\",\n    bmr: \"BMR\", maintenance: \"Maintenance Calories\", target: \"Target Calories\",\n    calculate: \"Calculate\", reset: \"Reset\", copy: \"Copy\",\n  },\n  es: {\n    gender: \"Género\", male: \"Hombre\", female: \"Mujer\",\n    age: \"Edad\", height: \"Estatura (cm)\", weight: \"Peso (kg)\",\n    activity: \"Nivel de Actividad\",\n    sedentary: \"Sedentario (poco o nada de ejercicio)\", light: \"Ligero (1-3 días/semana)\",\n    moderate: \"Moderado (3-5 días/semana)\", active: \"Activo (6-7 días/semana)\", veryActive: \"Muy Activo (trabajo físico)\",\n    goal: \"Objetivo\", lose: \"Perder Peso\", maintain: \"Mantener Peso\", gain: \"Ganar Peso\",\n    emptyTitle: \"Ingresa tus datos para calcular calorías\", emptyDesc: \"Tu TMB y objetivos diarios de calorías aparecerán aquí.\",\n    bmr: \"TMB\", maintenance: \"Calorías de Mantenimiento\", target: \"Calorías Objetivo\",\n    calculate: \"Calcular\", reset: \"Restablecer\", copy: \"Copiar\",\n  },\n}[lang];\n---"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "translate gender field",
+      "find": "    <CalculatorField id=\"gender\" label=\"Gender\" type=\"select\">\n      <option value=\"male\">Male</option>\n      <option value=\"female\">Female</option>\n    </CalculatorField>",
+      "replace": "    <CalculatorField id=\"gender\" label={copy.gender} type=\"select\">\n      <option value=\"male\">{copy.male}</option>\n      <option value=\"female\">{copy.female}</option>\n    </CalculatorField>"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "translate age/height/weight fields",
+      "find": "    <CalculatorField id=\"age\" label=\"Age\" type=\"number\" placeholder=\"e.g. 28\" />\n    <CalculatorField id=\"heightCm\" label=\"Height (cm)\" type=\"number\" placeholder=\"e.g. 170\" />\n    <CalculatorField id=\"weightKg\" label=\"Weight (kg)\" type=\"number\" placeholder=\"e.g. 65\" />",
+      "replace": "    <CalculatorField id=\"age\" label={copy.age} type=\"number\" placeholder=\"e.g. 28\" />\n    <CalculatorField id=\"heightCm\" label={copy.height} type=\"number\" placeholder=\"e.g. 170\" />\n    <CalculatorField id=\"weightKg\" label={copy.weight} type=\"number\" placeholder=\"e.g. 65\" />"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "translate activity level field",
+      "find": "    <CalculatorField id=\"activityLevel\" label=\"Activity Level\" type=\"select\">\n      <option value=\"sedentary\">Sedentary (little/no exercise)</option>\n      <option value=\"light\">Light (1-3 days/week)</option>\n      <option value=\"moderate\" selected>Moderate (3-5 days/week)</option>\n      <option value=\"active\">Active (6-7 days/week)</option>\n      <option value=\"veryActive\">Very Active (physical job)</option>\n    </CalculatorField>",
+      "replace": "    <CalculatorField id=\"activityLevel\" label={copy.activity} type=\"select\">\n      <option value=\"sedentary\">{copy.sedentary}</option>\n      <option value=\"light\">{copy.light}</option>\n      <option value=\"moderate\" selected>{copy.moderate}</option>\n      <option value=\"active\">{copy.active}</option>\n      <option value=\"veryActive\">{copy.veryActive}</option>\n    </CalculatorField>"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "translate goal field",
+      "find": "    <CalculatorField id=\"goal\" label=\"Goal\" type=\"select\">\n      <option value=\"lose\">Lose Weight</option>\n      <option value=\"maintain\" selected>Maintain Weight</option>\n      <option value=\"gain\">Gain Weight</option>\n    </CalculatorField>",
+      "replace": "    <CalculatorField id=\"goal\" label={copy.goal} type=\"select\">\n      <option value=\"lose\">{copy.lose}</option>\n      <option value=\"maintain\" selected>{copy.maintain}</option>\n      <option value=\"gain\">{copy.gain}</option>\n    </CalculatorField>"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "ActionButtons text props",
+      "find": "    <ActionButtons\n      calculateId=\"calculateBtn\"\n      resetId=\"resetBtn\"\n      copyId=\"copyBtn\"\n      showDownload={false}\n      showShare={false}\n    />",
+      "replace": "    <ActionButtons\n      calculateId=\"calculateBtn\"\n      resetId=\"resetBtn\"\n      copyId=\"copyBtn\"\n      showDownload={false}\n      showShare={false}\n      calculateText={copy.calculate}\n      resetText={copy.reset}\n      copyText={copy.copy}\n    />"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "translate EmptyState + ResultCards",
+      "find": "    <EmptyState\n      id=\"emptyState\"\n      title=\"Enter details to calculate calories\"\n      description=\"Your BMR and daily calorie targets will appear here.\"\n    />\n\n    <ResultsGrid id=\"resultsContainer\" hidden>\n      <ResultCard id=\"bmrResult\" title=\"BMR\" icon={Flame} accent=\"neutral\" />\n      <ResultCard id=\"maintenanceResult\" title=\"Maintenance Calories\" icon={Activity} accent=\"primary\" size=\"lg\" />\n      <ResultCard id=\"targetResult\" title=\"Target Calories\" icon={Target} accent=\"success\" />\n    </ResultsGrid>",
+      "replace": "    <EmptyState\n      id=\"emptyState\"\n      title={copy.emptyTitle}\n      description={copy.emptyDesc}\n    />\n\n    <ResultsGrid id=\"resultsContainer\" hidden>\n      <ResultCard id=\"bmrResult\" title={copy.bmr} icon={Flame} accent=\"neutral\" />\n      <ResultCard id=\"maintenanceResult\" title={copy.maintenance} icon={Activity} accent=\"primary\" size=\"lg\" />\n      <ResultCard id=\"targetResult\" title={copy.target} icon={Target} accent=\"success\" />\n    </ResultsGrid>"
+    },
+    {
+      "file": "src/components/tools/CalorieCalculatorWidget.astro",
+      "label": "wire calcLang + script tag",
+      "find": "<script src=\"../../scripts/calorie-calculator.ts\"></script>",
+      "replace": "<script define:vars={{ calcLang: lang }}>\n  window.calcLang = calcLang;\n</script>\n<script src=\"../../scripts/calorie-calculator.ts\"></script>"
+    },
+    {
+      "file": "src/utils/calorie.ts",
+      "label": "add ES lookup maps + lang param to validate",
+      "find": "export function validateCalorieInput(i: CalorieInput): string | null {\n  if (i.age <= 0 || i.age > 120) return \"Enter a realistic age.\";\n  if (i.heightCm <= 0 || i.heightCm > 250) return \"Enter a realistic height.\";\n  if (i.weightKg <= 0 || i.weightKg > 300) return \"Enter a realistic weight.\";\n  return null;\n}",
+      "replace": "const GENDER_ES: Record<CalorieInput[\"gender\"], string> = { male: \"Hombre\", female: \"Mujer\" };\nconst ACTIVITY_ES: Record<ActivityLevel, string> = {\n  sedentary: \"Sedentario\", light: \"Ligero\", moderate: \"Moderado\", active: \"Activo\", veryActive: \"Muy Activo\",\n};\nconst GOAL_ES: Record<Goal, string> = { lose: \"Perder Peso\", maintain: \"Mantener Peso\", gain: \"Ganar Peso\" };\nconst GOAL_SUBTITLE_ES: Record<Goal, string> = { lose: \"para perder peso\", maintain: \"para mantener peso\", gain: \"para ganar peso\" };\n\nexport function validateCalorieInput(i: CalorieInput, lang: \"en\" | \"es\" = \"en\"): string | null {\n  if (lang === \"es\") {\n    if (i.age <= 0 || i.age > 120) return \"Ingresa una edad realista.\";\n    if (i.heightCm <= 0 || i.heightCm > 250) return \"Ingresa una estatura realista.\";\n    if (i.weightKg <= 0 || i.weightKg > 300) return \"Ingresa un peso realista.\";\n    return null;\n  }\n  if (i.age <= 0 || i.age > 120) return \"Enter a realistic age.\";\n  if (i.heightCm <= 0 || i.heightCm > 250) return \"Enter a realistic height.\";\n  if (i.weightKg <= 0 || i.weightKg > 300) return \"Enter a realistic weight.\";\n  return null;\n}"
+    },
+    {
+      "file": "src/utils/calorie.ts",
+      "label": "translate copyCalorieSummary",
+      "find": "export function copyCalorieSummary(i: CalorieInput, r: CalorieResult): string {\n  return `\nCalorie Calculation Summary\n\nGender: ${i.gender}\nAge: ${i.age}\nHeight: ${i.heightCm} cm\nWeight: ${i.weightKg} kg\nActivity Level: ${i.activityLevel}\nGoal: ${i.goal}\n\nBMR: ${r.bmr} cal/day\nMaintenance Calories: ${r.maintenanceCalories} cal/day\nTarget Calories: ${r.targetCalories} cal/day\n`.trim();\n}",
+      "replace": "export function copyCalorieSummary(i: CalorieInput, r: CalorieResult, lang: \"en\" | \"es\" = \"en\"): string {\n  if (lang === \"es\") {\n    return `\nResumen del Cálculo de Calorías\n\nGénero: ${GENDER_ES[i.gender]}\nEdad: ${i.age}\nEstatura: ${i.heightCm} cm\nPeso: ${i.weightKg} kg\nNivel de Actividad: ${ACTIVITY_ES[i.activityLevel]}\nObjetivo: ${GOAL_ES[i.goal]}\n\nTMB: ${r.bmr} cal/día\nCalorías de Mantenimiento: ${r.maintenanceCalories} cal/día\nCalorías Objetivo: ${r.targetCalories} cal/día\n`.trim();\n  }\n  return `\nCalorie Calculation Summary\n\nGender: ${i.gender}\nAge: ${i.age}\nHeight: ${i.heightCm} cm\nWeight: ${i.weightKg} kg\nActivity Level: ${i.activityLevel}\nGoal: ${i.goal}\n\nBMR: ${r.bmr} cal/day\nMaintenance Calories: ${r.maintenanceCalories} cal/day\nTarget Calories: ${r.targetCalories} cal/day\n`.trim();\n}"
+    },
+    {
+      "file": "src/scripts/calorie-calculator.ts",
+      "label": "add lang + t object",
+      "find": "const errorBox = document.getElementById(\"errorBox\") as HTMLElement;\nconst emptyState = document.getElementById(\"emptyState\") as HTMLElement;\nconst resultsContainer = document.getElementById(\"resultsContainer\") as HTMLElement;\n\nlet lastInput: CalorieInput | null = null;",
+      "replace": "const errorBox = document.getElementById(\"errorBox\") as HTMLElement;\nconst emptyState = document.getElementById(\"emptyState\") as HTMLElement;\nconst resultsContainer = document.getElementById(\"resultsContainer\") as HTMLElement;\n\nconst lang = (window as any).calcLang === \"es\" ? \"es\" : \"en\";\nconst t = {\n  en: { fillAll: \"Please fill all required fields.\", rest: \"at complete rest\", perDay: \"per day\", toGoal: (g: string) => `to ${g} weight` },\n  es: { fillAll: \"Por favor completa todos los campos requeridos.\", rest: \"en reposo total\", perDay: \"por día\", toGoal: (g: string) => ({ lose: \"para perder peso\", maintain: \"para mantener peso\", gain: \"para ganar peso\" } as Record<string, string>)[g] },\n}[lang];\n\nlet lastInput: CalorieInput | null = null;"
+    },
+    {
+      "file": "src/scripts/calorie-calculator.ts",
+      "label": "translate validation + subtitles + copy call",
+      "find": "  if (!input.age || !input.heightCm || !input.weightKg) {\n    showError(\"Please fill all required fields.\");\n    return;\n  }\n\n  const err = validateCalorieInput(input);\n  if (err) {\n    showError(err);\n    return;\n  }\n\n  const result = calculateCalories(input);\n\n  setValue(\"bmrResult\", `${result.bmr} cal`);\n  setValue(\"maintenanceResult\", `${result.maintenanceCalories} cal`);\n  setValue(\"targetResult\", `${result.targetCalories} cal`);\n  setSubtitle(\"bmrResult\", \"at complete rest\");\n  setSubtitle(\"maintenanceResult\", \"per day\");\n  setSubtitle(\"targetResult\", `to ${input.goal} weight`);",
+      "replace": "  if (!input.age || !input.heightCm || !input.weightKg) {\n    showError(t.fillAll);\n    return;\n  }\n\n  const err = validateCalorieInput(input, lang);\n  if (err) {\n    showError(err);\n    return;\n  }\n\n  const result = calculateCalories(input);\n\n  setValue(\"bmrResult\", `${result.bmr} cal`);\n  setValue(\"maintenanceResult\", `${result.maintenanceCalories} cal`);\n  setValue(\"targetResult\", `${result.targetCalories} cal`);\n  setSubtitle(\"bmrResult\", t.rest);\n  setSubtitle(\"maintenanceResult\", t.perDay);\n  setSubtitle(\"targetResult\", t.toGoal(input.goal));"
+    },
+    {
+      "file": "src/scripts/calorie-calculator.ts",
+      "label": "pass lang to copy summary",
+      "find": "  const result = calculateCalories(lastInput);\n  copyToClipboard(copyCalorieSummary(lastInput, result));",
+      "replace": "  const result = calculateCalories(lastInput);\n  copyToClipboard(copyCalorieSummary(lastInput, result, lang));"
+    }
+  ],
+  "newFiles": []
+}

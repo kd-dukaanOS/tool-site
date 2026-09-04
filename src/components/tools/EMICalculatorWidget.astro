@@ -9,6 +9,13 @@ import ScheduleTable from "../calculator/ScheduleTable.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { loanAmount:"Loan Amount", loanAmountHelp:"Total loan / principal amount.", rate:"Interest Rate (% per year)", rateHelp:"Annual interest rate.", tenure:"Loan Tenure (years)", tenureHelp:"Loan repayment period.", yrs:"Yrs", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Loan EMI Calculator", emptyDesc:"Calculate your monthly EMI, total interest and the full year-wise repayment schedule.", tip1:"Monthly EMI Breakdown", tip2:"Principal vs Interest Chart", tip3:"Year-wise Amortization Schedule", tip4:"Smart Payoff Insight", emi:"Monthly EMI", interest:"Total Interest", total:"Total Payment", percent:"Interest % of Payment", chartTitle:"Principal vs Interest", scheduleHeaders:["Year","Principal Paid","Interest Paid","Remaining Balance"], scheduleCaption:"Year-wise Amortization Schedule", aboutTitle:"About this Calculator", aboutText:"EMI (Equated Monthly Installment) is the fixed amount you repay every month, covering both principal and interest, until the loan is fully paid off.", formulaTitle:"Formula" },
+  es: { loanAmount:"Monto del Préstamo", loanAmountHelp:"Monto total del préstamo / capital.", rate:"Tasa de Interés (% anual)", rateHelp:"Tasa de interés anual.", tenure:"Plazo del Préstamo (años)", tenureHelp:"Período de reembolso del préstamo.", yrs:"Años", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Cuota de Préstamo (EMI)", emptyDesc:"Calcula tu cuota mensual, interés total y el cronograma de pago completo año por año.", tip1:"Desglose de Cuota Mensual", tip2:"Gráfico Capital vs Interés", tip3:"Cronograma de Amortización Anual", tip4:"Análisis Inteligente de Pago", emi:"Cuota Mensual", interest:"Interés Total", total:"Pago Total", percent:"Interés % del Pago", chartTitle:"Capital vs Interés", scheduleHeaders:["Año","Capital Pagado","Interés Pagado","Saldo Restante"], scheduleCaption:"Cronograma de Amortización Anual", aboutTitle:"Acerca de esta Calculadora", aboutText:"La Cuota Mensual Fija (EMI) es el monto fijo que pagas cada mes, cubriendo capital e interés, hasta que el préstamo esté completamente pagado.", formulaTitle:"Fórmula" },
+}[lang];
 ---
 
 <section class="emi-calculator">
@@ -23,40 +30,40 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
       <CalculatorField
         id="principal"
-        label="Loan Amount"
+        label={copy.loanAmount}
         type="number"
         placeholder="e.g. 2500000"
         required={true}
         min="1"
-        helpText="Total loan / principal amount."
+        helpText={copy.loanAmountHelp}
       />
 
       <CalculatorField
         id="rate"
-        label="Interest Rate (% per year)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 8.5"
         required={true}
         min="0"
         step="0.01"
-        helpText="Annual interest rate."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorField
         id="tenure"
-        label="Loan Tenure (years)"
+        label={copy.tenure}
         type="number"
         placeholder="e.g. 20"
         required={true}
         min="1"
-        helpText="Loan repayment period."
+        helpText={copy.tenureHelp}
       />
 
       <div class="scenario-row">
-        <button type="button" class="scenario-btn" data-tenure="10">10 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="15">15 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="20">20 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="25">25 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="10">10 {copy.yrs}</button>
+        <button type="button" class="scenario-btn" data-tenure="15">15 {copy.yrs}</button>
+        <button type="button" class="scenario-btn" data-tenure="20">20 {copy.yrs}</button>
+        <button type="button" class="scenario-btn" data-tenure="25">25 {copy.yrs}</button>
       </div>
 
       <CalculatorActions
@@ -64,6 +71,9 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -82,14 +92,9 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
         <EmptyState
           icon="🏦"
-          title="Loan EMI Calculator"
-          description="Calculate your monthly EMI, total interest and the full year-wise repayment schedule."
-          tips={[
-            "Monthly EMI Breakdown",
-            "Principal vs Interest Chart",
-            "Year-wise Amortization Schedule",
-            "Smart Payoff Insight"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
 
       </div>
@@ -101,10 +106,10 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
         <ResultsGrid columns={4}>
 
-          <ResultCard id="emiResult" title="Monthly EMI" icon={Wallet} accent="primary" />
-          <ResultCard id="interestResult" title="Total Interest" icon={Percent} accent="warning" />
-          <ResultCard id="totalResult" title="Total Payment" icon={Receipt} accent="neutral" />
-          <ResultCard id="percentResult" title="Interest % of Payment" icon={PiggyBank} accent="danger" />
+          <ResultCard id="emiResult" title={copy.emi} icon={Wallet} accent="primary" />
+          <ResultCard id="interestResult" title={copy.interest} icon={Percent} accent="warning" />
+          <ResultCard id="totalResult" title={copy.total} icon={Receipt} accent="neutral" />
+          <ResultCard id="percentResult" title={copy.percent} icon={PiggyBank} accent="danger" />
 
         </ResultsGrid>
 
@@ -116,26 +121,24 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
         <ChartCard
           id="emiPieChart"
-          title="Principal vs Interest"
+          title={copy.chartTitle}
         />
 
         <ScheduleTable
           id="scheduleBody"
-          headers={["Year", "Principal Paid", "Interest Paid", "Remaining Balance"]}
-          caption="Year-wise Amortization Schedule"
+          headers={copy.scheduleHeaders}
+          caption={copy.scheduleCaption}
         />
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            EMI (Equated Monthly Installment) is the fixed amount you repay
-            every month, covering both principal and interest, until the
-            loan is fully paid off.
+            {copy.aboutText}
           </p>
 
-          <h3>Formula</h3>
+          <h3>{copy.formulaTitle}</h3>
 
           <p>
             EMI = [P &times; R &times; (1+R)<sup>N</sup>] &divide; [(1+R)<sup>N</sup> &minus; 1]
@@ -153,6 +156,9 @@ import { Wallet, Percent, Receipt, PiggyBank } from "@lucide/astro";
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/emi-calculator";
 </script>

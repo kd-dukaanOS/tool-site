@@ -5,35 +5,45 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { CalendarClock, Percent, Wallet, PiggyBank } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { balance:"Current Card Balance", balanceHelp:"Your current outstanding balance.", apr:"APR (%)", aprHelp:"Your card's annual percentage rate.", monthlyPayment:"Monthly Payment", monthlyPaymentHelp:"The fixed amount you plan to pay each month.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Credit Card Payoff Calculator", emptyDesc:"See how long it takes to pay off your card and how much you'd save vs paying only the minimum.", tip1:"Payoff Time", tip2:"Total Interest", tip3:"Interest Saved", payoffTime:"Payoff Time", totalInterest:"Total Interest", totalPaid:"Total Paid", interestSaved:"Interest Saved", aboutTitle:"About this Calculator", aboutText:"Runs your real payoff numbers month by month, applying your APR to the remaining balance each month, and compares your chosen fixed payment against paying only the card's minimum payment." },
+  es: { balance:"Saldo Actual de la Tarjeta", balanceHelp:"Tu saldo pendiente actual.", apr:"TAE (%)", aprHelp:"La tasa de porcentaje anual de tu tarjeta.", monthlyPayment:"Pago Mensual", monthlyPaymentHelp:"El monto fijo que planeas pagar cada mes.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Pago de Tarjeta de Crédito", emptyDesc:"Descubre cuánto tardarás en pagar tu tarjeta y cuánto ahorrarías frente a pagar solo el mínimo.", tip1:"Tiempo de Pago", tip2:"Interés Total", tip3:"Interés Ahorrado", payoffTime:"Tiempo de Pago", totalInterest:"Interés Total", totalPaid:"Total Pagado", interestSaved:"Interés Ahorrado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tus números de pago reales mes a mes, aplicando tu TAE al saldo restante cada mes, y compara tu pago fijo elegido contra pagar solo el mínimo de la tarjeta." },
+}[lang];
 ---
 <section class="ccp-calculator">
   <div class="ccp-layout">
     <aside class="ccp-sidebar">
-      <CalculatorField id="balance" label="Current Card Balance" type="number" placeholder="e.g. 5000" required={true} min="0" step="1" helpText="Your current outstanding balance." />
-      <CalculatorField id="apr" label="APR (%)" type="number" placeholder="e.g. 24" required={true} min="0" step="0.01" helpText="Your card's annual percentage rate." />
-      <CalculatorField id="monthlyPayment" label="Monthly Payment" type="number" placeholder="e.g. 200" required={true} min="0" step="1" helpText="The fixed amount you plan to pay each month." />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="balance" label={copy.balance} type="number" placeholder="e.g. 5000" required={true} min="0" step="1" helpText={copy.balanceHelp} />
+      <CalculatorField id="apr" label={copy.apr} type="number" placeholder="e.g. 24" required={true} min="0" step="0.01" helpText={copy.aprHelp} />
+      <CalculatorField id="monthlyPayment" label={copy.monthlyPayment} type="number" placeholder="e.g. 200" required={true} min="0" step="1" helpText={copy.monthlyPaymentHelp} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ccp-content">
       <div id="emptyState">
-        <EmptyState icon="💳" title="Credit Card Payoff Calculator" description="See how long it takes to pay off your card and how much you'd save vs paying only the minimum." tips={["Payoff Time", "Total Interest", "Interest Saved"]} />
+        <EmptyState icon="💳" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={CalendarClock} accent="success" />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={Percent} />
-          <ResultCard id="totalPaidResult" title="Total Paid" icon={Wallet} />
-          <ResultCard id="interestSavedResult" title="Interest Saved" icon={PiggyBank} subtitle=" " />
+          <ResultCard id="payoffTimeResult" title={copy.payoffTime} icon={CalendarClock} accent="success" />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={Percent} />
+          <ResultCard id="totalPaidResult" title={copy.totalPaid} icon={Wallet} />
+          <ResultCard id="interestSavedResult" title={copy.interestSaved} icon={PiggyBank} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Runs your real payoff numbers month by month, applying your APR to the remaining balance each month, and compares your chosen fixed payment against paying only the card's minimum payment.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/credit-card-payoff-calculator";
 </script>

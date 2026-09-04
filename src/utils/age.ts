@@ -37,6 +37,16 @@ const WEEK_DAYS = [
   "Saturday",
 ];
 
+const WEEK_DAYS_ES = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+];
+
 const BIRTHSTONES = [
   "Garnet",
   "Amethyst",
@@ -50,6 +60,21 @@ const BIRTHSTONES = [
   "Opal",
   "Topaz",
   "Turquoise",
+];
+
+const BIRTHSTONES_ES = [
+  "Granate",
+  "Amatista",
+  "Aguamarina",
+  "Diamante",
+  "Esmeralda",
+  "Perla",
+  "Rubí",
+  "Peridoto",
+  "Zafiro",
+  "Ópalo",
+  "Topacio",
+  "Turquesa",
 ];
 
 const CHINESE = [
@@ -67,6 +92,21 @@ const CHINESE = [
   "Pig",
 ];
 
+const CHINESE_ES = [
+  "Rata",
+  "Buey",
+  "Tigre",
+  "Conejo",
+  "Dragón",
+  "Serpiente",
+  "Caballo",
+  "Cabra",
+  "Mono",
+  "Gallo",
+  "Perro",
+  "Cerdo",
+];
+
 export function isLeapYear(year: number): boolean {
   return (
     (year % 4 === 0 && year % 100 !== 0) ||
@@ -74,62 +114,71 @@ export function isLeapYear(year: number): boolean {
   );
 }
 
-export function weekdayBorn(date: Date): string {
-  return WEEK_DAYS[date.getDay()];
+export function weekdayBorn(date: Date, lang: "en" | "es" = "en"): string {
+  return (lang === "es" ? WEEK_DAYS_ES : WEEK_DAYS)[date.getDay()];
 }
 
-export function birthstone(date: Date): string {
-  return BIRTHSTONES[date.getMonth()];
+export function birthstone(date: Date, lang: "en" | "es" = "en"): string {
+  return (lang === "es" ? BIRTHSTONES_ES : BIRTHSTONES)[date.getMonth()];
 }
 
-export function chineseZodiac(date: Date): string {
-  return CHINESE[(date.getFullYear() - 1900) % 12];
+export function chineseZodiac(date: Date, lang: "en" | "es" = "en"): string {
+  return (lang === "es" ? CHINESE_ES : CHINESE)[(date.getFullYear() - 1900) % 12];
 }
 
-export function westernZodiac(date: Date): string {
+const ZODIAC_ES: Record<string, string> = {
+  Aquarius: "Acuario", Pisces: "Piscis", Aries: "Aries", Taurus: "Tauro",
+  Gemini: "Géminis", Cancer: "Cáncer", Leo: "Leo", Virgo: "Virgo",
+  Libra: "Libra", Scorpio: "Escorpio", Sagittarius: "Sagitario", Capricorn: "Capricornio",
+};
+
+export function westernZodiac(date: Date, lang: "en" | "es" = "en"): string {
 
   const day = date.getDate();
   const month = date.getMonth() + 1;
 
+  let sign = "Capricorn";
+
   if ((month === 1 && day >= 20) || (month === 2 && day <= 18))
-    return "Aquarius";
+    sign = "Aquarius";
+  else if ((month === 2 && day >= 19) || (month === 3 && day <= 20))
+    sign = "Pisces";
+  else if ((month === 3 && day >= 21) || (month === 4 && day <= 19))
+    sign = "Aries";
+  else if ((month === 4 && day >= 20) || (month === 5 && day <= 20))
+    sign = "Taurus";
+  else if ((month === 5 && day >= 21) || (month === 6 && day <= 20))
+    sign = "Gemini";
+  else if ((month === 6 && day >= 21) || (month === 7 && day <= 22))
+    sign = "Cancer";
+  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22))
+    sign = "Leo";
+  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22))
+    sign = "Virgo";
+  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22))
+    sign = "Libra";
+  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21))
+    sign = "Scorpio";
+  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21))
+    sign = "Sagittarius";
 
-  if ((month === 2 && day >= 19) || (month === 3 && day <= 20))
-    return "Pisces";
-
-  if ((month === 3 && day >= 21) || (month === 4 && day <= 19))
-    return "Aries";
-
-  if ((month === 4 && day >= 20) || (month === 5 && day <= 20))
-    return "Taurus";
-
-  if ((month === 5 && day >= 21) || (month === 6 && day <= 20))
-    return "Gemini";
-
-  if ((month === 6 && day >= 21) || (month === 7 && day <= 22))
-    return "Cancer";
-
-  if ((month === 7 && day >= 23) || (month === 8 && day <= 22))
-    return "Leo";
-
-  if ((month === 8 && day >= 23) || (month === 9 && day <= 22))
-    return "Virgo";
-
-  if ((month === 9 && day >= 23) || (month === 10 && day <= 22))
-    return "Libra";
-
-  if ((month === 10 && day >= 23) || (month === 11 && day <= 21))
-    return "Scorpio";
-
-  if ((month === 11 && day >= 22) || (month === 12 && day <= 21))
-    return "Sagittarius";
-
-  return "Capricorn";
+  return lang === "es" ? ZODIAC_ES[sign] : sign;
 }
 
-export function generation(date: Date): string {
+export function generation(date: Date, lang: "en" | "es" = "en"): string {
 
   const year = date.getFullYear();
+
+  if (lang === "es") {
+    if (year >= 2025) return "Generación Beta";
+    if (year >= 2013) return "Generación Alfa";
+    if (year >= 1997) return "Generación Z";
+    if (year >= 1981) return "Millennial";
+    if (year >= 1965) return "Generación X";
+    if (year >= 1946) return "Baby Boomer";
+    if (year >= 1928) return "Generación Silenciosa";
+    return "Generación Grandiosa";
+  }
 
   if (year >= 2025) return "Generation Beta";
   if (year >= 2013) return "Generation Alpha";
@@ -247,19 +296,32 @@ export function nextBirthday(
 }
 
 export function validateBirthDate(
-  date: Date
+  date: Date,
+  lang: "en" | "es" = "en"
 ): string | null {
 
+  const msg = lang === "es"
+    ? {
+        invalid: "Por favor selecciona una fecha válida.",
+        future: "La fecha de nacimiento no puede ser futura.",
+        year: "Por favor ingresa un año de nacimiento realista.",
+      }
+    : {
+        invalid: "Please select a valid date.",
+        future: "Birth date cannot be in the future.",
+        year: "Please enter a realistic birth year.",
+      };
+
   if (Number.isNaN(date.getTime())) {
-    return "Please select a valid date.";
+    return msg.invalid;
   }
 
   if (date > new Date()) {
-    return "Birth date cannot be in the future.";
+    return msg.future;
   }
 
   if (date.getFullYear() < 1900) {
-    return "Please enter a realistic birth year.";
+    return msg.year;
   }
 
   return null;
@@ -281,11 +343,12 @@ export function parseDateInput(
 }
 
 export function formatDuration(
-  totalDays: number
+  totalDays: number,
+  lang: "en" | "es" = "en"
 ): string {
 
   if (totalDays < 1) {
-    return "Today";
+    return lang === "es" ? "Hoy" : "Today";
   }
 
   const years = Math.floor(totalDays / 365);
@@ -300,6 +363,13 @@ export function formatDuration(
     months * 30;
 
   const parts: string[] = [];
+
+  if (lang === "es") {
+    if (years) parts.push(`${years} año${years !== 1 ? "s" : ""}`);
+    if (months) parts.push(`${months} mes${months !== 1 ? "es" : ""}`);
+    if (days) parts.push(`${days} día${days !== 1 ? "s" : ""}`);
+    return parts.join(", ");
+  }
 
   if (years)
     parts.push(
@@ -320,18 +390,24 @@ export function formatDuration(
 }
 
 export function formatAgeSummary(
-  age: ExactAge
+  age: ExactAge,
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `${age.years} años, ${age.months} meses y ${age.days} días`;
+  }
 
   return `${age.years} years, ${age.months} months and ${age.days} days`;
 }
 
 export function formatBirthday(
-  date: Date
+  date: Date,
+  lang: "en" | "es" = "en"
 ): string {
 
   return date.toLocaleDateString(
-    "en-US",
+    lang === "es" ? "es-ES" : "en-US",
     {
       weekday: "long",
       month: "long",
@@ -343,8 +419,56 @@ export function formatBirthday(
 
 export function copyAgeSummary(
   birthDate: Date,
-  age: ExactAge
+  age: ExactAge,
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Edad
+
+Fecha de Nacimiento:
+${birthDate.toLocaleDateString("es-ES")}
+
+Edad:
+${age.years} Años
+${age.months} Meses
+${age.days} Días
+
+Total de Meses:
+${age.totalMonths}
+
+Total de Semanas:
+${age.totalWeeks}
+
+Total de Días:
+${age.totalDays}
+
+Total de Horas:
+${age.totalHours}
+
+Total de Minutos:
+${age.totalMinutes}
+
+Total de Segundos:
+${age.totalSeconds}
+
+Zodiaco Occidental:
+${westernZodiac(birthDate, "es")}
+
+Zodiaco Chino:
+${chineseZodiac(birthDate, "es")}
+
+Piedra del Mes:
+${birthstone(birthDate, "es")}
+
+Generación:
+${generation(birthDate, "es")}
+
+Día de Nacimiento:
+${weekdayBorn(birthDate, "es")}
+`.trim();
+  }
 
   return `
 Age Summary

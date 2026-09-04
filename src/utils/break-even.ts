@@ -11,7 +11,15 @@ export interface BreakEvenResult {
   contributionMarginRatio: number;
 }
 
-export function validateBreakEvenInput(i: BreakEvenInput): string | null {
+export function validateBreakEvenInput(i: BreakEvenInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.fixedCosts <= 0) return "Ingresa costos fijos válidos.";
+    if (i.variableCostPerUnit < 0) return "Ingresa un costo variable válido.";
+    if (i.sellingPricePerUnit <= 0) return "Ingresa un precio de venta válido.";
+    if (i.sellingPricePerUnit <= i.variableCostPerUnit)
+      return "El precio de venta debe ser mayor que el costo variable.";
+    return null;
+  }
   if (i.fixedCosts <= 0) return "Enter valid fixed costs.";
   if (i.variableCostPerUnit < 0) return "Enter a valid variable cost.";
   if (i.sellingPricePerUnit <= 0) return "Enter a valid selling price.";
@@ -37,7 +45,21 @@ export function calculateBreakEven(i: BreakEvenInput): BreakEvenResult {
 
 import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyBreakEvenSummary(i: BreakEvenInput, r: BreakEvenResult, currency: CurrencyCode = "INR"): string {
+export function copyBreakEvenSummary(i: BreakEvenInput, r: BreakEvenResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Análisis de Punto de Equilibrio
+
+Costos Fijos: ${formatCurrency(i.fixedCosts, currency)}
+Costo Variable/Unidad: ${formatCurrency(i.variableCostPerUnit, currency)}
+Precio de Venta/Unidad: ${formatCurrency(i.sellingPricePerUnit, currency)}
+
+Unidades de Equilibrio: ${r.breakEvenUnits}
+Ingresos de Equilibrio: ${formatCurrency(r.breakEvenRevenue, currency)}
+Margen de Contribución: ${formatCurrency(r.contributionMargin, currency)}/unidad
+Ratio de Margen de Contribución: ${r.contributionMarginRatio}%
+`.trim();
+  }
   return `
 Break Even Analysis
 

@@ -17,6 +17,30 @@ const fieldIds = [
   "customersStartOfPeriod", "customersLost", "mrrStartOfPeriod", "mrrChurned", "mrrExpansion", "projectionMonths",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { afterMonths:(m:number)=>`After ${m} months`, negChurn:"Negative churn (net expansion)", summary:(r:any,pm:number)=>`
+Churn Rate Summary
+
+Customer Churn Rate: ${fmtPercent(r.customerChurnRate)}
+Revenue Churn Rate: ${fmtPercent(r.revenueChurnRate)}
+Net Revenue Churn Rate: ${fmtPercent(r.netRevenueChurnRate)}
+Customers Lost: ${r.customersLost}
+Revenue Churned: ${fmtCurrency(r.revenueChurned)}
+Projected Customers Remaining (${pm} months): ${Math.round(r.projectedCustomersRemaining).toLocaleString()}
+`.trim() },
+  es: { afterMonths:(m:number)=>`Después de ${m} meses`, negChurn:"Abandono negativo (expansión neta)", summary:(r:any,pm:number)=>`
+Resumen de Tasa de Abandono
+
+Tasa de Abandono de Clientes: ${fmtPercent(r.customerChurnRate)}
+Tasa de Abandono de Ingresos: ${fmtPercent(r.revenueChurnRate)}
+Tasa Neta de Abandono de Ingresos: ${fmtPercent(r.netRevenueChurnRate)}
+Clientes Perdidos: ${r.customersLost}
+Ingresos Perdidos: ${fmtCurrency(r.revenueChurned)}
+Clientes Proyectados Restantes (${pm} meses): ${Math.round(r.projectedCustomersRemaining).toLocaleString()}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -40,7 +64,7 @@ function calculate() {
 
   const [customersStartOfPeriod, customersLost, mrrStartOfPeriod, mrrChurned, mrrExpansion, projectionMonths] = fieldIds.map(val);
 
-  const validationError = validateChurnRateInputs(customersStartOfPeriod, mrrStartOfPeriod);
+  const validationError = validateChurnRateInputs(customersStartOfPeriod, mrrStartOfPeriod, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -52,19 +76,10 @@ function calculate() {
   setValue("revenueChurnResult", fmtPercent(result.revenueChurnRate));
   setValue("netRevenueChurnResult", fmtPercent(result.netRevenueChurnRate));
   setValue("projectedCustomersResult", Math.round(result.projectedCustomersRemaining).toLocaleString());
-  setSubtitle("projectedCustomersResult", `After ${projectionMonths || 12} months`);
-  setSubtitle("netRevenueChurnResult", result.netRevenueChurned <= 0 ? "Negative churn (net expansion)" : " ");
+  setSubtitle("projectedCustomersResult", t.afterMonths(projectionMonths || 12));
+  setSubtitle("netRevenueChurnResult", result.netRevenueChurned <= 0 ? t.negChurn : " ");
 
-  lastSummary = `
-Churn Rate Summary
-
-Customer Churn Rate: ${fmtPercent(result.customerChurnRate)}
-Revenue Churn Rate: ${fmtPercent(result.revenueChurnRate)}
-Net Revenue Churn Rate: ${fmtPercent(result.netRevenueChurnRate)}
-Customers Lost: ${result.customersLost}
-Revenue Churned: ${fmtCurrency(result.revenueChurned)}
-Projected Customers Remaining (${projectionMonths || 12} months): ${Math.round(result.projectedCustomersRemaining).toLocaleString()}
-`.trim();
+  lastSummary = t.summary(result, projectionMonths || 12);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

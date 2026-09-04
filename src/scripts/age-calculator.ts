@@ -24,6 +24,11 @@ const copyBtn = document.getElementById("copyBtn");
 const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { needDob: "Please select your date of birth.", days: "days" },
+  es: { needDob: "Por favor selecciona tu fecha de nacimiento.", days: "días" },
+}[lang];
 
 let lastBirthDate: Date | null = null;
 let lastAge: ReturnType<typeof calculateExactAge> | null = null;
@@ -43,12 +48,12 @@ function calculate() {
 
   const birthDate = parseDateInput(birthDateInput.value);
 
-  if (!birthDate) {
-    showError("Please select your date of birth.");
+ if (!birthDate) {
+    showError(t.needDob);
     return;
   }
 
-  const validationError = validateBirthDate(birthDate);
+  const validationError = validateBirthDate(birthDate, lang);
 
   if (validationError) {
     showError(validationError);
@@ -72,14 +77,14 @@ function calculate() {
   setValue("minutesResult", age.totalMinutes);
   setValue("secondsResult", age.totalSeconds);
 
-  setValue("birthdayResult", `${birthday.daysRemaining} days`);
-  setSubtitle("birthdayResult", formatBirthday(birthday.nextBirthday));
+  setValue("birthdayResult", `${birthday.daysRemaining} ${t.days}`);
+  setSubtitle("birthdayResult", formatBirthday(birthday.nextBirthday, lang));
 
-  setValue("weekdayResult", weekdayBorn(birthDate));
-  setValue("zodiacResult", westernZodiac(birthDate));
-  setValue("chineseResult", chineseZodiac(birthDate));
-  setValue("birthstoneResult", birthstone(birthDate));
-  setValue("generationResult", generation(birthDate));
+    setValue("weekdayResult", weekdayBorn(birthDate, lang));
+  setValue("zodiacResult", westernZodiac(birthDate, lang));
+  setValue("chineseResult", chineseZodiac(birthDate, lang));
+  setValue("birthstoneResult", birthstone(birthDate, lang));
+  setValue("generationResult", generation(birthDate, lang));
 
   lastBirthDate = birthDate;
   lastAge = age;
@@ -102,7 +107,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastBirthDate || !lastAge) return;
-  copyToClipboard(copyAgeSummary(lastBirthDate, lastAge));
+ copyToClipboard(copyAgeSummary(lastBirthDate, lastAge, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

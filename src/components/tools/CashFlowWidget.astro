@@ -5,47 +5,57 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { ArrowRightLeft, Wallet, TrendingUp, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { cashPosition:"Cash Position", beginningBalance:"Beginning Cash Balance", operatingGroup:"Operating Activities", operatingInflows:"Operating Cash Inflows", operatingOutflows:"Operating Cash Outflows", otherGroup:"Other Activities", investing:"Investing Cash Flow (net, +/-)", financing:"Financing Cash Flow (net, +/-)", monthlyRevenue:"Monthly Revenue (optional)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Cash Flow Calculator", emptyDesc:"See your net cash flow, ending balance, and operating cash flow margin.", tip1:"Net Cash Flow", tip2:"Ending Balance", tip3:"Cash Flow Margin", netCashFlow:"Net Cash Flow", endingBalance:"Ending Cash Balance", operatingCashFlow:"Operating Cash Flow", cashFlowMargin:"Cash Flow Margin", aboutTitle:"About this Calculator", aboutText:"Combines your operating, investing, and financing cash flows to show net cash flow and projected ending cash balance, plus an operating cash flow margin if you provide monthly revenue.", positive:"Positive cash flow", negative:"Negative cash flow" },
+  es: { cashPosition:"Posición de Caja", beginningBalance:"Saldo Inicial de Caja", operatingGroup:"Actividades Operativas", operatingInflows:"Entradas de Efectivo Operativas", operatingOutflows:"Salidas de Efectivo Operativas", otherGroup:"Otras Actividades", investing:"Flujo de Inversión (neto, +/-)", financing:"Flujo de Financiamiento (neto, +/-)", monthlyRevenue:"Ingresos Mensuales (opcional)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Flujo de Caja", emptyDesc:"Consulta tu flujo de caja neto, saldo final y margen de flujo de caja operativo.", tip1:"Flujo de Caja Neto", tip2:"Saldo Final", tip3:"Margen de Flujo de Caja", netCashFlow:"Flujo de Caja Neto", endingBalance:"Saldo Final de Caja", operatingCashFlow:"Flujo de Caja Operativo", cashFlowMargin:"Margen de Flujo de Caja", aboutTitle:"Acerca de esta Calculadora", aboutText:"Combina tus flujos de caja operativos, de inversión y de financiamiento para mostrar el flujo de caja neto y el saldo final proyectado, además de un margen de flujo de caja operativo si proporcionas ingresos mensuales.", positive:"Flujo de caja positivo", negative:"Flujo de caja negativo" },
+}[lang];
 ---
 <section class="cfc-calculator">
   <div class="cfc-layout">
     <aside class="cfc-sidebar">
       <div class="cfc-group">
-        <h3>Cash Position</h3>
-        <CalculatorField id="beginningCashBalance" label="Beginning Cash Balance" type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <h3>{copy.cashPosition}</h3>
+        <CalculatorField id="beginningCashBalance" label={copy.beginningBalance} type="number" placeholder="e.g. 50000" min="0" step="1" />
       </div>
       <div class="cfc-group">
-        <h3>Operating Activities</h3>
-        <CalculatorField id="operatingInflows" label="Operating Cash Inflows" type="number" placeholder="e.g. 40000" min="0" step="1" />
-        <CalculatorField id="operatingOutflows" label="Operating Cash Outflows" type="number" placeholder="e.g. 28000" min="0" step="1" />
+        <h3>{copy.operatingGroup}</h3>
+        <CalculatorField id="operatingInflows" label={copy.operatingInflows} type="number" placeholder="e.g. 40000" min="0" step="1" />
+        <CalculatorField id="operatingOutflows" label={copy.operatingOutflows} type="number" placeholder="e.g. 28000" min="0" step="1" />
       </div>
       <div class="cfc-group">
-        <h3>Other Activities</h3>
-        <CalculatorField id="investingCashFlow" label="Investing Cash Flow (net, +/-)" type="number" placeholder="e.g. -5000" step="1" />
-        <CalculatorField id="financingCashFlow" label="Financing Cash Flow (net, +/-)" type="number" placeholder="e.g. 10000" step="1" />
-        <CalculatorField id="monthlyRevenue" label="Monthly Revenue (optional)" type="number" placeholder="e.g. 45000" min="0" step="1" />
+        <h3>{copy.otherGroup}</h3>
+        <CalculatorField id="investingCashFlow" label={copy.investing} type="number" placeholder="e.g. -5000" step="1" />
+        <CalculatorField id="financingCashFlow" label={copy.financing} type="number" placeholder="e.g. 10000" step="1" />
+        <CalculatorField id="monthlyRevenue" label={copy.monthlyRevenue} type="number" placeholder="e.g. 45000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cfc-content">
       <div id="emptyState">
-        <EmptyState icon="💵" title="Cash Flow Calculator" description="See your net cash flow, ending balance, and operating cash flow margin." tips={["Net Cash Flow", "Ending Balance", "Cash Flow Margin"]} />
+        <EmptyState icon="💵" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="netCashFlowResult" title="Net Cash Flow" icon={ArrowRightLeft} accent="success" subtitle=" " />
-          <ResultCard id="endingBalanceResult" title="Ending Cash Balance" icon={Wallet} />
-          <ResultCard id="operatingCashFlowResult" title="Operating Cash Flow" icon={TrendingUp} />
-          <ResultCard id="cashFlowMarginResult" title="Cash Flow Margin" icon={Percent} />
+          <ResultCard id="netCashFlowResult" title={copy.netCashFlow} icon={ArrowRightLeft} accent="success" subtitle=" " />
+          <ResultCard id="endingBalanceResult" title={copy.endingBalance} icon={Wallet} />
+          <ResultCard id="operatingCashFlowResult" title={copy.operatingCashFlow} icon={TrendingUp} />
+          <ResultCard id="cashFlowMarginResult" title={copy.cashFlowMargin} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Combines your operating, investing, and financing cash flows to show net cash flow and projected ending cash balance, plus an operating cash flow margin if you provide monthly revenue.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/cash-flow-calculator";
 </script>

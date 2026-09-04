@@ -55,7 +55,12 @@ export function calculateDownPayment(
   };
 }
 
-export function validateDownPaymentInputs(homePrice: number, downPaymentPercent: number): string | null {
+export function validateDownPaymentInputs(homePrice: number, downPaymentPercent: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (homePrice <= 0) return "El precio de la vivienda debe ser mayor que cero.";
+    if (downPaymentPercent < 0 || downPaymentPercent > 100) return "El porcentaje de pago inicial debe estar entre 0 y 100.";
+    return null;
+  }
   if (homePrice <= 0) return "Home price must be greater than zero.";
   if (downPaymentPercent < 0 || downPaymentPercent > 100) return "Down payment percentage must be between 0 and 100.";
   return null;

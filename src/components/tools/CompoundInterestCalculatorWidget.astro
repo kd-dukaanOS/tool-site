@@ -14,6 +14,13 @@ import {
   BarChart3,
   Repeat
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { principal:"Principal Amount (₹)", principalHelp:"The initial amount you are investing or depositing.", rate:"Annual Interest Rate (%)", rateHelp:"The yearly interest rate offered by the bank or scheme.", years:"Time Period (Years)", yearsHelp:"How long the money stays invested.", frequency:"Compounding Frequency (times/year)", frequencyHelp:"1 = Annually, 2 = Semi-Annually, 4 = Quarterly, 12 = Monthly, 365 = Daily.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Compound Interest Calculator", emptyDesc:"See how your money grows when interest is added back and starts earning interest itself.", tip1:"Maturity Value", tip2:"Total Interest Earned", tip3:"Effective Annual Rate", tip4:"Growth Multiplier", tip5:"Year-wise Growth Schedule", maturity:"Maturity Value", interest:"Total Interest Earned", principalInvested:"Principal Invested", ear:"Effective Annual Rate", multiplier:"Growth Multiplier", freqTitle:"Compounding Frequency", earSubtitle:"True yearly return once compounding is applied", scheduleHeaders:["Year", "Opening Balance", "Interest Earned", "Closing Balance"], scheduleCaption:"Year-wise Growth Schedule", aboutTitle:"About this Calculator", aboutText:"The Compound Interest Calculator shows how a lump sum grows over time when interest earned is added back to the principal and starts earning interest itself. Try changing the compounding frequency to see how monthly or quarterly compounding compares to yearly compounding — more frequent compounding always means slightly higher returns for the same stated rate." },
+  es: { principal:"Monto del Capital (₹)", principalHelp:"El monto inicial que estás invirtiendo o depositando.", rate:"Tasa de Interés Anual (%)", rateHelp:"La tasa de interés anual ofrecida por el banco o plan.", years:"Período de Tiempo (Años)", yearsHelp:"Cuánto tiempo permanece invertido el dinero.", frequency:"Frecuencia de Capitalización (veces/año)", frequencyHelp:"1 = Anual, 2 = Semestral, 4 = Trimestral, 12 = Mensual, 365 = Diario.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Interés Compuesto", emptyDesc:"Observa cómo crece tu dinero cuando el interés se reinvierte y comienza a generar más interés.", tip1:"Valor de Vencimiento", tip2:"Interés Total Ganado", tip3:"Tasa Anual Efectiva", tip4:"Multiplicador de Crecimiento", tip5:"Programa de Crecimiento Anual", maturity:"Valor de Vencimiento", interest:"Interés Total Ganado", principalInvested:"Capital Invertido", ear:"Tasa Anual Efectiva", multiplier:"Multiplicador de Crecimiento", freqTitle:"Frecuencia de Capitalización", earSubtitle:"Rendimiento anual real una vez aplicada la capitalización", scheduleHeaders:["Año", "Saldo Inicial", "Interés Ganado", "Saldo Final"], scheduleCaption:"Programa de Crecimiento Anual", aboutTitle:"Acerca de esta Calculadora", aboutText:"La Calculadora de Interés Compuesto muestra cómo crece una suma global con el tiempo cuando el interés ganado se reinvierte en el capital y comienza a generar más interés. Prueba cambiar la frecuencia de capitalización para ver cómo se compara la capitalización mensual o trimestral con la anual — una capitalización más frecuente siempre significa rendimientos ligeramente mayores para la misma tasa declarada." },
+}[lang];
 ---
 
 <section class="ci-calculator">
@@ -26,46 +33,46 @@ import {
 
       <CalculatorField
         id="principal"
-        label="Principal Amount (₹)"
+        label={copy.principal}
         type="number"
         placeholder="e.g. 100000"
         required={true}
         min="0"
         step="1"
-        helpText="The initial amount you are investing or depositing."
+        helpText={copy.principalHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Annual Interest Rate (%)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 8.5"
         required={true}
         min="0"
         step="0.01"
-        helpText="The yearly interest rate offered by the bank or scheme."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorField
         id="years"
-        label="Time Period (Years)"
+        label={copy.years}
         type="number"
         placeholder="e.g. 5"
         required={true}
         min="0"
         step="0.5"
-        helpText="How long the money stays invested."
+        helpText={copy.yearsHelp}
       />
 
       <CalculatorField
         id="frequency"
-        label="Compounding Frequency (times/year)"
+        label={copy.frequency}
         type="number"
         value="1"
         required={true}
         min="1"
         step="1"
-        helpText="1 = Annually, 2 = Semi-Annually, 4 = Quarterly, 12 = Monthly, 365 = Daily."
+        helpText={copy.frequencyHelp}
       />
 
       <CalculatorActions
@@ -73,6 +80,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -91,15 +101,9 @@ import {
 
         <EmptyState
           icon="💰"
-          title="Compound Interest Calculator"
-          description="See how your money grows when interest is added back and starts earning interest itself."
-          tips={[
-            "Maturity Value",
-            "Total Interest Earned",
-            "Effective Annual Rate",
-            "Growth Multiplier",
-            "Year-wise Growth Schedule"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4, copy.tip5]}
         />
 
       </div>
@@ -113,39 +117,39 @@ import {
 
           <ResultCard
             id="maturityResult"
-            title="Maturity Value"
+            title={copy.maturity}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="interestResult"
-            title="Total Interest Earned"
+            title={copy.interest}
             icon={TrendingUp}
           />
 
           <ResultCard
             id="principalResult"
-            title="Principal Invested"
+            title={copy.principalInvested}
             icon={Coins}
           />
 
           <ResultCard
             id="earResult"
-            title="Effective Annual Rate"
+            title={copy.ear}
             icon={Percent}
             subtitle=" "
           />
 
           <ResultCard
             id="multiplierResult"
-            title="Growth Multiplier"
+            title={copy.multiplier}
             icon={BarChart3}
           />
 
           <ResultCard
             id="frequencyResult"
-            title="Compounding Frequency"
+            title={copy.freqTitle}
             icon={Repeat}
           />
 
@@ -153,22 +157,16 @@ import {
 
         <ScheduleTable
           id="scheduleBody"
-          headers={["Year", "Opening Balance", "Interest Earned", "Closing Balance"]}
-          caption="Year-wise Growth Schedule"
+          headers={copy.scheduleHeaders}
+          caption={copy.scheduleCaption}
         />
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            The Compound Interest Calculator shows how a lump sum grows
-            over time when interest earned is added back to the principal
-            and starts earning interest itself. Try changing the
-            compounding frequency to see how monthly or quarterly
-            compounding compares to yearly compounding — more frequent
-            compounding always means slightly higher returns for the
-            same stated rate.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -181,6 +179,12 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/compound-interest-calculator";
 </script>

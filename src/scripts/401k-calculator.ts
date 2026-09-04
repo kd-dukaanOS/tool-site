@@ -13,6 +13,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { atAge: "At age", title: "401(k) Projection Summary", projected: "Projected Balance", contrib: "Your Contributions", match: "Employer Match", growth: "Investment Growth" },
+  es: { atAge: "A los", title: "Resumen de Proyección 401(k)", projected: "Saldo Proyectado", contrib: "Tus Aportes", match: "Aporte del Empleador", growth: "Crecimiento de la Inversión" },
+}[lang];
+
 const fieldIds = [
   "currentAge", "retirementAge", "currentBalance", "annualSalary",
   "contributionPercent", "employerMatchPercent", "employerMatchLimit",
@@ -22,7 +28,7 @@ const fieldIds = [
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return n.toLocaleString(lang === "es" ? "es-ES" : "en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
 
 function showError(message: string) {
@@ -44,7 +50,7 @@ function calculate() {
     salaryGrowthRate, expectedReturn,
   ] = fieldIds.map(val);
 
-  const validationError = validate401kInputs(currentAge, retirementAge);
+  const validationError = validate401kInputs(currentAge, retirementAge, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -60,15 +66,15 @@ function calculate() {
   setValue("employeeContributionsResult", fmtCurrency(result.totalEmployeeContributions));
   setValue("employerMatchResult", fmtCurrency(result.totalEmployerMatch));
   setValue("totalGrowthResult", fmtCurrency(result.totalGrowth));
-  setSubtitle("projectedBalanceResult", `At age ${retirementAge}`);
+  setSubtitle("projectedBalanceResult", `${t.atAge} ${retirementAge}`);
 
   lastSummary = `
-401(k) Projection Summary
+${t.title}
 
-Projected Balance: ${fmtCurrency(result.projectedBalance)}
-Your Contributions: ${fmtCurrency(result.totalEmployeeContributions)}
-Employer Match: ${fmtCurrency(result.totalEmployerMatch)}
-Investment Growth: ${fmtCurrency(result.totalGrowth)}
+${t.projected}: ${fmtCurrency(result.projectedBalance)}
+${t.contrib}: ${fmtCurrency(result.totalEmployeeContributions)}
+${t.match}: ${fmtCurrency(result.totalEmployerMatch)}
+${t.growth}: ${fmtCurrency(result.totalGrowth)}
 `.trim();
 
   emptyState.hidden = true;

@@ -5,49 +5,59 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Percent, TrendingUp, Receipt, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income & Filing", grossIncome:"Gross Annual Income", filingStatus:"Filing Status", single:"Single", mfj:"Married Filing Jointly", hoh:"Head of Household", deductionsGroup:"Deductions", deductionType:"Deduction Type", standardDeduction:"Standard Deduction (2026)", itemizedDeduction:"Itemized Deduction", itemizedAmt:"Itemized Deductions (if selected)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Effective Tax Rate Calculator", emptyDesc:"See your true average federal tax rate using 2026 IRS brackets.", tip1:"Effective Rate", tip2:"Marginal Bracket", tip3:"After-Tax Income", effectiveRate:"Effective Tax Rate", marginalRate:"Marginal Bracket", totalTax:"Total Federal Tax", afterTax:"After-Tax Income", aboutTitle:"About this Calculator", aboutText:"Uses official 2026 IRS tax brackets and standard deductions to compute your true effective tax rate versus your marginal bracket.", onTaxable:(t:string)=>`On ${t} taxable income` },
+  es: { incomeGroup:"Ingresos y Estado Civil", grossIncome:"Ingreso Bruto Anual", filingStatus:"Estado Civil Tributario", single:"Soltero", mfj:"Casado Declarando Conjuntamente", hoh:"Cabeza de Familia", deductionsGroup:"Deducciones", deductionType:"Tipo de Deducción", standardDeduction:"Deducción Estándar (2026)", itemizedDeduction:"Deducción Detallada", itemizedAmt:"Deducciones Detalladas (si aplica)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Tasa Efectiva de Impuestos", emptyDesc:"Consulta tu tasa promedio real de impuesto federal usando los tramos del IRS 2026.", tip1:"Tasa Efectiva", tip2:"Tramo Marginal", tip3:"Ingreso Después de Impuestos", effectiveRate:"Tasa Efectiva de Impuesto", marginalRate:"Tramo Marginal", totalTax:"Impuesto Federal Total", afterTax:"Ingreso Después de Impuestos", aboutTitle:"Acerca de esta Calculadora", aboutText:"Usa los tramos fiscales oficiales del IRS 2026 y las deducciones estándar para calcular tu tasa efectiva de impuesto real frente a tu tramo marginal.", onTaxable:(t:string)=>`Sobre ${t} de ingreso gravable` },
+}[lang];
 ---
 <section class="etr-calculator">
   <div class="etr-layout">
     <aside class="etr-sidebar">
       <div class="etr-group">
-        <h3>Income & Filing</h3>
-        <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" placeholder="e.g. 100000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status">
-  <option value="single">Single</option>
-  <option value="mfj">Married Filing Jointly</option>
-  <option value="hoh">Head of Household</option>
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="grossIncome" label={copy.grossIncome} type="number" placeholder="e.g. 100000" min="0" step="1" />
+        <CalculatorField type="select" id="filingStatus" label={copy.filingStatus}>
+  <option value="single">{copy.single}</option>
+  <option value="mfj">{copy.mfj}</option>
+  <option value="hoh">{copy.hoh}</option>
 </CalculatorField>
       </div>
       <div class="etr-group">
-        <h3>Deductions</h3>
-        <CalculatorField type="select" id="deductionType" label="Deduction Type">
-  <option value="standard">Standard Deduction (2026)</option>
-  <option value="itemized">Itemized Deduction</option>
+        <h3>{copy.deductionsGroup}</h3>
+        <CalculatorField type="select" id="deductionType" label={copy.deductionType}>
+  <option value="standard">{copy.standardDeduction}</option>
+  <option value="itemized">{copy.itemizedDeduction}</option>
 </CalculatorField>
-        <CalculatorField id="itemizedDeductions" label="Itemized Deductions (if selected)" type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="itemizedDeductions" label={copy.itemizedAmt} type="number" placeholder="e.g. 20000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="etr-content">
       <div id="emptyState">
-        <EmptyState icon="📈" title="Effective Tax Rate Calculator" description="See your true average federal tax rate using 2026 IRS brackets." tips={["Effective Rate", "Marginal Bracket", "After-Tax Income"]} />
+        <EmptyState icon="📈" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="effectiveRateResult" title="Effective Tax Rate" icon={Percent} accent="success" />
-          <ResultCard id="marginalRateResult" title="Marginal Bracket" icon={TrendingUp} />
-          <ResultCard id="totalTaxResult" title="Total Federal Tax" icon={Receipt} subtitle=" " />
-          <ResultCard id="afterTaxResult" title="After-Tax Income" icon={Wallet} />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} accent="success" />
+          <ResultCard id="marginalRateResult" title={copy.marginalRate} icon={TrendingUp} />
+          <ResultCard id="totalTaxResult" title={copy.totalTax} icon={Receipt} subtitle=" " />
+          <ResultCard id="afterTaxResult" title={copy.afterTax} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Uses official 2026 IRS tax brackets and standard deductions to compute your true effective tax rate versus your marginal bracket.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/effective-tax-rate-calculator";
 </script>

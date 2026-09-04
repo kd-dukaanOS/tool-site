@@ -1,4 +1,4 @@
-﻿export interface CsvJsonInput {
+export interface CsvJsonInput {
   text: string;
   mode: "csvToJson" | "jsonToCsv";
 }
@@ -7,7 +7,19 @@ export interface CsvJsonResult {
   output: string;
 }
 
-export function validateCsvJsonInput(i: CsvJsonInput): string | null {
+export function validateCsvJsonInput(i: CsvJsonInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (!i.text.trim()) return "Ingresa datos para convertir.";
+    if (i.mode === "jsonToCsv") {
+      try {
+        const parsed = JSON.parse(i.text);
+        if (!Array.isArray(parsed)) return "El JSON debe ser un arreglo de objetos.";
+      } catch {
+        return "JSON inválido.";
+      }
+    }
+    return null;
+  }
   if (!i.text.trim()) return "Enter data to convert.";
   if (i.mode === "jsonToCsv") {
     try {

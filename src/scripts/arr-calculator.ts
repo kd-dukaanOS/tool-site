@@ -13,6 +13,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { inMonths: "In", months: "months", monthlyGrowth: "monthly growth", title: "ARR Summary", current: "Current ARR", netNew: "Net New ARR (annualized)", projected: "Projected ARR", growth: "ARR Growth Rate" },
+  es: { inMonths: "En", months: "meses", monthlyGrowth: "crecimiento mensual", title: "Resumen de ARR", current: "ARR Actual", netNew: "ARR Neto Nuevo (anualizado)", projected: "ARR Proyectado", growth: "Tasa de Crecimiento de ARR" },
+}[lang];
+
 const fieldIds = [
   "currentMRR", "newBusinessMRR", "expansionMRR", "contractionMRR", "churnedMRR", "projectionMonths",
 ];
@@ -20,7 +26,7 @@ const fieldIds = [
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return n.toLocaleString(lang === "es" ? "es-ES" : "en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
 function fmtPercent(n: number): string {
   return `${n.toFixed(2)}%`;
@@ -40,7 +46,7 @@ function calculate() {
 
   const [currentMRR, newBusinessMRR, expansionMRR, contractionMRR, churnedMRR, projectionMonths] = fieldIds.map(val);
 
-  const validationError = validateARRInputs(currentMRR, projectionMonths);
+  const validationError = validateARRInputs(currentMRR, projectionMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -52,16 +58,16 @@ function calculate() {
   setValue("netNewARRResult", fmtCurrency(result.netNewARR));
   setValue("projectedARRResult", fmtCurrency(result.projectedARR));
   setValue("arrGrowthRateResult", fmtPercent(result.arrGrowthRate));
-  setSubtitle("projectedARRResult", `In ${projectionMonths || 12} months`);
-  setSubtitle("netNewARRResult", `${fmtPercent(result.monthlyGrowthRate * 100)} monthly growth`);
+  setSubtitle("projectedARRResult", `${t.inMonths} ${projectionMonths || 12} ${t.months}`);
+  setSubtitle("netNewARRResult", `${fmtPercent(result.monthlyGrowthRate * 100)} ${t.monthlyGrowth}`);
 
   lastSummary = `
-ARR Summary
+${t.title}
 
-Current ARR: ${fmtCurrency(result.currentARR)}
-Net New ARR (annualized): ${fmtCurrency(result.netNewARR)}
-Projected ARR (${projectionMonths || 12} months): ${fmtCurrency(result.projectedARR)}
-ARR Growth Rate: ${fmtPercent(result.arrGrowthRate)}
+${t.current}: ${fmtCurrency(result.currentARR)}
+${t.netNew}: ${fmtCurrency(result.netNewARR)}
+${t.projected} (${projectionMonths || 12} ${t.months}): ${fmtCurrency(result.projectedARR)}
+${t.growth}: ${fmtPercent(result.arrGrowthRate)}
 `.trim();
 
   emptyState.hidden = true;

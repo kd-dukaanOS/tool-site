@@ -17,6 +17,7 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 let lastInput: CaseConverterInput | null = null;
 
 function showError(msg: string) {
@@ -37,7 +38,7 @@ function calculate() {
     caseType: caseTypeInput.value as CaseType,
   };
 
-  const err = validateCaseConverterInput(input);
+  const err = validateCaseConverterInput(input, lang);
   if (err) {
     showError(err);
     return;

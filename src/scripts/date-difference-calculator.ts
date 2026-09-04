@@ -17,6 +17,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { bothDates:"Please select both dates.", negativeNote:"end date is before start date" },
+  es: { bothDates:"Por favor selecciona ambas fechas.", negativeNote:"la fecha de fin es anterior a la fecha de inicio" },
+}[lang];
+
 let lastInput: DateDifferenceInput | null = null;
 
 function showError(msg: string) {
@@ -33,7 +39,7 @@ function calculate() {
   clearError();
 
   if (!startDateInput.value || !endDateInput.value) {
-    showError("Please select both dates.");
+    showError(t.bothDates);
     return;
   }
 
@@ -42,7 +48,7 @@ function calculate() {
     endDate: new Date(endDateInput.value),
   };
 
-  const err = validateDateDifferenceInput(input);
+  const err = validateDateDifferenceInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -55,7 +61,7 @@ function calculate() {
   setValue("daysResult", result.diff.days);
   setValue("totalDaysResult", result.diff.totalDays);
   setValue("totalWeeksResult", result.diff.totalWeeks);
-  setSubtitle("totalDaysResult", result.isNegative ? "end date is before start date" : "");
+  setSubtitle("totalDaysResult", result.isNegative ? t.negativeNote : "");
 
   lastInput = input;
 
@@ -77,7 +83,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateDateDifference(lastInput);
-  copyToClipboard(copyDateDifferenceSummary(lastInput, result));
+  copyToClipboard(copyDateDifferenceSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -5,51 +5,86 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, Landmark, PiggyBank, TrendingUp } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    personal: "Personal", currentAge: "Current Age", retirementAge: "Retirement Age",
+    balancesGroup: "Current Balances", currentRrsp: "Current RRSP Balance", currentTfsa: "Current TFSA Balance",
+    contribGroup: "Annual Contributions", annualRrsp: "Annual RRSP Contribution", annualTfsa: "Annual TFSA Contribution",
+    assumptionsGroup: "Assumptions", expectedReturn: "Expected Return (%/yr)",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Canada Retirement Calculator", emptyDesc: "Project your combined RRSP and TFSA balance at retirement.",
+    tip1: "Total Balance", tip2: "RRSP Balance", tip3: "TFSA Balance",
+    totalBalance: "Total Projected Balance", rrspBalance: "RRSP Balance", tfsaBalance: "TFSA Balance", totalGrowth: "Investment Growth",
+    aboutTitle: "About this Calculator",
+    aboutText: "Projects your RRSP and TFSA balances separately using your current savings, annual contributions capped at 2026 limits, and expected return, then combines them into a total retirement estimate.",
+  },
+  es: {
+    personal: "Personal", currentAge: "Edad Actual", retirementAge: "Edad de Jubilación",
+    balancesGroup: "Saldos Actuales", currentRrsp: "Saldo Actual de RRSP", currentTfsa: "Saldo Actual de TFSA",
+    contribGroup: "Contribuciones Anuales", annualRrsp: "Contribución Anual a RRSP", annualTfsa: "Contribución Anual a TFSA",
+    assumptionsGroup: "Supuestos", expectedReturn: "Rendimiento Esperado (%/año)",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Jubilación de Canadá", emptyDesc: "Proyecta tu saldo combinado de RRSP y TFSA al momento de jubilarte.",
+    tip1: "Saldo Total", tip2: "Saldo RRSP", tip3: "Saldo TFSA",
+    totalBalance: "Saldo Total Proyectado", rrspBalance: "Saldo RRSP", tfsaBalance: "Saldo TFSA", totalGrowth: "Crecimiento de Inversión",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Proyecta tus saldos de RRSP y TFSA por separado usando tus ahorros actuales, contribuciones anuales limitadas a los topes de 2026, y el rendimiento esperado, combinándolos luego en una estimación total de jubilación.",
+  },
+}[lang];
 ---
 <section class="cret-calculator">
   <div class="cret-layout">
     <aside class="cret-sidebar">
       <div class="cret-group">
-        <h3>Personal</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" min="1" step="1" />
-        <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" min="1" step="1" />
+        <h3>{copy.personal}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 30" min="1" step="1" />
+        <CalculatorField id="retirementAge" label={copy.retirementAge} type="number" placeholder="e.g. 65" min="1" step="1" />
       </div>
       <div class="cret-group">
-        <h3>Current Balances</h3>
-        <CalculatorField id="currentRrspBalance" label="Current RRSP Balance" type="number" placeholder="e.g. 20000" min="0" step="1" />
-        <CalculatorField id="currentTfsaBalance" label="Current TFSA Balance" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <h3>{copy.balancesGroup}</h3>
+        <CalculatorField id="currentRrspBalance" label={copy.currentRrsp} type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="currentTfsaBalance" label={copy.currentTfsa} type="number" placeholder="e.g. 10000" min="0" step="1" />
       </div>
       <div class="cret-group">
-        <h3>Annual Contributions</h3>
-        <CalculatorField id="annualRrspContribution" label="Annual RRSP Contribution" type="number" placeholder="e.g. 8000" min="0" step="1" />
-        <CalculatorField id="annualTfsaContribution" label="Annual TFSA Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
+        <h3>{copy.contribGroup}</h3>
+        <CalculatorField id="annualRrspContribution" label={copy.annualRrsp} type="number" placeholder="e.g. 8000" min="0" step="1" />
+        <CalculatorField id="annualTfsaContribution" label={copy.annualTfsa} type="number" placeholder="e.g. 7000" min="0" step="1" />
       </div>
       <div class="cret-group">
-        <h3>Assumptions</h3>
-        <CalculatorField id="expectedReturn" label="Expected Return (%/yr)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <h3>{copy.assumptionsGroup}</h3>
+        <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cret-content">
       <div id="emptyState">
-        <EmptyState icon="🍁" title="Canada Retirement Calculator" description="Project your combined RRSP and TFSA balance at retirement." tips={["Total Balance", "RRSP Balance", "TFSA Balance"]} />
+        <EmptyState icon="🍁" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalBalanceResult" title="Total Projected Balance" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="rrspBalanceResult" title="RRSP Balance" icon={Landmark} />
-          <ResultCard id="tfsaBalanceResult" title="TFSA Balance" icon={PiggyBank} />
-          <ResultCard id="totalGrowthResult" title="Investment Growth" icon={TrendingUp} />
+          <ResultCard id="totalBalanceResult" title={copy.totalBalance} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="rrspBalanceResult" title={copy.rrspBalance} icon={Landmark} />
+          <ResultCard id="tfsaBalanceResult" title={copy.tfsaBalance} icon={PiggyBank} />
+          <ResultCard id="totalGrowthResult" title={copy.totalGrowth} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects your RRSP and TFSA balances separately using your current savings, annual contributions capped at 2026 limits, and expected return, then combines them into a total retirement estimate.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/canada-retirement-calculator";
 </script>

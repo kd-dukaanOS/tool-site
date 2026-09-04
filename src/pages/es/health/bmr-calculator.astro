@@ -1,0 +1,49 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import BMRCalculatorWidget from "../../../components/tools/BMRCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { bmrCalculatorContent } from "../../../data/calculators/es/bmr.ts";
+
+const tool = tools.find((t) => t.slug === "bmr-calculator")!;
+const content = bmrCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Salud", url: "/es/health/" },
+    { name: "Calculadora de TMB", url: "/es/health/bmr-calculator/" },
+  ]}
+  appName="Calculadora de TMB"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/health/">Salud</a> / Calculadora de TMB
+    </p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["health"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de TMB</h1>
+        <p>Calorías que tu cuerpo quema en reposo total</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="bmr-calculator" data-name="Calculadora de TMB" data-url="/es/health/bmr-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+
+    <BMRCalculatorWidget lang="es" />
+
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>cd ../

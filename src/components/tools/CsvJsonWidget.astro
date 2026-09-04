@@ -4,19 +4,26 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { FileSpreadsheet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { mode:"Mode", csvToJson:"CSV to JSON", jsonToCsv:"JSON to CSV", input:"Input", placeholder:"Paste CSV or JSON here", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"CSV / JSON Converter", emptyDesc:"Paste data to convert between CSV and JSON instantly.", tip1:"CSV to JSON", tip2:"JSON to CSV", tip3:"Instant Preview", tip4:"Copy Output", output:"Output", aboutTitle:"About this Tool", aboutText:"Convert CSV data to JSON or JSON data to CSV instantly, right in your browser. Nothing is uploaded to a server." },
+  es: { mode:"Modo", csvToJson:"CSV a JSON", jsonToCsv:"JSON a CSV", input:"Entrada", placeholder:"Pega CSV o JSON aquí", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Convertidor CSV / JSON", emptyDesc:"Pega datos para convertir entre CSV y JSON al instante.", tip1:"CSV a JSON", tip2:"JSON a CSV", tip3:"Vista Previa Instantánea", tip4:"Copiar Resultado", output:"Resultado", aboutTitle:"Acerca de esta Herramienta", aboutText:"Convierte datos CSV a JSON o JSON a CSV al instante, directamente en tu navegador. Nada se sube a un servidor." },
+}[lang];
 ---
 <section class="csv-json-converter">
   <div class="csv-layout">
     <aside class="csv-sidebar">
 
-      <CalculatorField id="mode" label="Mode" type="select">
-        <option value="csvToJson">CSV to JSON</option>
-        <option value="jsonToCsv">JSON to CSV</option>
+      <CalculatorField id="mode" label={copy.mode} type="select">
+        <option value="csvToJson">{copy.csvToJson}</option>
+        <option value="jsonToCsv">{copy.jsonToCsv}</option>
       </CalculatorField>
 
-      <CalculatorField id="text" label="Input" type="textarea" placeholder="Paste CSV or JSON here" />
+      <CalculatorField id="text" label={copy.input} type="textarea" placeholder={copy.placeholder} />
 
-      <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
@@ -24,24 +31,27 @@ import { FileSpreadsheet } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🔄"
-          title="CSV / JSON Converter"
-          description="Paste data to convert between CSV and JSON instantly."
-          tips={["CSV to JSON", "JSON to CSV", "Instant Preview", "Copy Output"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
-        <ResultCard id="outputResult" title="Output" icon={FileSpreadsheet} size="lg" />
+        <ResultCard id="outputResult" title={copy.output} icon={FileSpreadsheet} size="lg" />
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Convert CSV data to JSON or JSON data to CSV instantly, right in your browser. Nothing is uploaded to a server.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/csv-json.ts"></script>
 
 <style>

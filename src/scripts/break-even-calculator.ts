@@ -9,6 +9,12 @@ import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode }
 
 let currentCurrency: CurrencyCode = getSavedCurrency();
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { requiredFields: "Please fill all required fields.", unitsToSell: "units to sell" },
+  es: { requiredFields: "Por favor completa todos los campos requeridos.", unitsToSell: "unidades para vender" },
+}[lang];
+
 
 
 
@@ -41,7 +47,7 @@ function renderResults(result: ReturnType<typeof calculateBreakEven>) {
   setValue("breakEvenRevenueResult", formatCurrency(result.breakEvenRevenue, currentCurrency));
   setValue("contributionMarginResult", formatCurrency(result.contributionMargin, currentCurrency));
   setValue("contributionRatioResult", `${result.contributionMarginRatio}%`);
-  setSubtitle("breakEvenUnitsResult", "units to sell");
+  setSubtitle("breakEvenUnitsResult", t.unitsToSell);
 }
 
 function calculate() {
@@ -54,11 +60,11 @@ function calculate() {
   };
 
   if (!input.fixedCosts || !input.sellingPricePerUnit) {
-    showError("Please fill all required fields.");
+    showError(t.requiredFields);
     return;
   }
 
-  const err = validateBreakEvenInput(input);
+  const err = validateBreakEvenInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -99,7 +105,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBreakEven(lastInput);
-  copyToClipboard(copyBreakEvenSummary(lastInput, result, currentCurrency));
+  copyToClipboard(copyBreakEvenSummary(lastInput, result, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

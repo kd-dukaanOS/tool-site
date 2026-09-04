@@ -5,50 +5,91 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Wallet, Users, TrendingUp } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    groupYou: "You", groupContrib: "Contributions", groupGrowth: "Growth Assumptions",
+    currentAge: "Current Age", retirementAge: "Retirement Age",
+    currentBalance: "Current 401(k) Balance", annualSalary: "Annual Salary",
+    yourContribution: "Your Contribution (%)", employerMatch: "Employer Match (%)",
+    matchLimit: "Match Limit (% of salary)", salaryGrowth: "Annual Salary Growth (%)",
+    expectedReturn: "Expected Annual Return (%)",
+    emptyTitle: "401(k) Calculator",
+    emptyDesc: "Project your 401(k) balance at retirement with employer match and compound growth.",
+    tips: ["Projected Balance", "Employer Match", "Investment Growth"],
+    projectedBalance: "Projected Balance", yourContributions: "Your Contributions",
+    employerMatchTitle: "Employer Match", investmentGrowth: "Investment Growth",
+    aboutTitle: "About this Calculator",
+    aboutText: "Projects your 401(k) balance at retirement using your current balance, salary, contribution rate, employer match, salary growth, and expected annual return, compounded year by year.",
+  },
+  es: {
+    groupYou: "Tú", groupContrib: "Aportes", groupGrowth: "Supuestos de Crecimiento",
+    currentAge: "Edad Actual", retirementAge: "Edad de Jubilación",
+    currentBalance: "Saldo Actual del 401(k)", annualSalary: "Salario Anual",
+    yourContribution: "Tu Aporte (%)", employerMatch: "Aporte del Empleador (%)",
+    matchLimit: "Límite del Aporte (% del salario)", salaryGrowth: "Crecimiento Salarial Anual (%)",
+    expectedReturn: "Retorno Anual Esperado (%)",
+    emptyTitle: "Calculadora de 401(k)",
+    emptyDesc: "Proyecta tu saldo de 401(k) al jubilarte con el aporte del empleador y el crecimiento compuesto.",
+    tips: ["Saldo Proyectado", "Aporte del Empleador", "Crecimiento de la Inversión"],
+    projectedBalance: "Saldo Proyectado", yourContributions: "Tus Aportes",
+    employerMatchTitle: "Aporte del Empleador", investmentGrowth: "Crecimiento de la Inversión",
+    aboutTitle: "Sobre esta Calculadora",
+    aboutText: "Proyecta tu saldo de 401(k) al jubilarte usando tu saldo actual, salario, tasa de aporte, aporte del empleador, crecimiento salarial y retorno anual esperado, compuesto año por año.",
+  },
+}[lang];
 ---
 <section class="fk-calculator">
   <div class="fk-layout">
     <aside class="fk-sidebar">
       <div class="fk-group">
-        <h3>You</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" min="1" step="1" />
-        <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" min="1" step="1" />
-        <CalculatorField id="currentBalance" label="Current 401(k) Balance" type="number" placeholder="e.g. 25000" min="0" step="1" />
-        <CalculatorField id="annualSalary" label="Annual Salary" type="number" placeholder="e.g. 75000" min="0" step="1" />
+        <h3>{copy.groupYou}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 30" min="1" step="1" />
+        <CalculatorField id="retirementAge" label={copy.retirementAge} type="number" placeholder="e.g. 65" min="1" step="1" />
+        <CalculatorField id="currentBalance" label={copy.currentBalance} type="number" placeholder="e.g. 25000" min="0" step="1" />
+        <CalculatorField id="annualSalary" label={copy.annualSalary} type="number" placeholder="e.g. 75000" min="0" step="1" />
       </div>
       <div class="fk-group">
-        <h3>Contributions</h3>
-        <CalculatorField id="contributionPercent" label="Your Contribution (%)" type="number" placeholder="e.g. 8" min="0" step="0.1" />
-        <CalculatorField id="employerMatchPercent" label="Employer Match (%)" type="number" placeholder="e.g. 50" min="0" step="1" />
-        <CalculatorField id="employerMatchLimit" label="Match Limit (% of salary)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <h3>{copy.groupContrib}</h3>
+        <CalculatorField id="contributionPercent" label={copy.yourContribution} type="number" placeholder="e.g. 8" min="0" step="0.1" />
+        <CalculatorField id="employerMatchPercent" label={copy.employerMatch} type="number" placeholder="e.g. 50" min="0" step="1" />
+        <CalculatorField id="employerMatchLimit" label={copy.matchLimit} type="number" placeholder="e.g. 6" min="0" step="0.1" />
       </div>
       <div class="fk-group">
-        <h3>Growth Assumptions</h3>
-        <CalculatorField id="salaryGrowthRate" label="Annual Salary Growth (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="expectedReturn" label="Expected Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <h3>{copy.groupGrowth}</h3>
+        <CalculatorField id="salaryGrowthRate" label={copy.salaryGrowth} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="fk-content">
       <div id="emptyState">
-        <EmptyState icon="🏦" title="401(k) Calculator" description="Project your 401(k) balance at retirement with employer match and compound growth." tips={["Projected Balance", "Employer Match", "Investment Growth"]} />
+        <EmptyState icon="🏦" title={copy.emptyTitle} description={copy.emptyDesc} tips={copy.tips} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="projectedBalanceResult" title="Projected Balance" icon={PiggyBank} accent="success" subtitle=" " />
-          <ResultCard id="employeeContributionsResult" title="Your Contributions" icon={Wallet} />
-          <ResultCard id="employerMatchResult" title="Employer Match" icon={Users} />
-          <ResultCard id="totalGrowthResult" title="Investment Growth" icon={TrendingUp} />
+          <ResultCard id="projectedBalanceResult" title={copy.projectedBalance} icon={PiggyBank} accent="success" subtitle=" " />
+          <ResultCard id="employeeContributionsResult" title={copy.yourContributions} icon={Wallet} />
+          <ResultCard id="employerMatchResult" title={copy.employerMatchTitle} icon={Users} />
+          <ResultCard id="totalGrowthResult" title={copy.investmentGrowth} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects your 401(k) balance at retirement using your current balance, salary, contribution rate, employer match, salary growth, and expected annual return, compounded year by year.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/401k-calculator";
 </script>

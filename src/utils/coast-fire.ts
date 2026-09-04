@@ -48,7 +48,14 @@ export function calculateCoastFire(
   return { fiNumberAtRetirement, coastFireNumber, isCoastFireReached, yearsToCoastFire, coastFireAge, projectedBalanceAtRetirement };
 }
 
-export function validateCoastFireInputs(currentAge: number, targetRetirementAge: number, annualExpenses: number, withdrawalRate: number): string | null {
+export function validateCoastFireInputs(currentAge: number, targetRetirementAge: number, annualExpenses: number, withdrawalRate: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (currentAge <= 0 || currentAge > 100) return "Ingresa una edad actual válida.";
+    if (targetRetirementAge <= currentAge) return "La edad objetivo de jubilación debe ser mayor que la edad actual.";
+    if (annualExpenses <= 0) return "Los gastos anuales deben ser mayores que cero.";
+    if (withdrawalRate <= 0 || withdrawalRate > 20) return "La tasa de retiro debe estar entre 0 y 20%.";
+    return null;
+  }
   if (currentAge <= 0 || currentAge > 100) return "Enter a valid current age.";
   if (targetRetirementAge <= currentAge) return "Target retirement age must be greater than current age.";
   if (annualExpenses <= 0) return "Annual expenses must be greater than zero.";

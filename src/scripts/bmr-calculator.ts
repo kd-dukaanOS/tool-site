@@ -1,6 +1,10 @@
 import { calculateBMR, validateBMRInput, copyBMRSummary, type BMRInput } from "../utils/bmr";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = { en: { fillAll: "Please fill all fields.", atRest: "at complete rest", perDay: "cal/day" }, es: { fillAll: "Por favor completa todos los campos.", atRest: "en reposo total", perDay: "cal/día" } }[lang];
+
+
 const genderInput = document.getElementById("gender") as HTMLSelectElement;
 const ageInput = document.getElementById("age") as HTMLInputElement;
 const heightInput = document.getElementById("heightCm") as HTMLInputElement;
@@ -37,11 +41,11 @@ function calculate() {
   };
 
   if (!input.age || !input.heightCm || !input.weightKg) {
-    showError("Please fill all fields.");
+    showError(t.fillAll);
     return;
   }
 
-  const err = validateBMRInput(input);
+  const err = validateBMRInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,8 +53,8 @@ function calculate() {
 
   const result = calculateBMR(input);
 
-  setValue("bmrResult", `${result.bmr} cal/day`);
-  setSubtitle("bmrResult", "at complete rest");
+  setValue("bmrResult", `${result.bmr} ${t.perDay}`);
+  setSubtitle("bmrResult", t.atRest);
 
   lastInput = input;
 
@@ -73,7 +77,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBMR(lastInput);
-  copyToClipboard(copyBMRSummary(lastInput, result));
+  copyToClipboard(copyBMRSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

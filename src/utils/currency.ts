@@ -83,8 +83,16 @@ export interface CurrencyResult {
 
 const CODE_REGEX = /^[A-Za-z]{3}$/;
 
-export function validateCurrencyInput(input: CurrencyInput): string | null {
+export function validateCurrencyInput(input: CurrencyInput, lang: "en" | "es" = "en"): string | null {
   const { amount, fromCurrency, toCurrency } = input;
+
+  if (lang === "es") {
+    if (!amount || Number.isNaN(amount) || amount <= 0) return "Ingresa un monto mayor a 0.";
+    if (!CODE_REGEX.test(fromCurrency)) return "Ingresa un código de moneda válido de 3 letras (ej. USD).";
+    if (!CODE_REGEX.test(toCurrency)) return "Ingresa un código de moneda válido de 3 letras (ej. INR).";
+    if (fromCurrency.toUpperCase() === toCurrency.toUpperCase()) return "Elige dos monedas diferentes.";
+    return null;
+  }
 
   if (!amount || Number.isNaN(amount) || amount <= 0) {
     return "Please enter an amount greater than 0.";
@@ -134,7 +142,19 @@ export function formatAmount(value: number, code: string): string {
   }
 }
 
-export function copyCurrencySummary(result: CurrencyResult, amount: number): string {
+export function copyCurrencySummary(result: CurrencyResult, amount: number, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Moneda
+
+${formatAmount(amount, result.fromCurrency)} = ${formatAmount(result.convertedAmount, result.toCurrency)}
+
+Tipo de Cambio:
+1 ${result.fromCurrency} = ${result.rate.toFixed(4)} ${result.toCurrency}
+
+1 ${result.toCurrency} = ${result.inverseRate.toFixed(4)} ${result.fromCurrency}
+`.trim();
+  }
   return `
 Currency Conversion
 

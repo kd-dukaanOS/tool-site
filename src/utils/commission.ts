@@ -10,7 +10,13 @@ export interface CommissionResult {
   effectiveRate: number;
 }
 
-export function validateCommissionInput(i: CommissionInput): string | null {
+export function validateCommissionInput(i: CommissionInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.salesAmount <= 0) return "Ingresa un monto de ventas válido.";
+    if (i.commissionRate <= 0 || i.commissionRate > 100) return "Ingresa una tasa de comisión válida.";
+    if (i.baseSalary !== undefined && i.baseSalary < 0) return "Ingresa un salario base válido.";
+    return null;
+  }
   if (i.salesAmount <= 0) return "Enter a valid sales amount.";
   if (i.commissionRate <= 0 || i.commissionRate > 100) return "Enter a valid commission rate.";
   if (i.baseSalary !== undefined && i.baseSalary < 0) return "Enter a valid base salary.";
@@ -32,7 +38,20 @@ export function calculateCommission(i: CommissionInput): CommissionResult {
 
 import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyCommissionSummary(i: CommissionInput, r: CommissionResult, currency: CurrencyCode = "INR"): string {
+export function copyCommissionSummary(i: CommissionInput, r: CommissionResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Comisión
+
+Monto de Ventas: ${formatCurrency(i.salesAmount, currency)}
+Tasa de Comisión: ${i.commissionRate}%
+${i.baseSalary ? `Salario Base: ${formatCurrency(i.baseSalary, currency)}` : ""}
+
+Comisión Ganada: ${formatCurrency(r.commissionEarned, currency)}
+Ganancias Totales: ${formatCurrency(r.totalEarnings, currency)}
+Tasa Efectiva: ${r.effectiveRate}%
+`.trim();
+  }
   return `
 Commission Summary
 

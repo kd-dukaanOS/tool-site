@@ -32,6 +32,10 @@ const scenarioButtons =
 
 let pieChart: Chart | null = null;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const chartLabels = lang === "es" ? ["Capital", "Interés"] : ["Principal", "Interest"];
+const yearLabel = lang === "es" ? "Año" : "Year";
+
 let lastPrincipal: number | null = null;
 let lastRate: number | null = null;
 let lastYears: number | null = null;
@@ -61,7 +65,7 @@ function renderChart(principal: number, totalInterest: number) {
   pieChart = new Chart(canvas, {
     type: "doughnut",
     data: {
-      labels: ["Principal", "Interest"],
+      labels: chartLabels,
       datasets: [
         {
           data: [principal, totalInterest],
@@ -88,7 +92,7 @@ function renderSchedule(principal: number, rate: number, years: number) {
     .map(
       (row) => `
       <tr>
-        <td>${row.year}</td>
+        <td>${yearLabel} ${row.year}</td>
         <td>${inr(row.principalPaid)}</td>
         <td>${inr(row.interestPaid)}</td>
         <td>${inr(row.balance)}</td>
@@ -105,7 +109,7 @@ function calculate() {
   const rate = parseFloat(rateInput.value);
   const years = parseFloat(tenureInput.value);
 
-  const validationError = validateEMIInputs(principal, rate, years);
+  const validationError = validateEMIInputs(principal, rate, years, lang);
 
   if (validationError) {
     showError(validationError);
@@ -131,7 +135,7 @@ function renderResults(result: ReturnType<typeof calculateEMI>, principal: numbe
   setValue("totalResult", inr(result.totalPayment));
   setValue("percentResult", `${result.interestPercent}%`);
 
-  insightBox.textContent = emiInsight(principal, rate, years, result, currentCurrency);
+  insightBox.textContent = emiInsight(principal, rate, years, result, currentCurrency, lang);
   insightBox.hidden = false;
 
   renderChart(principal, result.totalInterest);
@@ -169,7 +173,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastPrincipal === null || lastRate === null || lastYears === null || !lastResult) return;
-  copyToClipboard(copyEMISummary(lastPrincipal, lastRate, lastYears, lastResult, currentCurrency));
+  copyToClipboard(copyEMISummary(lastPrincipal, lastRate, lastYears, lastResult, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

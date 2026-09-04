@@ -19,6 +19,39 @@ import {
   Sun,
   Orbit
 } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    dobLabel: "Date of Birth", dobHelp: "Select your date of birth.",
+    targetLabel: "Calculate Age On", targetHelp: "Leave blank to calculate today's age.",
+    emptyTitle: "Age Calculator", emptyDesc: "Calculate your exact age instantly.",
+    tips: ["Years, Months & Days", "Age on Any Date", "Birthday Countdown", "Birthstone", "Zodiac", "Generation"],
+    years: "Years", months: "Months", days: "Days", weeks: "Weeks", hours: "Hours",
+    minutes: "Minutes", seconds: "Seconds", nextBirthday: "Next Birthday",
+    weekdayBorn: "Weekday Born", westernZodiac: "Western Zodiac", chineseZodiac: "Chinese Zodiac",
+    birthstone: "Birthstone", generation: "Generation",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculate your exact age in years, months, weeks, days, hours, minutes and seconds. You can also calculate your age on any future or past date.",
+  },
+  es: {
+    dobLabel: "Fecha de Nacimiento", dobHelp: "Selecciona tu fecha de nacimiento.",
+    targetLabel: "Calcular Edad Al", targetHelp: "Déjalo en blanco para calcular tu edad de hoy.",
+    emptyTitle: "Calculadora de Edad", emptyDesc: "Calcula tu edad exacta al instante.",
+    tips: ["Años, Meses y Días", "Edad en Cualquier Fecha", "Cuenta Regresiva de Cumpleaños", "Piedra del Mes", "Zodiaco", "Generación"],
+    years: "Años", months: "Meses", days: "Días", weeks: "Semanas", hours: "Horas",
+    minutes: "Minutos", seconds: "Segundos", nextBirthday: "Próximo Cumpleaños",
+    weekdayBorn: "Día de Nacimiento", westernZodiac: "Zodiaco Occidental", chineseZodiac: "Zodiaco Chino",
+    birthstone: "Piedra del Mes", generation: "Generación",
+    aboutTitle: "Sobre esta Calculadora",
+    aboutText: "Calcula tu edad exacta en años, meses, semanas, días, horas, minutos y segundos. También puedes calcular tu edad en cualquier fecha futura o pasada.",
+  },
+}[lang];
+---
 ---
 
 <section class="age-calculator">
@@ -31,17 +64,17 @@ import {
 
       <CalculatorField
         id="birthDate"
-        label="Date of Birth"
+        label={copy.dobLabel}
         type="date"
         required={true}
-        helpText="Select your date of birth."
+        helpText={copy.dobHelp}
       />
 
       <CalculatorField
         id="targetDate"
-        label="Calculate Age On"
+        label={copy.targetLabel}
         type="date"
-        helpText="Leave blank to calculate today's age."
+        helpText={copy.targetHelp}
       />
 
       <CalculatorActions
@@ -65,18 +98,11 @@ import {
 
       <div id="emptyState">
 
-        <EmptyState
+       <EmptyState
           icon="🎂"
-          title="Age Calculator"
-          description="Calculate your exact age instantly."
-          tips={[
-            "Years, Months & Days",
-            "Age on Any Date",
-            "Birthday Countdown",
-            "Birthstone",
-            "Zodiac",
-            "Generation"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={copy.tips}
         />
 
       </div>
@@ -88,95 +114,25 @@ import {
 
         <ResultsGrid columns={3}>
 
-          <ResultCard
-            id="yearsResult"
-            title="Years"
-            icon={Cake}
-          />
-
-          <ResultCard
-            id="monthsResult"
-            title="Months"
-            icon={CalendarDays}
-          />
-
-          <ResultCard
-            id="daysResult"
-            title="Days"
-            icon={CalendarRange}
-          />
-
-          <ResultCard
-            id="weeksResult"
-            title="Weeks"
-            icon={CalendarRange}
-          />
-
-          <ResultCard
-            id="hoursResult"
-            title="Hours"
-            icon={Clock3}
-          />
-
-          <ResultCard
-            id="minutesResult"
-            title="Minutes"
-            icon={Timer}
-          />
-
-          <ResultCard
-            id="secondsResult"
-            title="Seconds"
-            icon={Hourglass}
-          />
-
-          <ResultCard
-            id="birthdayResult"
-            title="Next Birthday"
-            icon={PartyPopper}
-            subtitle=" "
-          />
-
-          <ResultCard
-            id="weekdayResult"
-            title="Weekday Born"
-            icon={Sun}
-          />
-
-          <ResultCard
-            id="zodiacResult"
-            title="Western Zodiac"
-            icon={Star}
-          />
-
-          <ResultCard
-            id="chineseResult"
-            title="Chinese Zodiac"
-            icon={Orbit}
-          />
-
-          <ResultCard
-            id="birthstoneResult"
-            title="Birthstone"
-            icon={Gem}
-          />
-
-          <ResultCard
-            id="generationResult"
-            title="Generation"
-            icon={Baby}
-          />
+          <ResultCard id="yearsResult" title={copy.years} icon={Cake} />
+          <ResultCard id="monthsResult" title={copy.months} icon={CalendarDays} />
+          <ResultCard id="daysResult" title={copy.days} icon={CalendarRange} />
+          <ResultCard id="weeksResult" title={copy.weeks} icon={CalendarRange} />
+          <ResultCard id="hoursResult" title={copy.hours} icon={Clock3} />
+          <ResultCard id="minutesResult" title={copy.minutes} icon={Timer} />
+          <ResultCard id="secondsResult" title={copy.seconds} icon={Hourglass} />
+          <ResultCard id="birthdayResult" title={copy.nextBirthday} icon={PartyPopper} subtitle=" " />
+          <ResultCard id="weekdayResult" title={copy.weekdayBorn} icon={Sun} />
+          <ResultCard id="zodiacResult" title={copy.westernZodiac} icon={Star} />
+          <ResultCard id="chineseResult" title={copy.chineseZodiac} icon={Orbit} />
+          <ResultCard id="birthstoneResult" title={copy.birthstone} icon={Gem} />
+          <ResultCard id="generationResult" title={copy.generation} icon={Baby} />
 
         </ResultsGrid>
                 <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
-
-          <p>
-            Calculate your exact age in years, months, weeks, days,
-            hours, minutes and seconds. You can also calculate your
-            age on any future or past date.
-          </p>
+           <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -188,6 +144,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/age-calculator";
 </script>

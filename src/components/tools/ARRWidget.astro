@@ -5,47 +5,78 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Landmark, TrendingUp, Percent, Rocket } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    groupCurrent: "Current Revenue", currentMRR: "Current MRR",
+    groupMovement: "MRR Movement", newBiz: "New Business MRR", expansion: "Expansion MRR", contraction: "Contraction MRR", churned: "Churned MRR",
+    groupProjection: "Projection", projMonths: "Projection Months",
+    emptyTitle: "ARR Calculator", emptyDesc: "Find your Annual Recurring Revenue and growth projection.",
+    tips: ["Current ARR", "Net New ARR", "Projected ARR"],
+    currentARR: "Current ARR", netNewARR: "Net New ARR", projectedARR: "Projected ARR", growthRate: "ARR Growth Rate",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculates your current Annual Recurring Revenue from MRR, net new ARR from business movement, and a compounded ARR projection.",
+  },
+  es: {
+    groupCurrent: "Ingresos Actuales", currentMRR: "MRR Actual",
+    groupMovement: "Movimiento de MRR", newBiz: "MRR de Negocio Nuevo", expansion: "MRR de Expansión", contraction: "MRR de Contracción", churned: "MRR Perdido (Churn)",
+    groupProjection: "Proyección", projMonths: "Meses de Proyección",
+    emptyTitle: "Calculadora de ARR", emptyDesc: "Calcula tu Ingreso Recurrente Anual (ARR) y su proyección de crecimiento.",
+    tips: ["ARR Actual", "ARR Neto Nuevo", "ARR Proyectado"],
+    currentARR: "ARR Actual", netNewARR: "ARR Neto Nuevo", projectedARR: "ARR Proyectado", growthRate: "Tasa de Crecimiento de ARR",
+    aboutTitle: "Sobre esta Calculadora",
+    aboutText: "Calcula tu Ingreso Recurrente Anual (ARR) actual a partir del MRR, el ARR neto nuevo según el movimiento del negocio, y una proyección de ARR compuesta.",
+  },
+}[lang];
 ---
 <section class="arr-calculator">
   <div class="arr-layout">
     <aside class="arr-sidebar">
       <div class="arr-group">
-        <h3>Current Revenue</h3>
-        <CalculatorField id="currentMRR" label="Current MRR" type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <h3>{copy.groupCurrent}</h3>
+        <CalculatorField id="currentMRR" label={copy.currentMRR} type="number" placeholder="e.g. 50000" min="0" step="1" />
       </div>
       <div class="arr-group">
-        <h3>MRR Movement</h3>
-        <CalculatorField id="newBusinessMRR" label="New Business MRR" type="number" placeholder="e.g. 6000" min="0" step="1" />
-        <CalculatorField id="expansionMRR" label="Expansion MRR" type="number" placeholder="e.g. 2000" min="0" step="1" />
-        <CalculatorField id="contractionMRR" label="Contraction MRR" type="number" placeholder="e.g. 1000" min="0" step="1" />
-        <CalculatorField id="churnedMRR" label="Churned MRR" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <h3>{copy.groupMovement}</h3>
+        <CalculatorField id="newBusinessMRR" label={copy.newBiz} type="number" placeholder="e.g. 6000" min="0" step="1" />
+        <CalculatorField id="expansionMRR" label={copy.expansion} type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <CalculatorField id="contractionMRR" label={copy.contraction} type="number" placeholder="e.g. 1000" min="0" step="1" />
+        <CalculatorField id="churnedMRR" label={copy.churned} type="number" placeholder="e.g. 2000" min="0" step="1" />
       </div>
       <div class="arr-group">
-        <h3>Projection</h3>
-        <CalculatorField id="projectionMonths" label="Projection Months" type="number" placeholder="e.g. 12" min="1" step="1" />
+        <h3>{copy.groupProjection}</h3>
+        <CalculatorField id="projectionMonths" label={copy.projMonths} type="number" placeholder="e.g. 12" min="1" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="arr-content">
       <div id="emptyState">
-        <EmptyState icon="📊" title="ARR Calculator" description="Find your Annual Recurring Revenue and growth projection." tips={["Current ARR", "Net New ARR", "Projected ARR"]} />
+        <EmptyState icon="📊" title={copy.emptyTitle} description={copy.emptyDesc} tips={copy.tips} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="currentARRResult" title="Current ARR" icon={Landmark} accent="success" />
-          <ResultCard id="netNewARRResult" title="Net New ARR" icon={TrendingUp} subtitle=" " />
-          <ResultCard id="projectedARRResult" title="Projected ARR" icon={Rocket} subtitle=" " />
-          <ResultCard id="arrGrowthRateResult" title="ARR Growth Rate" icon={Percent} />
+          <ResultCard id="currentARRResult" title={copy.currentARR} icon={Landmark} accent="success" />
+          <ResultCard id="netNewARRResult" title={copy.netNewARR} icon={TrendingUp} subtitle=" " />
+          <ResultCard id="projectedARRResult" title={copy.projectedARR} icon={Rocket} subtitle=" " />
+          <ResultCard id="arrGrowthRateResult" title={copy.growthRate} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your current Annual Recurring Revenue from MRR, net new ARR from business movement, and a compounded ARR projection.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/arr-calculator";
 </script>

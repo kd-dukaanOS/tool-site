@@ -13,6 +13,46 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { reduced:"Reduced by income phase-out", full:"Full credit amount", maxActc:"Max Additional CTC (refundable)", summary:(r:any)=>`
+Child Tax Credit Summary (2026)
+
+Final Credit Amount: ${fmtCurrency(r.finalCredit)}
+Base Credit (before phase-out): ${fmtCurrency(r.totalBaseCredit)}
+Phase-Out Reduction: ${fmtCurrency(r.phaseOutReduction)}
+Max Refundable (Additional CTC): ${fmtCurrency(r.refundableCap)}
+`.trim() },
+  es: { reduced:"Reducido por límite de ingresos", full:"Monto de crédito completo", maxActc:"Máximo ACTC Adicional (reembolsable)", summary:(r:any)=>`
+Resumen de Crédito Tributario por Hijos (2026)
+
+Monto de Crédito Final: ${fmtCurrency(r.finalCredit)}
+Crédito Base (antes de reducción): ${fmtCurrency(r.totalBaseCredit)}
+Reducción por Ingresos: ${fmtCurrency(r.phaseOutReduction)}
+Máximo Reembolsable (ACTC Adicional): ${fmtCurrency(r.refundableCap)}
+`.trim() },
+}[lang];
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { reduced:"Reduced by income phase-out", full:"Full credit amount", maxActc:"Max Additional CTC (refundable)", summary:(r:any)=>`
+Child Tax Credit Summary (2026)
+
+Final Credit Amount: ${fmtCurrency(r.finalCredit)}
+Base Credit (before phase-out): ${fmtCurrency(r.totalBaseCredit)}
+Phase-Out Reduction: ${fmtCurrency(r.phaseOutReduction)}
+Max Refundable (Additional CTC): ${fmtCurrency(r.refundableCap)}
+`.trim() },
+  es: { reduced:"Reducido por límite de ingresos", full:"Monto de crédito completo", maxActc:"Máximo ACTC Adicional (reembolsable)", summary:(r:any)=>`
+Resumen de Crédito Tributario por Hijos (2026)
+
+Monto de Crédito Final: ${fmtCurrency(r.finalCredit)}
+Crédito Base (antes de reducción): ${fmtCurrency(r.totalBaseCredit)}
+Reducción por Ingresos: ${fmtCurrency(r.phaseOutReduction)}
+Máximo Reembolsable (ACTC Adicional): ${fmtCurrency(r.refundableCap)}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -37,7 +77,7 @@ function calculate() {
   const numQualifyingChildren = val("numQualifyingChildren");
   const numOtherDependents = val("numOtherDependents");
 
-  const validationError = validateCTCInputs(magi, numQualifyingChildren, numOtherDependents);
+  const validationError = validateCTCInputs(magi, numQualifyingChildren, numOtherDependents, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,17 +89,10 @@ function calculate() {
   setValue("baseCreditResult", fmtCurrency(result.totalBaseCredit));
   setValue("phaseOutResult", fmtCurrency(result.phaseOutReduction));
   setValue("refundableCapResult", fmtCurrency(result.refundableCap));
-  setSubtitle("finalCreditResult", result.isPhasingOut ? "Reduced by income phase-out" : "Full credit amount");
-  setSubtitle("refundableCapResult", "Max Additional CTC (refundable)");
+  setSubtitle("finalCreditResult", result.isPhasingOut ? t.reduced : t.full);
+  setSubtitle("refundableCapResult", t.maxActc);
 
-  lastSummary = `
-Child Tax Credit Summary (2026)
-
-Final Credit Amount: ${fmtCurrency(result.finalCredit)}
-Base Credit (before phase-out): ${fmtCurrency(result.totalBaseCredit)}
-Phase-Out Reduction: ${fmtCurrency(result.phaseOutReduction)}
-Max Refundable (Additional CTC): ${fmtCurrency(result.refundableCap)}
-`.trim();
+  lastSummary = t.summary(result);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

@@ -22,6 +22,16 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fillFields:"Please fill all required fields.", withBase:"commission + base salary", noBase:"commission only" },
+  es: { fillFields:"Completa todos los campos requeridos.", withBase:"comisión + salario base", noBase:"solo comisión" },
+}[lang];
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fillFields:"Please fill all required fields.", withBase:"commission + base salary", noBase:"commission only" },
+  es: { fillFields:"Completa todos los campos requeridos.", withBase:"comisión + salario base", noBase:"solo comisión" },
+}[lang];
 let lastInput: CommissionInput | null = null;
 
 function showError(msg: string) {
@@ -44,11 +54,11 @@ function calculate() {
   };
 
   if (!input.salesAmount || !input.commissionRate) {
-    showError("Please fill all required fields.");
+    showError(t.fillFields);
     return;
   }
 
-  const err = validateCommissionInput(input);
+  const err = validateCommissionInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -69,7 +79,7 @@ function renderResults(result: ReturnType<typeof calculateCommission>, input: Co
   setValue("commissionEarnedResult", formatCurrency(result.commissionEarned, currentCurrency));
   setValue("totalEarningsResult", formatCurrency(result.totalEarnings, currentCurrency));
   setValue("effectiveRateResult", `${result.effectiveRate}%`);
-  setSubtitle("totalEarningsResult", input.baseSalary ? "commission + base salary" : "commission only");
+  setSubtitle("totalEarningsResult", input.baseSalary ? t.withBase : t.noBase);
 }
 
 onCurrencyChange((code) => {
@@ -92,7 +102,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateCommission(lastInput);
-  copyToClipboard(copyCommissionSummary(lastInput, result, currentCurrency));
+  copyToClipboard(copyCommissionSummary(lastInput, result, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

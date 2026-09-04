@@ -17,6 +17,26 @@ const fieldIds = [
   "investingCashFlow", "financingCashFlow", "monthlyRevenue",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { na:"N/A", positive:"Positive cash flow", negative:"Negative cash flow", summary:(r:any,mr:number)=>`
+Cash Flow Summary
+
+Operating Cash Flow: ${fmtCurrency(r.operatingCashFlow)}
+Net Cash Flow: ${fmtCurrency(r.netCashFlow)}
+Ending Cash Balance: ${fmtCurrency(r.endingCashBalance)}
+Cash Flow Margin: ${mr > 0 ? r.cashFlowMargin.toFixed(1) + "%" : "N/A"}
+`.trim() },
+  es: { na:"N/D", positive:"Flujo de caja positivo", negative:"Flujo de caja negativo", summary:(r:any,mr:number)=>`
+Resumen de Flujo de Caja
+
+Flujo de Caja Operativo: ${fmtCurrency(r.operatingCashFlow)}
+Flujo de Caja Neto: ${fmtCurrency(r.netCashFlow)}
+Saldo Final de Caja: ${fmtCurrency(r.endingCashBalance)}
+Margen de Flujo de Caja: ${mr > 0 ? r.cashFlowMargin.toFixed(1) + "%" : "N/D"}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -29,7 +49,7 @@ function calculate() {
   clearError();
   const [beginningCashBalance, operatingInflows, operatingOutflows, investingCashFlow, financingCashFlow, monthlyRevenue] = fieldIds.map(val);
 
-  const err = validateCashFlowInputs(operatingInflows, operatingOutflows);
+  const err = validateCashFlowInputs(operatingInflows, operatingOutflows, lang);
   if (err) { showError(err); return; }
 
   const result = calculateCashFlow(beginningCashBalance, operatingInflows, operatingOutflows, investingCashFlow, financingCashFlow, monthlyRevenue);
@@ -37,17 +57,10 @@ function calculate() {
   setValue("netCashFlowResult", fmtCurrency(result.netCashFlow));
   setValue("endingBalanceResult", fmtCurrency(result.endingCashBalance));
   setValue("operatingCashFlowResult", fmtCurrency(result.operatingCashFlow));
-  setValue("cashFlowMarginResult", monthlyRevenue > 0 ? `${result.cashFlowMargin.toFixed(1)}%` : "N/A");
-  setSubtitle("netCashFlowResult", result.netCashFlow >= 0 ? "Positive cash flow" : "Negative cash flow");
+  setValue("cashFlowMarginResult", monthlyRevenue > 0 ? `${result.cashFlowMargin.toFixed(1)}%` : t.na);
+  setSubtitle("netCashFlowResult", result.netCashFlow >= 0 ? t.positive : t.negative);
 
-  lastSummary = `
-Cash Flow Summary
-
-Operating Cash Flow: ${fmtCurrency(result.operatingCashFlow)}
-Net Cash Flow: ${fmtCurrency(result.netCashFlow)}
-Ending Cash Balance: ${fmtCurrency(result.endingCashBalance)}
-Cash Flow Margin: ${monthlyRevenue > 0 ? result.cashFlowMargin.toFixed(1) + "%" : "N/A"}
-`.trim();
+  lastSummary = t.summary(result, monthlyRevenue);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

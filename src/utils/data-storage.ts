@@ -28,7 +28,13 @@ export const DATA_STORAGE_LABELS: Record<string, string> = {
   pb: "PB",
 };
 
-export function validateDataStorageInput(i: DataStorageInput): string | null {
+export function validateDataStorageInput(i: DataStorageInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.value === undefined || Number.isNaN(i.value)) return "Ingresa un número válido.";
+    if (!i.fromUnit || !i.toUnit) return "Selecciona ambas unidades.";
+    if (i.fromUnit === i.toUnit) return "Elige dos unidades diferentes.";
+    return null;
+  }
   if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
   if (!i.fromUnit || !i.toUnit) return "Select both units.";
   if (i.fromUnit === i.toUnit) return "Choose two different units.";
@@ -41,7 +47,14 @@ export function calculateDataStorage(i: DataStorageInput): DataStorageResult {
   return { convertedValue };
 }
 
-export function copyDataStorageSummary(i: DataStorageInput, r: DataStorageResult): string {
+export function copyDataStorageSummary(i: DataStorageInput, r: DataStorageResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Almacenamiento de Datos
+
+${i.value} ${DATA_STORAGE_LABELS[i.fromUnit]} = ${r.convertedValue} ${DATA_STORAGE_LABELS[i.toUnit]}
+`.trim();
+  }
   return `
 Data Storage Conversion
 

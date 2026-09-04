@@ -66,8 +66,15 @@ function stackedTax(base: number, amount: number, brackets: Bracket[]): number {
   return tax;
 }
 
-export function validateCapitalGainsInput(input: CapitalGainsInput): string | null {
+export function validateCapitalGainsInput(input: CapitalGainsInput, lang: "en" | "es" = "en"): string | null {
   const { purchasePrice, salePrice, otherIncome, itemizedDeduction, useStandardDeduction } = input;
+  if (lang === "es") {
+    if (Number.isNaN(purchasePrice) || purchasePrice < 0) return "Ingresa un precio de compra válido (0 o más).";
+    if (Number.isNaN(salePrice) || salePrice < 0) return "Ingresa un precio de venta válido (0 o más).";
+    if (Number.isNaN(otherIncome) || otherIncome < 0) return "Ingresa un monto válido de otros ingresos (0 o más).";
+    if (!useStandardDeduction && (Number.isNaN(itemizedDeduction) || itemizedDeduction < 0)) return "Ingresa un monto válido de deducción detallada (0 o más).";
+    return null;
+  }
   if (Number.isNaN(purchasePrice) || purchasePrice < 0) {
     return "Please enter a valid purchase price of 0 or more.";
   }
@@ -106,7 +113,33 @@ export function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
 }
 
-export function copyCapitalGainsSummary(input: CapitalGainsInput, result: CapitalGainsResult): string {
+export function copyCapitalGainsSummary(input: CapitalGainsInput, result: CapitalGainsResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Impuesto sobre Ganancias de Capital (Año Fiscal ${input.taxYear})
+
+Período de Tenencia:
+${input.holdingPeriod === "long" ? "Largo Plazo (más de 1 año)" : "Corto Plazo (1 año o menos)"}
+
+Precio de Compra:
+${formatCurrency(input.purchasePrice)}
+
+Precio de Venta:
+${formatCurrency(input.salePrice)}
+
+Ganancia de Capital:
+${formatCurrency(result.gain)}
+
+Impuesto sobre Ganancias de Capital:
+${formatCurrency(result.capitalGainsTax)}
+
+Tasa Efectiva sobre la Ganancia:
+${result.effectiveRateOnGain.toFixed(1)}%
+
+Ganancia Después de Impuestos:
+${formatCurrency(result.afterTaxGain)}
+`.trim();
+  }
   return `
 Capital Gains Tax Summary (Tax Year ${input.taxYear})
 

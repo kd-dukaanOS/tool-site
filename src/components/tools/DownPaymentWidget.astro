@@ -5,46 +5,56 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Landmark, Wallet, CreditCard } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { homeLoanGroup:"Home & Loan", homePrice:"Home Price", downPaymentPercent:"Down Payment (%)", mortgageRate:"Mortgage Rate (%)", loanTermYears:"Loan Term (years)", costsGroup:"Costs", propertyTaxRate:"Property Tax Rate (% / yr)", annualInsurance:"Annual Insurance", closingCostPercent:"Closing Costs (%)", pmiRate:"PMI Rate (% / yr)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Down Payment Calculator", emptyDesc:"Find your required down payment, loan amount, and cash needed at closing.", tip1:"Down Payment", tip2:"Loan Amount", tip3:"Cash at Closing", downPayment:"Down Payment", loanAmount:"Loan Amount", cashNeeded:"Cash Needed at Closing", monthlyPayment:"Total Monthly Payment", aboutTitle:"About this Calculator", aboutText:"Calculates your down payment amount, resulting loan size, PMI requirement, and total cash needed at closing based on home price and loan terms.", inclClosing:(c:string)=>`Incl. ${c} closing costs`, inclPmi:(p:string)=>`Incl. ${p} PMI/mo`, noPmi:"No PMI required", pmiYes:"Yes", pmiNo:"No" },
+  es: { homeLoanGroup:"Vivienda y Préstamo", homePrice:"Precio de la Vivienda", downPaymentPercent:"Pago Inicial (%)", mortgageRate:"Tasa Hipotecaria (%)", loanTermYears:"Plazo del Préstamo (años)", costsGroup:"Costos", propertyTaxRate:"Tasa de Impuesto Predial (% / año)", annualInsurance:"Seguro Anual", closingCostPercent:"Costos de Cierre (%)", pmiRate:"Tasa PMI (% / año)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Pago Inicial", emptyDesc:"Encuentra tu pago inicial requerido, monto del préstamo y efectivo necesario al cierre.", tip1:"Pago Inicial", tip2:"Monto del Préstamo", tip3:"Efectivo al Cierre", downPayment:"Pago Inicial", loanAmount:"Monto del Préstamo", cashNeeded:"Efectivo Necesario al Cierre", monthlyPayment:"Pago Mensual Total", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu monto de pago inicial, el tamaño resultante del préstamo, el requisito de PMI y el efectivo total necesario al cierre según el precio de la vivienda y los términos del préstamo.", inclClosing:(c:string)=>`Incl. ${c} en costos de cierre`, inclPmi:(p:string)=>`Incl. ${p} PMI/mes`, noPmi:"No se requiere PMI", pmiYes:"Sí", pmiNo:"No" },
+}[lang];
 ---
 <section class="dp-calculator">
   <div class="dp-layout">
     <aside class="dp-sidebar">
       <div class="dp-group">
-        <h3>Home & Loan</h3>
-        <CalculatorField id="homePrice" label="Home Price" type="number" placeholder="e.g. 400000" min="0" step="1" />
-        <CalculatorField id="downPaymentPercent" label="Down Payment (%)" type="number" placeholder="e.g. 10" min="0" step="0.1" />
-        <CalculatorField id="mortgageRate" label="Mortgage Rate (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
-        <CalculatorField id="loanTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+        <h3>{copy.homeLoanGroup}</h3>
+        <CalculatorField id="homePrice" label={copy.homePrice} type="number" placeholder="e.g. 400000" min="0" step="1" />
+        <CalculatorField id="downPaymentPercent" label={copy.downPaymentPercent} type="number" placeholder="e.g. 10" min="0" step="0.1" />
+        <CalculatorField id="mortgageRate" label={copy.mortgageRate} type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="loanTermYears" label={copy.loanTermYears} type="number" placeholder="e.g. 30" min="1" step="1" />
       </div>
       <div class="dp-group">
-        <h3>Costs</h3>
-        <CalculatorField id="propertyTaxRate" label="Property Tax Rate (% / yr)" type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
-        <CalculatorField id="annualInsurance" label="Annual Insurance" type="number" placeholder="e.g. 1400" min="0" step="1" />
-        <CalculatorField id="closingCostPercent" label="Closing Costs (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="pmiRate" label="PMI Rate (% / yr)" type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
+        <h3>{copy.costsGroup}</h3>
+        <CalculatorField id="propertyTaxRate" label={copy.propertyTaxRate} type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
+        <CalculatorField id="annualInsurance" label={copy.annualInsurance} type="number" placeholder="e.g. 1400" min="0" step="1" />
+        <CalculatorField id="closingCostPercent" label={copy.closingCostPercent} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="pmiRate" label={copy.pmiRate} type="number" placeholder="e.g. 0.5" min="0" step="0.01" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dp-content">
       <div id="emptyState">
-        <EmptyState icon="🏡" title="Down Payment Calculator" description="Find your required down payment, loan amount, and cash needed at closing." tips={["Down Payment", "Loan Amount", "Cash at Closing"]} />
+        <EmptyState icon="🏡" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="downPaymentResult" title="Down Payment" icon={PiggyBank} accent="success" />
-          <ResultCard id="loanAmountResult" title="Loan Amount" icon={Landmark} />
-          <ResultCard id="cashNeededResult" title="Cash Needed at Closing" icon={Wallet} subtitle=" " />
-          <ResultCard id="monthlyPaymentResult" title="Total Monthly Payment" icon={CreditCard} subtitle=" " />
+          <ResultCard id="downPaymentResult" title={copy.downPayment} icon={PiggyBank} accent="success" />
+          <ResultCard id="loanAmountResult" title={copy.loanAmount} icon={Landmark} />
+          <ResultCard id="cashNeededResult" title={copy.cashNeeded} icon={Wallet} subtitle=" " />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={CreditCard} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your down payment amount, resulting loan size, PMI requirement, and total cash needed at closing based on home price and loan terms.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/down-payment-calculator";
 </script>

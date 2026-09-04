@@ -23,6 +23,7 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 let lastInput: FDInput | null = null;
 let lastResult: FDResult | null = null;
 
@@ -46,7 +47,7 @@ function calculate() {
     compoundingFrequency: parseFloat(frequencyInput.value) || 4,
   };
 
-  const validationError = validateFDInput(input);
+  const validationError = validateFDInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -85,7 +86,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyFDSummary(lastInput, lastResult));
+  copyToClipboard(copyFDSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

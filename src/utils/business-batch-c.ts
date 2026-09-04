@@ -3,9 +3,9 @@
 
 import { formatCurrency } from "./currency";
 
-export function validatePositiveNumber(value: number, label: string): string | null {
+export function validatePositiveNumber(value: number, label: string, lang: "en" | "es" = "en"): string | null {
   if (value === undefined || Number.isNaN(value) || value < 0) {
-    return `Please enter a valid ${label} (0 or more).`;
+    return lang === "es" ? `Por favor ingresa un ${label} válido (0 o más).` : `Please enter a valid ${label} (0 or more).`;
   }
   return null;
 }

@@ -36,39 +36,49 @@ const FREQUENCY_LABELS: Record<number, string> = {
   12: "Monthly",
   365: "Daily",
 };
+const FREQUENCY_LABELS_ES: Record<number, string> = {
+  1: "Anual",
+  2: "Semestral",
+  4: "Trimestral",
+  12: "Mensual",
+  365: "Diario",
+};
 
-export function frequencyLabel(frequency: number): string {
+export function frequencyLabel(frequency: number, lang: "en" | "es" = "en"): string {
+  if (lang === "es") return FREQUENCY_LABELS_ES[frequency] ?? `${frequency}x / año`;
   return FREQUENCY_LABELS[frequency] ?? `${frequency}x / year`;
 }
 
 export function validateCompoundInterestInput(
-  input: CompoundInterestInput
+  input: CompoundInterestInput,
+  lang: "en" | "es" = "en"
 ): string | null {
 
   const { principal, annualRate, years, frequency } = input;
 
+  const isEs = arguments[1] === "es";
   if (!principal || Number.isNaN(principal) || principal <= 0) {
-    return "Please enter a principal amount greater than 0.";
+    return isEs ? "Ingresa un monto de capital mayor a 0." : "Please enter a principal amount greater than 0.";
   }
 
   if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) {
-    return "Please enter an interest rate greater than 0.";
+    return isEs ? "Ingresa una tasa de interés mayor a 0." : "Please enter an interest rate greater than 0.";
   }
 
   if (!years || Number.isNaN(years) || years <= 0) {
-    return "Please enter a time period greater than 0.";
+    return isEs ? "Ingresa un período de tiempo mayor a 0." : "Please enter a time period greater than 0.";
   }
 
   if (!frequency || Number.isNaN(frequency) || frequency <= 0) {
-    return "Please enter a valid compounding frequency.";
+    return isEs ? "Ingresa una frecuencia de capitalización válida." : "Please enter a valid compounding frequency.";
   }
 
   if (years > 100) {
-    return "Please enter a realistic time period (under 100 years).";
+    return isEs ? "Ingresa un período de tiempo realista (menos de 100 años)." : "Please enter a realistic time period (under 100 years).";
   }
 
   if (annualRate > 100) {
-    return "Please enter a realistic interest rate (under 100%).";
+    return isEs ? "Ingresa una tasa de interés realista (menos de 100%)." : "Please enter a realistic interest rate (under 100%).";
   }
 
   return null;
@@ -154,8 +164,39 @@ export function formatPercent(value: number): string {
 
 export function copyCompoundInterestSummary(
   input: CompoundInterestInput,
-  result: CompoundInterestResult
+  result: CompoundInterestResult,
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Interés Compuesto
+
+Monto del Capital:
+${formatCurrency(input.principal)}
+
+Tasa de Interés Anual:
+${input.annualRate}%
+
+Período de Tiempo:
+${input.years} Años
+
+Frecuencia de Capitalización:
+${frequencyLabel(input.frequency, "es")}
+
+Valor de Vencimiento:
+${formatCurrency(result.maturityValue)}
+
+Interés Total Ganado:
+${formatCurrency(result.totalInterest)}
+
+Tasa Anual Efectiva:
+${formatPercent(result.effectiveAnnualRate)}
+
+Multiplicador de Crecimiento:
+${result.growthMultiplier.toFixed(2)}x
+`.trim();
+  }
 
   return `
 Compound Interest Summary

@@ -4,16 +4,36 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Binary } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    mode: "Mode", encode: "Encode", decode: "Decode",
+    text: "Text", placeholder: "Enter text or Base64 string",
+    emptyTitle: "Base64 Encoder / Decoder", emptyDesc: "Enter text to encode or decode.",
+    output: "Output",
+  },
+  es: {
+    mode: "Modo", encode: "Codificar", decode: "Decodificar",
+    text: "Texto", placeholder: "Ingresa texto o una cadena Base64",
+    emptyTitle: "Codificador / Decodificador Base64", emptyDesc: "Ingresa un texto para codificar o decodificar.",
+    output: "Resultado",
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="mode" label="Mode" type="select">
-      <option value="encode">Encode</option>
-      <option value="decode">Decode</option>
+    <CalculatorField id="mode" label={copy.mode} type="select">
+      <option value="encode">{copy.encode}</option>
+      <option value="decode">{copy.decode}</option>
     </CalculatorField>
 
-    <CalculatorField id="text" label="Text" type="textarea" placeholder="Enter text or Base64 string" />
+    <CalculatorField id="text" label={copy.text} type="textarea" placeholder={copy.placeholder} />
 
     <div id="errorBox" class="error-box" hidden></div>
 
@@ -21,12 +41,15 @@ import { Binary } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <EmptyState id="emptyState" icon="🔤" title="Base64 Encoder / Decoder" description="Enter text to encode or decode." />
+    <EmptyState id="emptyState" icon="🔤" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="outputResult" title="Output" icon={Binary} />
+      <ResultCard id="outputResult" title={copy.output} icon={Binary} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/base64-encoder-decoder.ts"></script>

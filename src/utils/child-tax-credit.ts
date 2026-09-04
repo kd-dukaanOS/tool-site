@@ -55,7 +55,13 @@ export function calculateChildTaxCredit(
   };
 }
 
-export function validateCTCInputs(magi: number, numQualifyingChildren: number, numOtherDependents: number): string | null {
+export function validateCTCInputs(magi: number, numQualifyingChildren: number, numOtherDependents: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (magi < 0) return "El ingreso no puede ser negativo.";
+    if (numQualifyingChildren < 0 || numOtherDependents < 0) return "El número de dependientes no puede ser negativo.";
+    if (numQualifyingChildren === 0 && numOtherDependents === 0) return "Ingresa al menos un hijo calificado o dependiente.";
+    return null;
+  }
   if (magi < 0) return "Income cannot be negative.";
   if (numQualifyingChildren < 0 || numOtherDependents < 0) return "Number of dependents cannot be negative.";
   if (numQualifyingChildren === 0 && numOtherDependents === 0) return "Enter at least one qualifying child or dependent.";

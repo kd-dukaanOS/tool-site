@@ -5,47 +5,60 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Baby, Wallet, TrendingDown, RefreshCw } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income & Filing", magi:"Modified AGI", filingStatus:"Filing Status", single:"Single", mfj:"Married Filing Jointly", hoh:"Head of Household", mfs:"Married Filing Separately", dependentsGroup:"Dependents", qualifyingChildren:"Qualifying Children (under 17)", otherDependents:"Other Dependents", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Child Tax Credit Calculator", emptyDesc:"Find your 2026 Child Tax Credit amount after income phase-out.", tip1:"Final Credit", tip2:"Phase-Out", tip3:"Refundable Amount", finalCredit:"Final Credit Amount", baseCredit:"Base Credit", phaseOut:"Phase-Out Reduction", refundableCap:"Max Refundable (ACTC)", aboutTitle:"About this Calculator", aboutText:"Calculates your 2026 Child Tax Credit ($2,200/child) and Credit for Other Dependents ($500), applying the income-based phase-out." },
+  es: { incomeGroup:"Ingresos y Estado Civil", magi:"Ingreso Bruto Ajustado Modificado", filingStatus:"Estado Civil Tributario", single:"Soltero", mfj:"Casado Declarando Conjuntamente", hoh:"Cabeza de Familia", mfs:"Casado Declarando por Separado", dependentsGroup:"Dependientes", qualifyingChildren:"Hijos Calificados (menores de 17)", otherDependents:"Otros Dependientes", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Crédito Tributario por Hijos", emptyDesc:"Encuentra tu monto de Crédito Tributario por Hijos 2026 después de la reducción por ingresos.", tip1:"Crédito Final", tip2:"Reducción", tip3:"Monto Reembolsable", finalCredit:"Monto de Crédito Final", baseCredit:"Crédito Base", phaseOut:"Reducción por Ingresos", refundableCap:"Máximo Reembolsable (ACTC)", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu Crédito Tributario por Hijos 2026 ($2,200/hijo) y el Crédito por Otros Dependientes ($500), aplicando la reducción basada en ingresos." },
+}[lang];
 ---
 <section class="ctc-calculator">
   <div class="ctc-layout">
     <aside class="ctc-sidebar">
       <div class="ctc-group">
-        <h3>Income & Filing</h3>
-        <CalculatorField id="magi" label="Modified AGI" type="number" placeholder="e.g. 150000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status">
-  <option value="single">Single</option>
-  <option value="mfj">Married Filing Jointly</option>
-  <option value="hoh">Head of Household</option>
-  <option value="mfs">Married Filing Separately</option>
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="magi" label={copy.magi} type="number" placeholder="e.g. 150000" min="0" step="1" />
+        <CalculatorField type="select" id="filingStatus" label={copy.filingStatus}>
+  <option value="single">{copy.single}</option>
+  <option value="mfj">{copy.mfj}</option>
+  <option value="hoh">{copy.hoh}</option>
+  <option value="mfs">{copy.mfs}</option>
 </CalculatorField>
       </div>
       <div class="ctc-group">
-        <h3>Dependents</h3>
-        <CalculatorField id="numQualifyingChildren" label="Qualifying Children (under 17)" type="number" placeholder="e.g. 2" min="0" step="1" />
-        <CalculatorField id="numOtherDependents" label="Other Dependents" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.dependentsGroup}</h3>
+        <CalculatorField id="numQualifyingChildren" label={copy.qualifyingChildren} type="number" placeholder="e.g. 2" min="0" step="1" />
+        <CalculatorField id="numOtherDependents" label={copy.otherDependents} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ctc-content">
       <div id="emptyState">
-        <EmptyState icon="👶" title="Child Tax Credit Calculator" description="Find your 2026 Child Tax Credit amount after income phase-out." tips={["Final Credit", "Phase-Out", "Refundable Amount"]} />
+        <EmptyState icon="👶" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="finalCreditResult" title="Final Credit Amount" icon={Baby} accent="success" subtitle=" " />
-          <ResultCard id="baseCreditResult" title="Base Credit" icon={Wallet} />
-          <ResultCard id="phaseOutResult" title="Phase-Out Reduction" icon={TrendingDown} />
-          <ResultCard id="refundableCapResult" title="Max Refundable (ACTC)" icon={RefreshCw} subtitle=" " />
+          <ResultCard id="finalCreditResult" title={copy.finalCredit} icon={Baby} accent="success" subtitle=" " />
+          <ResultCard id="baseCreditResult" title={copy.baseCredit} icon={Wallet} />
+          <ResultCard id="phaseOutResult" title={copy.phaseOut} icon={TrendingDown} />
+          <ResultCard id="refundableCapResult" title={copy.refundableCap} icon={RefreshCw} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your 2026 Child Tax Credit ($2,200/child) and Credit for Other Dependents ($500), applying the income-based phase-out.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/child-tax-credit-calculator";
 </script>

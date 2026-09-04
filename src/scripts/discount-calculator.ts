@@ -11,6 +11,7 @@ import { setValue, copyToClipboard } from "../utils/calculator";
 import { formatCurrency, getSavedCurrency, onCurrencyChange, type CurrencyCode } from "../utils/currencyselector";
 
 let currentCurrency: CurrencyCode = getSavedCurrency();
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 const priceInput = document.getElementById("originalPrice") as HTMLInputElement;
 const discountInput = document.getElementById("discountValue") as HTMLInputElement;
@@ -74,7 +75,7 @@ function calculate() {
   const discount = parseFloat(discountInput.value);
   const extra = extraInput.value ? parseFloat(extraInput.value) : 0;
 
-  const validationError = validateDiscountInputs(price, discount, currentMode);
+  const validationError = validateDiscountInputs(price, discount, currentMode, lang);
 
   if (validationError) {
     showError(validationError);
@@ -99,7 +100,7 @@ function renderResults(result: ReturnType<typeof calculateDiscount>, price: numb
   setValue("saveResult", inr(result.youSave));
   setValue("percentResult", `${result.effectivePercent}%`);
 
-  insightBox.textContent = discountInsight(result, price, currentCurrency);
+  insightBox.textContent = discountInsight(result, price, currentCurrency, lang);
   insightBox.hidden = false;
 
   renderComparison(price);
@@ -129,7 +130,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastPrice === null || lastDiscount === null || !lastResult) return;
-  copyToClipboard(copyDiscountSummary(lastPrice, lastDiscount, currentMode, lastExtra, lastResult, currentCurrency));
+  copyToClipboard(copyDiscountSummary(lastPrice, lastDiscount, currentMode, lastExtra, lastResult, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -18,6 +18,12 @@ const fieldIds = [
   "studentLoanPayment", "creditCardMinPayments", "otherDebtPayments",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { roomTo43:(v:string)=>`Room to 43%: ${v}/mo`, summaryTitle:"Debt-to-Income Summary", frontEndLabel:"Front-End DTI (Housing)", backEndLabel:"Back-End DTI (Total Debt)", totalMonthlyDebt:"Total Monthly Debt", roomTo36:"Room to reach 36% DTI", roomTo43Full:"Room to reach 43% DTI" },
+  es: { roomTo43:(v:string)=>`Margen al 43%: ${v}/mes`, summaryTitle:"Resumen de Deuda a Ingresos", frontEndLabel:"DTI Inicial (Vivienda)", backEndLabel:"DTI Total (Toda la Deuda)", totalMonthlyDebt:"Deuda Mensual Total", roomTo36:"Margen para llegar al 36% DTI", roomTo43Full:"Margen para llegar al 43% DTI" },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -42,7 +48,7 @@ function calculate() {
     studentLoanPayment, creditCardMinPayments, otherDebtPayments,
   ] = fieldIds.map(val);
 
-  const validationError = validateDTIInputs(grossMonthlyIncome);
+  const validationError = validateDTIInputs(grossMonthlyIncome, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -50,7 +56,7 @@ function calculate() {
 
   const result = calculateDTI(
     grossMonthlyIncome, housingPayment, carLoanPayment,
-    studentLoanPayment, creditCardMinPayments, otherDebtPayments
+    studentLoanPayment, creditCardMinPayments, otherDebtPayments, lang
   );
 
   setValue("frontEndResult", `${result.frontEndDTI.toFixed(1)}%`);
@@ -59,16 +65,16 @@ function calculate() {
   setValue("ratingResult", result.backEndRating);
   setSubtitle("frontEndResult", result.frontEndRating);
   setSubtitle("backEndResult", result.backEndRating);
-  setSubtitle("ratingResult", `Room to 43%: ${fmtCurrency(result.maxAdditionalDebtFor43)}/mo`);
+  setSubtitle("ratingResult", t.roomTo43(fmtCurrency(result.maxAdditionalDebtFor43)));
 
   lastSummary = `
-Debt-to-Income Summary
+${t.summaryTitle}
 
-Front-End DTI (Housing): ${result.frontEndDTI.toFixed(1)}% - ${result.frontEndRating}
-Back-End DTI (Total Debt): ${result.backEndDTI.toFixed(1)}% - ${result.backEndRating}
-Total Monthly Debt: ${fmtCurrency(result.totalMonthlyDebt)}
-Room to reach 36% DTI: ${fmtCurrency(result.maxAdditionalDebtFor36)}/mo
-Room to reach 43% DTI: ${fmtCurrency(result.maxAdditionalDebtFor43)}/mo
+${t.frontEndLabel}: ${result.frontEndDTI.toFixed(1)}% - ${result.frontEndRating}
+${t.backEndLabel}: ${result.backEndDTI.toFixed(1)}% - ${result.backEndRating}
+${t.totalMonthlyDebt}: ${fmtCurrency(result.totalMonthlyDebt)}
+${t.roomTo36}: ${fmtCurrency(result.maxAdditionalDebtFor36)}/mo
+${t.roomTo43Full}: ${fmtCurrency(result.maxAdditionalDebtFor43)}/mo
 `.trim();
 
   emptyState.hidden = true;

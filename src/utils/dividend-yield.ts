@@ -19,7 +19,12 @@ export function calculateDividendYield(
   return { dividendYield, annualDividendIncome, monthlyDividendIncome, yieldOnCost };
 }
 
-export function validateDividendYieldInputs(sharePrice: number, annualDividendPerShare: number): string | null {
+export function validateDividendYieldInputs(sharePrice: number, annualDividendPerShare: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (sharePrice <= 0) return "El precio de la acción debe ser mayor que cero.";
+    if (annualDividendPerShare < 0) return "El dividendo anual por acción no puede ser negativo.";
+    return null;
+  }
   if (sharePrice <= 0) return "Share price must be greater than zero.";
   if (annualDividendPerShare < 0) return "Annual dividend per share cannot be negative.";
   return null;

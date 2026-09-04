@@ -91,7 +91,16 @@ export function payoffDateFromMonths(months: number, startDate = new Date()): Da
   return d;
 }
 
-export function formatMonthsAsYearsMonths(months: number): string {
+export function formatMonthsAsYearsMonths(months: number, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    if (months >= MAX_MONTHS) return "50+ años";
+    const years = Math.floor(months / 12);
+    const rem = months % 12;
+    const parts: string[] = [];
+    if (years) parts.push(`${years} año${years !== 1 ? "s" : ""}`);
+    if (rem) parts.push(`${rem} mes${rem !== 1 ? "es" : ""}`);
+    return parts.join(" ") || "0 meses";
+  }
   if (months >= MAX_MONTHS) return "50+ years";
   const years = Math.floor(months / 12);
   const rem = months % 12;
@@ -104,8 +113,15 @@ export function formatMonthsAsYearsMonths(months: number): string {
 export function validateCreditCardInputs(
   balance: number,
   apr: number,
-  monthlyPayment: number
+  monthlyPayment: number,
+  lang: "en" | "es" = "en"
 ): string | null {
+  if (lang === "es") {
+    if (!balance || balance <= 0) return "Ingresa un saldo de tarjeta válido.";
+    if (apr < 0) return "La TAE no puede ser negativa.";
+    if (!monthlyPayment || monthlyPayment <= 0) return "Ingresa un pago mensual válido.";
+    return null;
+  }
   if (!balance || balance <= 0) return "Please enter a valid card balance.";
   if (apr < 0) return "APR cannot be negative.";
   if (!monthlyPayment || monthlyPayment <= 0) return "Please enter a valid monthly payment.";

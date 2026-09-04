@@ -11,13 +11,15 @@ export interface BodyFatResult {
   category: string;
 }
 
-export function validateBodyFatInput(i: BodyFatInput): string | null {
-  if (i.heightCm <= 0 || i.heightCm > 250) return "Enter a realistic height.";
-  if (i.neckCm <= 0) return "Enter a valid neck measurement.";
-  if (i.waistCm <= 0) return "Enter a valid waist measurement.";
-  if (i.gender === "female" && (!i.hipCm || i.hipCm <= 0))
-    return "Enter a valid hip measurement.";
-  if (i.waistCm <= i.neckCm) return "Waist measurement must be greater than neck.";
+export function validateBodyFatInput(i: BodyFatInput, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es"
+    ? { height: "Ingresa una estatura realista.", neck: "Ingresa una medida de cuello válida.", waist: "Ingresa una medida de cintura válida.", hip: "Ingresa una medida de cadera válida.", waistNeck: "La cintura debe ser mayor que el cuello." }
+    : { height: "Enter a realistic height.", neck: "Enter a valid neck measurement.", waist: "Enter a valid waist measurement.", hip: "Enter a valid hip measurement.", waistNeck: "Waist measurement must be greater than neck." };
+  if (i.heightCm <= 0 || i.heightCm > 250) return msg.height;
+  if (i.neckCm <= 0) return msg.neck;
+  if (i.waistCm <= 0) return msg.waist;
+  if (i.gender === "female" && (!i.hipCm || i.hipCm <= 0)) return msg.hip;
+  if (i.waistCm <= i.neckCm) return msg.waistNeck;
   return null;
 }
 
@@ -61,7 +63,25 @@ export function calculateBodyFat(i: BodyFatInput): BodyFatResult {
   };
 }
 
-export function copyBodyFatSummary(i: BodyFatInput, r: BodyFatResult): string {
+const CATEGORY_ES: Record<string, string> = {
+  "Essential Fat": "Grasa Esencial", "Athletes": "Atlético", "Fitness": "En Forma", "Average": "Promedio", "Obese": "Obesidad",
+};
+
+export function copyBodyFatSummary(i: BodyFatInput, r: BodyFatResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Grasa Corporal
+
+Sexo: ${i.gender === "male" ? "Hombre" : "Mujer"}
+Estatura: ${i.heightCm} cm
+Cuello: ${i.neckCm} cm
+Cintura: ${i.waistCm} cm
+${i.hipCm ? `Cadera: ${i.hipCm} cm` : ""}
+
+Grasa Corporal: ${r.bodyFatPercent}%
+Categoría: ${CATEGORY_ES[r.category] ?? r.category}
+`.trim();
+  }
   return `
 Body Fat Summary
 

@@ -5,42 +5,52 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Wallet, Receipt, TrendingDown } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { currentDebts:"Current Debts", addDebt:"+ Add Debt", loanGroup:"Consolidation Loan", loanRate:"Loan Interest Rate (%)", loanTerm:"Loan Term (years)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Debt Consolidation Calculator", emptyDesc:"Compare your current debts against a single consolidation loan.", tip1:"Interest Saved", tip2:"New Monthly Payment", tip3:"Total Interest", interestSaved:"Interest Saved", newMonthlyPayment:"New Monthly Payment", currentTotalInterest:"Current Total Interest", consolidatedTotalInterest:"Consolidated Total Interest", aboutTitle:"About this Calculator", aboutText:"Compares the total interest cost of your current debts paid at their existing rates against a single new consolidation loan, so you can see whether consolidating actually saves money." },
+  es: { currentDebts:"Deudas Actuales", addDebt:"+ Agregar Deuda", loanGroup:"Préstamo de Consolidación", loanRate:"Tasa de Interés del Préstamo (%)", loanTerm:"Plazo del Préstamo (años)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Consolidación de Deudas", emptyDesc:"Compara tus deudas actuales con un único préstamo de consolidación.", tip1:"Interés Ahorrado", tip2:"Nuevo Pago Mensual", tip3:"Interés Total", interestSaved:"Interés Ahorrado", newMonthlyPayment:"Nuevo Pago Mensual", currentTotalInterest:"Interés Total Actual", consolidatedTotalInterest:"Interés Total Consolidado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Compara el costo total de interés de tus deudas actuales pagadas a sus tasas existentes frente a un único préstamo de consolidación nuevo, para que veas si consolidar realmente ahorra dinero." },
+}[lang];
 ---
 <section class="dcn-calculator">
   <div class="dcn-layout">
     <aside class="dcn-sidebar">
       <div class="dcn-group">
-        <h3>Current Debts</h3>
+        <h3>{copy.currentDebts}</h3>
         <div id="debtList" class="debt-list"></div>
-        <button type="button" id="addDebtBtn" class="add-debt-btn">+ Add Debt</button>
+        <button type="button" id="addDebtBtn" class="add-debt-btn">{copy.addDebt}</button>
       </div>
       <div class="dcn-group">
-        <h3>Consolidation Loan</h3>
-        <CalculatorField id="consolidationRate" label="Loan Interest Rate (%)" type="number" placeholder="e.g. 12" min="0" step="0.01" />
-        <CalculatorField id="consolidationTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 4" min="1" step="1" />
+        <h3>{copy.loanGroup}</h3>
+        <CalculatorField id="consolidationRate" label={copy.loanRate} type="number" placeholder="e.g. 12" min="0" step="0.01" />
+        <CalculatorField id="consolidationTermYears" label={copy.loanTerm} type="number" placeholder="e.g. 4" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dcn-content">
       <div id="emptyState">
-        <EmptyState icon="🏦" title="Debt Consolidation Calculator" description="Compare your current debts against a single consolidation loan." tips={["Interest Saved", "New Monthly Payment", "Total Interest"]} />
+        <EmptyState icon="🏦" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="interestSavedResult" title="Interest Saved" icon={PiggyBank} accent="success" subtitle=" " />
-          <ResultCard id="consolidatedPaymentResult" title="New Monthly Payment" icon={Wallet} />
-          <ResultCard id="currentInterestResult" title="Current Total Interest" icon={Receipt} />
-          <ResultCard id="consolidatedInterestResult" title="Consolidated Total Interest" icon={TrendingDown} />
+          <ResultCard id="interestSavedResult" title={copy.interestSaved} icon={PiggyBank} accent="success" subtitle=" " />
+          <ResultCard id="consolidatedPaymentResult" title={copy.newMonthlyPayment} icon={Wallet} />
+          <ResultCard id="currentInterestResult" title={copy.currentTotalInterest} icon={Receipt} />
+          <ResultCard id="consolidatedInterestResult" title={copy.consolidatedTotalInterest} icon={TrendingDown} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Compares the total interest cost of your current debts paid at their existing rates against a single new consolidation loan, so you can see whether consolidating actually saves money.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/debt-consolidation-calculator";
 </script>

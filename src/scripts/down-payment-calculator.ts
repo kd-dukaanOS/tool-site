@@ -18,6 +18,30 @@ const fieldIds = [
   "propertyTaxRate", "annualInsurance", "closingCostPercent", "pmiRate",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { inclClosing:(c:string)=>`Incl. ${c} closing costs`, inclPmi:(p:string)=>`Incl. ${p} PMI/mo`, noPmi:"No PMI required", yes:"Yes", no:"No", summary:(r:any,fmt:(n:number)=>string)=>`
+Down Payment Summary
+
+Down Payment: ${fmt(r.downPayment)}
+Loan Amount: ${fmt(r.loanAmount)}
+Closing Costs: ${fmt(r.closingCosts)}
+Cash Needed at Closing: ${fmt(r.cashNeeded)}
+Total Monthly Payment: ${fmt(r.totalMonthlyPayment)}
+PMI Required: ${r.pmiRequired ? "Yes" : "No"}
+`.trim() },
+  es: { inclClosing:(c:string)=>`Incl. ${c} en costos de cierre`, inclPmi:(p:string)=>`Incl. ${p} PMI/mes`, noPmi:"No se requiere PMI", yes:"Sí", no:"No", summary:(r:any,fmt:(n:number)=>string)=>`
+Resumen de Pago Inicial
+
+Pago Inicial: ${fmt(r.downPayment)}
+Monto del Préstamo: ${fmt(r.loanAmount)}
+Costos de Cierre: ${fmt(r.closingCosts)}
+Efectivo Necesario al Cierre: ${fmt(r.cashNeeded)}
+Pago Mensual Total: ${fmt(r.totalMonthlyPayment)}
+PMI Requerido: ${r.pmiRequired ? "Sí" : "No"}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -41,7 +65,7 @@ function calculate() {
     propertyTaxRate, annualInsurance, closingCostPercent, pmiRate,
   ] = fieldIds.map(val);
 
-  const validationError = validateDownPaymentInputs(homePrice, downPaymentPercent);
+  const validationError = validateDownPaymentInputs(homePrice, downPaymentPercent, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -56,19 +80,10 @@ function calculate() {
   setValue("loanAmountResult", fmtCurrency(result.loanAmount));
   setValue("cashNeededResult", fmtCurrency(result.cashNeeded));
   setValue("monthlyPaymentResult", fmtCurrency(result.totalMonthlyPayment));
-  setSubtitle("cashNeededResult", `Incl. ${fmtCurrency(result.closingCosts)} closing costs`);
-  setSubtitle("monthlyPaymentResult", result.pmiRequired ? `Incl. ${fmtCurrency(result.monthlyPMI)} PMI/mo` : "No PMI required");
+  setSubtitle("cashNeededResult", t.inclClosing(fmtCurrency(result.closingCosts)));
+  setSubtitle("monthlyPaymentResult", result.pmiRequired ? t.inclPmi(fmtCurrency(result.monthlyPMI)) : t.noPmi);
 
-  lastSummary = `
-Down Payment Summary
-
-Down Payment: ${fmtCurrency(result.downPayment)}
-Loan Amount: ${fmtCurrency(result.loanAmount)}
-Closing Costs: ${fmtCurrency(result.closingCosts)}
-Cash Needed at Closing: ${fmtCurrency(result.cashNeeded)}
-Total Monthly Payment: ${fmtCurrency(result.totalMonthlyPayment)}
-PMI Required: ${result.pmiRequired ? "Yes" : "No"}
-`.trim();
+  lastSummary = t.summary(result, fmtCurrency);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

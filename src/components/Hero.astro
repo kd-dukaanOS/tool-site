@@ -3,15 +3,39 @@ import Badge from './ui/Badge.astro';
 import Input from './ui/Input.astro';
 import Button from './ui/Button.astro';
 import { tools } from '../data/tools.js';
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+const prefix = lang === "es" ? "/es" : "";
+
+const copy = {
+  en: {
+    heading1: "Too Many Tools.", headingGradient: "One Less", headingRest: "Problem.",
+    desc: "Free calculators, converters, developer utilities and everyday tools — built to help you get things done faster.",
+    searchPlaceholder: "What do you need to figure out?",
+    popularLabel: "People are using:",
+    badgeSuffix: "free tools · private by default · no sign-up",
+  },
+  es: {
+    heading1: "Demasiadas Herramientas.", headingGradient: "Un Problema", headingRest: "Menos.",
+    desc: "Calculadoras, conversores, utilidades para desarrolladores y herramientas gratuitas — creadas para ayudarte a resolver todo más rápido.",
+    searchPlaceholder: "¿Qué necesitas calcular?",
+    popularLabel: "La gente está usando:",
+    badgeSuffix: "herramientas gratis · privado por defecto · sin registro",
+  },
+}[lang];
+
 const popularSearches = [
-  { name: 'JSON Formatter', href: '/developer-tools/json-formatter/' },
-  { name: 'Word Counter', href: '/text-tools/word-counter/' },
-  { name: 'UUID Generator', href: '/security-tools/uuid-generator/' },
-  { name: 'QR Code Generator', href: '/generators-calculators/qr-code-generator/' },
-  { name: 'EMI Calculator', href: '/finance/emi-calculator/' },
-  { name: 'GST Calculator', href: '/finance/gst-calculator/' },
-  { name: 'BMI Calculator', href: '/health/bmi-calculator/' },
-  { name: 'Age Calculator', href: '/date-time/age-calculator/' },
+  { name: 'JSON Formatter', href: `${prefix}/developer-tools/json-formatter/` },
+  { name: 'Word Counter', href: `${prefix}/text-tools/word-counter/` },
+  { name: 'UUID Generator', href: `${prefix}/security-tools/uuid-generator/` },
+  { name: 'QR Code Generator', href: `${prefix}/generators-calculators/qr-code-generator/` },
+  { name: 'EMI Calculator', href: `${prefix}/finance/emi-calculator/` },
+  { name: 'GST Calculator', href: `${prefix}/finance/gst-calculator/` },
+  { name: 'BMI Calculator', href: `${prefix}/health/bmi-calculator/` },
+  { name: 'Age Calculator', href: `${prefix}/date-time/age-calculator/` },
 ];
 ---
 <section class="ts-hero">
@@ -25,23 +49,22 @@ const popularSearches = [
   <div class="ts-hero-float f8"><span class="dot" style="background:#db2777"></span> Age</div>
   <div class="ts-hero-inner reveal">
     <Badge tone="primary" class="ts-hero-badge">
-      ✦ {tools.length}+ free tools · private by default · no sign-up
+      ✦ {tools.length}+ {copy.badgeSuffix}
     </Badge>
 
     <h1 class="ts-hero-heading">
-      Too Many Tools.<br />
-      <span class="ts-hero-gradient">One Less</span> Problem.
+      {copy.heading1}<br />
+      <span class="ts-hero-gradient">{copy.headingGradient}</span> {copy.headingRest}
     </h1>
 
     <p class="ts-hero-desc">
-      Free calculators, converters, developer utilities and everyday tools —
-      built to help you get things done faster.
+      {copy.desc}
     </p>
 
     <div class="ts-hero-search">
       <div class="ts-input-wrap">
         <span class="ts-input-icon">🔍</span>
-        <input class="ts-input" type="text" id="hero-search-input" placeholder="What do you need to figure out?" autocomplete="off" />
+        <input class="ts-input" type="text" id="hero-search-input" placeholder={copy.searchPlaceholder} autocomplete="off" />
         <button id="hero-clear-btn" class="ts-hero-clear" style="display:none">✕</button>
         <kbd class="ts-input-kbd">⌘K</kbd>
         <button id="hero-search-btn" class="ts-btn ts-btn-primary ts-hero-search-btn">→</button>
@@ -50,7 +73,7 @@ const popularSearches = [
     </div>
 
     <div class="ts-hero-popular">
-      <span class="ts-hero-popular-label">People are using:</span>
+      <span class="ts-hero-popular-label">{copy.popularLabel}</span>
       {popularSearches.map((term) => (
         <a href={term.href} class="ts-hero-chip">{term.name}</a>
       ))}

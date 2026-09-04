@@ -12,6 +12,12 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 const debtListEl = document.getElementById("debtList") as HTMLElement;
 const orderBody = document.getElementById("orderBody") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { namePlaceholder:"Debt name (e.g. Credit Card)", debtWord:"Debt", balancePlaceholder:"Balance", minPaymentPlaceholder:"Min payment", ratePlaceholder:"Rate %", debtFreeTimeline:"Debt-free timeline", summaryTitle:"Debt Avalanche Summary", debtFreeIn:"Debt-Free In", totalInterest:"Total Interest Paid", totalPaid:"Total Paid", payoffOrder:"Payoff Order" },
+  es: { namePlaceholder:"Nombre de la deuda (ej. Tarjeta de Crédito)", debtWord:"Deuda", balancePlaceholder:"Saldo", minPaymentPlaceholder:"Pago mínimo", ratePlaceholder:"Tasa %", debtFreeTimeline:"Cronograma sin deudas", summaryTitle:"Resumen de Avalancha de Deudas", debtFreeIn:"Libre de Deudas En", totalInterest:"Interés Total Pagado", totalPaid:"Total Pagado", payoffOrder:"Orden de Pago" },
+}[lang];
+
 let debtCount = 0;
 let lastSummary = "";
 
@@ -35,10 +41,10 @@ function addDebtRow() {
   row.className = "debt-row";
   row.dataset.debtId = String(debtCount);
   row.innerHTML = `
-    <input type="text" class="debt-name" placeholder="Debt name (e.g. Credit Card)" value="Debt ${debtCount}" />
-    <input type="number" class="debt-balance" placeholder="Balance" min="0" step="1" />
-    <input type="number" class="debt-min-payment" placeholder="Min payment" min="0" step="1" />
-    <input type="number" class="debt-rate" placeholder="Rate %" min="0" step="0.01" />
+    <input type="text" class="debt-name" placeholder="${t.namePlaceholder}" value="${t.debtWord} ${debtCount}" />
+    <input type="number" class="debt-balance" placeholder="${t.balancePlaceholder}" min="0" step="1" />
+    <input type="number" class="debt-min-payment" placeholder="${t.minPaymentPlaceholder}" min="0" step="1" />
+    <input type="number" class="debt-rate" placeholder="${t.ratePlaceholder}" min="0" step="0.01" />
     <button type="button" class="debt-remove" aria-label="Remove debt">&times;</button>
   `;
   row.querySelector(".debt-remove")?.addEventListener("click", () => row.remove());
@@ -60,7 +66,7 @@ function calculate() {
   const debts = readDebts();
   const extraMonthlyPayment = parseFloat((document.getElementById("extraMonthlyPayment") as HTMLInputElement)?.value) || 0;
 
-  const validationError = validateDebtAvalancheInputs(debts);
+  const validationError = validateDebtAvalancheInputs(debts, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -72,7 +78,7 @@ function calculate() {
   setValue("totalInterestResult", fmtCurrency(result.totalInterestPaid));
   setValue("totalPaidResult", fmtCurrency(result.totalPaid));
   setValue("debtCountResult", String(debts.length));
-  setSubtitle("totalMonthsResult", "Debt-free timeline");
+  setSubtitle("totalMonthsResult", t.debtFreeTimeline);
 
   if (orderBody) {
     orderBody.innerHTML = result.payoffOrder
@@ -84,13 +90,13 @@ function calculate() {
   }
 
   lastSummary = `
-Debt Avalanche Summary
+${t.summaryTitle}
 
-Debt-Free In: ${Math.floor(result.totalMonths / 12)}y ${result.totalMonths % 12}m
-Total Interest Paid: ${fmtCurrency(result.totalInterestPaid)}
-Total Paid: ${fmtCurrency(result.totalPaid)}
+${t.debtFreeIn}: ${Math.floor(result.totalMonths / 12)}y ${result.totalMonths % 12}m
+${t.totalInterest}: ${fmtCurrency(result.totalInterestPaid)}
+${t.totalPaid}: ${fmtCurrency(result.totalPaid)}
 
-Payoff Order:
+${t.payoffOrder}:
 ${result.payoffOrder.map((d, i) => `${i + 1}. ${d.name} — ${Math.floor(d.monthsToPayoff / 12)}y ${d.monthsToPayoff % 12}m`).join("\n")}
 `.trim();
 

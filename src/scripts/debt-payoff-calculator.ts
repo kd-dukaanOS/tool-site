@@ -26,6 +26,12 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const orderList = document.getElementById("payoffOrderList") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { avalancheSaves:"avalanche saves more", snowballSaves:"snowball saves more", paidOffInMonth:(month:number)=>`paid off in month ${month}`, summaryTitle:(strategy:string)=>`Debt Payoff Summary (${strategy})`, payoffTime:"Payoff Time", totalInterest:"Total Interest", totalPaid:"Total Paid" },
+  es: { avalancheSaves:"la avalancha ahorra más", snowballSaves:"la bola de nieve ahorra más", paidOffInMonth:(month:number)=>`pagada en el mes ${month}`, summaryTitle:(strategy:string)=>`Resumen de Pago de Deudas (${strategy})`, payoffTime:"Tiempo de Pago", totalInterest:"Interés Total", totalPaid:"Total Pagado" },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -49,7 +55,7 @@ function calculate() {
   const debts = [getDebtInputs(1), getDebtInputs(2), getDebtInputs(3)];
   const extra = parseFloat(extraPaymentInput?.value || "0") || 0;
 
-  const validationError = validateDebts(debts);
+  const validationError = validateDebts(debts, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -64,20 +70,20 @@ function calculate() {
 
   const interestDiff = snowball.totalInterest - avalanche.totalInterest;
   setValue("avalancheSavingsResult", fmtCurrency(Math.abs(interestDiff)));
-  setSubtitle("avalancheSavingsResult", interestDiff >= 0 ? "avalanche saves more" : "snowball saves more");
+  setSubtitle("avalancheSavingsResult", interestDiff >= 0 ? t.avalancheSaves : t.snowballSaves);
 
   if (orderList) {
     orderList.innerHTML = chosen.payoffOrder
-      .map((d) => `<li>${d.name} — paid off in month ${d.monthPaidOff}</li>`)
+      .map((d) => `<li>${d.name} — ${t.paidOffInMonth(d.monthPaidOff)}</li>`)
       .join("");
   }
 
   lastSummary = `
-Debt Payoff Summary (${strategySelect?.value || "avalanche"})
+${t.summaryTitle(strategySelect?.value || "avalanche")}
 
-Payoff Time: ${formatMonthsAsYearsMonths(chosen.months)}
-Total Interest: ${fmtCurrency(chosen.totalInterest)}
-Total Paid: ${fmtCurrency(chosen.totalPaid)}
+${t.payoffTime}: ${formatMonthsAsYearsMonths(chosen.months)}
+${t.totalInterest}: ${fmtCurrency(chosen.totalInterest)}
+${t.totalPaid}: ${fmtCurrency(chosen.totalPaid)}
 `.trim();
 
   emptyState.hidden = true;

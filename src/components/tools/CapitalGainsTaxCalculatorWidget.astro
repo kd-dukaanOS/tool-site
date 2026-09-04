@@ -7,6 +7,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { purchasePrice:"Purchase Price ($)", salePrice:"Sale Price ($)", holdingPeriod:"Holding Period", longTerm:"Long-Term (over 1 year)", shortTerm:"Short-Term (1 year or less)", otherIncome:"Other Annual Income ($)", otherIncomeHelp:"Your income excluding this gain — determines your bracket.", filingStatus:"Filing Status", single:"Single", mfj:"Married Filing Jointly", mfs:"Married Filing Separately", hoh:"Head of Household", taxYear:"Tax Year", deduction:"Deduction", standardDeduction:"Standard Deduction", itemizedDeduction:"Itemized Deduction", itemizedDeductionAmt:"Itemized Deduction ($)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Capital Gains Tax Calculator", emptyDesc:"Estimate federal tax owed on a short-term or long-term capital gain based on your income and filing status.", tip1:"Capital Gains Tax", tip2:"After-Tax Gain", gain:"Capital Gain", tax:"Capital Gains Tax", rate:"Effective Rate on Gain", afterTax:"After-Tax Gain", aboutTitle:"About this Calculator", aboutText:"Estimates federal capital gains tax by stacking your gain on top of your other taxable income, using current IRS ordinary tax brackets (short-term) or long-term capital gains brackets (0%/15%/20%) for 2025 and 2026. Does not include state tax or the Net Investment Income Tax." },
+  es: { purchasePrice:"Precio de Compra ($)", salePrice:"Precio de Venta ($)", holdingPeriod:"Período de Tenencia", longTerm:"Largo Plazo (más de 1 año)", shortTerm:"Corto Plazo (1 año o menos)", otherIncome:"Otros Ingresos Anuales ($)", otherIncomeHelp:"Tu ingreso excluyendo esta ganancia — determina tu tramo.", filingStatus:"Estado Civil Tributario", single:"Soltero", mfj:"Casado Declarando Conjuntamente", mfs:"Casado Declarando por Separado", hoh:"Cabeza de Familia", taxYear:"Año Fiscal", deduction:"Deducción", standardDeduction:"Deducción Estándar", itemizedDeduction:"Deducción Detallada", itemizedDeductionAmt:"Deducción Detallada ($)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto sobre Ganancias de Capital", emptyDesc:"Estima el impuesto federal adeudado sobre una ganancia de capital a corto o largo plazo según tu ingreso y estado civil tributario.", tip1:"Impuesto sobre Ganancias", tip2:"Ganancia Después de Impuestos", gain:"Ganancia de Capital", tax:"Impuesto sobre Ganancias de Capital", rate:"Tasa Efectiva sobre la Ganancia", afterTax:"Ganancia Después de Impuestos", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima el impuesto federal sobre ganancias de capital apilando tu ganancia sobre tu otro ingreso imponible, usando los tramos ordinarios actuales del IRS (corto plazo) o los tramos de ganancias de capital a largo plazo (0%/15%/20%) para 2025 y 2026. No incluye impuesto estatal ni el Impuesto sobre Ingresos Netos de Inversión." },
+}[lang];
 ---
 
 <section class="cgt-calculator">
@@ -15,7 +22,7 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
     <aside class="cgt-sidebar">
       <CalculatorField
         id="purchasePrice"
-        label="Purchase Price ($)"
+        label={copy.purchasePrice}
         type="number"
         placeholder="e.g. 10000"
         required={true}
@@ -25,7 +32,7 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="salePrice"
-        label="Sale Price ($)"
+        label={copy.salePrice}
         type="number"
         placeholder="e.g. 15000"
         required={true}
@@ -35,39 +42,39 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="holdingPeriod"
-        label="Holding Period"
+        label={copy.holdingPeriod}
         type="select"
         required={true}
       >
-        <option value="long">Long-Term (over 1 year)</option>
-        <option value="short">Short-Term (1 year or less)</option>
+        <option value="long">{copy.longTerm}</option>
+        <option value="short">{copy.shortTerm}</option>
       </CalculatorField>
 
       <CalculatorField
         id="otherIncome"
-        label="Other Annual Income ($)"
+        label={copy.otherIncome}
         type="number"
         placeholder="e.g. 75000"
         min="0"
         step="0.01"
-        helpText="Your income excluding this gain — determines your bracket."
+        helpText={copy.otherIncomeHelp}
       />
 
       <CalculatorField
         id="filingStatus"
-        label="Filing Status"
+        label={copy.filingStatus}
         type="select"
         required={true}
       >
-        <option value="single">Single</option>
-        <option value="marriedJointly">Married Filing Jointly</option>
-        <option value="marriedSeparately">Married Filing Separately</option>
-        <option value="headOfHousehold">Head of Household</option>
+        <option value="single">{copy.single}</option>
+        <option value="marriedJointly">{copy.mfj}</option>
+        <option value="marriedSeparately">{copy.mfs}</option>
+        <option value="headOfHousehold">{copy.hoh}</option>
       </CalculatorField>
 
       <CalculatorField
         id="taxYear"
-        label="Tax Year"
+        label={copy.taxYear}
         type="select"
         required={true}
       >
@@ -77,18 +84,18 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="deductionMode"
-        label="Deduction"
+        label={copy.deduction}
         type="select"
         required={true}
       >
-        <option value="standard">Standard Deduction</option>
-        <option value="itemized">Itemized Deduction</option>
+        <option value="standard">{copy.standardDeduction}</option>
+        <option value="itemized">{copy.itemizedDeduction}</option>
       </CalculatorField>
 
       <div id="itemizedRow" hidden>
         <CalculatorField
           id="itemizedDeduction"
-          label="Itemized Deduction ($)"
+          label={copy.itemizedDeductionAmt}
           type="number"
           placeholder="e.g. 18000"
           min="0"
@@ -101,6 +108,9 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -110,27 +120,24 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📈"
-          title="Capital Gains Tax Calculator"
-          description="Estimate federal tax owed on a short-term or long-term capital gain based on your income and filing status."
-          tips={["Capital Gains Tax", "After-Tax Gain"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="gainResult" title="Capital Gain" icon={TrendingUp} accent="neutral" size="lg" />
-          <ResultCard id="taxResult" title="Capital Gains Tax" icon={Landmark} accent="primary" size="lg" />
-          <ResultCard id="rateResult" title="Effective Rate on Gain" icon={Percent} accent="primary" />
-          <ResultCard id="afterTaxResult" title="After-Tax Gain" icon={Wallet} accent="success" />
+          <ResultCard id="gainResult" title={copy.gain} icon={TrendingUp} accent="neutral" size="lg" />
+          <ResultCard id="taxResult" title={copy.tax} icon={Landmark} accent="primary" size="lg" />
+          <ResultCard id="rateResult" title={copy.rate} icon={Percent} accent="primary" />
+          <ResultCard id="afterTaxResult" title={copy.afterTax} icon={Wallet} accent="success" />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
           <p>
-            Estimates federal capital gains tax by stacking your gain on top of your other taxable
-            income, using current IRS ordinary tax brackets (short-term) or long-term capital gains
-            brackets (0%/15%/20%) for 2025 and 2026. Does not include state tax or the Net
-            Investment Income Tax.
+            {copy.aboutText}
           </p>
         </section>
       </div>
@@ -139,6 +146,9 @@ import { TrendingUp, Landmark, Wallet, Percent } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/capital-gains-calculator";
 </script>

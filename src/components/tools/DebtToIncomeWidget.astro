@@ -5,47 +5,57 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Percent, Layers, Wallet, Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income", grossIncome:"Gross Monthly Income", housingGroup:"Housing", housingPayment:"Total Housing Payment", otherDebtsGroup:"Other Debts", carLoan:"Car Loan Payment", studentLoan:"Student Loan Payment", creditCardMin:"Credit Card Min. Payments", otherDebt:"Other Debt Payments", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Debt-to-Income Calculator", emptyDesc:"Find your front-end and back-end DTI ratio for mortgage qualification.", tip1:"Front-End DTI", tip2:"Back-End DTI", tip3:"Lender Rating", frontEnd:"Front-End DTI", backEnd:"Back-End DTI", totalDebt:"Total Monthly Debt", rating:"Overall Rating", aboutTitle:"About this Calculator", aboutText:"Calculates your front-end (housing-only) and back-end (total debt) DTI ratios against gross monthly income, using lender-standard thresholds." },
+  es: { incomeGroup:"Ingresos", grossIncome:"Ingreso Mensual Bruto", housingGroup:"Vivienda", housingPayment:"Pago Total de Vivienda", otherDebtsGroup:"Otras Deudas", carLoan:"Pago de Préstamo de Auto", studentLoan:"Pago de Préstamo Estudiantil", creditCardMin:"Pagos Mín. de Tarjeta de Crédito", otherDebt:"Otros Pagos de Deuda", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Deuda a Ingresos", emptyDesc:"Encuentra tu relación DTI inicial y total para calificar una hipoteca.", tip1:"DTI Inicial", tip2:"DTI Total", tip3:"Calificación del Prestamista", frontEnd:"DTI Inicial", backEnd:"DTI Total", totalDebt:"Deuda Mensual Total", rating:"Calificación General", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tus relaciones DTI inicial (solo vivienda) y total (toda la deuda) frente al ingreso mensual bruto, usando los umbrales estándar de los prestamistas." },
+}[lang];
 ---
 <section class="dti-calculator">
   <div class="dti-layout">
     <aside class="dti-sidebar">
       <div class="dti-group">
-        <h3>Income</h3>
-        <CalculatorField id="grossMonthlyIncome" label="Gross Monthly Income" type="number" placeholder="e.g. 6000" min="0" step="1" />
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="grossMonthlyIncome" label={copy.grossIncome} type="number" placeholder="e.g. 6000" min="0" step="1" />
       </div>
       <div class="dti-group">
-        <h3>Housing</h3>
-        <CalculatorField id="housingPayment" label="Total Housing Payment" type="number" placeholder="e.g. 1500" min="0" step="1" />
+        <h3>{copy.housingGroup}</h3>
+        <CalculatorField id="housingPayment" label={copy.housingPayment} type="number" placeholder="e.g. 1500" min="0" step="1" />
       </div>
       <div class="dti-group">
-        <h3>Other Debts</h3>
-        <CalculatorField id="carLoanPayment" label="Car Loan Payment" type="number" placeholder="e.g. 350" min="0" step="1" />
-        <CalculatorField id="studentLoanPayment" label="Student Loan Payment" type="number" placeholder="e.g. 200" min="0" step="1" />
-        <CalculatorField id="creditCardMinPayments" label="Credit Card Min. Payments" type="number" placeholder="e.g. 150" min="0" step="1" />
-        <CalculatorField id="otherDebtPayments" label="Other Debt Payments" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.otherDebtsGroup}</h3>
+        <CalculatorField id="carLoanPayment" label={copy.carLoan} type="number" placeholder="e.g. 350" min="0" step="1" />
+        <CalculatorField id="studentLoanPayment" label={copy.studentLoan} type="number" placeholder="e.g. 200" min="0" step="1" />
+        <CalculatorField id="creditCardMinPayments" label={copy.creditCardMin} type="number" placeholder="e.g. 150" min="0" step="1" />
+        <CalculatorField id="otherDebtPayments" label={copy.otherDebt} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dti-content">
       <div id="emptyState">
-        <EmptyState icon="⚖️" title="Debt-to-Income Calculator" description="Find your front-end and back-end DTI ratio for mortgage qualification." tips={["Front-End DTI", "Back-End DTI", "Lender Rating"]} />
+        <EmptyState icon="⚖️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="frontEndResult" title="Front-End DTI" icon={Percent} accent="success" subtitle=" " />
-          <ResultCard id="backEndResult" title="Back-End DTI" icon={Layers} subtitle=" " />
-          <ResultCard id="totalDebtResult" title="Total Monthly Debt" icon={Wallet} />
-          <ResultCard id="ratingResult" title="Overall Rating" icon={Gauge} subtitle=" " />
+          <ResultCard id="frontEndResult" title={copy.frontEnd} icon={Percent} accent="success" subtitle=" " />
+          <ResultCard id="backEndResult" title={copy.backEnd} icon={Layers} subtitle=" " />
+          <ResultCard id="totalDebtResult" title={copy.totalDebt} icon={Wallet} />
+          <ResultCard id="ratingResult" title={copy.rating} icon={Gauge} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your front-end (housing-only) and back-end (total debt) DTI ratios against gross monthly income, using lender-standard thresholds.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/debt-to-income-calculator";
 </script>

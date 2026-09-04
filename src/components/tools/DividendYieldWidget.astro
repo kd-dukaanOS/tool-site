@@ -5,42 +5,52 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Percent, DollarSign, Wallet, TrendingUp } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { stockInfo:"Stock Info", sharePrice:"Current Share Price", annualDividend:"Annual Dividend per Share", numberOfShares:"Number of Shares", yieldOnCostGroup:"Yield on Cost (Optional)", purchasePrice:"Your Purchase Price", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Dividend Yield Calculator", emptyDesc:"Find your dividend yield and projected income.", tip1:"Dividend Yield", tip2:"Annual Income", tip3:"Yield on Cost", dividendYield:"Dividend Yield", annualIncome:"Annual Dividend Income", monthlyIncome:"Monthly Dividend Income", yieldOnCost:"Yield on Cost", aboutTitle:"About this Calculator", aboutText:"Calculates a stock's dividend yield, your projected annual and monthly dividend income, and yield on cost based on your original purchase price." },
+  es: { stockInfo:"Información de la Acción", sharePrice:"Precio Actual de la Acción", annualDividend:"Dividendo Anual por Acción", numberOfShares:"Número de Acciones", yieldOnCostGroup:"Rendimiento sobre Costo (Opcional)", purchasePrice:"Tu Precio de Compra", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Rendimiento de Dividendos", emptyDesc:"Encuentra tu rendimiento de dividendos e ingreso proyectado.", tip1:"Rendimiento de Dividendos", tip2:"Ingreso Anual", tip3:"Rendimiento sobre Costo", dividendYield:"Rendimiento de Dividendos", annualIncome:"Ingreso Anual por Dividendos", monthlyIncome:"Ingreso Mensual por Dividendos", yieldOnCost:"Rendimiento sobre Costo", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el rendimiento de dividendos de una acción, tu ingreso anual y mensual proyectado por dividendos, y el rendimiento sobre costo según tu precio de compra original." },
+}[lang];
 ---
 <section class="dy-calculator">
   <div class="dy-layout">
     <aside class="dy-sidebar">
       <div class="dy-group">
-        <h3>Stock Info</h3>
-        <CalculatorField id="sharePrice" label="Current Share Price" type="number" placeholder="e.g. 50" min="0" step="0.01" />
-        <CalculatorField id="annualDividendPerShare" label="Annual Dividend per Share" type="number" placeholder="e.g. 2.00" min="0" step="0.01" />
-        <CalculatorField id="numberOfShares" label="Number of Shares" type="number" placeholder="e.g. 100" min="0" step="1" />
+        <h3>{copy.stockInfo}</h3>
+        <CalculatorField id="sharePrice" label={copy.sharePrice} type="number" placeholder="e.g. 50" min="0" step="0.01" />
+        <CalculatorField id="annualDividendPerShare" label={copy.annualDividend} type="number" placeholder="e.g. 2.00" min="0" step="0.01" />
+        <CalculatorField id="numberOfShares" label={copy.numberOfShares} type="number" placeholder="e.g. 100" min="0" step="1" />
       </div>
       <div class="dy-group">
-        <h3>Yield on Cost (Optional)</h3>
-        <CalculatorField id="purchasePrice" label="Your Purchase Price" type="number" placeholder="e.g. 40" min="0" step="0.01" />
+        <h3>{copy.yieldOnCostGroup}</h3>
+        <CalculatorField id="purchasePrice" label={copy.purchasePrice} type="number" placeholder="e.g. 40" min="0" step="0.01" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dy-content">
       <div id="emptyState">
-        <EmptyState icon="💵" title="Dividend Yield Calculator" description="Find your dividend yield and projected income." tips={["Dividend Yield", "Annual Income", "Yield on Cost"]} />
+        <EmptyState icon="💵" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="dividendYieldResult" title="Dividend Yield" icon={Percent} accent="success" />
-          <ResultCard id="annualIncomeResult" title="Annual Dividend Income" icon={DollarSign} />
-          <ResultCard id="monthlyIncomeResult" title="Monthly Dividend Income" icon={Wallet} />
-          <ResultCard id="yieldOnCostResult" title="Yield on Cost" icon={TrendingUp} subtitle=" " />
+          <ResultCard id="dividendYieldResult" title={copy.dividendYield} icon={Percent} accent="success" />
+          <ResultCard id="annualIncomeResult" title={copy.annualIncome} icon={DollarSign} />
+          <ResultCard id="monthlyIncomeResult" title={copy.monthlyIncome} icon={Wallet} />
+          <ResultCard id="yieldOnCostResult" title={copy.yieldOnCost} icon={TrendingUp} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates a stock's dividend yield, your projected annual and monthly dividend income, and yield on cost based on your original purchase price.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/dividend-yield-calculator";
 </script>

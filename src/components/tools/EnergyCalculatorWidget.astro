@@ -4,13 +4,20 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Zap } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", valuePlaceholder:"Enter value", from:"From", to:"To", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Energy Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", valuePlaceholder:"Ingresa un valor", from:"De", to:"A", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Convertidor de Energía", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder={copy.valuePlaceholder} />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
       <option value="joule">Joule</option>
       <option value="kj">Kilojoule</option>
       <option value="cal">Calorie</option>
@@ -20,7 +27,7 @@ import { Zap } from "@lucide/astro";
       <option value="btu">BTU</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
+    <CalculatorField id="toUnit" label={copy.to} type="select">
       <option value="joule">Joule</option>
       <option value="kj">Kilojoule</option>
       <option value="cal">Calorie</option>
@@ -32,18 +39,21 @@ import { Zap } from "@lucide/astro";
 
     <div id="errorBox" class="error-box" hidden></div>
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
   </div>
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="?" title="Energy Converter" description="Enter a value to convert." />
+      <EmptyState icon="?" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Zap} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Zap} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/energy-calculator.ts"></script>

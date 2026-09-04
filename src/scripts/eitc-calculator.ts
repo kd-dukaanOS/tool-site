@@ -19,6 +19,12 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 const numericFieldIds = ["earnedIncome", "agi", "qualifyingChildren", "investmentIncome"];
 const selectFieldIds = ["filingStatus", "taxYear"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { eligible:"Eligible", notEligible:"Not Eligible", header:(y:number)=>`Earned Income Tax Credit (EITC) Summary — Tax Year ${y}`, estCredit:"Estimated EITC", status:"Status", maxCreditLine:"Maximum Credit for Family Size", note:"Note" },
+  es: { eligible:"Elegible", notEligible:"No Elegible", header:(y:number)=>`Resumen de Crédito Tributario por Ingreso del Trabajo (EITC) — Año Fiscal ${y}`, estCredit:"EITC Estimado", status:"Estado", maxCreditLine:"Crédito Máximo por Tamaño Familiar", note:"Nota" },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -41,28 +47,28 @@ function calculate() {
   const filingStatus = strVal("filingStatus") as any;
   const taxYear = parseInt(strVal("taxYear"), 10) || 2025;
 
-  const validationError = validateEITCInputs(earnedIncome, agi || earnedIncome);
+  const validationError = validateEITCInputs(earnedIncome, agi || earnedIncome, lang);
   if (validationError) {
     showError(validationError);
     return;
   }
 
-  const result = calculateEITC(earnedIncome, agi || earnedIncome, filingStatus, qualifyingChildren, investmentIncome, taxYear);
+  const result = calculateEITC(earnedIncome, agi || earnedIncome, filingStatus, qualifyingChildren, investmentIncome, taxYear, lang);
 
   setValue("eitcResult", fmtCurrency(result.credit));
-  setValue("eligibleResult", result.eligible ? "Eligible" : "Not Eligible");
+  setValue("eligibleResult", result.eligible ? t.eligible : t.notEligible);
   setValue("maxCreditResult", fmtCurrency(result.maxCredit));
   setValue("phaseoutRateResult", `${(result.phaseoutRate * 100).toFixed(2)}%`);
-  setSubtitle("eitcResult", `Tax Year ${taxYear}`);
+  setSubtitle("eitcResult", `${lang === "es" ? "Año Fiscal" : "Tax Year"} ${taxYear}`);
   if (result.reason) setSubtitle("eligibleResult", result.reason);
 
   lastSummary = `
-Earned Income Tax Credit (EITC) Summary — Tax Year ${taxYear}
+${t.header(taxYear)}
 
-Estimated EITC: ${fmtCurrency(result.credit)}
-Status: ${result.eligible ? "Eligible" : "Not Eligible"}
-Maximum Credit for Family Size: ${fmtCurrency(result.maxCredit)}
-${result.reason ? `Note: ${result.reason}` : ""}
+${t.estCredit}: ${fmtCurrency(result.credit)}
+${t.status}: ${result.eligible ? t.eligible : t.notEligible}
+${t.maxCreditLine}: ${fmtCurrency(result.maxCredit)}
+${result.reason ? `${t.note}: ${result.reason}` : ""}
 `.trim();
 
   emptyState.hidden = true;

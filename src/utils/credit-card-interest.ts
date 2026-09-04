@@ -39,7 +39,12 @@ export function calculateCreditCardInterest(
   return { monthsToPayoff: months, totalInterest, totalRepayment, payoffPossible: true };
 }
 
-export function validateCreditCardInterestInputs(balance: number, monthlyPayment: number): string | null {
+export function validateCreditCardInterestInputs(balance: number, monthlyPayment: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (balance <= 0) return "El saldo debe ser mayor que cero.";
+    if (monthlyPayment <= 0) return "El pago mensual debe ser mayor que cero.";
+    return null;
+  }
   if (balance <= 0) return "Balance must be greater than zero.";
   if (monthlyPayment <= 0) return "Monthly payment must be greater than zero.";
   return null;

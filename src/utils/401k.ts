@@ -40,7 +40,12 @@ export function calculate401k(
   return { projectedBalance: balance, totalEmployeeContributions, totalEmployerMatch, totalGrowth };
 }
 
-export function validate401kInputs(currentAge: number, retirementAge: number): string | null {
+export function validate401kInputs(currentAge: number, retirementAge: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (currentAge <= 0) return "La edad actual debe ser mayor que cero.";
+    if (retirementAge <= currentAge) return "La edad de jubilación debe ser mayor que la edad actual.";
+    return null;
+  }
   if (currentAge <= 0) return "Current age must be greater than zero.";
   if (retirementAge <= currentAge) return "Retirement age must be greater than current age.";
   return null;

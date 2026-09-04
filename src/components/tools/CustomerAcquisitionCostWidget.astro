@@ -12,6 +12,38 @@ import {
   Wallet,
   Target
 } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    marketingCost: "Marketing Cost", marketingHelp: "Total marketing spend for the period.",
+    salesCost: "Sales Cost", salesHelp: "Total sales team spend for the period (optional).",
+    newCustomers: "New Customers", newCustomersHelp: "Number of new customers acquired in the period.",
+    totalLeads: "Total Leads", totalLeadsHelp: "Total leads generated, to also see cost per lead (optional).",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Customer Acquisition Cost Calculator", emptyDesc: "Find out how much it costs to acquire a new customer.",
+    tip1: "CAC per Customer", tip2: "Total Spend", tip3: "Cost per Lead",
+    cac: "Customer Acquisition Cost", totalSpend: "Total Spend", costPerLead: "Cost per Lead",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculate your Customer Acquisition Cost (CAC) by combining marketing and sales spend and dividing by the number of new customers acquired. Compare this against Customer Lifetime Value to check whether your acquisition spend is sustainable.",
+  },
+  es: {
+    marketingCost: "Costo de Marketing", marketingHelp: "Gasto total de marketing durante el período.",
+    salesCost: "Costo de Ventas", salesHelp: "Gasto total del equipo de ventas durante el período (opcional).",
+    newCustomers: "Clientes Nuevos", newCustomersHelp: "Número de clientes nuevos adquiridos en el período.",
+    totalLeads: "Leads Totales", totalLeadsHelp: "Total de leads generados, para también ver el costo por lead (opcional).",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Costo de Adquisición de Clientes", emptyDesc: "Descubre cuánto cuesta adquirir un nuevo cliente.",
+    tip1: "CAC por Cliente", tip2: "Gasto Total", tip3: "Costo por Lead",
+    cac: "Costo de Adquisición de Clientes", totalSpend: "Gasto Total", costPerLead: "Costo por Lead",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Calcula tu Costo de Adquisición de Clientes (CAC) combinando el gasto de marketing y ventas y dividiéndolo entre el número de clientes nuevos adquiridos. Compara esto con el Valor de Vida del Cliente para verificar si tu gasto de adquisición es sostenible.",
+  },
+}[lang];
 ---
 
 <section class="cac-calculator">
@@ -22,32 +54,32 @@ import {
       <CurrencySelector />
 
       <CalculatorField
-        id="marketingCost"        label="Marketing Cost"
+        id="marketingCost"        label={copy.marketingCost}
         type="number"
         required={true}
-        helpText="Total marketing spend for the period."
+        helpText={copy.marketingHelp}
       />
 
       <CalculatorField
         id="salesCost"
-        label="Sales Cost"
+        label={copy.salesCost}
         type="number"
-        helpText="Total sales team spend for the period (optional)."
+        helpText={copy.salesHelp}
       />
 
       <CalculatorField
         id="newCustomers"
-        label="New Customers"
+        label={copy.newCustomers}
         type="number"
         required={true}
-        helpText="Number of new customers acquired in the period."
+        helpText={copy.newCustomersHelp}
       />
 
       <CalculatorField
         id="totalLeads"
-        label="Total Leads"
+        label={copy.totalLeads}
         type="number"
-        helpText="Total leads generated, to also see cost per lead (optional)."
+        helpText={copy.totalLeadsHelp}
       />
 
       <CalculatorActions
@@ -55,6 +87,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -67,12 +102,12 @@ import {
 
         <EmptyState
           icon="🎯"
-          title="Customer Acquisition Cost Calculator"
-          description="Find out how much it costs to acquire a new customer."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "CAC per Customer",
-            "Total Spend",
-            "Cost per Lead"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3
           ]}
         />
 
@@ -84,20 +119,20 @@ import {
 
           <ResultCard
             id="cacResult"
-            title="Customer Acquisition Cost"
+            title={copy.cac}
             icon={Target}
             subtitle=" "
           />
 
           <ResultCard
             id="totalSpendResult"
-            title="Total Spend"
+            title={copy.totalSpend}
             icon={Wallet}
           />
 
           <ResultCard
             id="costPerLeadResult"
-            title="Cost per Lead"
+            title={copy.costPerLead}
             icon={Users}
           />
 
@@ -105,13 +140,10 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            Calculate your Customer Acquisition Cost (CAC) by combining
-            marketing and sales spend and dividing by the number of new
-            customers acquired. Compare this against Customer Lifetime
-            Value to check whether your acquisition spend is sustainable.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -124,6 +156,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/customer-acquisition-cost";
 </script>

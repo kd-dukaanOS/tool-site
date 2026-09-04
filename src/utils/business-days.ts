@@ -12,7 +12,13 @@ export interface BusinessDaysResult {
   holidayCount: number;
 }
 
-export function validateBusinessDaysInput(i: BusinessDaysInput): string | null {
+export function validateBusinessDaysInput(i: BusinessDaysInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (Number.isNaN(i.startDate.getTime())) return "Por favor selecciona una fecha de inicio válida.";
+    if (Number.isNaN(i.endDate.getTime())) return "Por favor selecciona una fecha de fin válida.";
+    if (i.endDate < i.startDate) return "La fecha de fin debe ser posterior a la fecha de inicio.";
+    return null;
+  }
   if (Number.isNaN(i.startDate.getTime())) return "Please select a valid start date.";
   if (Number.isNaN(i.endDate.getTime())) return "Please select a valid end date.";
   if (i.endDate < i.startDate) return "End date must be after start date.";
@@ -52,7 +58,20 @@ export function calculateBusinessDays(i: BusinessDaysInput): BusinessDaysResult 
   return { totalDays, businessDays, weekendDays, holidayCount };
 }
 
-export function copyBusinessDaysSummary(i: BusinessDaysInput, r: BusinessDaysResult): string {
+export function copyBusinessDaysSummary(i: BusinessDaysInput, r: BusinessDaysResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Días Hábiles
+
+Fecha de Inicio: ${i.startDate.toLocaleDateString("es-ES")}
+Fecha de Fin: ${i.endDate.toLocaleDateString("es-ES")}
+
+Días Totales: ${r.totalDays}
+Días Hábiles: ${r.businessDays}
+Días de Fin de Semana: ${r.weekendDays}
+Días Festivos Excluidos: ${r.holidayCount}
+`.trim();
+  }
   return `
 Business Days Summary
 

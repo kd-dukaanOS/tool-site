@@ -1,9 +1,12 @@
 import {
   calculateBase64,
   validateBase64Input,
+  copyBase64Summary,
   type Base64Input,
 } from "../utils/base64";
 import { setValue, copyToClipboard } from "../utils/calculator";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 const textInput = document.getElementById("text") as HTMLTextAreaElement;
 const modeInput = document.getElementById("mode") as HTMLSelectElement;
@@ -36,7 +39,7 @@ function calculate() {
     mode: modeInput.value as "encode" | "decode",
   };
 
-  const err = validateBase64Input(input);
+  const err = validateBase64Input(input, lang);
   if (err) {
     showError(err);
     return;
@@ -63,7 +66,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBase64(lastInput);
-  copyToClipboard(result.output);
+  copyToClipboard(copyBase64Summary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

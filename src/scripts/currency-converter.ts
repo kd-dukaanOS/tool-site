@@ -21,6 +21,11 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fetchErr:"Could not fetch exchange rate. Check the currency codes.", netErr:"Network error while fetching exchange rate.", convertedSuffix:" converted" },
+  es: { fetchErr:"No se pudo obtener el tipo de cambio. Verifica los códigos de moneda.", netErr:"Error de red al obtener el tipo de cambio.", convertedSuffix:" convertido" },
+}[lang];
 let lastResult: CurrencyResult | null = null;
 let lastAmount = 0;
 
@@ -43,7 +48,7 @@ async function calculate() {
     toCurrency: toInput.value.trim(),
   };
 
-  const validationError = validateCurrencyInput(input);
+  const validationError = validateCurrencyInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -60,13 +65,13 @@ async function calculate() {
     const data = await res.json();
 
     if (data.result !== "success" || !data.rates?.[to]) {
-      showError("Could not fetch exchange rate. Check the currency codes.");
+      showError(t.fetchErr);
       return;
     }
 
     rate = data.rates[to];
   } catch {
-    showError("Network error while fetching exchange rate.");
+    showError(t.netErr);
     return;
   }
 
@@ -75,7 +80,7 @@ async function calculate() {
   setValue("convertedResult", formatAmount(result.convertedAmount, result.toCurrency));
   setValue("rateResult", `1 ${result.fromCurrency} = ${result.rate.toFixed(4)} ${result.toCurrency}`);
   setValue("inverseRateResult", `1 ${result.toCurrency} = ${result.inverseRate.toFixed(4)} ${result.fromCurrency}`);
-  setSubtitle("convertedResult", `${formatAmount(input.amount, result.fromCurrency)} converted`);
+  setSubtitle("convertedResult", `${formatAmount(input.amount, result.fromCurrency)}${t.convertedSuffix}`);
 
   lastResult = result;
   lastAmount = input.amount;
@@ -99,7 +104,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastResult) return;
-  copyToClipboard(copyCurrencySummary(lastResult, lastAmount));
+  copyToClipboard(copyCurrencySummary(lastResult, lastAmount, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

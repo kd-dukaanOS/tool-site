@@ -1,0 +1,60 @@
+---
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const currentPath = Astro.url.pathname;
+const basePath = currentPath.startsWith("/es")
+  ? currentPath.replace(/^\/es/, "") || "/"
+  : currentPath;
+
+const enHref = basePath;
+const esHref = basePath === "/" ? "/es/" : `/es${basePath}`;
+---
+<div class="ts-lang-switch">
+  <button class="ts-nav-icon-btn" id="lang-switch-toggle" aria-haspopup="true" aria-expanded="false" aria-label="Change language">
+    <span>{lang === "es" ? "🇪🇸" : "🇺🇸"}</span>
+  </button>
+  <div class="ts-lang-menu" id="lang-switch-menu">
+    <a href={enHref} class:list={["ts-lang-item", { active: lang === "en" }]}>🇺🇸 English</a>
+    <a href={esHref} class:list={["ts-lang-item", { active: lang === "es" }]}>🇪🇸 Español</a>
+  </div>
+</div>
+
+<style>
+  .ts-lang-switch { position: relative; }
+  .ts-lang-menu {
+    display: none;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    min-width: 140px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    z-index: 60;
+  }
+  .ts-lang-menu.open { display: block; }
+  .ts-lang-item {
+    display: block;
+    padding: 8px 12px;
+    font-size: var(--fs-small);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .ts-lang-item:hover { background: var(--bg-page); }
+  .ts-lang-item.active { font-weight: 700; color: var(--color-primary); }
+</style>
+
+<script>
+  const toggle = document.getElementById('lang-switch-toggle');
+  const menu = document.getElementById('lang-switch-menu');
+  toggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = menu?.classList.toggle('open');
+    toggle?.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  document.addEventListener('click', () => menu?.classList.remove('open'));
+</script>

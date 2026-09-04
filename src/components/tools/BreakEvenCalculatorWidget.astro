@@ -6,14 +6,38 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Package, Wallet, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    fixedCostsLabel: "Fixed Costs", fixedCostsPh: "e.g. 50000",
+    variableCostLabel: "Variable Cost per Unit", variableCostPh: "e.g. 100",
+    priceLabel: "Selling Price per Unit", pricePh: "e.g. 250",
+    emptyTitle: "Enter costs to find break-even point",
+    emptyDesc: "Units and revenue needed to break even will appear here.",
+    breakEvenUnits: "Break Even Units", breakEvenRevenue: "Break Even Revenue",
+    contributionMargin: "Contribution Margin", contributionRatio: "Contribution Ratio",
+  },
+  es: {
+    fixedCostsLabel: "Costos Fijos", fixedCostsPh: "ej. 50000",
+    variableCostLabel: "Costo Variable por Unidad", variableCostPh: "ej. 100",
+    priceLabel: "Precio de Venta por Unidad", pricePh: "ej. 250",
+    emptyTitle: "Ingresa los costos para hallar el punto de equilibrio",
+    emptyDesc: "Aquí aparecerán las unidades y los ingresos necesarios para el punto de equilibrio.",
+    breakEvenUnits: "Unidades de Equilibrio", breakEvenRevenue: "Ingresos de Equilibrio",
+    contributionMargin: "Margen de Contribución", contributionRatio: "Ratio de Contribución",
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CurrencySelector />
-    <CalculatorField id="fixedCosts" label="Fixed Costs" type="number" placeholder="e.g. 50000" />
-    <CalculatorField id="variableCostPerUnit" label="Variable Cost per Unit" type="number" placeholder="e.g. 100" />
-    <CalculatorField id="sellingPricePerUnit" label="Selling Price per Unit" type="number" placeholder="e.g. 250" />
+    <CalculatorField id="fixedCosts" label={copy.fixedCostsLabel} type="number" placeholder={copy.fixedCostsPh} />
+    <CalculatorField id="variableCostPerUnit" label={copy.variableCostLabel} type="number" placeholder={copy.variableCostPh} />
+    <CalculatorField id="sellingPricePerUnit" label={copy.priceLabel} type="number" placeholder={copy.pricePh} />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -29,17 +53,18 @@ import { Package, Wallet, Percent } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter costs to find break-even point"
-      description="Units and revenue needed to break even will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="breakEvenUnitsResult" title="Break Even Units" icon={Package} accent="primary" size="lg" />
-      <ResultCard id="breakEvenRevenueResult" title="Break Even Revenue" icon={Wallet} accent="success" />
-      <ResultCard id="contributionMarginResult" title="Contribution Margin" icon={Wallet} accent="neutral" />
-      <ResultCard id="contributionRatioResult" title="Contribution Ratio" icon={Percent} accent="neutral" />
+      <ResultCard id="breakEvenUnitsResult" title={copy.breakEvenUnits} icon={Package} accent="primary" size="lg" />
+      <ResultCard id="breakEvenRevenueResult" title={copy.breakEvenRevenue} icon={Wallet} accent="success" />
+      <ResultCard id="contributionMarginResult" title={copy.contributionMargin} icon={Wallet} accent="neutral" />
+      <ResultCard id="contributionRatioResult" title={copy.contributionRatio} icon={Percent} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>window.calcLang = calcLang;</script>
 <script src="../../scripts/break-even-calculator.ts"></script>

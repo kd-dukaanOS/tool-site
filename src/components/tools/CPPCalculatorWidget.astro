@@ -5,33 +5,46 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Users, Building2, Coins } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { grossIncome:"Gross Annual Income", grossIncomeHelp:"Your gross annual income (CAD).", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"CPP Calculator", emptyDesc:"Estimate your Canada Pension Plan contribution.", tip1:"Pensionable Earnings", tip2:"Employee Portion", tip3:"Employer Portion", pensionable:"Pensionable Earnings", employee:"Employee Contribution", employer:"Employer Contribution", total:"Total Contribution", aboutTitle:"About this Calculator", aboutText:"Estimates your CPP contribution after the basic exemption, capped at the yearly maximum pensionable earnings. Excludes CPP2. Verify against current CRA figures." },
+  es: { grossIncome:"Ingreso Bruto Anual", grossIncomeHelp:"Tu ingreso bruto anual (CAD).", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora CPP", emptyDesc:"Estima tu contribución al Plan de Pensiones de Canadá.", tip1:"Ingresos Pensionables", tip2:"Parte del Empleado", tip3:"Parte del Empleador", pensionable:"Ingresos Pensionables", employee:"Contribución del Empleado", employer:"Contribución del Empleador", total:"Contribución Total", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu contribución al CPP después de la exención básica, limitada al máximo anual de ingresos pensionables. Excluye CPP2. Verifica con las cifras actuales de CRA." },
+}[lang];
 ---
 <section class="cpp-calculator">
   <div class="cpp-layout">
     <aside class="cpp-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross annual income (CAD)." />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="grossIncome" label={copy.grossIncome} type="number" required={true} helpText={copy.grossIncomeHelp} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cpp-content">
       <div id="emptyState">
-        <EmptyState icon="🏦" title="CPP Calculator" description="Estimate your Canada Pension Plan contribution." tips={["Pensionable Earnings", "Employee Portion", "Employer Portion"]} />
+        <EmptyState icon="🏦" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="pensionableResult" title="Pensionable Earnings" icon={PiggyBank} />
-          <ResultCard id="employeeResult" title="Employee Contribution" icon={Users} subtitle=" " />
-          <ResultCard id="employerResult" title="Employer Contribution" icon={Building2} />
-          <ResultCard id="totalResult" title="Total Contribution" icon={Coins} />
+          <ResultCard id="pensionableResult" title={copy.pensionable} icon={PiggyBank} />
+          <ResultCard id="employeeResult" title={copy.employee} icon={Users} subtitle=" " />
+          <ResultCard id="employerResult" title={copy.employer} icon={Building2} />
+          <ResultCard id="totalResult" title={copy.total} icon={Coins} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your CPP contribution after the basic exemption, capped at the yearly maximum pensionable earnings. Excludes CPP2. Verify against current CRA figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/ca-cpp-calculator";
 </script>

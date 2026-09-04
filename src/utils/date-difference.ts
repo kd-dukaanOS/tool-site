@@ -10,7 +10,12 @@ export interface DateDifferenceResult {
   isNegative: boolean;
 }
 
-export function validateDateDifferenceInput(i: DateDifferenceInput): string | null {
+export function validateDateDifferenceInput(i: DateDifferenceInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (Number.isNaN(i.startDate.getTime())) return "Por favor selecciona una fecha de inicio válida.";
+    if (Number.isNaN(i.endDate.getTime())) return "Por favor selecciona una fecha de fin válida.";
+    return null;
+  }
   if (Number.isNaN(i.startDate.getTime())) return "Please select a valid start date.";
   if (Number.isNaN(i.endDate.getTime())) return "Please select a valid end date.";
   return null;
@@ -26,7 +31,19 @@ export function calculateDateDifference(i: DateDifferenceInput): DateDifferenceR
   };
 }
 
-export function copyDateDifferenceSummary(i: DateDifferenceInput, r: DateDifferenceResult): string {
+export function copyDateDifferenceSummary(i: DateDifferenceInput, r: DateDifferenceResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Diferencia de Fechas
+
+Fecha de Inicio: ${i.startDate.toLocaleDateString("es-ES")}
+Fecha de Fin: ${i.endDate.toLocaleDateString("es-ES")}
+
+Diferencia: ${r.diff.years} años, ${r.diff.months} meses, ${r.diff.days} días
+Días Totales: ${r.diff.totalDays}
+Semanas Totales: ${r.diff.totalWeeks}
+`.trim();
+  }
   return `
 Date Difference Summary
 

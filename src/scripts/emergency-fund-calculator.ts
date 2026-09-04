@@ -15,6 +15,26 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["monthlyExpenses", "currentSavings", "targetMonths", "monthlySavingsCapacity"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { dash:"—", goalReached:"Goal reached", months:(m:number)=>`${m} months`, na:"N/A", monthsOf:(m:number)=>`${m} months of expenses`, summary:(r:any,tm:number,fmt:(n:number)=>string)=>`
+Emergency Fund Summary
+
+Target Amount (${tm} months): ${fmt(r.targetAmount)}
+Current Progress: ${r.progressPercent.toFixed(0)}%
+Remaining to Save: ${fmt(r.remainingAmount)}
+Time to Reach Goal: ${r.monthsToGoal === null ? "N/A" : r.monthsToGoal === 0 ? "Goal reached" : `${r.monthsToGoal} months`}
+`.trim() },
+  es: { dash:"—", goalReached:"Meta alcanzada", months:(m:number)=>`${m} meses`, na:"N/D", monthsOf:(m:number)=>`${m} meses de gastos`, summary:(r:any,tm:number,fmt:(n:number)=>string)=>`
+Resumen de Fondo de Emergencia
+
+Monto Objetivo (${tm} meses): ${fmt(r.targetAmount)}
+Progreso Actual: ${r.progressPercent.toFixed(0)}%
+Restante por Ahorrar: ${fmt(r.remainingAmount)}
+Tiempo para Alcanzar la Meta: ${r.monthsToGoal === null ? "N/D" : r.monthsToGoal === 0 ? "Meta alcanzada" : `${r.monthsToGoal} meses`}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +56,7 @@ function calculate() {
 
   const [monthlyExpenses, currentSavings, targetMonths, monthlySavingsCapacity] = fieldIds.map(val);
 
-  const validationError = validateEmergencyFundInputs(monthlyExpenses, targetMonths);
+  const validationError = validateEmergencyFundInputs(monthlyExpenses, targetMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,18 +69,11 @@ function calculate() {
   setValue("remainingResult", fmtCurrency(result.remainingAmount));
   setValue(
     "monthsToGoalResult",
-    result.monthsToGoal === null ? "—" : result.monthsToGoal === 0 ? "Goal reached" : `${result.monthsToGoal} months`
+    result.monthsToGoal === null ? t.dash : result.monthsToGoal === 0 ? t.goalReached : t.months(result.monthsToGoal)
   );
-  setSubtitle("targetAmountResult", `${targetMonths} months of expenses`);
+  setSubtitle("targetAmountResult", t.monthsOf(targetMonths));
 
-  lastSummary = `
-Emergency Fund Summary
-
-Target Amount (${targetMonths} months): ${fmtCurrency(result.targetAmount)}
-Current Progress: ${result.progressPercent.toFixed(0)}%
-Remaining to Save: ${fmtCurrency(result.remainingAmount)}
-Time to Reach Goal: ${result.monthsToGoal === null ? "N/A" : result.monthsToGoal === 0 ? "Goal reached" : `${result.monthsToGoal} months`}
-`.trim();
+  lastSummary = t.summary(result, targetMonths, fmtCurrency);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

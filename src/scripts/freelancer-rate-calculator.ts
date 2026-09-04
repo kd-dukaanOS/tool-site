@@ -24,6 +24,7 @@ let lastInput: {
   taxRate: number;
 } | null = null;
 let lastResult: ReturnType<typeof calculateFreelancerRate> | null = null;
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 function showError(msg: string) {
   errorBox.textContent = msg;
@@ -45,7 +46,7 @@ function calculate() {
     taxRate: parseFloat(taxRateInput.value) || 0,
   };
 
-  const error = validateFreelancerRateInput(input);
+  const error = validateFreelancerRateInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -85,7 +86,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyFreelancerRateSummary(lastInput, lastResult));
+  copyToClipboard(copyFreelancerRateSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

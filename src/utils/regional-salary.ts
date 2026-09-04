@@ -34,7 +34,7 @@ const CA_PROVINCES: Record<string, IncomeTaxConfig> = {
   BC: bcIncomeTax,
 };
 
-export function calculateCATakeHome(grossAnnual: number, province: string): TakeHomeResult {
+export function calculateCATakeHome(grossAnnual: number, province: string, lang: "en" | "es" = "en"): TakeHomeResult {
   const provincial = CA_PROVINCES[province] ?? ontarioIncomeTax;
 
   const federalTax = calculateBracketTax(grossAnnual, caFederalIncomeTax.brackets);
@@ -45,6 +45,10 @@ export function calculateCATakeHome(grossAnnual: number, province: string): Take
   const totalDeductions = federalTax + provincialTax + cpp + ei;
   const netAnnual = grossAnnual - totalDeductions;
 
+  const labels = lang === "es"
+    ? { federal: "Impuesto Federal", provincial: `Impuesto Provincial de ${province}`, cpp: "CPP", ei: "EI" }
+    : { federal: "Federal Tax", provincial: `${province} Provincial Tax`, cpp: "CPP", ei: "EI" };
+
   return {
     grossAnnual,
     totalDeductions,
@@ -53,10 +57,10 @@ export function calculateCATakeHome(grossAnnual: number, province: string): Take
     netBiweekly: netAnnual / 26,
     netWeekly: netAnnual / 52,
     breakdown: [
-      { label: "Federal Tax", amount: federalTax },
-      { label: `${province} Provincial Tax`, amount: provincialTax },
-      { label: "CPP", amount: cpp },
-      { label: "EI", amount: ei },
+      { label: labels.federal, amount: federalTax },
+      { label: labels.provincial, amount: provincialTax },
+      { label: labels.cpp, amount: cpp },
+      { label: labels.ei, amount: ei },
     ],
     effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,
   };
@@ -311,7 +315,13 @@ export function formatCurrency(value: number, currency: "CAD" | "GBP" | "USD" = 
   return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(value);
 }
 
-export function validateIncome(value: number): string | null {
+export function validateIncome(value: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (Number.isNaN(value)) return "Por favor ingresa un ingreso anual válido.";
+    if (value < 0) return "El ingreso no puede ser negativo.";
+    if (value > 100000000) return "Por favor ingresa un ingreso realista.";
+    return null;
+  }
   if (Number.isNaN(value)) return "Please enter a valid annual income.";
   if (value < 0) return "Income cannot be negative.";
   if (value > 100000000) return "Please enter a realistic income.";

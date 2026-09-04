@@ -5,53 +5,63 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, CheckCircle2, TrendingUp, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { filingGroup:"Filing Info", taxYear:"Tax Year", y2025:"2025 (filed 2026)", y2026:"2026 (filed 2027)", filingStatus:"Filing Status", single:"Single", hoh:"Head of Household", mfj:"Married Filing Jointly", mfs:"Married Filing Separately", widowed:"Qualifying Widow(er)", qualifyingChildren:"Qualifying Children", incomeGroup:"Income", earnedIncome:"Earned Income", agi:"Adjusted Gross Income (AGI)", investmentIncome:"Investment Income", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"EITC Calculator", emptyDesc:"Estimate your Earned Income Tax Credit for 2025 or 2026.", tip1:"Estimated Credit", tip2:"Eligibility", tip3:"Max Credit for Family Size", estimatedEitc:"Estimated EITC", eligibility:"Eligibility", maxCredit:"Max Credit for Family Size", phaseoutRate:"Phase-Out Rate", aboutTitle:"About this Calculator", aboutText:"Estimates your federal Earned Income Tax Credit using current IRS phase-in, plateau, and phase-out figures based on your income, filing status, and number of qualifying children." },
+  es: { filingGroup:"Información de Declaración", taxYear:"Año Fiscal", y2025:"2025 (declarado 2026)", y2026:"2026 (declarado 2027)", filingStatus:"Estado Civil Tributario", single:"Soltero", hoh:"Cabeza de Familia", mfj:"Casado Declarando Conjuntamente", mfs:"Casado Declarando por Separado", widowed:"Viudo(a) Calificado(a)", qualifyingChildren:"Hijos Calificados", incomeGroup:"Ingresos", earnedIncome:"Ingreso Ganado", agi:"Ingreso Bruto Ajustado (AGI)", investmentIncome:"Ingreso de Inversión", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora EITC", emptyDesc:"Estima tu Crédito Tributario por Ingreso del Trabajo para 2025 o 2026.", tip1:"Crédito Estimado", tip2:"Elegibilidad", tip3:"Crédito Máximo por Tamaño Familiar", estimatedEitc:"EITC Estimado", eligibility:"Elegibilidad", maxCredit:"Crédito Máximo por Tamaño Familiar", phaseoutRate:"Tasa de Reducción", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu Crédito Tributario Federal por Ingreso del Trabajo usando las cifras actuales del IRS de fase de entrada, meseta y reducción, según tu ingreso, estado civil tributario y número de hijos calificados." },
+}[lang];
 ---
 <section class="eitc-calculator">
   <div class="eitc-layout">
     <aside class="eitc-sidebar">
       <div class="eitc-group">
-        <h3>Filing Info</h3>
-        <CalculatorField type="select" id="taxYear" label="Tax Year">
-  <option value="2025">2025 (filed 2026)</option>
-  <option value="2026">2026 (filed 2027)</option>
+        <h3>{copy.filingGroup}</h3>
+        <CalculatorField type="select" id="taxYear" label={copy.taxYear}>
+  <option value="2025">{copy.y2025}</option>
+  <option value="2026">{copy.y2026}</option>
 </CalculatorField>
-        <CalculatorField type="select" id="filingStatus" label="Filing Status">
-  <option value="single">Single</option>
-  <option value="hoh">Head of Household</option>
-  <option value="mfj">Married Filing Jointly</option>
-  <option value="mfs">Married Filing Separately</option>
-  <option value="widowed">Qualifying Widow(er)</option>
+        <CalculatorField type="select" id="filingStatus" label={copy.filingStatus}>
+  <option value="single">{copy.single}</option>
+  <option value="hoh">{copy.hoh}</option>
+  <option value="mfj">{copy.mfj}</option>
+  <option value="mfs">{copy.mfs}</option>
+  <option value="widowed">{copy.widowed}</option>
 </CalculatorField>
-        <CalculatorField id="qualifyingChildren" label="Qualifying Children" type="number" placeholder="e.g. 1" min="0" max="3" step="1" />
+        <CalculatorField id="qualifyingChildren" label={copy.qualifyingChildren} type="number" placeholder="e.g. 1" min="0" max="3" step="1" />
       </div>
       <div class="eitc-group">
-        <h3>Income</h3>
-        <CalculatorField id="earnedIncome" label="Earned Income" type="number" placeholder="e.g. 20000" min="0" step="1" />
-        <CalculatorField id="agi" label="Adjusted Gross Income (AGI)" type="number" placeholder="e.g. 20000" min="0" step="1" />
-        <CalculatorField id="investmentIncome" label="Investment Income" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="earnedIncome" label={copy.earnedIncome} type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="agi" label={copy.agi} type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="investmentIncome" label={copy.investmentIncome} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="eitc-content">
       <div id="emptyState">
-        <EmptyState icon="💰" title="EITC Calculator" description="Estimate your Earned Income Tax Credit for 2025 or 2026." tips={["Estimated Credit", "Eligibility", "Max Credit for Family Size"]} />
+        <EmptyState icon="💰" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="eitcResult" title="Estimated EITC" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="eligibleResult" title="Eligibility" icon={CheckCircle2} subtitle=" " />
-          <ResultCard id="maxCreditResult" title="Max Credit for Family Size" icon={TrendingUp} />
-          <ResultCard id="phaseoutRateResult" title="Phase-Out Rate" icon={Percent} />
+          <ResultCard id="eitcResult" title={copy.estimatedEitc} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="eligibleResult" title={copy.eligibility} icon={CheckCircle2} subtitle=" " />
+          <ResultCard id="maxCreditResult" title={copy.maxCredit} icon={TrendingUp} />
+          <ResultCard id="phaseoutRateResult" title={copy.phaseoutRate} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your federal Earned Income Tax Credit using current IRS phase-in, plateau, and phase-out figures based on your income, filing status, and number of qualifying children.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/eitc-calculator";
 </script>

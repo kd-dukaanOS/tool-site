@@ -21,6 +21,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fillAll: "Please fill all required fields.", rest: "at complete rest", perDay: "per day", toGoal: (g: string) => `to ${g} weight` },
+  es: { fillAll: "Por favor completa todos los campos requeridos.", rest: "en reposo total", perDay: "por día", toGoal: (g: string) => ({ lose: "para perder peso", maintain: "para mantener peso", gain: "para ganar peso" } as Record<string, string>)[g] },
+}[lang];
+
 let lastInput: CalorieInput | null = null;
 
 function showError(msg: string) {
@@ -46,11 +52,11 @@ function calculate() {
   };
 
   if (!input.age || !input.heightCm || !input.weightKg) {
-    showError("Please fill all required fields.");
+    showError(t.fillAll);
     return;
   }
 
-  const err = validateCalorieInput(input);
+  const err = validateCalorieInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -61,9 +67,9 @@ function calculate() {
   setValue("bmrResult", `${result.bmr} cal`);
   setValue("maintenanceResult", `${result.maintenanceCalories} cal`);
   setValue("targetResult", `${result.targetCalories} cal`);
-  setSubtitle("bmrResult", "at complete rest");
-  setSubtitle("maintenanceResult", "per day");
-  setSubtitle("targetResult", `to ${input.goal} weight`);
+  setSubtitle("bmrResult", t.rest);
+  setSubtitle("maintenanceResult", t.perDay);
+  setSubtitle("targetResult", t.toGoal(input.goal));
 
   lastInput = input;
 
@@ -86,7 +92,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateCalories(lastInput);
-  copyToClipboard(copyCalorieSummary(lastInput, result));
+  copyToClipboard(copyCalorieSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

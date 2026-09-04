@@ -30,7 +30,20 @@ const GOAL_ADJUSTMENT: Record<Goal, number> = {
   gain: 500,
 };
 
-export function validateCalorieInput(i: CalorieInput): string | null {
+const GENDER_ES: Record<CalorieInput["gender"], string> = { male: "Hombre", female: "Mujer" };
+const ACTIVITY_ES: Record<ActivityLevel, string> = {
+  sedentary: "Sedentario", light: "Ligero", moderate: "Moderado", active: "Activo", veryActive: "Muy Activo",
+};
+const GOAL_ES: Record<Goal, string> = { lose: "Perder Peso", maintain: "Mantener Peso", gain: "Ganar Peso" };
+const GOAL_SUBTITLE_ES: Record<Goal, string> = { lose: "para perder peso", maintain: "para mantener peso", gain: "para ganar peso" };
+
+export function validateCalorieInput(i: CalorieInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.age <= 0 || i.age > 120) return "Ingresa una edad realista.";
+    if (i.heightCm <= 0 || i.heightCm > 250) return "Ingresa una estatura realista.";
+    if (i.weightKg <= 0 || i.weightKg > 300) return "Ingresa un peso realista.";
+    return null;
+  }
   if (i.age <= 0 || i.age > 120) return "Enter a realistic age.";
   if (i.heightCm <= 0 || i.heightCm > 250) return "Enter a realistic height.";
   if (i.weightKg <= 0 || i.weightKg > 300) return "Enter a realistic weight.";
@@ -53,7 +66,23 @@ export function calculateCalories(i: CalorieInput): CalorieResult {
   };
 }
 
-export function copyCalorieSummary(i: CalorieInput, r: CalorieResult): string {
+export function copyCalorieSummary(i: CalorieInput, r: CalorieResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen del Cálculo de Calorías
+
+Género: ${GENDER_ES[i.gender]}
+Edad: ${i.age}
+Estatura: ${i.heightCm} cm
+Peso: ${i.weightKg} kg
+Nivel de Actividad: ${ACTIVITY_ES[i.activityLevel]}
+Objetivo: ${GOAL_ES[i.goal]}
+
+TMB: ${r.bmr} cal/día
+Calorías de Mantenimiento: ${r.maintenanceCalories} cal/día
+Calorías Objetivo: ${r.targetCalories} cal/día
+`.trim();
+  }
   return `
 Calorie Calculation Summary
 

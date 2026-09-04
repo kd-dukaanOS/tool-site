@@ -5,44 +5,73 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Car, Wallet, TrendingDown, Receipt } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    groupVehicle: "Vehicle & Payment", vehiclePrice: "Vehicle Price", downPayment: "Down Payment", tradeInValue: "Trade-In Value",
+    groupTerms: "Loan Terms", salesTaxRate: "Sales Tax Rate (%)", apr: "Interest Rate / APR (%)", termMonths: "Loan Term (months)",
+    emptyTitle: "Auto Loan Calculator", emptyDesc: "Enter vehicle price and loan terms to see your monthly payment.",
+    tips: ["Monthly Payment", "Total Interest", "Total Cost"],
+    monthlyPayment: "Monthly Payment", loanAmount: "Loan Amount", totalInterest: "Total Interest", totalCost: "Total Cost",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculates your monthly car payment from vehicle price, down payment, trade-in value, sales tax, interest rate, and loan term, along with total interest and total cost over the loan.",
+  },
+  es: {
+    groupVehicle: "Vehículo y Pago", vehiclePrice: "Precio del Vehículo", downPayment: "Enganche", tradeInValue: "Entrega a Cuenta",
+    groupTerms: "Términos del Préstamo", salesTaxRate: "Tasa de Impuesto sobre Venta (%)", apr: "Tasa de Interés / APR (%)", termMonths: "Plazo del Préstamo (meses)",
+    emptyTitle: "Calculadora de Préstamo de Auto", emptyDesc: "Ingresa el precio del vehículo y los términos del préstamo para ver tu pago mensual.",
+    tips: ["Pago Mensual", "Interés Total", "Costo Total"],
+    monthlyPayment: "Pago Mensual", loanAmount: "Monto del Préstamo", totalInterest: "Interés Total", totalCost: "Costo Total",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Calcula tu pago mensual del auto a partir del precio del vehículo, enganche, valor de entrega a cuenta, impuesto sobre venta, tasa de interés y plazo del préstamo, junto con el interés total y el costo total del préstamo.",
+  },
+}[lang];
 ---
 <section class="al-calculator">
   <div class="al-layout">
     <aside class="al-sidebar">
       <div class="al-group">
-        <h3>Vehicle & Payment</h3>
-        <CalculatorField id="vehiclePrice" label="Vehicle Price" type="number" placeholder="e.g. 32000" min="0" step="1" />
-        <CalculatorField id="downPayment" label="Down Payment" type="number" placeholder="e.g. 4000" min="0" step="1" />
-        <CalculatorField id="tradeInValue" label="Trade-In Value" type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <h3>{copy.groupVehicle}</h3>
+        <CalculatorField id="vehiclePrice" label={copy.vehiclePrice} type="number" placeholder="e.g. 32000" min="0" step="1" />
+        <CalculatorField id="downPayment" label={copy.downPayment} type="number" placeholder="e.g. 4000" min="0" step="1" />
+        <CalculatorField id="tradeInValue" label={copy.tradeInValue} type="number" placeholder="e.g. 2000" min="0" step="1" />
       </div>
       <div class="al-group">
-        <h3>Loan Terms</h3>
-        <CalculatorField id="salesTaxRate" label="Sales Tax Rate (%)" type="number" placeholder="e.g. 7" min="0" step="0.01" />
-        <CalculatorField id="apr" label="Interest Rate / APR (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
-        <CalculatorField id="termMonths" label="Loan Term (months)" type="number" placeholder="e.g. 60" min="1" step="1" />
+        <h3>{copy.groupTerms}</h3>
+        <CalculatorField id="salesTaxRate" label={copy.salesTaxRate} type="number" placeholder="e.g. 7" min="0" step="0.01" />
+        <CalculatorField id="apr" label={copy.apr} type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="termMonths" label={copy.termMonths} type="number" placeholder="e.g. 60" min="1" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="al-content">
       <div id="emptyState">
-        <EmptyState icon="🚗" title="Auto Loan Calculator" description="Enter vehicle price and loan terms to see your monthly payment." tips={["Monthly Payment", "Total Interest", "Total Cost"]} />
+        <EmptyState icon="🚗" title={copy.emptyTitle} description={copy.emptyDesc} tips={copy.tips} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={Car} accent="success" subtitle=" " />
-          <ResultCard id="loanAmountResult" title="Loan Amount" icon={Wallet} />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={TrendingDown} />
-          <ResultCard id="totalCostResult" title="Total Cost" icon={Receipt} />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={Car} accent="success" subtitle=" " />
+          <ResultCard id="loanAmountResult" title={copy.loanAmount} icon={Wallet} />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={TrendingDown} />
+          <ResultCard id="totalCostResult" title={copy.totalCost} icon={Receipt} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your monthly car payment from vehicle price, down payment, trade-in value, sales tax, interest rate, and loan term, along with total interest and total cost over the loan.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/auto-loan-calculator";
 </script>

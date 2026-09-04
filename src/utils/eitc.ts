@@ -56,15 +56,20 @@ export function calculateEITC(
   filingStatus: FilingStatus,
   qualifyingChildren: number,
   investmentIncome: number,
-  taxYear: number
+  taxYear: number,
+  lang: "en" | "es" = "en"
 ): EITCResult {
+  const msg = lang === "es"
+    ? { mfs: "Casado Declarando por Separado no es elegible para el EITC.", invLimit: (l: string) => `El ingreso de inversión excede el límite de ${l}.`, noEarned: "Debes tener ingreso ganado para calificar.", overLimit: "El ingreso excede el límite de elegibilidad para este estado civil y tamaño familiar.", zeroCredit: "El crédito calculado se redondea a $0 en este nivel de ingreso." }
+    : { mfs: "Married Filing Separately is not eligible for the EITC.", invLimit: (l: string) => `Investment income exceeds the ${l} limit.`, noEarned: "You must have earned income to qualify.", overLimit: "Income exceeds the eligibility limit for this filing status and family size.", zeroCredit: "Calculated credit rounds to $0 at this income level." };
+
   if (filingStatus === "mfs") {
-    return { credit: 0, eligible: false, reason: "Married Filing Separately is not eligible for the EITC.", maxCredit: 0, phaseoutRate: 0 };
+    return { credit: 0, eligible: false, reason: msg.mfs, maxCredit: 0, phaseoutRate: 0 };
   }
 
   const invLimit = INVESTMENT_LIMIT[taxYear] ?? INVESTMENT_LIMIT[2025];
   if (investmentIncome > invLimit) {
-    return { credit: 0, eligible: false, reason: `Investment income exceeds the $${invLimit.toLocaleString()} limit.`, maxCredit: 0, phaseoutRate: 0 };
+    return { credit: 0, eligible: false, reason: msg.invLimit(`$${invLimit.toLocaleString()}`), maxCredit: 0, phaseoutRate: 0 };
   }
 
   const bucket = filingStatus === "mfj" ? "mfj" : "single";
@@ -74,7 +79,7 @@ export function calculateEITC(
 
   const relevantIncome = Math.max(earnedIncome, agi);
   if (relevantIncome >= p.completedPhaseout || earnedIncome <= 0) {
-    return { credit: 0, eligible: earnedIncome > 0, reason: earnedIncome <= 0 ? "You must have earned income to qualify." : "Income exceeds the eligibility limit for this filing status and family size.", maxCredit: p.maxCredit, phaseoutRate: 0 };
+    return { credit: 0, eligible: earnedIncome > 0, reason: earnedIncome <= 0 ? msg.noEarned : msg.overLimit, maxCredit: p.maxCredit, phaseoutRate: 0 };
   }
 
   const phaseoutRate = p.maxCredit / (p.completedPhaseout - p.thresholdPhaseout);
@@ -82,10 +87,16 @@ export function calculateEITC(
   const reduction = Math.max(0, relevantIncome - p.thresholdPhaseout) * phaseoutRate;
   const credit = Math.max(0, Math.round(phasedIn - reduction));
 
-  return { credit, eligible: credit > 0, reason: credit > 0 ? null : "Calculated credit rounds to $0 at this income level.", maxCredit: p.maxCredit, phaseoutRate };
+  return { credit, eligible: credit > 0, reason: credit > 0 ? null : msg.zeroCredit, maxCredit: p.maxCredit, phaseoutRate };
 }
 
-export function validateEITCInputs(earnedIncome: number, agi: number): string | null {
+export function validateEITCInputs(earnedIncome: number, agi: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (earnedIncome < 0) return "El ingreso ganado no puede ser negativo.";
+    if (agi < 0) return "El AGI no puede ser negativo.";
+    if (earnedIncome === 0 && agi === 0) return "Ingresa tu ingreso ganado para calcular el crédito.";
+    return null;
+  }
   if (earnedIncome < 0) return "Earned income cannot be negative.";
   if (agi < 0) return "AGI cannot be negative.";
   if (earnedIncome === 0 && agi === 0) return "Enter your earned income to calculate the credit.";

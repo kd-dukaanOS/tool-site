@@ -1,4 +1,4 @@
-﻿/* ==========================================================
+/* ==========================================================
    ToolSite Diff Checker Utilities
 ========================================================== */
 
@@ -75,7 +75,7 @@ export function computeDiff(text1: string, text2: string): DiffResult {
 
 export function formatDiffHtml(result: DiffResult): string {
   if (result.lines.length === 0) {
-    return "No differences found — texts are identical.";
+    return "No differences found � texts are identical.";
   }
 
   return result.lines
@@ -97,10 +97,11 @@ export function formatDiffHtml(result: DiffResult): string {
 
 export function validateDiffInput(
   text1: string,
-  text2: string
+  text2: string,
+  lang: "en" | "es" = "en"
 ): string | null {
   if (!text1.trim() && !text2.trim()) {
-    return "Please enter text in at least one field.";
+    return lang === "es" ? "Por favor ingresa texto en al menos un campo." : "Please enter text in at least one field.";
   }
   return null;
 }
@@ -108,8 +109,30 @@ export function validateDiffInput(
 export function copyDiffSummary(
   _text1: string,
   _text2: string,
-  result: DiffResult
+  result: DiffResult,
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Diferencias
+
+Líneas Agregadas: ${result.stats.added}
+Líneas Eliminadas: ${result.stats.removed}
+Líneas Sin Cambios: ${result.stats.unchanged}
+Similitud: ${result.stats.similarity}%
+
+--- Diferencia ---
+${result.lines
+  .map((l) =>
+    l.type === "added"
+      ? `+ ${l.text}`
+      : l.type === "removed"
+      ? `- ${l.text}`
+      : `  ${l.text}`
+  )
+  .join("\n")}
+`.trim();
+  }
   return `
 Diff Summary
 

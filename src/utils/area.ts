@@ -30,7 +30,24 @@ export const AREA_LABELS: Record<string, string> = {
   hectare: "Hectare",
 };
 
-export function validateAreaInput(i: AreaInput): string | null {
+export const AREA_LABELS_ES: Record<string, string> = {
+  sqmm: "Milímetro Cuadrado",
+  sqcm: "Centímetro Cuadrado",
+  sqm: "Metro Cuadrado",
+  sqkm: "Kilómetro Cuadrado",
+  sqft: "Pie Cuadrado",
+  sqyd: "Yarda Cuadrada",
+  acre: "Acre",
+  hectare: "Hectárea",
+};
+
+export function validateAreaInput(i: AreaInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.value === undefined || Number.isNaN(i.value)) return "Ingresa un número válido.";
+    if (!i.fromUnit || !i.toUnit) return "Selecciona ambas unidades.";
+    if (i.fromUnit === i.toUnit) return "Elige dos unidades diferentes.";
+    return null;
+  }
   if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
   if (!i.fromUnit || !i.toUnit) return "Select both units.";
   if (i.fromUnit === i.toUnit) return "Choose two different units.";
@@ -43,7 +60,14 @@ export function calculateArea(i: AreaInput): AreaResult {
   return { convertedValue };
 }
 
-export function copyAreaSummary(i: AreaInput, r: AreaResult): string {
+export function copyAreaSummary(i: AreaInput, r: AreaResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Área
+
+${i.value} ${AREA_LABELS_ES[i.fromUnit]} = ${r.convertedValue} ${AREA_LABELS_ES[i.toUnit]}
+`.trim();
+  }
   return `
 Area Conversion
 

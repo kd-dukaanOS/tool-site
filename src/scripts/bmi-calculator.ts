@@ -8,6 +8,8 @@ import {
 
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 const weightInput = document.getElementById("weight") as HTMLInputElement;
 const heightInput = document.getElementById("height") as HTMLInputElement;
 
@@ -40,7 +42,7 @@ function calculate() {
   const weight = parseFloat(weightInput.value);
   const height = parseFloat(heightInput.value);
 
-  const validationError = validateBMIInputs(weight, height);
+  const validationError = validateBMIInputs(weight, height, lang);
 
   if (validationError) {
     showError(validationError);
@@ -56,7 +58,7 @@ function calculate() {
   setValue("categoryResult", bmi.category);
   setValue("rangeResult", `${range.min} - ${range.max} kg`);
 
-  insightBox.textContent = bmiInsight(weight, height, bmi);
+  insightBox.textContent = bmiInsight(weight, height, bmi, lang);
   insightBox.hidden = false;
 
   lastWeight = weight;
@@ -83,7 +85,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastWeight === null || lastHeight === null || !lastBMI) return;
-  copyToClipboard(copyBMISummary(lastWeight, lastHeight, lastBMI));
+  copyToClipboard(copyBMISummary(lastWeight, lastHeight, lastBMI, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

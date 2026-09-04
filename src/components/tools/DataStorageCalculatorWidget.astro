@@ -4,13 +4,20 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { HardDrive } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { valueLabel:"Value", fromLabel:"From", toLabel:"To", valuePlaceholder:"Enter value", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Data Storage Converter", emptyDesc:"Enter a value to convert.", resultTitle:"Converted Value" },
+  es: { valueLabel:"Valor", fromLabel:"De", toLabel:"A", valuePlaceholder:"Ingresa un valor", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Convertidor de Almacenamiento de Datos", emptyDesc:"Ingresa un valor para convertir.", resultTitle:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.valueLabel} type="number" placeholder={copy.valuePlaceholder} />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
+    <CalculatorField id="fromUnit" label={copy.fromLabel} type="select">
       <option value="bit">Bit</option>
       <option value="byte">Byte</option>
       <option value="kb">KB</option>
@@ -20,7 +27,7 @@ import { HardDrive } from "@lucide/astro";
       <option value="pb">PB</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
+    <CalculatorField id="toUnit" label={copy.toLabel} type="select">
       <option value="bit">Bit</option>
       <option value="byte">Byte</option>
       <option value="kb">KB</option>
@@ -32,18 +39,21 @@ import { HardDrive } from "@lucide/astro";
 
     <div id="errorBox" class="error-box" hidden></div>
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" />
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
   </div>
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="??" title="Data Storage Converter" description="Enter a value to convert." />
+      <EmptyState icon="💾" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={HardDrive} />
+      <ResultCard id="convertedResult" title={copy.resultTitle} icon={HardDrive} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/data-storage-calculator.ts"></script>

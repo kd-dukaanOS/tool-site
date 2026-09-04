@@ -11,6 +11,12 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const debtListEl = document.getElementById("debtList") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { namePlaceholder:"Debt name (e.g. Credit Card)", debtWord:"Debt", balancePlaceholder:"Balance", minPaymentPlaceholder:"Min payment", ratePlaceholder:"Rate %", saves:"Consolidation saves you money", costs:"Consolidation costs more", summaryTitle:"Debt Consolidation Summary", currentInterest:"Current Total Interest (if unchanged)", consolidatedInterest:"Consolidated Loan Total Interest", interestSaved:"Interest Saved", extraCost:"Extra Interest Cost", newPayment:"New Monthly Payment", currentPayment:"Current Combined Monthly Payment" },
+  es: { namePlaceholder:"Nombre de la deuda (ej. Tarjeta de Crédito)", debtWord:"Deuda", balancePlaceholder:"Saldo", minPaymentPlaceholder:"Pago mínimo", ratePlaceholder:"Tasa %", saves:"La consolidación te ahorra dinero", costs:"La consolidación cuesta más", summaryTitle:"Resumen de Consolidación de Deudas", currentInterest:"Interés Total Actual (sin cambios)", consolidatedInterest:"Interés Total del Préstamo Consolidado", interestSaved:"Interés Ahorrado", extraCost:"Costo de Interés Adicional", newPayment:"Nuevo Pago Mensual", currentPayment:"Pago Mensual Combinado Actual" },
+}[lang];
+
 let debtCount = 0;
 let lastSummary = "";
 
@@ -34,10 +40,10 @@ function addDebtRow() {
   row.className = "debt-row";
   row.dataset.debtId = String(debtCount);
   row.innerHTML = `
-    <input type="text" class="debt-name" placeholder="Debt name (e.g. Credit Card)" value="Debt ${debtCount}" />
-    <input type="number" class="debt-balance" placeholder="Balance" min="0" step="1" />
-    <input type="number" class="debt-min-payment" placeholder="Min payment" min="0" step="1" />
-    <input type="number" class="debt-rate" placeholder="Rate %" min="0" step="0.01" />
+    <input type="text" class="debt-name" placeholder="${t.namePlaceholder}" value="${t.debtWord} ${debtCount}" />
+    <input type="number" class="debt-balance" placeholder="${t.balancePlaceholder}" min="0" step="1" />
+    <input type="number" class="debt-min-payment" placeholder="${t.minPaymentPlaceholder}" min="0" step="1" />
+    <input type="number" class="debt-rate" placeholder="${t.ratePlaceholder}" min="0" step="0.01" />
     <button type="button" class="debt-remove" aria-label="Remove debt">&times;</button>
   `;
   row.querySelector(".debt-remove")?.addEventListener("click", () => row.remove());
@@ -61,7 +67,7 @@ function calculate() {
   const consolidationTermYears = parseFloat((document.getElementById("consolidationTermYears") as HTMLInputElement)?.value) || 0;
   const consolidationTermMonths = consolidationTermYears * 12;
 
-  const validationError = validateDebtConsolidationInputs(debts, consolidationTermMonths);
+  const validationError = validateDebtConsolidationInputs(debts, consolidationTermMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -73,16 +79,16 @@ function calculate() {
   setValue("consolidatedPaymentResult", fmtCurrency(result.consolidatedMonthlyPayment));
   setValue("currentInterestResult", fmtCurrency(result.currentTotalInterest));
   setValue("consolidatedInterestResult", fmtCurrency(result.consolidatedTotalInterest));
-  setSubtitle("interestSavedResult", result.isConsolidationBetter ? "Consolidation saves you money" : "Consolidation costs more");
+  setSubtitle("interestSavedResult", result.isConsolidationBetter ? t.saves : t.costs);
 
   lastSummary = `
-Debt Consolidation Summary
+${t.summaryTitle}
 
-Current Total Interest (if unchanged): ${fmtCurrency(result.currentTotalInterest)}
-Consolidated Loan Total Interest: ${fmtCurrency(result.consolidatedTotalInterest)}
-${result.isConsolidationBetter ? "Interest Saved" : "Extra Interest Cost"}: ${fmtCurrency(Math.abs(result.interestSaved))}
-New Monthly Payment: ${fmtCurrency(result.consolidatedMonthlyPayment)}
-Current Combined Monthly Payment: ${fmtCurrency(result.currentMonthlyPayment)}
+${t.currentInterest}: ${fmtCurrency(result.currentTotalInterest)}
+${t.consolidatedInterest}: ${fmtCurrency(result.consolidatedTotalInterest)}
+${result.isConsolidationBetter ? t.interestSaved : t.extraCost}: ${fmtCurrency(Math.abs(result.interestSaved))}
+${t.newPayment}: ${fmtCurrency(result.consolidatedMonthlyPayment)}
+${t.currentPayment}: ${fmtCurrency(result.currentMonthlyPayment)}
 `.trim();
 
   emptyState.hidden = true;

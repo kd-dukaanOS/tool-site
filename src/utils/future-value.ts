@@ -29,7 +29,13 @@ export function calculateFutureValue(
   return { futureValue: balance, totalContributions, investmentGrowth, yearsInvested: years };
 }
 
-export function validateFutureValueInputs(presentValue: number, years: number, annualReturn: number): string | null {
+export function validateFutureValueInputs(presentValue: number, years: number, annualReturn: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (presentValue < 0) return "El valor presente no puede ser negativo.";
+    if (years <= 0) return "El número de años debe ser mayor que cero.";
+    if (annualReturn < -100) return "La tasa de rendimiento anual no es válida.";
+    return null;
+  }
   if (presentValue < 0) return "Present value cannot be negative.";
   if (years <= 0) return "Number of years must be greater than zero.";
   if (annualReturn < -100) return "Annual return rate is invalid.";

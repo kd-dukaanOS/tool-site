@@ -6,6 +6,26 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { TrendingUp, Percent, Wallet, Repeat } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    initial: "Initial Investment", final: "Final Value", years: "Time Period (Years)",
+    emptyTitle: "Enter values to calculate CAGR", emptyDesc: "Your compounded annual growth rate will appear here.",
+    cagr: "CAGR", absoluteReturn: "Absolute Return", totalGrowth: "Total Growth", wealthMultiple: "Wealth Multiple",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+  },
+  es: {
+    initial: "Inversión Inicial", final: "Valor Final", years: "Período de Tiempo (Años)",
+    emptyTitle: "Ingresa los valores para calcular el CAGR", emptyDesc: "Tu tasa de crecimiento anual compuesta aparecerá aquí.",
+    cagr: "CAGR", absoluteReturn: "Rentabilidad Absoluta", totalGrowth: "Crecimiento Total", wealthMultiple: "Múltiplo de Riqueza",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
@@ -13,19 +33,19 @@ import { TrendingUp, Percent, Wallet, Repeat } from "@lucide/astro";
     <CurrencySelector />
     <CalculatorField
       id="initialValue"
-      label="Initial Investment"
+      label={copy.initial}
       type="number"
       placeholder="e.g. 100000"
     />
     <CalculatorField
       id="finalValue"
-      label="Final Value"
+      label={copy.final}
       type="number"
       placeholder="e.g. 250000"
     />
     <CalculatorField
       id="years"
-      label="Time Period (Years)"
+      label={copy.years}
       type="number"
       placeholder="e.g. 5"
     />
@@ -38,23 +58,29 @@ import { TrendingUp, Percent, Wallet, Repeat } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter values to calculate CAGR"
-      description="Your compounded annual growth rate will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="cagrResult" title="CAGR" icon={TrendingUp} accent="primary" size="lg" />
-      <ResultCard id="absoluteReturnResult" title="Absolute Return" icon={Percent} accent="success" />
-      <ResultCard id="totalGrowthResult" title="Total Growth" icon={Wallet} accent="success" />
-      <ResultCard id="wealthMultipleResult" title="Wealth Multiple" icon={Repeat} accent="neutral" />
+      <ResultCard id="cagrResult" title={copy.cagr} icon={TrendingUp} accent="primary" size="lg" />
+      <ResultCard id="absoluteReturnResult" title={copy.absoluteReturn} icon={Percent} accent="success" />
+      <ResultCard id="totalGrowthResult" title={copy.totalGrowth} icon={Wallet} accent="success" />
+      <ResultCard id="wealthMultipleResult" title={copy.wealthMultiple} icon={Repeat} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/cagr-calculator.ts"></script>

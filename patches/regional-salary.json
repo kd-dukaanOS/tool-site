@@ -1,0 +1,30 @@
+{
+  "tool": "regional-salary",
+  "edits": [
+    {
+      "file": "src/utils/regional-salary.ts",
+      "label": "add lang param + translated messages to validateIncome",
+      "find": "export function validateIncome(value: number): string | null {\n  if (Number.isNaN(value)) return \"Please enter a valid annual income.\";\n  if (value < 0) return \"Income cannot be negative.\";\n  if (value > 100000000) return \"Please enter a realistic income.\";\n  return null;\n}",
+      "replace": "export function validateIncome(value: number, lang: \"en\" | \"es\" = \"en\"): string | null {\n  if (lang === \"es\") {\n    if (Number.isNaN(value)) return \"Por favor ingresa un ingreso anual válido.\";\n    if (value < 0) return \"El ingreso no puede ser negativo.\";\n    if (value > 100000000) return \"Por favor ingresa un ingreso realista.\";\n    return null;\n  }\n  if (Number.isNaN(value)) return \"Please enter a valid annual income.\";\n  if (value < 0) return \"Income cannot be negative.\";\n  if (value > 100000000) return \"Please enter a realistic income.\";\n  return null;\n}"
+    },
+    {
+      "file": "src/utils/regional-salary.ts",
+      "label": "add lang param + translated breakdown labels to calculateCATakeHome",
+      "find": "export function calculateCATakeHome(grossAnnual: number, province: string): TakeHomeResult {\n  const provincial = CA_PROVINCES[province] ?? ontarioIncomeTax;\n\n  const federalTax = calculateBracketTax(grossAnnual, caFederalIncomeTax.brackets);\n  const provincialTax = calculateBracketTax(grossAnnual, provincial.brackets);\n  const cpp = calculateCPPDetailed(grossAnnual).employeeContribution;\n  const ei = Math.min(grossAnnual, caEI.wageBase ?? grossAnnual) * caEI.rate;\n\n  const totalDeductions = federalTax + provincialTax + cpp + ei;\n  const netAnnual = grossAnnual - totalDeductions;\n\n  return {\n    grossAnnual,\n    totalDeductions,\n    netAnnual,\n    netMonthly: netAnnual / 12,\n    netBiweekly: netAnnual / 26,\n    netWeekly: netAnnual / 52,\n    breakdown: [\n      { label: \"Federal Tax\", amount: federalTax },\n      { label: `${province} Provincial Tax`, amount: provincialTax },\n      { label: \"CPP\", amount: cpp },\n      { label: \"EI\", amount: ei },\n    ],\n    effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,\n  };\n}",
+      "replace": "export function calculateCATakeHome(grossAnnual: number, province: string, lang: \"en\" | \"es\" = \"en\"): TakeHomeResult {\n  const provincial = CA_PROVINCES[province] ?? ontarioIncomeTax;\n\n  const federalTax = calculateBracketTax(grossAnnual, caFederalIncomeTax.brackets);\n  const provincialTax = calculateBracketTax(grossAnnual, provincial.brackets);\n  const cpp = calculateCPPDetailed(grossAnnual).employeeContribution;\n  const ei = Math.min(grossAnnual, caEI.wageBase ?? grossAnnual) * caEI.rate;\n\n  const totalDeductions = federalTax + provincialTax + cpp + ei;\n  const netAnnual = grossAnnual - totalDeductions;\n\n  const labels = lang === \"es\"\n    ? { federal: \"Impuesto Federal\", provincial: `Impuesto Provincial de ${province}`, cpp: \"CPP\", ei: \"EI\" }\n    : { federal: \"Federal Tax\", provincial: `${province} Provincial Tax`, cpp: \"CPP\", ei: \"EI\" };\n\n  return {\n    grossAnnual,\n    totalDeductions,\n    netAnnual,\n    netMonthly: netAnnual / 12,\n    netBiweekly: netAnnual / 26,\n    netWeekly: netAnnual / 52,\n    breakdown: [\n      { label: labels.federal, amount: federalTax },\n      { label: labels.provincial, amount: provincialTax },\n      { label: labels.cpp, amount: cpp },\n      { label: labels.ei, amount: ei },\n    ],\n    effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,\n  };\n}"
+    },
+    {
+      "file": "src/scripts/ca-income-tax.ts",
+      "label": "pass lang to validateIncome",
+      "find": "  const err = validateIncome(grossIncome);\n  if (err) return showError(err);\n\n  const r = calculateCAIncomeTax(grossIncome, province);",
+      "replace": "  const err = validateIncome(grossIncome, lang);\n  if (err) return showError(err);\n\n  const r = calculateCAIncomeTax(grossIncome, province);"
+    },
+    {
+      "file": "src/scripts/ca-take-home-pay.ts",
+      "label": "pass lang to validateIncome + calculateCATakeHome",
+      "find": "  const err = validateIncome(grossIncome);\n  if (err) return showError(err);\n\n  const r = calculateCATakeHome(grossIncome, province);",
+      "replace": "  const err = validateIncome(grossIncome, lang);\n  if (err) return showError(err);\n\n  const r = calculateCATakeHome(grossIncome, province, lang);"
+    }
+  ],
+  "newFiles": []
+}

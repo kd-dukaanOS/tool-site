@@ -40,7 +40,13 @@ export function calculateFire(
   return { fiNumber, yearsToFi, fiAge, projectedBalanceIn10Years, savingsRatePercent };
 }
 
-export function validateFireInputs(currentAge: number, annualExpenses: number, withdrawalRate: number): string | null {
+export function validateFireInputs(currentAge: number, annualExpenses: number, withdrawalRate: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (currentAge <= 0 || currentAge > 100) return "Ingresa una edad actual válida.";
+    if (annualExpenses <= 0) return "Los gastos anuales deben ser mayores que cero.";
+    if (withdrawalRate <= 0 || withdrawalRate > 20) return "La tasa de retiro debe estar entre 0 y 20%.";
+    return null;
+  }
   if (currentAge <= 0 || currentAge > 100) return "Enter a valid current age.";
   if (annualExpenses <= 0) return "Annual expenses must be greater than zero.";
   if (withdrawalRate <= 0 || withdrawalRate > 20) return "Withdrawal rate must be between 0 and 20%.";

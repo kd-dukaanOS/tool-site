@@ -13,6 +13,28 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { onTaxable:(x:string)=>`On ${x} taxable income`, summary:(r:any,fmt:(n:number)=>string)=>`
+Effective Tax Rate Summary
+
+Effective Tax Rate: ${r.effectiveRate.toFixed(2)}%
+Marginal Tax Bracket: ${r.marginalRate.toFixed(0)}%
+Taxable Income: ${fmt(r.taxableIncome)}
+Total Federal Tax: ${fmt(r.totalTax)}
+After-Tax Income: ${fmt(r.afterTaxIncome)}
+`.trim() },
+  es: { onTaxable:(x:string)=>`Sobre ${x} de ingreso gravable`, summary:(r:any,fmt:(n:number)=>string)=>`
+Resumen de Tasa Efectiva de Impuestos
+
+Tasa Efectiva de Impuesto: ${r.effectiveRate.toFixed(2)}%
+Tramo Marginal: ${r.marginalRate.toFixed(0)}%
+Ingreso Gravable: ${fmt(r.taxableIncome)}
+Impuesto Federal Total: ${fmt(r.totalTax)}
+Ingreso Después de Impuestos: ${fmt(r.afterTaxIncome)}
+`.trim() },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -37,7 +59,7 @@ function calculate() {
   const useStandardDeduction = (document.getElementById("deductionType") as HTMLSelectElement)?.value === "standard";
   const itemizedDeductions = val("itemizedDeductions");
 
-  const validationError = validateEffectiveTaxRateInputs(grossIncome);
+  const validationError = validateEffectiveTaxRateInputs(grossIncome, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,17 +71,9 @@ function calculate() {
   setValue("marginalRateResult", `${result.marginalRate.toFixed(0)}%`);
   setValue("totalTaxResult", fmtCurrency(result.totalTax));
   setValue("afterTaxResult", fmtCurrency(result.afterTaxIncome));
-  setSubtitle("totalTaxResult", `On ${fmtCurrency(result.taxableIncome)} taxable income`);
+  setSubtitle("totalTaxResult", t.onTaxable(fmtCurrency(result.taxableIncome)));
 
-  lastSummary = `
-Effective Tax Rate Summary
-
-Effective Tax Rate: ${result.effectiveRate.toFixed(2)}%
-Marginal Tax Bracket: ${result.marginalRate.toFixed(0)}%
-Taxable Income: ${fmtCurrency(result.taxableIncome)}
-Total Federal Tax: ${fmtCurrency(result.totalTax)}
-After-Tax Income: ${fmtCurrency(result.afterTaxIncome)}
-`.trim();
+  lastSummary = t.summary(result, fmtCurrency);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

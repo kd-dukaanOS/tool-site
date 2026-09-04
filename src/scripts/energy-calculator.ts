@@ -3,6 +3,7 @@ import {
   validateEnergyInput,
   copyEnergySummary,
   ENERGY_LABELS,
+  ENERGY_LABELS_ES,
   type EnergyInput,
 } from "../utils/energy";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
@@ -19,6 +20,7 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 let lastInput: EnergyInput | null = null;
 
 function showError(msg: string) {
@@ -40,7 +42,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateEnergyInput(input);
+  const err = validateEnergyInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +51,7 @@ function calculate() {
   const result = calculateEnergy(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", ENERGY_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", (lang === "es" ? ENERGY_LABELS_ES : ENERGY_LABELS)[input.toUnit]);
 
   lastInput = input;
 
@@ -68,7 +70,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateEnergy(lastInput);
-  copyToClipboard(copyEnergySummary(lastInput, result));
+  copyToClipboard(copyEnergySummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

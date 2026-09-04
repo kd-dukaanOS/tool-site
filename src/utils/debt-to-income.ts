@@ -21,7 +21,8 @@ export function calculateDTI(
   carLoanPayment: number,
   studentLoanPayment: number,
   creditCardMinPayments: number,
-  otherDebtPayments: number
+  otherDebtPayments: number,
+  lang: "en" | "es" = "en"
 ): DTIResult {
   const totalMonthlyDebt = housingPayment + carLoanPayment + studentLoanPayment + creditCardMinPayments + otherDebtPayments;
   const nonHousingDebt = carLoanPayment + studentLoanPayment + creditCardMinPayments + otherDebtPayments;
@@ -29,18 +30,22 @@ export function calculateDTI(
   const frontEndDTI = (housingPayment / grossMonthlyIncome) * 100;
   const backEndDTI = (totalMonthlyDebt / grossMonthlyIncome) * 100;
 
+  const labels = lang === "es"
+    ? { excellent:"Excelente", good:"Bueno", borderline:"Límite", highRisk:"Alto Riesgo" }
+    : { excellent:"Excellent", good:"Good", borderline:"Borderline", highRisk:"High Risk" };
+
   const frontEndRating = rateDTI(frontEndDTI, [
-    [28, "Excellent"],
-    [33, "Good"],
-    [40, "Borderline"],
-    [Infinity, "High Risk"],
+    [28, labels.excellent],
+    [33, labels.good],
+    [40, labels.borderline],
+    [Infinity, labels.highRisk],
   ]);
 
   const backEndRating = rateDTI(backEndDTI, [
-    [36, "Excellent"],
-    [43, "Good"],
-    [50, "Borderline"],
-    [Infinity, "High Risk"],
+    [36, labels.excellent],
+    [43, labels.good],
+    [50, labels.borderline],
+    [Infinity, labels.highRisk],
   ]);
 
   const maxAdditionalDebtFor36 = Math.max(grossMonthlyIncome * 0.36 - totalMonthlyDebt, 0);
@@ -57,7 +62,11 @@ export function calculateDTI(
   };
 }
 
-export function validateDTIInputs(grossMonthlyIncome: number): string | null {
+export function validateDTIInputs(grossMonthlyIncome: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (grossMonthlyIncome <= 0) return "El ingreso mensual bruto debe ser mayor que cero.";
+    return null;
+  }
   if (grossMonthlyIncome <= 0) return "Gross monthly income must be greater than zero.";
   return null;
 }

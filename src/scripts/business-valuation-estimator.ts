@@ -8,6 +8,8 @@ import {
 import { setValue, copyToClipboard } from "../utils/calculator";
 import { formatCurrency, getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 const annualRevenueInput = document.getElementById("annualRevenue") as HTMLInputElement;
 const annualProfitInput = document.getElementById("annualProfit") as HTMLInputElement;
 const revenueMultipleInput = document.getElementById("revenueMultiple") as HTMLInputElement;
@@ -45,7 +47,7 @@ function calculate() {
     valuationMethod: (valuationMethodSelect.value as BusinessValuationInput["valuationMethod"]) || "average",
   };
 
-  const error = validateBusinessValuationInput(input);
+  const error = validateBusinessValuationInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -84,7 +86,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyBusinessValuationSummary(lastInput, lastResult));
+  copyToClipboard(copyBusinessValuationSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

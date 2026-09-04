@@ -23,8 +23,15 @@ export function calculateCanadaCapitalGains(
 export function validateCanadaCapitalGainsInputs(
   proceedsOfDisposition: number,
   adjustedCostBase: number,
-  marginalTaxRate: number
+  marginalTaxRate: number,
+  lang: "en" | "es" = "en"
 ): string | null {
+  if (lang === "es") {
+    if (proceedsOfDisposition <= 0) return "El producto de la disposición debe ser mayor que cero.";
+    if (adjustedCostBase < 0) return "La base de costo ajustada no puede ser negativa.";
+    if (marginalTaxRate <= 0 || marginalTaxRate > 55) return "Ingresa una tasa de impuesto marginal válida entre 0% y 55%.";
+    return null;
+  }
   if (proceedsOfDisposition <= 0) return "Proceeds of disposition must be greater than zero.";
   if (adjustedCostBase < 0) return "Adjusted cost base cannot be negative.";
   if (marginalTaxRate <= 0 || marginalTaxRate > 55) return "Enter a valid marginal tax rate between 0% and 55%.";

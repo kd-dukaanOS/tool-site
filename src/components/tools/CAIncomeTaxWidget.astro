@@ -5,41 +5,72 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Landmark, MapPin, TrendingUp, Wallet } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    grossIncomeLabel: "Gross Annual Income", grossIncomeHelp: "Your gross salary before deductions (CAD).",
+    provinceLabel: "Province", ontario: "Ontario", alberta: "Alberta", britishColumbia: "British Columbia",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Canada Income Tax Calculator", emptyDesc: "See your estimated federal + provincial income tax and combined marginal rate.",
+    tip1: "Federal Tax", tip2: "Provincial Tax", tip3: "Marginal Rate",
+    federalTax: "Federal Tax", provincialTax: "Provincial Tax", marginalRate: "Combined Marginal Rate", afterTax: "After-Tax Income",
+    aboutTitle: "About this Calculator",
+    aboutText: "Estimates combined federal and provincial income tax for Ontario, Alberta, and British Columbia. Does not include CPP or EI — use the Canada Take-Home Pay Calculator for a full paycheque breakdown. Verify against current CRA figures.",
+  },
+  es: {
+    grossIncomeLabel: "Ingreso Bruto Anual", grossIncomeHelp: "Tu salario bruto antes de deducciones (CAD).",
+    provinceLabel: "Provincia", ontario: "Ontario", alberta: "Alberta", britishColumbia: "Columbia Británica",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Impuesto sobre la Renta de Canadá", emptyDesc: "Consulta tu impuesto federal + provincial estimado y la tasa marginal combinada.",
+    tip1: "Impuesto Federal", tip2: "Impuesto Provincial", tip3: "Tasa Marginal",
+    federalTax: "Impuesto Federal", provincialTax: "Impuesto Provincial", marginalRate: "Tasa Marginal Combinada", afterTax: "Ingreso Después de Impuestos",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Estima el impuesto federal y provincial combinado para Ontario, Alberta y Columbia Británica. No incluye CPP ni EI — usa la Calculadora de Sueldo Neto de Canadá para un desglose completo de tu cheque de pago. Verifica con las cifras actuales de la CRA.",
+  },
+}[lang];
 ---
 <section class="cait-calculator">
   <div class="cait-layout">
     <aside class="cait-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross salary before deductions (CAD)." />
+      <CalculatorField id="grossIncome" label={copy.grossIncomeLabel} type="number" required={true} helpText={copy.grossIncomeHelp} />
       <div class="cait-province">
-        <label for="province">Province</label>
+        <label for="province">{copy.provinceLabel}</label>
         <select id="province">
-          <option value="ON">Ontario</option>
-          <option value="AB">Alberta</option>
-          <option value="BC">British Columbia</option>
+          <option value="ON">{copy.ontario}</option>
+          <option value="AB">{copy.alberta}</option>
+          <option value="BC">{copy.britishColumbia}</option>
         </select>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cait-content">
       <div id="emptyState">
-        <EmptyState icon="🇨🇦" title="Canada Income Tax Calculator" description="See your estimated federal + provincial income tax and combined marginal rate." tips={["Federal Tax", "Provincial Tax", "Marginal Rate"]} />
+        <EmptyState icon="🇨🇦" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="federalTaxResult" title="Federal Tax" icon={Landmark} subtitle=" " />
-          <ResultCard id="provincialTaxResult" title="Provincial Tax" icon={MapPin} />
-          <ResultCard id="marginalRateResult" title="Combined Marginal Rate" icon={TrendingUp} />
-          <ResultCard id="afterTaxResult" title="After-Tax Income" icon={Wallet} />
+          <ResultCard id="federalTaxResult" title={copy.federalTax} icon={Landmark} subtitle=" " />
+          <ResultCard id="provincialTaxResult" title={copy.provincialTax} icon={MapPin} />
+          <ResultCard id="marginalRateResult" title={copy.marginalRate} icon={TrendingUp} />
+          <ResultCard id="afterTaxResult" title={copy.afterTax} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates combined federal and provincial income tax for Ontario, Alberta, and British Columbia. Does not include CPP or EI — use the Canada Take-Home Pay Calculator for a full paycheque breakdown. Verify against current CRA figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/ca-income-tax";
 </script>

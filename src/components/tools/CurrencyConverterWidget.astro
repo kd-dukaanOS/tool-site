@@ -10,6 +10,13 @@ import {
   ArrowLeftRight,
   Repeat
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { amount:"Amount", amountHelp:"Amount you want to convert.", from:"From Currency", to:"To Currency", codeHelp:"3-letter code, e.g. USD, INR, EUR.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Currency Converter", emptyDesc:"Convert between currencies using live exchange rates.", tip1:"Live Exchange Rate", tip2:"Converted Amount", tip3:"Inverse Rate", converted:"Converted Amount", rate:"Exchange Rate", inverse:"Inverse Rate", aboutTitle:"About this Calculator", aboutText:"Converts an amount from one currency to another using a live exchange rate. Rates update automatically each time you calculate.", convertedSub:" converted" },
+  es: { amount:"Monto", amountHelp:"Monto que deseas convertir.", from:"De Moneda", to:"A Moneda", codeHelp:"Código de 3 letras, ej. USD, INR, EUR.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Convertidor de Moneda", emptyDesc:"Convierte entre monedas usando tipos de cambio en vivo.", tip1:"Tipo de Cambio en Vivo", tip2:"Monto Convertido", tip3:"Tasa Inversa", converted:"Monto Convertido", rate:"Tipo de Cambio", inverse:"Tasa Inversa", aboutTitle:"Acerca de esta Calculadora", aboutText:"Convierte un monto de una moneda a otra usando un tipo de cambio en vivo. Las tasas se actualizan automáticamente cada vez que calculas.", convertedSub:" convertido" },
+}[lang];
 ---
 
 <section class="cur-calculator">
@@ -20,31 +27,31 @@ import {
 
       <CalculatorField
         id="amount"
-        label="Amount"
+        label={copy.amount}
         type="number"
         placeholder="e.g. 100"
         required={true}
         min="0"
         step="0.01"
-        helpText="Amount you want to convert."
+        helpText={copy.amountHelp}
       />
 
       <CalculatorField
         id="fromCurrency"
-        label="From Currency"
+        label={copy.from}
         type="text"
         value="USD"
         required={true}
-        helpText="3-letter code, e.g. USD, INR, EUR."
+        helpText={copy.codeHelp}
       />
 
       <CalculatorField
         id="toCurrency"
-        label="To Currency"
+        label={copy.to}
         type="text"
         value="INR"
         required={true}
-        helpText="3-letter code, e.g. USD, INR, EUR."
+        helpText={copy.codeHelp}
       />
 
       <CalculatorActions
@@ -52,6 +59,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -68,13 +78,9 @@ import {
 
         <EmptyState
           icon="💱"
-          title="Currency Converter"
-          description="Convert between currencies using live exchange rates."
-          tips={[
-            "Live Exchange Rate",
-            "Converted Amount",
-            "Inverse Rate"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3]}
         />
 
       </div>
@@ -88,7 +94,7 @@ import {
 
           <ResultCard
             id="convertedResult"
-            title="Converted Amount"
+            title={copy.converted}
             icon={Banknote}
             accent="success"
             subtitle=" "
@@ -96,13 +102,13 @@ import {
 
           <ResultCard
             id="rateResult"
-            title="Exchange Rate"
+            title={copy.rate}
             icon={ArrowLeftRight}
           />
 
           <ResultCard
             id="inverseRateResult"
-            title="Inverse Rate"
+            title={copy.inverse}
             icon={Repeat}
           />
 
@@ -110,12 +116,10 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            Converts an amount from one currency to another using a
-            live exchange rate. Rates update automatically each time
-            you calculate.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -128,6 +132,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/currency-converter";
 </script>

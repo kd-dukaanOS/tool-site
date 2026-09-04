@@ -49,7 +49,13 @@ export function calculateClosingCosts(
   };
 }
 
-export function validateClosingCostsInputs(homePrice: number, loanAmount: number): string | null {
+export function validateClosingCostsInputs(homePrice: number, loanAmount: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (homePrice <= 0) return "El precio de la vivienda debe ser mayor que cero.";
+    if (loanAmount < 0) return "El monto del préstamo no puede ser negativo.";
+    if (loanAmount > homePrice) return "El monto del préstamo no puede exceder el precio de la vivienda.";
+    return null;
+  }
   if (homePrice <= 0) return "Home price must be greater than zero.";
   if (loanAmount < 0) return "Loan amount cannot be negative.";
   if (loanAmount > homePrice) return "Loan amount cannot exceed home price.";

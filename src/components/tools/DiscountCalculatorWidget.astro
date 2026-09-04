@@ -8,6 +8,13 @@ import ScheduleTable from "../calculator/ScheduleTable.astro";
 
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Tag, PiggyBank, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { originalPrice:"Original Price", originalPriceHelp:"The price before any discount.", percentOff:"% Off", flatOff:"Flat Off", discount:"Discount", discountHelp:"Discount percentage or flat amount, based on the toggle above.", extraCoupon:"Additional Coupon (%) — optional", extraCouponHelp:"Stack an extra coupon discount on top.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Discount Calculator", emptyDesc:"Find the final price, your total savings, and compare across common discount rates.", tip1:"Percentage or Flat Discount", tip2:"Stack an Extra Coupon", tip3:"Compare Common Discount Rates", finalPrice:"Final Price", youSave:"You Save", effectiveDiscount:"Effective Discount", scheduleDiscount:"Discount", scheduleFinalPrice:"Final Price", scheduleYouSave:"You Save", scheduleCaption:"Compare Common Discount Rates", aboutTitle:"About this Calculator", aboutText:"Enter the original price and a discount — either a percentage or a flat amount — to see the final price and total savings. Add an optional second coupon to see how stacked discounts compound." },
+  es: { originalPrice:"Precio Original", originalPriceHelp:"El precio antes de cualquier descuento.", percentOff:"% de Descuento", flatOff:"Monto Fijo", discount:"Descuento", discountHelp:"Porcentaje o monto fijo de descuento, según el interruptor de arriba.", extraCoupon:"Cupón Adicional (%) — opcional", extraCouponHelp:"Aplica un cupón extra sobre el descuento.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Descuentos", emptyDesc:"Encuentra el precio final, tu ahorro total y compara tasas de descuento comunes.", tip1:"Descuento Porcentual o Fijo", tip2:"Aplica un Cupón Adicional", tip3:"Compara Tasas de Descuento Comunes", finalPrice:"Precio Final", youSave:"Ahorras", effectiveDiscount:"Descuento Efectivo", scheduleDiscount:"Descuento", scheduleFinalPrice:"Precio Final", scheduleYouSave:"Ahorras", scheduleCaption:"Compara Tasas de Descuento Comunes", aboutTitle:"Acerca de esta Calculadora", aboutText:"Ingresa el precio original y un descuento — porcentual o de monto fijo — para ver el precio final y el ahorro total. Agrega un segundo cupón opcional para ver cómo se combinan los descuentos." },
+}[lang];
 ---
 
 <section class="discount-calculator">
@@ -20,27 +27,27 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="originalPrice"
-        label="Original Price"
+        label={copy.originalPrice}
         type="number"
         placeholder="e.g. 2000"
         required={true}
         min="1"
-        helpText="The price before any discount."
+        helpText={copy.originalPriceHelp}
       />
 
       <div class="toggle-row">
-        <button type="button" class="toggle-btn active" data-discount-mode="percentage">% Off</button>
-        <button type="button" class="toggle-btn" data-discount-mode="flat">Flat Off</button>
+        <button type="button" class="toggle-btn active" data-discount-mode="percentage">{copy.percentOff}</button>
+        <button type="button" class="toggle-btn" data-discount-mode="flat">{copy.flatOff}</button>
       </div>
 
       <CalculatorField
         id="discountValue"
-        label="Discount"
+        label={copy.discount}
         type="number"
         placeholder="e.g. 20"
         required={true}
         min="0"
-        helpText="Discount percentage or flat amount, based on the toggle above."
+        helpText={copy.discountHelp}
       />
 
       <div class="scenario-row">
@@ -52,11 +59,11 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="extraPercent"
-        label="Additional Coupon (%) — optional"
+        label={copy.extraCoupon}
         type="number"
         placeholder="e.g. 10"
         min="0"
-        helpText="Stack an extra coupon discount on top."
+        helpText={copy.extraCouponHelp}
       />
 
       <CalculatorActions
@@ -64,6 +71,9 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -80,12 +90,12 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
         <EmptyState
           icon="🏷️"
-          title="Discount Calculator"
-          description="Find the final price, your total savings, and compare across common discount rates."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Percentage or Flat Discount",
-            "Stack an Extra Coupon",
-            "Compare Common Discount Rates"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3
           ]}
         />
 
@@ -98,9 +108,9 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
         <ResultsGrid columns={3}>
 
-          <ResultCard id="finalPriceResult" title="Final Price" icon={Tag} accent="primary" />
-          <ResultCard id="saveResult" title="You Save" icon={PiggyBank} accent="success" />
-          <ResultCard id="percentResult" title="Effective Discount" icon={Percent} accent="warning" />
+          <ResultCard id="finalPriceResult" title={copy.finalPrice} icon={Tag} accent="primary" />
+          <ResultCard id="saveResult" title={copy.youSave} icon={PiggyBank} accent="success" />
+          <ResultCard id="percentResult" title={copy.effectiveDiscount} icon={Percent} accent="warning" />
 
         </ResultsGrid>
 
@@ -112,19 +122,16 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
         <ScheduleTable
           id="scheduleBody"
-          headers={["Discount", "Final Price", "You Save"]}
-          caption="Compare Common Discount Rates"
+          headers={[copy.scheduleDiscount, copy.scheduleFinalPrice, copy.scheduleYouSave]}
+          caption={copy.scheduleCaption}
         />
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            Enter the original price and a discount — either a percentage
-            or a flat amount — to see the final price and total savings.
-            Add an optional second coupon to see how stacked discounts
-            compound.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -137,6 +144,9 @@ import { Tag, PiggyBank, Percent } from "@lucide/astro";
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/discount-calculator";
 </script>

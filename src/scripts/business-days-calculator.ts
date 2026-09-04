@@ -6,6 +6,12 @@ import {
 } from "../utils/business-days";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { selectDates: "Please select both dates.", workingDays: "working days" },
+  es: { selectDates: "Por favor selecciona ambas fechas.", workingDays: "días hábiles" },
+}[lang];
+
 const startDateInput = document.getElementById("startDate") as HTMLInputElement;
 const endDateInput = document.getElementById("endDate") as HTMLInputElement;
 const excludeWeekendsInput = document.getElementById("excludeWeekends") as HTMLInputElement;
@@ -34,7 +40,7 @@ function calculate() {
   clearError();
 
   if (!startDateInput.value || !endDateInput.value) {
-    showError("Please select both dates.");
+    showError(t.selectDates);
     return;
   }
 
@@ -45,7 +51,7 @@ function calculate() {
     holidays: [],
   };
 
-  const err = validateBusinessDaysInput(input);
+  const err = validateBusinessDaysInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -56,7 +62,7 @@ function calculate() {
   setValue("businessDaysResult", result.businessDays);
   setValue("totalDaysResult", result.totalDays);
   setValue("weekendDaysResult", result.weekendDays);
-  setSubtitle("businessDaysResult", "working days");
+  setSubtitle("businessDaysResult", t.workingDays);
 
   lastInput = input;
 
@@ -79,7 +85,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBusinessDays(lastInput);
-  copyToClipboard(copyBusinessDaysSummary(lastInput, result));
+  copyToClipboard(copyBusinessDaysSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

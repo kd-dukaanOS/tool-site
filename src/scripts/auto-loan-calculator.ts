@@ -1,6 +1,12 @@
 import { calculateAutoLoan, validateAutoLoanInputs } from "../utils/auto-loan";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { title: "Auto Loan Summary", loanAmount: "Loan Amount", monthlyPayment: "Monthly Payment", totalInterest: "Total Interest", totalCost: "Total Cost", months: "months" },
+  es: { title: "Resumen de Préstamo de Auto", loanAmount: "Monto del Préstamo", monthlyPayment: "Pago Mensual", totalInterest: "Interés Total", totalCost: "Costo Total", months: "meses" },
+}[lang];
+
 function val(id: string): number {
   return parseFloat((document.getElementById(id) as HTMLInputElement)?.value) || 0;
 }
@@ -18,7 +24,7 @@ const fieldIds = ["vehiclePrice", "downPayment", "tradeInValue", "salesTaxRate",
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return n.toLocaleString(lang === "es" ? "es-ES" : "en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
 
 function showError(message: string) {
@@ -36,7 +42,7 @@ function calculate() {
 
   const [vehiclePrice, downPayment, tradeInValue, salesTaxRate, apr, termMonths] = fieldIds.map(val);
 
-  const validationError = validateAutoLoanInputs(vehiclePrice, termMonths);
+  const validationError = validateAutoLoanInputs(vehiclePrice, termMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -48,15 +54,15 @@ function calculate() {
   setValue("loanAmountResult", fmtCurrency(result.loanAmount));
   setValue("totalInterestResult", fmtCurrency(result.totalInterest));
   setValue("totalCostResult", fmtCurrency(result.totalCost));
-  setSubtitle("monthlyPaymentResult", `${termMonths} months`);
+  setSubtitle("monthlyPaymentResult", `${termMonths} ${t.months}`);
 
   lastSummary = `
-Auto Loan Summary
+${t.title}
 
-Loan Amount: ${fmtCurrency(result.loanAmount)}
-Monthly Payment: ${fmtCurrency(result.monthlyPayment)}
-Total Interest: ${fmtCurrency(result.totalInterest)}
-Total Cost: ${fmtCurrency(result.totalCost)}
+${t.loanAmount}: ${fmtCurrency(result.loanAmount)}
+${t.monthlyPayment}: ${fmtCurrency(result.monthlyPayment)}
+${t.totalInterest}: ${fmtCurrency(result.totalInterest)}
+${t.totalCost}: ${fmtCurrency(result.totalCost)}
 `.trim();
 
   emptyState.hidden = true;

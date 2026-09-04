@@ -5,49 +5,59 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Target, Calendar, TrendingUp, PiggyBank } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { personal:"Personal", currentAge:"Current Age", currentSavings:"Current Savings", annualIncome:"Annual Income", expensesGroup:"Expenses & Savings", annualExpenses:"Annual Expenses", annualContribution:"Annual Contribution", assumptionsGroup:"Assumptions", expectedReturn:"Expected Return (%/yr)", inflation:"Inflation Rate (%/yr)", withdrawal:"Withdrawal Rate (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"FIRE Calculator", emptyDesc:"Find your Financial Independence number and years to FIRE.", tip1:"FI Number", tip2:"Years to FI", tip3:"FIRE Age", fiNumber:"FI Number", yearsToFi:"Years to FI", fireAge:"FIRE Age", savingsRate:"Savings Rate", aboutTitle:"About this Calculator", aboutText:"Calculates your Financial Independence number from annual expenses and withdrawal rate, then projects years to reach it using real (inflation-adjusted) investment growth and your annual contribution.", beyond75:"Beyond 75 yrs", yrs:(y:number)=>`${y} yrs`, na:"N/A", atRate:(r:number)=>`At ${r}% withdrawal rate` },
+  es: { personal:"Personal", currentAge:"Edad Actual", currentSavings:"Ahorros Actuales", annualIncome:"Ingreso Anual", expensesGroup:"Gastos y Ahorros", annualExpenses:"Gastos Anuales", annualContribution:"Contribución Anual", assumptionsGroup:"Supuestos", expectedReturn:"Rendimiento Esperado (%/año)", inflation:"Tasa de Inflación (%/año)", withdrawal:"Tasa de Retiro (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora FIRE", emptyDesc:"Encuentra tu número de Independencia Financiera y años para lograrlo.", tip1:"Número FI", tip2:"Años para FI", tip3:"Edad FIRE", fiNumber:"Número FI", yearsToFi:"Años para FI", fireAge:"Edad FIRE", savingsRate:"Tasa de Ahorro", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu número de Independencia Financiera a partir de tus gastos anuales y tasa de retiro, luego proyecta los años para alcanzarlo usando el crecimiento real de inversión (ajustado por inflación) y tu contribución anual.", beyond75:"Más de 75 años", yrs:(y:number)=>`${y} años`, na:"N/D", atRate:(r:number)=>`A una tasa de retiro del ${r}%` },
+}[lang];
 ---
 <section class="fire-calculator">
   <div class="fire-layout">
     <aside class="fire-sidebar">
       <div class="fire-group">
-        <h3>Personal</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" min="1" step="1" />
-        <CalculatorField id="currentSavings" label="Current Savings" type="number" placeholder="e.g. 50000" min="0" step="1" />
-        <CalculatorField id="annualIncome" label="Annual Income" type="number" placeholder="e.g. 90000" min="0" step="1" />
+        <h3>{copy.personal}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 30" min="1" step="1" />
+        <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="annualIncome" label={copy.annualIncome} type="number" placeholder="e.g. 90000" min="0" step="1" />
       </div>
       <div class="fire-group">
-        <h3>Expenses & Savings</h3>
-        <CalculatorField id="annualExpenses" label="Annual Expenses" type="number" placeholder="e.g. 45000" min="0" step="1" />
-        <CalculatorField id="annualContribution" label="Annual Contribution" type="number" placeholder="e.g. 25000" min="0" step="1" />
+        <h3>{copy.expensesGroup}</h3>
+        <CalculatorField id="annualExpenses" label={copy.annualExpenses} type="number" placeholder="e.g. 45000" min="0" step="1" />
+        <CalculatorField id="annualContribution" label={copy.annualContribution} type="number" placeholder="e.g. 25000" min="0" step="1" />
       </div>
       <div class="fire-group">
-        <h3>Assumptions</h3>
-        <CalculatorField id="expectedReturnRate" label="Expected Return (%/yr)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
-        <CalculatorField id="inflationRate" label="Inflation Rate (%/yr)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="withdrawalRate" label="Withdrawal Rate (%)" type="number" placeholder="e.g. 4" min="0.1" step="0.1" />
+        <h3>{copy.assumptionsGroup}</h3>
+        <CalculatorField id="expectedReturnRate" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="inflationRate" label={copy.inflation} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="withdrawalRate" label={copy.withdrawal} type="number" placeholder="e.g. 4" min="0.1" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="fire-content">
       <div id="emptyState">
-        <EmptyState icon="🔥" title="FIRE Calculator" description="Find your Financial Independence number and years to FIRE." tips={["FI Number", "Years to FI", "FIRE Age"]} />
+        <EmptyState icon="🔥" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="fiNumberResult" title="FI Number" icon={Target} accent="success" subtitle=" " />
-          <ResultCard id="yearsToFiResult" title="Years to FI" icon={Calendar} />
-          <ResultCard id="fiAgeResult" title="FIRE Age" icon={TrendingUp} />
-          <ResultCard id="savingsRateResult" title="Savings Rate" icon={PiggyBank} />
+          <ResultCard id="fiNumberResult" title={copy.fiNumber} icon={Target} accent="success" subtitle=" " />
+          <ResultCard id="yearsToFiResult" title={copy.yearsToFi} icon={Calendar} />
+          <ResultCard id="fiAgeResult" title={copy.fireAge} icon={TrendingUp} />
+          <ResultCard id="savingsRateResult" title={copy.savingsRate} icon={PiggyBank} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your Financial Independence number from annual expenses and withdrawal rate, then projects years to reach it using real (inflation-adjusted) investment growth and your annual contribution.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/fire-calculator";
 </script>

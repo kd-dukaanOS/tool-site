@@ -8,7 +8,15 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 
-import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
+import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { desiredIncome:"Desired Annual Income ($)", desiredIncomeHelp:"Take-home income you want to earn per year.", expenses:"Annual Business Expenses ($)", expensesHelp:"Software, equipment, insurance, and other business costs.", billableHours:"Billable Hours per Week", billableHoursHelp:"Hours you can actually bill clients, not total hours worked.", weeks:"Working Weeks per Year", weeksHelp:"Weeks you work, after subtracting holidays and time off.", taxRate:"Tax Rate (%)", taxRateHelp:"Estimated income + self-employment tax rate.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Freelancer Hourly Rate Calculator", emptyDesc:"Find the hourly rate you need to charge to hit your income goal after expenses and taxes.", tip1:"Hourly Rate", tip2:"Daily Rate", tip3:"Billable Hours", tip4:"Gross Revenue Needed", hourlyRate:"Hourly Rate", dailyRate:"Daily Rate", annualHours:"Annual Billable Hours", grossRevenue:"Gross Revenue Needed", aboutTitle:"About this Calculator", aboutText:"Calculates the hourly rate you need to charge clients to hit your desired income after business expenses and taxes, based on your realistic billable hours. All calculations run locally — no external data or paid service is required." },
+  es: { desiredIncome:"Ingreso Anual Deseado ($)", desiredIncomeHelp:"Ingreso neto que deseas ganar por año.", expenses:"Gastos Anuales del Negocio ($)", expensesHelp:"Software, equipo, seguros y otros costos del negocio.", billableHours:"Horas Facturables por Semana", billableHoursHelp:"Horas que realmente puedes facturar a clientes, no el total de horas trabajadas.", weeks:"Semanas Laborables por Año", weeksHelp:"Semanas que trabajas, después de restar vacaciones y tiempo libre.", taxRate:"Tasa de Impuesto (%)", taxRateHelp:"Tasa estimada de impuesto sobre la renta + trabajo autónomo.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Tarifa por Hora para Freelancers", emptyDesc:"Encuentra la tarifa por hora que necesitas cobrar para alcanzar tu meta de ingresos después de gastos e impuestos.", tip1:"Tarifa por Hora", tip2:"Tarifa Diaria", tip3:"Horas Facturables", tip4:"Ingreso Bruto Necesario", hourlyRate:"Tarifa por Hora", dailyRate:"Tarifa Diaria", annualHours:"Horas Facturables Anuales", grossRevenue:"Ingreso Bruto Necesario", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula la tarifa por hora que necesitas cobrar a tus clientes para alcanzar tu ingreso deseado después de gastos del negocio e impuestos, según tus horas facturables reales. Todos los cálculos se ejecutan localmente — no se requiere ningún dato externo ni servicio de pago." },
+}[lang];
+---
 
 <section class="fr-calculator">
   <div class="fr-layout">
@@ -18,58 +26,58 @@ import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
 
       <CalculatorField
         id="desiredAnnualIncome"
-        label="Desired Annual Income ($)"
+        label={copy.desiredIncome}
         type="number"
         placeholder="e.g. 60000"
         required={true}
         min="0"
         step="1"
-        helpText="Take-home income you want to earn per year."
+        helpText={copy.desiredIncomeHelp}
       />
 
       <CalculatorField
         id="annualExpenses"
-        label="Annual Business Expenses ($)"
+        label={copy.expenses}
         type="number"
         placeholder="e.g. 5000"
         min="0"
         step="1"
-        helpText="Software, equipment, insurance, and other business costs."
+        helpText={copy.expensesHelp}
       />
 
       <CalculatorField
         id="billableHoursPerWeek"
-        label="Billable Hours per Week"
+        label={copy.billableHours}
         type="number"
         placeholder="e.g. 25"
         required={true}
         min="1"
         max="168"
         step="1"
-        helpText="Hours you can actually bill clients, not total hours worked."
+        helpText={copy.billableHoursHelp}
       />
 
       <CalculatorField
         id="weeksPerYear"
-        label="Working Weeks per Year"
+        label={copy.weeks}
         type="number"
         placeholder="e.g. 48"
         required={true}
         min="1"
         max="52"
         step="1"
-        helpText="Weeks you work, after subtracting holidays and time off."
+        helpText={copy.weeksHelp}
       />
 
       <CalculatorField
         id="taxRate"
-        label="Tax Rate (%)"
+        label={copy.taxRate}
         type="number"
         placeholder="e.g. 25"
         min="0"
         max="99"
         step="0.1"
-        helpText="Estimated income + self-employment tax rate."
+        helpText={copy.taxRateHelp}
       />
 
       <CalculatorActions
@@ -77,6 +85,9 @@ import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -86,26 +97,24 @@ import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
       <div id="emptyState">
         <EmptyState
           icon="🧑‍💻"
-          title="Freelancer Hourly Rate Calculator"
-          description="Find the hourly rate you need to charge to hit your income goal after expenses and taxes."
-          tips={["Hourly Rate", "Daily Rate", "Billable Hours", "Gross Revenue Needed"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="hourlyRateResult" title="Hourly Rate" icon={Clock} accent="success" size="lg" />
-          <ResultCard id="dailyRateResult" title="Daily Rate" icon={Sun} accent="primary" />
-          <ResultCard id="billableHoursResult" title="Annual Billable Hours" icon={CalendarClock} />
-          <ResultCard id="grossRevenueResult" title="Gross Revenue Needed" icon={Wallet} />
+          <ResultCard id="hourlyRateResult" title={copy.hourlyRate} icon={Clock} accent="success" size="lg" />
+          <ResultCard id="dailyRateResult" title={copy.dailyRate} icon={Sun} accent="primary" />
+          <ResultCard id="billableHoursResult" title={copy.annualHours} icon={CalendarClock} />
+          <ResultCard id="grossRevenueResult" title={copy.grossRevenue} icon={Wallet} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
           <p>
-            Calculates the hourly rate you need to charge clients to hit your desired income after
-            business expenses and taxes, based on your realistic billable hours. All calculations
-            run locally — no external data or paid service is required.
+            {copy.aboutText}
           </p>
         </section>
       </div>
@@ -114,6 +123,9 @@ import { Clock, Sun, CalendarClock, Wallet } from "@lucide/astro";---
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/freelancer-rate-calculator";
 </script>

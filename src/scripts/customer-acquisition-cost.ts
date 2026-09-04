@@ -19,6 +19,36 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: {
+    marketingCostLabel: "marketing cost", salesCostLabel: "sales cost",
+    newCustomersError: "Please enter the number of new customers (must be greater than 0).",
+    perNewCustomer: "per new customer",
+    summary: (marketingCost: number, salesCost: number, newCustomers: number, result: any, currency: string) =>
+      `Customer Acquisition Cost Summary\n\n` +
+      `Marketing Cost: ${formatCurrency(marketingCost, currency)}\n` +
+      `Sales Cost: ${formatCurrency(salesCost, currency)}\n` +
+      `Total Spend: ${formatCurrency(result.totalSpend, currency)}\n` +
+      `New Customers: ${newCustomers}\n` +
+      `CAC: ${formatCurrency(result.cac, currency)}\n` +
+      (result.costPerLead !== null ? `Cost per Lead: ${formatCurrency(result.costPerLead, currency)}\n` : ""),
+  },
+  es: {
+    marketingCostLabel: "costo de marketing", salesCostLabel: "costo de ventas",
+    newCustomersError: "Por favor ingresa el número de clientes nuevos (debe ser mayor que 0).",
+    perNewCustomer: "por cliente nuevo",
+    summary: (marketingCost: number, salesCost: number, newCustomers: number, result: any, currency: string) =>
+      `Resumen de Costo de Adquisición de Clientes\n\n` +
+      `Costo de Marketing: ${formatCurrency(marketingCost, currency)}\n` +
+      `Costo de Ventas: ${formatCurrency(salesCost, currency)}\n` +
+      `Gasto Total: ${formatCurrency(result.totalSpend, currency)}\n` +
+      `Clientes Nuevos: ${newCustomers}\n` +
+      `CAC: ${formatCurrency(result.cac, currency)}\n` +
+      (result.costPerLead !== null ? `Costo por Lead: ${formatCurrency(result.costPerLead, currency)}\n` : ""),
+  },
+}[lang];
+
 let lastSummary = "";
 
 function showError(message: string) {
@@ -39,14 +69,14 @@ function calculate() {
   const newCustomers = parseFloat(customersInput.value);
   const totalLeads = leadsInput.value ? parseFloat(leadsInput.value) : undefined;
 
-  const marketingError = validatePositiveNumber(marketingCost, "marketing cost");
+  const marketingError = validatePositiveNumber(marketingCost, t.marketingCostLabel, lang);
   if (marketingError) return showError(marketingError);
 
-  const salesError = validatePositiveNumber(salesCost, "sales cost");
+  const salesError = validatePositiveNumber(salesCost, t.salesCostLabel, lang);
   if (salesError) return showError(salesError);
 
   if (!newCustomers || newCustomers <= 0) {
-    return showError("Please enter the number of new customers (must be greater than 0).");
+    return showError(t.newCustomersError);
   }
 
  const result = calculateCAC(marketingCost, salesCost, newCustomers, totalLeads);
@@ -58,16 +88,9 @@ function calculate() {
     "costPerLeadResult",
     result.costPerLead !== null ? formatCurrency(result.costPerLead, currency) : "—"
   );
-  setSubtitle("cacResult", `per new customer`);
+  setSubtitle("cacResult", t.perNewCustomer);
 
-  lastSummary =
-    `Customer Acquisition Cost Summary\n\n` +
-    `Marketing Cost: ${formatCurrency(marketingCost, currency)}\n` +
-    `Sales Cost: ${formatCurrency(salesCost, currency)}\n` +
-    `Total Spend: ${formatCurrency(result.totalSpend, currency)}\n` +
-    `New Customers: ${newCustomers}\n` +
-    `CAC: ${formatCurrency(result.cac, currency)}\n` +
-    (result.costPerLead !== null ? `Cost per Lead: ${formatCurrency(result.costPerLead, currency)}\n` : "");
+  lastSummary = t.summary(marketingCost, salesCost, newCustomers, result, currency);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

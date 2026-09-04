@@ -6,6 +6,36 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Scale, Activity, Ruler } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    weightLabel: "Weight (kg)", weightHelp: "Enter your weight in kilograms.",
+    heightLabel: "Height (cm)", heightHelp: "Enter your height in centimeters.",
+    emptyTitle: "BMI Calculator", emptyDesc: "Find out your Body Mass Index and healthy weight range instantly.",
+    tips: ["BMI Value & Category", "Healthy Weight Range", "Personalized Insight"],
+    yourBMI: "Your BMI", category: "Category", healthyRange: "Healthy Weight Range",
+    aboutTitle: "About this Calculator",
+    aboutText: "Body Mass Index (BMI) estimates whether your weight is healthy for your height, using the formula BMI = weight (kg) ÷ height (m)². It's a screening tool, not a diagnosis — muscle mass, age, and body composition all affect what a healthy number looks like for you.",
+    categoriesTitle: "BMI Categories",
+    cats: ["Below 18.5 — Underweight", "18.5 – 24.9 — Normal weight", "25 – 29.9 — Overweight", "30 and above — Obese"],
+  },
+  es: {
+    weightLabel: "Peso (kg)", weightHelp: "Ingresa tu peso en kilogramos.",
+    heightLabel: "Estatura (cm)", heightHelp: "Ingresa tu estatura en centímetros.",
+    emptyTitle: "Calculadora de IMC", emptyDesc: "Descubre al instante tu Índice de Masa Corporal y tu rango de peso saludable.",
+    tips: ["Valor de IMC y Categoría", "Rango de Peso Saludable", "Análisis Personalizado"],
+    yourBMI: "Tu IMC", category: "Categoría", healthyRange: "Rango de Peso Saludable",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "El Índice de Masa Corporal (IMC) estima si tu peso es saludable para tu estatura, usando la fórmula IMC = peso (kg) ÷ estatura (m)². Es una herramienta de referencia, no un diagnóstico — la masa muscular, la edad y la composición corporal influyen en qué número es saludable para ti.",
+    categoriesTitle: "Categorías de IMC",
+    cats: ["Menos de 18.5 — Bajo peso", "18.5 – 24.9 — Peso normal", "25 – 29.9 — Sobrepeso", "30 o más — Obesidad"],
+  },
+}[lang];
 ---
 
 <section class="bmi-calculator">
@@ -18,24 +48,24 @@ import { Scale, Activity, Ruler } from "@lucide/astro";
 
       <CalculatorField
         id="weight"
-        label="Weight (kg)"
+        label={copy.weightLabel}
         type="number"
         placeholder="e.g. 70"
         required={true}
         min="1"
         step="0.1"
-        helpText="Enter your weight in kilograms."
+        helpText={copy.weightHelp}
       />
 
       <CalculatorField
         id="height"
-        label="Height (cm)"
+        label={copy.heightLabel}
         type="number"
         placeholder="e.g. 175"
         required={true}
         min="1"
         step="0.1"
-        helpText="Enter your height in centimeters."
+        helpText={copy.heightHelp}
       />
 
       <CalculatorActions
@@ -61,13 +91,9 @@ import { Scale, Activity, Ruler } from "@lucide/astro";
 
         <EmptyState
           icon="⚖️"
-          title="BMI Calculator"
-          description="Find out your Body Mass Index and healthy weight range instantly."
-          tips={[
-            "BMI Value & Category",
-            "Healthy Weight Range",
-            "Personalized Insight"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={copy.tips}
         />
 
       </div>
@@ -81,20 +107,20 @@ import { Scale, Activity, Ruler } from "@lucide/astro";
 
           <ResultCard
             id="bmiResult"
-            title="Your BMI"
+            title={copy.yourBMI}
             icon={Scale}
             subtitle=" "
           />
 
           <ResultCard
             id="categoryResult"
-            title="Category"
+            title={copy.category}
             icon={Activity}
           />
 
           <ResultCard
             id="rangeResult"
-            title="Healthy Weight Range"
+            title={copy.healthyRange}
             icon={Ruler}
             size="lg"
           />
@@ -109,23 +135,14 @@ import { Scale, Activity, Ruler } from "@lucide/astro";
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Body Mass Index (BMI) estimates whether your weight is healthy
-            for your height, using the formula BMI = weight (kg) &divide;
-            height (m)&sup2;. It's a screening tool, not a diagnosis —
-            muscle mass, age, and body composition all affect what a
-            healthy number looks like for you.
-          </p>
+          <p>{copy.aboutText}</p>
 
-          <h3>BMI Categories</h3>
+          <h3>{copy.categoriesTitle}</h3>
 
           <ul>
-            <li>Below 18.5 — Underweight</li>
-            <li>18.5 – 24.9 — Normal weight</li>
-            <li>25 – 29.9 — Overweight</li>
-            <li>30 and above — Obese</li>
+            {copy.cats.map((c) => <li>{c}</li>)}
           </ul>
 
         </section>
@@ -138,6 +155,9 @@ import { Scale, Activity, Ruler } from "@lucide/astro";
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/bmi-calculator";
 </script>

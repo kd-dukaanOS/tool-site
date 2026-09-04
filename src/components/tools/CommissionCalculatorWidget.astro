@@ -6,14 +6,21 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Wallet, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { salesAmount:"Sales Amount", commissionRate:"Commission Rate (%)", baseSalary:"Base Salary (optional)", emptyTitle:"Enter sales to calculate commission", emptyDesc:"Your commission earnings will appear here.", commissionEarned:"Commission Earned", totalEarnings:"Total Earnings", effectiveRate:"Effective Rate" },
+  es: { salesAmount:"Monto de Ventas", commissionRate:"Tasa de Comisión (%)", baseSalary:"Salario Base (opcional)", emptyTitle:"Ingresa ventas para calcular la comisión", emptyDesc:"Tus ganancias por comisión aparecerán aquí.", commissionEarned:"Comisión Ganada", totalEarnings:"Ganancias Totales", effectiveRate:"Tasa Efectiva" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CurrencySelector />
-    <CalculatorField id="salesAmount" label="Sales Amount" type="number" placeholder="e.g. 100000" />
-    <CalculatorField id="commissionRate" label="Commission Rate (%)" type="number" placeholder="e.g. 5" />
-    <CalculatorField id="baseSalary" label="Base Salary (optional)" type="number" placeholder="e.g. 15000" />
+    <CalculatorField id="salesAmount" label={copy.salesAmount} type="number" placeholder="e.g. 100000" />
+    <CalculatorField id="commissionRate" label={copy.commissionRate} type="number" placeholder="e.g. 5" />
+    <CalculatorField id="baseSalary" label={copy.baseSalary} type="number" placeholder="e.g. 15000" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -29,16 +36,22 @@ import { Wallet, Percent } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter sales to calculate commission"
-      description="Your commission earnings will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="commissionEarnedResult" title="Commission Earned" icon={Wallet} accent="success" size="lg" />
-      <ResultCard id="totalEarningsResult" title="Total Earnings" icon={Wallet} accent="primary" />
-      <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="neutral" />
+      <ResultCard id="commissionEarnedResult" title={copy.commissionEarned} icon={Wallet} accent="success" size="lg" />
+      <ResultCard id="totalEarningsResult" title={copy.totalEarnings} icon={Wallet} accent="primary" />
+      <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/commission-calculator.ts"></script>

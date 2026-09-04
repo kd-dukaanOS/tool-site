@@ -5,48 +5,72 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingUp, PiggyBank, Sparkles, Calendar } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { startGroup:"Starting Amount", presentValue:"Present Value", monthlyContribution:"Monthly Contribution", growthGroup:"Growth Assumptions", annualReturn:"Annual Return (%)", years:"Years to Grow", compounding:"Compounding Frequency", monthly:"Monthly", quarterly:"Quarterly", annually:"Annually", daily:"Daily", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Future Value Calculator", emptyDesc:"Project how much your investment will be worth in the future.", tip1:"Future Value", tip2:"Total Contributions", tip3:"Investment Growth", futureValue:"Future Value", totalContributions:"Total Contributions", investmentGrowth:"Investment Growth", yearsInvested:"Years Invested", aboutTitle:"About this Calculator", aboutText:"Projects the future value of your investment by compounding your present value and monthly contributions at your expected return rate and compounding frequency.", overYears:(y:number)=>`Over ${y} years`, yearsSuffix:(y:number)=>`${y} years`, summary:(r:any,fmt:(n:number)=>string)=>`
+Future Value Projection Summary
+
+Future Value: ${fmt(r.futureValue)}
+Total Contributions: ${fmt(r.totalContributions)}
+Investment Growth: ${fmt(r.investmentGrowth)}
+Years Invested: ${r.yearsInvested}
+`.trim() },
+  es: { startGroup:"Monto Inicial", presentValue:"Valor Presente", monthlyContribution:"Aporte Mensual", growthGroup:"Supuestos de Crecimiento", annualReturn:"Rendimiento Anual (%)", years:"Años de Crecimiento", compounding:"Frecuencia de Capitalización", monthly:"Mensual", quarterly:"Trimestral", annually:"Anual", daily:"Diario", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Valor Futuro", emptyDesc:"Proyecta cuánto valdrá tu inversión en el futuro.", tip1:"Valor Futuro", tip2:"Aportes Totales", tip3:"Crecimiento de Inversión", futureValue:"Valor Futuro", totalContributions:"Aportes Totales", investmentGrowth:"Crecimiento de Inversión", yearsInvested:"Años Invertidos", aboutTitle:"Acerca de esta Calculadora", aboutText:"Proyecta el valor futuro de tu inversión capitalizando tu valor presente y aportes mensuales a la tasa de rendimiento esperada y frecuencia de capitalización.", overYears:(y:number)=>`En ${y} años`, yearsSuffix:(y:number)=>`${y} años`, summary:(r:any,fmt:(n:number)=>string)=>`
+Resumen de Proyección de Valor Futuro
+
+Valor Futuro: ${fmt(r.futureValue)}
+Aportes Totales: ${fmt(r.totalContributions)}
+Crecimiento de Inversión: ${fmt(r.investmentGrowth)}
+Años Invertidos: ${r.yearsInvested}
+`.trim() },
+}[lang];
 ---
 <section class="fv-calculator">
   <div class="fv-layout">
     <aside class="fv-sidebar">
       <div class="fv-group">
-        <h3>Starting Amount</h3>
-        <CalculatorField id="presentValue" label="Present Value" type="number" placeholder="e.g. 10000" min="0" step="1" />
-        <CalculatorField id="monthlyContribution" label="Monthly Contribution" type="number" placeholder="e.g. 500" min="0" step="1" />
+        <h3>{copy.startGroup}</h3>
+        <CalculatorField id="presentValue" label={copy.presentValue} type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <CalculatorField id="monthlyContribution" label={copy.monthlyContribution} type="number" placeholder="e.g. 500" min="0" step="1" />
       </div>
       <div class="fv-group">
-        <h3>Growth Assumptions</h3>
-        <CalculatorField id="annualReturn" label="Annual Return (%)" type="number" placeholder="e.g. 7" min="-100" step="0.1" />
-        <CalculatorField id="years" label="Years to Grow" type="number" placeholder="e.g. 20" min="1" step="1" />
-        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency">
-  <option value="12">Monthly</option>
-  <option value="4">Quarterly</option>
-  <option value="1">Annually</option>
-  <option value="365">Daily</option>
+        <h3>{copy.growthGroup}</h3>
+        <CalculatorField id="annualReturn" label={copy.annualReturn} type="number" placeholder="e.g. 7" min="-100" step="0.1" />
+        <CalculatorField id="years" label={copy.years} type="number" placeholder="e.g. 20" min="1" step="1" />
+        <CalculatorField type="select" id="compoundingFrequency" label={copy.compounding}>
+  <option value="12">{copy.monthly}</option>
+  <option value="4">{copy.quarterly}</option>
+  <option value="1">{copy.annually}</option>
+  <option value="365">{copy.daily}</option>
 </CalculatorField>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="fv-content">
       <div id="emptyState">
-        <EmptyState icon="📈" title="Future Value Calculator" description="Project how much your investment will be worth in the future." tips={["Future Value", "Total Contributions", "Investment Growth"]} />
+        <EmptyState icon="📈" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="futureValueResult" title="Future Value" icon={TrendingUp} accent="success" subtitle=" " />
-          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={PiggyBank} />
-          <ResultCard id="investmentGrowthResult" title="Investment Growth" icon={Sparkles} />
-          <ResultCard id="yearsInvestedResult" title="Years Invested" icon={Calendar} />
+          <ResultCard id="futureValueResult" title={copy.futureValue} icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="totalContributionsResult" title={copy.totalContributions} icon={PiggyBank} />
+          <ResultCard id="investmentGrowthResult" title={copy.investmentGrowth} icon={Sparkles} />
+          <ResultCard id="yearsInvestedResult" title={copy.yearsInvested} icon={Calendar} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects the future value of your investment by compounding your present value and monthly contributions at your expected return rate and compounding frequency.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/future-value-calculator";
 </script>

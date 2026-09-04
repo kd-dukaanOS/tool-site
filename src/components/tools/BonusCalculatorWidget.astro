@@ -9,6 +9,32 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    salaryLabel: "Annual Salary ($)", salaryPh: "e.g. 60000", salaryHelp: "Your base annual salary.",
+    bonusLabel: "Bonus (%)", bonusPh: "e.g. 10", bonusHelp: "Bonus as a percentage of salary.",
+    taxLabel: "Tax Rate on Bonus (%)", taxPh: "e.g. 22", taxHelp: "Estimated tax rate applied to bonus pay.",
+    emptyTitle: "Bonus Calculator", emptyDesc: "Find your gross bonus, tax on bonus, and net take-home bonus amount.",
+    tips: ["Net Bonus", "Gross Bonus", "Tax on Bonus", "Total Compensation"],
+    netBonus: "Net Bonus", grossBonus: "Gross Bonus", taxOnBonus: "Tax on Bonus", totalComp: "Total Compensation",
+    aboutTitle: "About this Calculator",
+    aboutText: "Calculates your gross bonus, estimated tax on the bonus, and net take-home bonus amount from your salary and bonus percentage. All calculations run locally — no external data or paid service is required.",
+  },
+  es: {
+    salaryLabel: "Salario Anual ($)", salaryPh: "ej. 60000", salaryHelp: "Tu salario base anual.",
+    bonusLabel: "Bono (%)", bonusPh: "ej. 10", bonusHelp: "Bono como porcentaje del salario.",
+    taxLabel: "Tasa de Impuesto sobre el Bono (%)", taxPh: "ej. 22", taxHelp: "Tasa de impuesto estimada aplicada al bono.",
+    emptyTitle: "Calculadora de Bono", emptyDesc: "Calcula tu bono bruto, el impuesto sobre el bono y el monto neto a recibir.",
+    tips: ["Bono Neto", "Bono Bruto", "Impuesto sobre el Bono", "Compensación Total"],
+    netBonus: "Bono Neto", grossBonus: "Bono Bruto", taxOnBonus: "Impuesto sobre el Bono", totalComp: "Compensación Total",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Calcula tu bono bruto, el impuesto estimado sobre el bono y el monto neto a recibir a partir de tu salario y porcentaje de bono. Todos los cálculos se ejecutan localmente, sin datos externos ni servicios de pago.",
+  },
+}[lang];
 ---
 
 <section class="bonus-calculator">
@@ -19,35 +45,35 @@ import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
 
       <CalculatorField
         id="annualSalary"
-        label="Annual Salary ($)"
+        label={copy.salaryLabel}
         type="number"
-        placeholder="e.g. 60000"
+        placeholder={copy.salaryPh}
         required={true}
         min="0"
         step="1"
-        helpText="Your base annual salary."
+        helpText={copy.salaryHelp}
       />
 
       <CalculatorField
         id="bonusPercent"
-        label="Bonus (%)"
+        label={copy.bonusLabel}
         type="number"
-        placeholder="e.g. 10"
+        placeholder={copy.bonusPh}
         required={true}
         min="0"
         step="0.1"
-        helpText="Bonus as a percentage of salary."
+        helpText={copy.bonusHelp}
       />
 
       <CalculatorField
         id="taxRate"
-        label="Tax Rate on Bonus (%)"
+        label={copy.taxLabel}
         type="number"
-        placeholder="e.g. 22"
+        placeholder={copy.taxPh}
         min="0"
         max="100"
         step="0.1"
-        helpText="Estimated tax rate applied to bonus pay."
+        helpText={copy.taxHelp}
       />
 
       <CalculatorActions
@@ -62,29 +88,24 @@ import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
 
     <main class="bonus-content">
       <div id="emptyState">
-        <EmptyState
+      <EmptyState
           icon="🎁"
-          title="Bonus Calculator"
-          description="Find your gross bonus, tax on bonus, and net take-home bonus amount."
-          tips={["Net Bonus", "Gross Bonus", "Tax on Bonus", "Total Compensation"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={copy.tips}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="netBonusResult" title="Net Bonus" icon={Wallet} accent="success" size="lg" />
-          <ResultCard id="bonusAmountResult" title="Gross Bonus" icon={Package} accent="primary" />
-          <ResultCard id="taxOnBonusResult" title="Tax on Bonus" icon={Receipt} />
-          <ResultCard id="totalCompResult" title="Total Compensation" icon={TrendingUp} />
-        </ResultsGrid>
+           <ResultCard id="netBonusResult" title={copy.netBonus} icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="bonusAmountResult" title={copy.grossBonus} icon={Package} accent="primary" />
+          <ResultCard id="taxOnBonusResult" title={copy.taxOnBonus} icon={Receipt} />
+          <ResultCard id="totalCompResult" title={copy.totalComp} icon={TrendingUp} />        </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your gross bonus, estimated tax on the bonus, and net take-home bonus amount
-            from your salary and bonus percentage. All calculations run locally — no external data
-            or paid service is required.
-          </p>
+         <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -92,10 +113,10 @@ import { Package, Wallet, Receipt, TrendingUp } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>window.calcLang = calcLang;</script>
 <script>
   import "../../scripts/bonus-calculator";
 </script>
-
 <style>
 .bonus-calculator{ width:100%; }
 .bonus-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }

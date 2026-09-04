@@ -6,6 +6,9 @@
 } from "../utils/body-fat";
 import { setValue, copyToClipboard } from "../utils/calculator";
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = { en: { fillRequired: "Please fill all required fields." }, es: { fillRequired: "Por favor completa todos los campos requeridos." } }[lang];
+
 const genderInput = document.getElementById("gender") as HTMLSelectElement;
 const heightInput = document.getElementById("heightCm") as HTMLInputElement;
 const neckInput = document.getElementById("neckCm") as HTMLInputElement;
@@ -49,11 +52,11 @@ function calculate() {
   };
 
   if (!input.heightCm || !input.neckCm || !input.waistCm) {
-    showError("Please fill all required fields.");
+    showError(t.fillRequired);
     return;
   }
 
-  const err = validateBodyFatInput(input);
+  const err = validateBodyFatInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -62,7 +65,7 @@ function calculate() {
   const result = calculateBodyFat(input);
 
   setValue("bodyFatResult", `${result.bodyFatPercent}%`);
-  setValue("categoryResult", result.category);
+  setValue("categoryResult", lang === "es" ? CATEGORY_ES[result.category] : result.category);
 
   lastInput = input;
 
@@ -86,7 +89,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateBodyFat(lastInput);
-  copyToClipboard(copyBodyFatSummary(lastInput, result));
+  copyToClipboard(copyBodyFatSummary(lastInput, result, lang));
 }
 
 genderInput?.addEventListener("change", toggleHipField);

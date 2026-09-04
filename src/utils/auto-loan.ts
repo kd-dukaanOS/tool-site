@@ -30,8 +30,11 @@ export function calculateAutoLoan(
   return { loanAmount, monthlyPayment, totalInterest, totalCost, salesTaxAmount };
 }
 
-export function validateAutoLoanInputs(vehiclePrice: number, termMonths: number): string | null {
-  if (vehiclePrice <= 0) return "Vehicle price must be greater than zero.";
-  if (termMonths <= 0) return "Loan term must be greater than zero.";
+export function validateAutoLoanInputs(vehiclePrice: number, termMonths: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es"
+    ? { price: "El precio del vehículo debe ser mayor que cero.", term: "El plazo del préstamo debe ser mayor que cero." }
+    : { price: "Vehicle price must be greater than zero.", term: "Loan term must be greater than zero." };
+  if (vehiclePrice <= 0) return msg.price;
+  if (termMonths <= 0) return msg.term;
   return null;
 }

@@ -1,20 +1,51 @@
 ---
 import Button from './ui/Button.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 import { tools } from '../data/tools.js';
 
-const navLinks = [
-  { label: 'Text Tools', href: '/text-tools/' },
-  { label: 'Developer', href: '/developer-tools/' },
-  { label: 'Converters', href: '/converters/' },
-  { label: 'Security', href: '/security-tools/' },
-  { label: 'Finance', href: '/finance/' },
-  { label: 'Health', href: '/health/' },
-  { label: 'About', href: '/about' },
-];
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+const prefix = lang === "es" ? "/es" : "";
+
+const copy = {
+  en: {
+    nav: [
+      { label: 'Text Tools', href: '/text-tools/' },
+      { label: 'Developer', href: '/developer-tools/' },
+      { label: 'Converters', href: '/converters/' },
+      { label: 'Security', href: '/security-tools/' },
+      { label: 'Finance', href: '/finance/' },
+      { label: 'Health', href: '/health/' },
+      { label: 'About', href: '/about' },
+    ],
+    searchLabel: 'Search tools', searchPlaceholder: 'Search tools...',
+    clearSearch: 'Clear search', toggleDark: 'Toggle dark mode',
+    bookmarks: 'Bookmarks', openMenu: 'Open menu', noResults: 'No tools found',
+  },
+  es: {
+    nav: [
+      { label: 'Texto', href: '/es/text-tools/' },
+      { label: 'Desarrollo', href: '/es/developer-tools/' },
+      { label: 'Conversores', href: '/es/converters/' },
+      { label: 'Seguridad', href: '/es/security-tools/' },
+      { label: 'Finanzas', href: '/es/finance/' },
+      { label: 'Salud', href: '/es/health/' },
+      { label: 'Acerca de', href: '/es/about' },
+    ],
+    searchLabel: 'Buscar herramientas', searchPlaceholder: 'Buscar herramientas...',
+    clearSearch: 'Borrar búsqueda', toggleDark: 'Modo oscuro',
+    bookmarks: 'Favoritos', openMenu: 'Abrir menú', noResults: 'No se encontraron herramientas',
+  },
+} as const;
+
+const t = copy[lang];
+const navLinks = t.nav;
 ---
 <header class="ts-nav">
   <div class="ts-nav-inner">
-    <a href="/" class="ts-nav-logo">
+    <a href={prefix || "/"} class="ts-nav-logo">
       <span class="ts-nav-logo-mark">T</span>
       <span>TooManyToolz</span>
     </a>
@@ -27,30 +58,31 @@ const navLinks = [
 
     <div class="ts-nav-actions">
      <div class="ts-nav-search">
-        <label for="nav-search-input" class="ts-visually-hidden">Search tools</label>
-        <input type="text" id="nav-search-input" placeholder="Search tools..." autocomplete="off" />
-        <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none" aria-label="Clear search">✕</button>
+        <label for="nav-search-input" class="ts-visually-hidden">{t.searchLabel}</label>
+        <input type="text" id="nav-search-input" placeholder={t.searchPlaceholder} autocomplete="off" />
+        <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none" aria-label={t.clearSearch}>✕</button>
         <div class="ts-nav-search-results" id="nav-search-results" role="listbox" aria-live="polite"></div>
       </div>
       <script type="application/json" id="tools-data" set:html={JSON.stringify(tools.map(t => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc })))}></script>
-      <button class="ts-nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode">
+     <button class="ts-nav-icon-btn" id="theme-toggle" aria-label={t.toggleDark}>
         <span id="theme-icon">🌙</span>
       </button>
-      <a href="/bookmarks" class="ts-nav-icon-btn ts-nav-bookmarks" aria-label="Bookmarks">🔖</a>
-      <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+      <a href={`${prefix}/bookmarks`} class="ts-nav-icon-btn ts-nav-bookmarks" aria-label={t.bookmarks}>🔖</a>
+      <LanguageSwitcher lang={lang} />
+      <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label={t.openMenu} aria-expanded="false" aria-controls="mobile-menu">☰</button>
     </div>
   </div>
 
    <nav class="ts-nav-mobile" id="mobile-menu">
-    <div class="ts-nav-mobile-search">
-      <label for="nav-search-input-mobile" class="ts-visually-hidden">Search tools</label>
-      <input type="text" id="nav-search-input-mobile" placeholder="Search tools..." autocomplete="off" />
+   <div class="ts-nav-mobile-search">
+      <label for="nav-search-input-mobile" class="ts-visually-hidden">{t.searchLabel}</label>
+      <input type="text" id="nav-search-input-mobile" placeholder={t.searchPlaceholder} autocomplete="off" />
       <div class="ts-nav-search-results" id="nav-search-results-mobile" role="listbox" aria-live="polite"></div>
     </div>
     {navLinks.map((link) => (
       <a href={link.href} class="ts-nav-mobile-link">{link.label}</a>
     ))}
-    <a href="/bookmarks" class="ts-nav-mobile-link">🔖 Bookmarks</a>
+    <a href={`${prefix}/bookmarks`} class="ts-nav-mobile-link">🔖 {t.bookmarks}</a>
   </nav>
 </header>
 
@@ -241,7 +273,7 @@ const navLinks = [
   .ts-nav-search-empty { padding: 8px 12px; font-size: var(--fs-small); color: var(--text-secondary); }
 </style>
 
-<script>
+<script define:vars={{ noResultsText: t.noResults, urlPrefix: prefix }}>
  const toggle = document.getElementById('mobile-menu-toggle');
   const menu = document.getElementById('mobile-menu');
   toggle?.addEventListener('click', () => {
@@ -269,8 +301,8 @@ const navLinks = [
 
   function renderResultsInto(resultsEl, matches) {
     resultsEl.innerHTML = matches.length
-      ? matches.map(t => `<a href="/${t.category}/${t.slug}/" class="ts-nav-search-item" role="option">${t.name}</a>`).join('')
-      : '<div class="ts-nav-search-empty">No tools found</div>';
+      ? matches.map(t => `<a href="${urlPrefix}/${t.category}/${t.slug}/" class="ts-nav-search-item" role="option">${t.name}</a>`).join('')
+      : `<div class="ts-nav-search-empty">${noResultsText}</div>`;
     resultsEl.classList.add('open');
   }
 
@@ -299,14 +331,14 @@ const navLinks = [
   searchInput?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       const matches = matchNavTools(searchInput.value);
-      if (matches.length) window.location.href = `/${matches[0].category}/${matches[0].slug}/`;
+    if (matches.length) window.location.href = `${urlPrefix}/${matches[0].category}/${matches[0].slug}/`;
     }
   });
 
   mobileSearchInput?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       const matches = matchNavTools(mobileSearchInput.value);
-      if (matches.length) window.location.href = `/${matches[0].category}/${matches[0].slug}/`;
+      if (matches.length) window.location.href = `${urlPrefix}/${matches[0].category}/${matches[0].slug}/`;
     }
   });
 

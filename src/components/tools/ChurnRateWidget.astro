@@ -5,47 +5,57 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { UserMinus, Percent, TrendingDown, Users } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { customersGroup:"Customers", customersStart:"Customers at Start of Period", customersLost:"Customers Lost", revenueGroup:"Revenue", startingMrr:"Starting MRR", mrrChurned:"MRR Churned", mrrExpansion:"Expansion MRR", projectionGroup:"Projection", projectionMonths:"Projection Months", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Churn Rate Calculator", emptyDesc:"Find your customer and revenue churn rate.", tip1:"Customer Churn", tip2:"Revenue Churn", tip3:"Net Revenue Churn", customerChurn:"Customer Churn Rate", revenueChurn:"Revenue Churn Rate", netRevenueChurn:"Net Revenue Churn Rate", projectedCustomers:"Projected Customers Remaining", aboutTitle:"About this Calculator", aboutText:"Calculates your customer churn rate, revenue churn rate, and net revenue churn rate, plus a projection of remaining customers if churn stays constant.", afterMonths:(m:number)=>`After ${m} months`, negChurn:"Negative churn (net expansion)" },
+  es: { customersGroup:"Clientes", customersStart:"Clientes al Inicio del Período", customersLost:"Clientes Perdidos", revenueGroup:"Ingresos", startingMrr:"MRR Inicial", mrrChurned:"MRR Perdido", mrrExpansion:"MRR de Expansión", projectionGroup:"Proyección", projectionMonths:"Meses de Proyección", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Tasa de Abandono", emptyDesc:"Encuentra tu tasa de abandono de clientes e ingresos.", tip1:"Abandono de Clientes", tip2:"Abandono de Ingresos", tip3:"Abandono Neto de Ingresos", customerChurn:"Tasa de Abandono de Clientes", revenueChurn:"Tasa de Abandono de Ingresos", netRevenueChurn:"Tasa Neta de Abandono de Ingresos", projectedCustomers:"Clientes Proyectados Restantes", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu tasa de abandono de clientes, tasa de abandono de ingresos y tasa neta de abandono de ingresos, además de una proyección de clientes restantes si el abandono se mantiene constante.", afterMonths:(m:number)=>`Después de ${m} meses`, negChurn:"Abandono negativo (expansión neta)" },
+}[lang];
 ---
 <section class="churn-calculator">
   <div class="churn-layout">
     <aside class="churn-sidebar">
       <div class="churn-group">
-        <h3>Customers</h3>
-        <CalculatorField id="customersStartOfPeriod" label="Customers at Start of Period" type="number" placeholder="e.g. 200" min="0" step="1" />
-        <CalculatorField id="customersLost" label="Customers Lost" type="number" placeholder="e.g. 10" min="0" step="1" />
+        <h3>{copy.customersGroup}</h3>
+        <CalculatorField id="customersStartOfPeriod" label={copy.customersStart} type="number" placeholder="e.g. 200" min="0" step="1" />
+        <CalculatorField id="customersLost" label={copy.customersLost} type="number" placeholder="e.g. 10" min="0" step="1" />
       </div>
       <div class="churn-group">
-        <h3>Revenue</h3>
-        <CalculatorField id="mrrStartOfPeriod" label="Starting MRR" type="number" placeholder="e.g. 100000" min="0" step="1" />
-        <CalculatorField id="mrrChurned" label="MRR Churned" type="number" placeholder="e.g. 6000" min="0" step="1" />
-        <CalculatorField id="mrrExpansion" label="Expansion MRR" type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <h3>{copy.revenueGroup}</h3>
+        <CalculatorField id="mrrStartOfPeriod" label={copy.startingMrr} type="number" placeholder="e.g. 100000" min="0" step="1" />
+        <CalculatorField id="mrrChurned" label={copy.mrrChurned} type="number" placeholder="e.g. 6000" min="0" step="1" />
+        <CalculatorField id="mrrExpansion" label={copy.mrrExpansion} type="number" placeholder="e.g. 3000" min="0" step="1" />
       </div>
       <div class="churn-group">
-        <h3>Projection</h3>
-        <CalculatorField id="projectionMonths" label="Projection Months" type="number" placeholder="e.g. 12" min="1" step="1" />
+        <h3>{copy.projectionGroup}</h3>
+        <CalculatorField id="projectionMonths" label={copy.projectionMonths} type="number" placeholder="e.g. 12" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="churn-content">
       <div id="emptyState">
-        <EmptyState icon="📉" title="Churn Rate Calculator" description="Find your customer and revenue churn rate." tips={["Customer Churn", "Revenue Churn", "Net Revenue Churn"]} />
+        <EmptyState icon="📉" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="customerChurnResult" title="Customer Churn Rate" icon={UserMinus} accent="danger" />
-          <ResultCard id="revenueChurnResult" title="Revenue Churn Rate" icon={TrendingDown} />
-          <ResultCard id="netRevenueChurnResult" title="Net Revenue Churn Rate" icon={Percent} subtitle=" " />
-          <ResultCard id="projectedCustomersResult" title="Projected Customers Remaining" icon={Users} subtitle=" " />
+          <ResultCard id="customerChurnResult" title={copy.customerChurn} icon={UserMinus} accent="danger" />
+          <ResultCard id="revenueChurnResult" title={copy.revenueChurn} icon={TrendingDown} />
+          <ResultCard id="netRevenueChurnResult" title={copy.netRevenueChurn} icon={Percent} subtitle=" " />
+          <ResultCard id="projectedCustomersResult" title={copy.projectedCustomers} icon={Users} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your customer churn rate, revenue churn rate, and net revenue churn rate, plus a projection of remaining customers if churn stays constant.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/churn-rate-calculator";
 </script>

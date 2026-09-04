@@ -117,7 +117,8 @@ export function emiInsight(
   annualRate: number,
   years: number,
   result: EMIResult,
-  currency: CurrencyCode = "INR"
+  currency: CurrencyCode = "INR",
+  lang: "en" | "es" = "en"
 ): string {
 
   const monthlyRate = annualRate / 12 / 100;
@@ -126,6 +127,14 @@ export function emiInsight(
   const withExtra = simulatePayoff(principal, monthlyRate, result.emi + extra);
   const interestSaved = round(result.totalInterest - withExtra.totalInterest);
   const monthsSaved = years * 12 - withExtra.months;
+
+  if (lang === "es") {
+    if (interestSaved <= 0 || monthsSaved <= 0) {
+      return `Pagas un total de ${formatCurrency(result.totalInterest, currency)} en intereses durante ${years} años.`;
+    }
+    const yearsSavedEs = round(monthsSaved / 12, 1);
+    return `Pagas ${formatCurrency(result.totalInterest, currency)} en intereses. Aumentar tu cuota en ${formatCurrency(extra, currency)}/mes podría ahorrarte aproximadamente ${formatCurrency(interestSaved, currency)} y pagar tu préstamo ${yearsSavedEs} años antes.`;
+  }
 
   if (interestSaved <= 0 || monthsSaved <= 0) {
     return `You pay a total of ${formatCurrency(result.totalInterest, currency)} in interest over ${years} years.`;
@@ -139,8 +148,17 @@ export function emiInsight(
 export function validateEMIInputs(
   principal: number,
   rate: number,
-  years: number
+  years: number,
+  lang: "en" | "es" = "en"
 ): string | null {
+
+  if (lang === "es") {
+    if (!principal || principal <= 0) return "Ingresa un monto de préstamo válido.";
+    if (rate === undefined || Number.isNaN(rate) || rate < 0) return "Ingresa una tasa de interés válida.";
+    if (!years || years <= 0) return "Ingresa un plazo de préstamo válido.";
+    if (years > 50) return "Ingresa un plazo realista (hasta 50 años).";
+    return null;
+  }
 
   if (!principal || principal <= 0) return "Please enter a valid loan amount.";
   if (rate === undefined || Number.isNaN(rate) || rate < 0) return "Please enter a valid interest rate.";
@@ -155,8 +173,24 @@ export function copyEMISummary(
   rate: number,
   years: number,
   result: EMIResult,
-  currency: CurrencyCode = "INR"
+  currency: CurrencyCode = "INR",
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Cuota de Préstamo (EMI)
+
+Monto del Préstamo: ${formatCurrency(principal, currency)}
+Tasa de Interés: ${rate}%
+Plazo: ${years} años
+
+Cuota Mensual: ${formatCurrency(result.emi, currency)}
+Interés Total: ${formatCurrency(result.totalInterest, currency)}
+Pago Total: ${formatCurrency(result.totalPayment, currency)}
+Interés % del Pago: ${result.interestPercent}%
+`.trim();
+  }
 
   return `
 Loan EMI Summary

@@ -5,49 +5,59 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Anchor, CheckCircle, Calendar, TrendingUp } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { personal:"Personal", currentAge:"Current Age", currentSavings:"Current Savings", targetAge:"Target Retirement Age", expensesGroup:"Expenses & Savings", annualExpenses:"Annual Expenses at Retirement", annualContribution:"Current Annual Contribution", assumptionsGroup:"Assumptions", expectedReturn:"Expected Return (%/yr)", inflation:"Inflation Rate (%/yr)", withdrawal:"Withdrawal Rate (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Coast FIRE Calculator", emptyDesc:"Find your Coast FIRE number and whether you've already reached it.", tip1:"Coast FIRE Number", tip2:"Status", tip3:"Coast FIRE Age", coastFireNumber:"Coast FIRE Number", status:"Status", coastFireAge:"Coast FIRE Age", balance:"Balance at Retirement", aboutTitle:"About this Calculator", aboutText:"Calculates the savings level needed today to compound, untouched, into a full FIRE number by your target retirement age — and whether you've already reached it.", reached:"Reached", notYet:"Not Yet", notYetReached:"Not Yet Reached", beyondTimeline:"Beyond timeline", canStop:"You can stop contributing", keepGoing:"Keep contributing" },
+  es: { personal:"Personal", currentAge:"Edad Actual", currentSavings:"Ahorros Actuales", targetAge:"Edad Objetivo de Jubilación", expensesGroup:"Gastos y Ahorros", annualExpenses:"Gastos Anuales en Jubilación", annualContribution:"Contribución Anual Actual", assumptionsGroup:"Supuestos", expectedReturn:"Rendimiento Esperado (%/año)", inflation:"Tasa de Inflación (%/año)", withdrawal:"Tasa de Retiro (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora Coast FIRE", emptyDesc:"Encuentra tu número Coast FIRE y si ya lo has alcanzado.", tip1:"Número Coast FIRE", tip2:"Estado", tip3:"Edad Coast FIRE", coastFireNumber:"Número Coast FIRE", status:"Estado", coastFireAge:"Edad Coast FIRE", balance:"Saldo en la Jubilación", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el nivel de ahorro necesario hoy para que, sin más aportes, crezca hasta un número FIRE completo para tu edad objetivo de jubilación — y si ya lo has alcanzado.", reached:"Alcanzado", notYet:"Aún No", notYetReached:"Aún No Alcanzado", beyondTimeline:"Fuera del plazo", canStop:"Puedes dejar de aportar", keepGoing:"Sigue aportando" },
+}[lang];
 ---
 <section class="cfire-calculator">
   <div class="cfire-layout">
     <aside class="cfire-sidebar">
       <div class="cfire-group">
-        <h3>Personal</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" min="1" step="1" />
-        <CalculatorField id="currentSavings" label="Current Savings" type="number" placeholder="e.g. 150000" min="0" step="1" />
-        <CalculatorField id="targetRetirementAge" label="Target Retirement Age" type="number" placeholder="e.g. 60" min="1" step="1" />
+        <h3>{copy.personal}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 30" min="1" step="1" />
+        <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 150000" min="0" step="1" />
+        <CalculatorField id="targetRetirementAge" label={copy.targetAge} type="number" placeholder="e.g. 60" min="1" step="1" />
       </div>
       <div class="cfire-group">
-        <h3>Expenses & Savings</h3>
-        <CalculatorField id="annualExpenses" label="Annual Expenses at Retirement" type="number" placeholder="e.g. 50000" min="0" step="1" />
-        <CalculatorField id="annualContribution" label="Current Annual Contribution" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <h3>{copy.expensesGroup}</h3>
+        <CalculatorField id="annualExpenses" label={copy.annualExpenses} type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="annualContribution" label={copy.annualContribution} type="number" placeholder="e.g. 10000" min="0" step="1" />
       </div>
       <div class="cfire-group">
-        <h3>Assumptions</h3>
-        <CalculatorField id="expectedReturnRate" label="Expected Return (%/yr)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
-        <CalculatorField id="inflationRate" label="Inflation Rate (%/yr)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="withdrawalRate" label="Withdrawal Rate (%)" type="number" placeholder="e.g. 4" min="0.1" step="0.1" />
+        <h3>{copy.assumptionsGroup}</h3>
+        <CalculatorField id="expectedReturnRate" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="inflationRate" label={copy.inflation} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="withdrawalRate" label={copy.withdrawal} type="number" placeholder="e.g. 4" min="0.1" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cfire-content">
       <div id="emptyState">
-        <EmptyState icon="⛵" title="Coast FIRE Calculator" description="Find your Coast FIRE number and whether you've already reached it." tips={["Coast FIRE Number", "Status", "Coast FIRE Age"]} />
+        <EmptyState icon="⛵" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="coastFireNumberResult" title="Coast FIRE Number" icon={Anchor} accent="success" subtitle=" " />
-          <ResultCard id="statusResult" title="Status" icon={CheckCircle} subtitle=" " />
-          <ResultCard id="coastFireAgeResult" title="Coast FIRE Age" icon={Calendar} />
-          <ResultCard id="projectedBalanceResult" title="Balance at Retirement" icon={TrendingUp} />
+          <ResultCard id="coastFireNumberResult" title={copy.coastFireNumber} icon={Anchor} accent="success" subtitle=" " />
+          <ResultCard id="statusResult" title={copy.status} icon={CheckCircle} subtitle=" " />
+          <ResultCard id="coastFireAgeResult" title={copy.coastFireAge} icon={Calendar} />
+          <ResultCard id="projectedBalanceResult" title={copy.balance} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates the savings level needed today to compound, untouched, into a full FIRE number by your target retirement age — and whether you've already reached it.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/coast-fire-calculator";
 </script>

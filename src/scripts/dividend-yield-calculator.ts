@@ -15,6 +15,12 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["sharePrice", "annualDividendPerShare", "numberOfShares", "purchasePrice"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { enterPurchasePrice:"Enter purchase price", basedOnCost:"Based on your cost basis", summaryTitle:"Dividend Yield Summary", dividendYield:"Dividend Yield", annualIncome:"Annual Dividend Income", monthlyIncome:"Monthly Dividend Income", yieldOnCost:"Yield on Cost", na:"N/A" },
+  es: { enterPurchasePrice:"Ingresa el precio de compra", basedOnCost:"Basado en tu costo base", summaryTitle:"Resumen de Rendimiento de Dividendos", dividendYield:"Rendimiento de Dividendos", annualIncome:"Ingreso Anual por Dividendos", monthlyIncome:"Ingreso Mensual por Dividendos", yieldOnCost:"Rendimiento sobre Costo", na:"N/D" },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -38,7 +44,7 @@ function calculate() {
 
   const [sharePrice, annualDividendPerShare, numberOfShares, purchasePrice] = fieldIds.map(val);
 
-  const validationError = validateDividendYieldInputs(sharePrice, annualDividendPerShare);
+  const validationError = validateDividendYieldInputs(sharePrice, annualDividendPerShare, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,16 +55,16 @@ function calculate() {
   setValue("dividendYieldResult", fmtPercent(result.dividendYield));
   setValue("annualIncomeResult", fmtCurrency(result.annualDividendIncome));
   setValue("monthlyIncomeResult", fmtCurrency(result.monthlyDividendIncome));
-  setValue("yieldOnCostResult", result.yieldOnCost === null ? "N/A" : fmtPercent(result.yieldOnCost));
-  setSubtitle("yieldOnCostResult", result.yieldOnCost === null ? "Enter purchase price" : "Based on your cost basis");
+  setValue("yieldOnCostResult", result.yieldOnCost === null ? t.na : fmtPercent(result.yieldOnCost));
+  setSubtitle("yieldOnCostResult", result.yieldOnCost === null ? t.enterPurchasePrice : t.basedOnCost);
 
   lastSummary = `
-Dividend Yield Summary
+${t.summaryTitle}
 
-Dividend Yield: ${fmtPercent(result.dividendYield)}
-Annual Dividend Income: ${fmtCurrency(result.annualDividendIncome)}
-Monthly Dividend Income: ${fmtCurrency(result.monthlyDividendIncome)}
-Yield on Cost: ${result.yieldOnCost === null ? "N/A" : fmtPercent(result.yieldOnCost)}
+${t.dividendYield}: ${fmtPercent(result.dividendYield)}
+${t.annualIncome}: ${fmtCurrency(result.annualDividendIncome)}
+${t.monthlyIncome}: ${fmtCurrency(result.monthlyDividendIncome)}
+${t.yieldOnCost}: ${result.yieldOnCost === null ? t.na : fmtPercent(result.yieldOnCost)}
 `.trim();
 
   emptyState.hidden = true;

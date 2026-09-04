@@ -17,9 +17,18 @@ export interface FDResult {
 const TDS_THRESHOLD = 40000; // ₹/year, simplified general (non-senior) threshold
 const TDS_RATE = 0.10;
 
-export function validateFDInput(input: FDInput): string | null {
+export function validateFDInput(input: FDInput, lang: "en" | "es" = "en"): string | null {
 
   const { principal, annualRate, tenureYears, compoundingFrequency } = input;
+
+  if (lang === "es") {
+    if (!principal || Number.isNaN(principal) || principal <= 0) return "Ingresa un monto de depósito mayor a 0.";
+    if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) return "Ingresa una tasa de interés mayor a 0.";
+    if (!tenureYears || Number.isNaN(tenureYears) || tenureYears <= 0) return "Ingresa un plazo mayor a 0.";
+    if (!compoundingFrequency || compoundingFrequency <= 0) return "Ingresa una frecuencia de capitalización válida.";
+    if (tenureYears > 20) return "Ingresa un plazo realista (menos de 20 años).";
+    return null;
+  }
 
   if (!principal || Number.isNaN(principal) || principal <= 0) {
     return "Please enter a deposit amount greater than 0.";
@@ -89,7 +98,34 @@ export function formatPercent(value: number): string {
   return `${value.toFixed(2)}%`;
 }
 
-export function copyFDSummary(input: FDInput, result: FDResult): string {
+export function copyFDSummary(input: FDInput, result: FDResult, lang: "en" | "es" = "en"): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Depósito Fijo
+
+Capital:
+${formatCurrency(input.principal)}
+
+Tasa de Interés:
+${input.annualRate}%
+
+Plazo:
+${input.tenureYears} Años
+
+Valor de Vencimiento:
+${formatCurrency(result.maturityValue)}
+
+Interés Total Ganado:
+${formatCurrency(result.totalInterest)}
+
+TDS Estimado:
+${formatCurrency(result.estimatedTDS)}
+
+Interés Neto Después de TDS:
+${formatCurrency(result.netInterestAfterTDS)}
+`.trim();
+  }
 
   return `
 Fixed Deposit Summary

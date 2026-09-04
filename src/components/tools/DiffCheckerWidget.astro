@@ -11,6 +11,13 @@ import {
   Equal,
   Percent
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { originalText:"Original Text", changedText:"Changed Text", originalPlaceholder:"Paste original text...", changedPlaceholder:"Paste changed text...", calculate:"Compare", reset:"Reset", copy:"Copy", emptyTitle:"Diff Checker", emptyDesc:"Compare two blocks of text line by line.", tip1:"Line-by-Line Diff", tip2:"Added & Removed Lines", tip3:"Similarity Score", tip4:"Copy Summary", added:"Lines Added", removed:"Lines Removed", unchanged:"Unchanged", similarity:"Similarity", diffResultTitle:"Diff Result", aboutTitle:"About this Tool", aboutText:"The Diff Checker compares two blocks of text and highlights lines that were added, removed or left unchanged, along with an overall similarity score." },
+  es: { originalText:"Texto Original", changedText:"Texto Modificado", originalPlaceholder:"Pega el texto original...", changedPlaceholder:"Pega el texto modificado...", calculate:"Comparar", reset:"Restablecer", copy:"Copiar", emptyTitle:"Comparador de Diferencias", emptyDesc:"Compara dos bloques de texto línea por línea.", tip1:"Diferencia Línea por Línea", tip2:"Líneas Agregadas y Eliminadas", tip3:"Puntaje de Similitud", tip4:"Copiar Resumen", added:"Líneas Agregadas", removed:"Líneas Eliminadas", unchanged:"Sin Cambios", similarity:"Similitud", diffResultTitle:"Resultado de la Comparación", aboutTitle:"Acerca de esta Herramienta", aboutText:"El Comparador de Diferencias compara dos bloques de texto y resalta las líneas agregadas, eliminadas o sin cambios, junto con un puntaje de similitud general." },
+}[lang];
 ---
 
 <section class="diff-checker">
@@ -22,20 +29,20 @@ import {
     <aside class="diff-sidebar">
 
       <div class="tool-field">
-        <label class="tool-label" for="diffInput1">Original Text</label>
+        <label class="tool-label" for="diffInput1">{copy.originalText}</label>
         <textarea
           id="diffInput1"
           class="tool-textarea"
-          placeholder="Paste original text..."
+          placeholder={copy.originalPlaceholder}
         ></textarea>
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="diffInput2">Changed Text</label>
+        <label class="tool-label" for="diffInput2">{copy.changedText}</label>
         <textarea
           id="diffInput2"
           class="tool-textarea"
-          placeholder="Paste changed text..."
+          placeholder={copy.changedPlaceholder}
         ></textarea>
       </div>
 
@@ -44,6 +51,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -62,13 +72,13 @@ import {
 
         <EmptyState
           icon="🔍"
-          title="Diff Checker"
-          description="Compare two blocks of text line by line."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Line-by-Line Diff",
-            "Added & Removed Lines",
-            "Similarity Score",
-            "Copy Summary"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -83,25 +93,25 @@ import {
 
           <ResultCard
             id="addedResult"
-            title="Lines Added"
+            title={copy.added}
             icon={Plus}
           />
 
           <ResultCard
             id="removedResult"
-            title="Lines Removed"
+            title={copy.removed}
             icon={Minus}
           />
 
           <ResultCard
             id="unchangedResult"
-            title="Unchanged"
+            title={copy.unchanged}
             icon={Equal}
           />
 
           <ResultCard
             id="similarityResult"
-            title="Similarity"
+            title={copy.similarity}
             icon={Percent}
           />
 
@@ -109,7 +119,7 @@ import {
 
         <section class="diff-output-section">
 
-          <h2><GitCompare size={18} /> Diff Result</h2>
+          <h2><GitCompare size={18} /> {copy.diffResultTitle}</h2>
 
           <div id="diffOutput" class="diff-output"></div>
 
@@ -117,12 +127,10 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Tool</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            The Diff Checker compares two blocks of text and highlights
-            lines that were added, removed or left unchanged, along with
-            an overall similarity score.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -135,6 +143,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/diff-checker-script";
 </script>

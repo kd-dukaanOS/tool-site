@@ -11,6 +11,38 @@ import {
   Repeat,
   Wallet
 } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    avgOrderValue: "Average Order Value", avgOrderHelp: "Average amount spent per purchase.",
+    purchaseFrequency: "Purchase Frequency (per year)", purchaseFreqHelp: "Average number of purchases per year.",
+    lifespanYears: "Customer Lifespan (years)", lifespanHelp: "Average number of years a customer stays active.",
+    grossMargin: "Gross Margin (%)", grossMarginHelp: "Optional — leave blank to use 100% (revenue-based CLV).",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Customer Lifetime Value Calculator", emptyDesc: "Estimate how much revenue and profit a typical customer generates.",
+    tip1: "Gross CLV", tip2: "Net (Profit) CLV", tip3: "Annual Customer Value",
+    clvGross: "Gross CLV", clvNet: "Net CLV", annualValue: "Annual Customer Value",
+    aboutTitle: "About this Calculator",
+    aboutText: "Estimate Customer Lifetime Value (CLV) from average order value, purchase frequency and customer lifespan. Apply a gross margin percentage to see net, profit-based CLV, and compare it against your Customer Acquisition Cost.",
+  },
+  es: {
+    avgOrderValue: "Valor Promedio del Pedido", avgOrderHelp: "Monto promedio gastado por compra.",
+    purchaseFrequency: "Frecuencia de Compra (por año)", purchaseFreqHelp: "Número promedio de compras por año.",
+    lifespanYears: "Vida del Cliente (años)", lifespanHelp: "Número promedio de años que un cliente permanece activo.",
+    grossMargin: "Margen Bruto (%)", grossMarginHelp: "Opcional — deja en blanco para usar 100% (CLV basado en ingresos).",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Valor de Vida del Cliente", emptyDesc: "Estima cuántos ingresos y ganancias genera un cliente típico.",
+    tip1: "CLV Bruto", tip2: "CLV Neto (Ganancia)", tip3: "Valor Anual del Cliente",
+    clvGross: "CLV Bruto", clvNet: "CLV Neto", annualValue: "Valor Anual del Cliente",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Estima el Valor de Vida del Cliente (CLV) a partir del valor promedio del pedido, la frecuencia de compra y la vida del cliente. Aplica un porcentaje de margen bruto para ver el CLV neto basado en ganancias, y compáralo con tu Costo de Adquisición de Clientes.",
+  },
+}[lang];
 ---
 
 <section class="clv-calculator">
@@ -22,33 +54,33 @@ import {
 
       <CalculatorField
         id="avgOrderValue"
-        label="Average Order Value"
+        label={copy.avgOrderValue}
         type="number"
         required={true}
-        helpText="Average amount spent per purchase."
+        helpText={copy.avgOrderHelp}
       />
 
       <CalculatorField
         id="purchaseFrequency"
-        label="Purchase Frequency (per year)"
+        label={copy.purchaseFrequency}
         type="number"
         required={true}
-        helpText="Average number of purchases per year."
+        helpText={copy.purchaseFreqHelp}
       />
 
       <CalculatorField
         id="lifespanYears"
-        label="Customer Lifespan (years)"
+        label={copy.lifespanYears}
         type="number"
         required={true}
-        helpText="Average number of years a customer stays active."
+        helpText={copy.lifespanHelp}
       />
 
       <CalculatorField
         id="grossMargin"
-        label="Gross Margin (%)"
+        label={copy.grossMargin}
         type="number"
-        helpText="Optional — leave blank to use 100% (revenue-based CLV)."
+        helpText={copy.grossMarginHelp}
       />
 
       <CalculatorActions
@@ -56,6 +88,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -68,12 +103,12 @@ import {
 
         <EmptyState
           icon="💎"
-          title="Customer Lifetime Value Calculator"
-          description="Estimate how much revenue and profit a typical customer generates."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Gross CLV",
-            "Net (Profit) CLV",
-            "Annual Customer Value"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3
           ]}
         />
 
@@ -85,20 +120,20 @@ import {
 
           <ResultCard
             id="clvGrossResult"
-            title="Gross CLV"
+            title={copy.clvGross}
             icon={Gem}
           />
 
           <ResultCard
             id="clvNetResult"
-            title="Net CLV"
+            title={copy.clvNet}
             icon={TrendingUp}
             subtitle=" "
           />
 
           <ResultCard
             id="annualValueResult"
-            title="Annual Customer Value"
+            title={copy.annualValue}
             icon={Repeat}
           />
 
@@ -106,13 +141,10 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            Estimate Customer Lifetime Value (CLV) from average order
-            value, purchase frequency and customer lifespan. Apply a
-            gross margin percentage to see net, profit-based CLV, and
-            compare it against your Customer Acquisition Cost.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -125,6 +157,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/customer-lifetime-value";
 </script>

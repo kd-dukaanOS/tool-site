@@ -18,6 +18,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 let lastInput: ColorConverterInput | null = null;
 
 function showError(msg: string) {
@@ -38,7 +40,7 @@ function calculate() {
     inputFormat: formatInput.value as "hex" | "rgb",
   };
 
-  const err = validateColorConverterInput(input);
+  const err = validateColorConverterInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -68,7 +70,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateColorConverter(lastInput);
-  copyToClipboard(copyColorConverterSummary(lastInput, result));
+  copyToClipboard(copyColorConverterSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

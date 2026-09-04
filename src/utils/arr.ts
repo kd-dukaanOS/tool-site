@@ -29,7 +29,12 @@ export function calculateARR(
   return { currentARR, netNewMRR, netNewARR, monthlyGrowthRate, projectedMRR, projectedARR, arrGrowthRate };
 }
 
-export function validateARRInputs(currentMRR: number, projectionMonths: number): string | null {
+export function validateARRInputs(currentMRR: number, projectionMonths: number, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (currentMRR < 0) return "El MRR actual no puede ser negativo.";
+    if (projectionMonths <= 0) return "Los meses de proyección deben ser mayores que cero.";
+    return null;
+  }
   if (currentMRR < 0) return "Current MRR cannot be negative.";
   if (projectionMonths <= 0) return "Projection months must be greater than zero.";
   return null;

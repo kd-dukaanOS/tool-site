@@ -5,39 +5,70 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, CalendarDays, Repeat, MinusCircle } from "@lucide/astro";
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    grossIncomeLabel: "Gross Annual Income", grossIncomeHelp: "Your gross salary before deductions (CAD).",
+    provinceLabel: "Province", ontario: "Ontario", alberta: "Alberta", britishColumbia: "British Columbia",
+    calculate: "Calculate", reset: "Reset", copy: "Copy",
+    emptyTitle: "Canada Take-Home Pay Calculator", emptyDesc: "See your net salary after federal tax, provincial tax, CPP and EI.",
+    tip1: "Net Annual Pay", tip2: "Federal & Provincial Tax", tip3: "CPP & EI",
+    netAnnual: "Net Annual Pay", netMonthly: "Net Monthly", netBiweekly: "Net Biweekly", totalDeductions: "Total Deductions",
+    aboutTitle: "About this Calculator",
+    aboutText: "Estimates net pay after federal tax, provincial tax, CPP and EI deductions. Results are estimates — verify against current CRA and provincial figures.",
+  },
+  es: {
+    grossIncomeLabel: "Ingreso Bruto Anual", grossIncomeHelp: "Tu salario bruto antes de deducciones (CAD).",
+    provinceLabel: "Provincia", ontario: "Ontario", alberta: "Alberta", britishColumbia: "Columbia Británica",
+    calculate: "Calcular", reset: "Restablecer", copy: "Copiar",
+    emptyTitle: "Calculadora de Sueldo Neto de Canadá", emptyDesc: "Consulta tu salario neto después del impuesto federal, provincial, CPP y EI.",
+    tip1: "Pago Neto Anual", tip2: "Impuesto Federal y Provincial", tip3: "CPP y EI",
+    netAnnual: "Pago Neto Anual", netMonthly: "Neto Mensual", netBiweekly: "Neto Quincenal", totalDeductions: "Deducciones Totales",
+    aboutTitle: "Acerca de esta Calculadora",
+    aboutText: "Estima el pago neto después de las deducciones de impuesto federal, provincial, CPP y EI. Los resultados son estimaciones — verifica con las cifras actuales de la CRA y provinciales.",
+  },
+}[lang];
 ---
 <section class="cats-calculator">
   <div class="cats-layout">
     <aside class="cats-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross salary before deductions (CAD)." />
-      <label class="field-label" for="province">Province</label>
+      <CalculatorField id="grossIncome" label={copy.grossIncomeLabel} type="number" required={true} helpText={copy.grossIncomeHelp} />
+      <label class="field-label" for="province">{copy.provinceLabel}</label>
       <select id="province" class="field-select">
-        <option value="ON">Ontario</option>
-        <option value="AB">Alberta</option>
-        <option value="BC">British Columbia</option>
+        <option value="ON">{copy.ontario}</option>
+        <option value="AB">{copy.alberta}</option>
+        <option value="BC">{copy.britishColumbia}</option>
       </select>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cats-content">
       <div id="emptyState">
-        <EmptyState icon="🍁" title="Canada Take-Home Pay Calculator" description="See your net salary after federal tax, provincial tax, CPP and EI." tips={["Net Annual Pay", "Federal & Provincial Tax", "CPP & EI"]} />
+        <EmptyState icon="🍁" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="netAnnualResult" title="Net Annual Pay" icon={Wallet} subtitle=" " />
-          <ResultCard id="netMonthlyResult" title="Net Monthly" icon={CalendarDays} />
-          <ResultCard id="netBiweeklyResult" title="Net Biweekly" icon={Repeat} />
-          <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={MinusCircle} />
+          <ResultCard id="netAnnualResult" title={copy.netAnnual} icon={Wallet} subtitle=" " />
+          <ResultCard id="netMonthlyResult" title={copy.netMonthly} icon={CalendarDays} />
+          <ResultCard id="netBiweeklyResult" title={copy.netBiweekly} icon={Repeat} />
+          <ResultCard id="totalDeductionsResult" title={copy.totalDeductions} icon={MinusCircle} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates net pay after federal tax, provincial tax, CPP and EI deductions. Results are estimates — verify against current CRA and provincial figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/ca-take-home-pay";
 </script>

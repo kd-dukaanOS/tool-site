@@ -5,16 +5,34 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { CalendarDays, Briefcase } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+
+const copy = {
+  en: {
+    startDateLabel: "Start Date", endDateLabel: "End Date", excludeWeekends: "Exclude weekends",
+    emptyTitle: "Select dates to count business days",
+    emptyDesc: "Working days between the dates will appear here.",
+    businessDays: "Business Days", totalDays: "Total Days", weekendDays: "Weekend Days",
+  },
+  es: {
+    startDateLabel: "Fecha de Inicio", endDateLabel: "Fecha de Fin", excludeWeekends: "Excluir fines de semana",
+    emptyTitle: "Selecciona las fechas para contar días hábiles",
+    emptyDesc: "Aquí aparecerán los días hábiles entre las fechas.",
+    businessDays: "Días Hábiles", totalDays: "Días Totales", weekendDays: "Días de Fin de Semana",
+  },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="startDate" label="Start Date" type="date" />
-    <CalculatorField id="endDate" label="End Date" type="date" />
+    <CalculatorField id="startDate" label={copy.startDateLabel} type="date" />
+    <CalculatorField id="endDate" label={copy.endDateLabel} type="date" />
 
     <label class="checkbox-field">
       <input type="checkbox" id="excludeWeekends" checked />
-      <span>Exclude weekends</span>
+      <span>{copy.excludeWeekends}</span>
     </label>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -31,16 +49,17 @@ import { CalendarDays, Briefcase } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Select dates to count business days"
-      description="Working days between the dates will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="businessDaysResult" title="Business Days" icon={Briefcase} accent="primary" size="lg" />
-      <ResultCard id="totalDaysResult" title="Total Days" icon={CalendarDays} accent="neutral" />
-      <ResultCard id="weekendDaysResult" title="Weekend Days" icon={CalendarDays} accent="neutral" />
+      <ResultCard id="businessDaysResult" title={copy.businessDays} icon={Briefcase} accent="primary" size="lg" />
+      <ResultCard id="totalDaysResult" title={copy.totalDays} icon={CalendarDays} accent="neutral" />
+      <ResultCard id="weekendDaysResult" title={copy.weekendDays} icon={CalendarDays} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>window.calcLang = calcLang;</script>
 <script src="../../scripts/business-days-calculator.ts"></script>

@@ -11,8 +11,8 @@ export interface CaseConverterResult {
   output: string;
 }
 
-export function validateCaseConverterInput(i: CaseConverterInput): string | null {
-  if (!i.text) return "Enter text to convert.";
+export function validateCaseConverterInput(i: CaseConverterInput, lang: "en" | "es" = "en"): string | null {
+  if (!i.text) return lang === "es" ? "Ingresa texto para convertir." : "Enter text to convert.";
   return null;
 }
 

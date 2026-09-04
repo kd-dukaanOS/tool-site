@@ -17,6 +17,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fillAll: "Please fill all fields.", multiplied: "your money multiplied" },
+  es: { fillAll: "Por favor completa todos los campos.", multiplied: "tu dinero se multiplicó" },
+}[lang];
+
 let lastInput: CAGRInput | null = null;
 
 function showError(msg: string) {
@@ -39,11 +45,11 @@ function calculate() {
   };
 
   if (!input.initialValue || !input.finalValue || !input.years) {
-    showError("Please fill all fields.");
+    showError(t.fillAll);
     return;
   }
 
-  const err = validateCAGRInput(input);
+  const err = validateCAGRInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -65,7 +71,7 @@ function renderResults(result: ReturnType<typeof calculateCAGR>) {
   setValue("absoluteReturnResult", `${result.absoluteReturn}%`);
   setValue("totalGrowthResult", formatCurrency(result.totalGrowth, currentCurrency));
   setValue("wealthMultipleResult", `${result.wealthMultiple}x`);
-  setSubtitle("wealthMultipleResult", "your money multiplied");
+  setSubtitle("wealthMultipleResult", t.multiplied);
 }
 
 onCurrencyChange((code) => {
@@ -88,7 +94,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateCAGR(lastInput);
-  copyToClipboard(copyCAGRSummary(lastInput, result, currentCurrency));
+  copyToClipboard(copyCAGRSummary(lastInput, result, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

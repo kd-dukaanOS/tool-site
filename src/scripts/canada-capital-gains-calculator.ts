@@ -13,6 +13,32 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: {
+    subtitleTaxable: "Amount added to taxable income",
+    summary: (r: any) => `
+Canada Capital Gains Tax Summary
+
+Capital Gain: ${fmtCurrency(r.capitalGain)}
+Inclusion Rate: ${r.inclusionRate}%
+Taxable Capital Gain: ${fmtCurrency(r.taxableCapitalGain)}
+Estimated Tax Owed: ${fmtCurrency(r.estimatedTax)}
+`.trim(),
+  },
+  es: {
+    subtitleTaxable: "Monto añadido al ingreso imponible",
+    summary: (r: any) => `
+Resumen de Impuesto sobre Ganancias de Capital de Canadá
+
+Ganancia de Capital: ${fmtCurrency(r.capitalGain)}
+Tasa de Inclusión: ${r.inclusionRate}%
+Ganancia de Capital Imponible: ${fmtCurrency(r.taxableCapitalGain)}
+Impuesto Estimado Adeudado: ${fmtCurrency(r.estimatedTax)}
+`.trim(),
+  },
+}[lang];
+
 const fieldIds = ["proceedsOfDisposition", "adjustedCostBase", "outlaysAndExpenses", "marginalTaxRate"];
 
 let lastSummary = "";
@@ -36,7 +62,7 @@ function calculate() {
 
   const [proceedsOfDisposition, adjustedCostBase, outlaysAndExpenses, marginalTaxRate] = fieldIds.map(val);
 
-  const validationError = validateCanadaCapitalGainsInputs(proceedsOfDisposition, adjustedCostBase, marginalTaxRate);
+  const validationError = validateCanadaCapitalGainsInputs(proceedsOfDisposition, adjustedCostBase, marginalTaxRate, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -48,16 +74,9 @@ function calculate() {
   setValue("taxableCapitalGainResult", fmtCurrency(result.taxableCapitalGain));
   setValue("estimatedTaxResult", fmtCurrency(result.estimatedTax));
   setValue("inclusionRateResult", `${result.inclusionRate}%`);
-  setSubtitle("taxableCapitalGainResult", "Amount added to taxable income");
+  setSubtitle("taxableCapitalGainResult", t.subtitleTaxable);
 
-  lastSummary = `
-Canada Capital Gains Tax Summary
-
-Capital Gain: ${fmtCurrency(result.capitalGain)}
-Inclusion Rate: ${result.inclusionRate}%
-Taxable Capital Gain: ${fmtCurrency(result.taxableCapitalGain)}
-Estimated Tax Owed: ${fmtCurrency(result.estimatedTax)}
-`.trim();
+  lastSummary = t.summary(result);
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

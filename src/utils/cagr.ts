@@ -11,7 +11,13 @@ export interface CAGRResult {
   wealthMultiple: number;
 }
 
-export function validateCAGRInput(i: CAGRInput): string | null {
+export function validateCAGRInput(i: CAGRInput, lang: "en" | "es" = "en"): string | null {
+  if (lang === "es") {
+    if (i.initialValue <= 0) return "Ingresa una inversión inicial válida.";
+    if (i.finalValue <= 0) return "Ingresa un valor final válido.";
+    if (i.years <= 0) return "Ingresa un período de tiempo válido.";
+    return null;
+  }
   if (i.initialValue <= 0) return "Enter a valid initial investment.";
   if (i.finalValue <= 0) return "Enter a valid final value.";
   if (i.years <= 0) return "Enter a valid time period.";
@@ -36,7 +42,21 @@ export function calculateCAGR(i: CAGRInput): CAGRResult {
 
 import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyCAGRSummary(i: CAGRInput, r: CAGRResult, currency: CurrencyCode = "INR"): string {
+export function copyCAGRSummary(i: CAGRInput, r: CAGRResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen del Cálculo de CAGR
+
+Valor Inicial: ${formatCurrency(i.initialValue, currency)}
+Valor Final: ${formatCurrency(i.finalValue, currency)}
+Período: ${i.years} años
+
+CAGR: ${r.cagr}%
+Rentabilidad Absoluta: ${r.absoluteReturn}%
+Crecimiento Total: ${formatCurrency(r.totalGrowth, currency)}
+Múltiplo de Riqueza: ${r.wealthMultiple}x
+`.trim();
+  }
   return `
 CAGR Calculation Summary
 

@@ -4,22 +4,29 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { CaseSensitive } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { caseType:"Case Type", upper:"UPPERCASE", lower:"lowercase", title:"Title Case", sentence:"Sentence case", text:"Text", placeholder:"Enter text to convert", emptyTitle:"Case Converter", emptyDesc:"Enter text to convert case.", output:"Output" },
+  es: { caseType:"Tipo de Formato", upper:"MAYÚSCULAS", lower:"minúsculas", title:"Formato Título", sentence:"Formato Oración", text:"Texto", placeholder:"Ingresa el texto a convertir", emptyTitle:"Convertidor de Mayúsculas/Minúsculas", emptyDesc:"Ingresa texto para convertir el formato.", output:"Resultado" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="caseType" label="Case Type" type="select">
-      <option value="upper">UPPERCASE</option>
-      <option value="lower">lowercase</option>
-      <option value="title">Title Case</option>
-      <option value="sentence">Sentence case</option>
+    <CalculatorField id="caseType" label={copy.caseType} type="select">
+      <option value="upper">{copy.upper}</option>
+      <option value="lower">{copy.lower}</option>
+      <option value="title">{copy.title}</option>
+      <option value="sentence">{copy.sentence}</option>
       <option value="camel">camelCase</option>
       <option value="pascal">PascalCase</option>
       <option value="snake">snake_case</option>
       <option value="kebab">kebab-case</option>
     </CalculatorField>
 
-    <CalculatorField id="text" label="Text" type="textarea" placeholder="Enter text to convert" />
+    <CalculatorField id="text" label={copy.text} type="textarea" placeholder={copy.placeholder} />
 
     <div id="errorBox" class="error-box" hidden></div>
 
@@ -27,12 +34,15 @@ import { CaseSensitive } from "@lucide/astro";
   </div>
 
   <div class="calculator-results">
-    <EmptyState id="emptyState" icon="🔡" title="Case Converter" description="Enter text to convert case." />
+    <EmptyState id="emptyState" icon="🔡" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="outputResult" title="Output" icon={CaseSensitive} />
+      <ResultCard id="outputResult" title={copy.output} icon={CaseSensitive} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/case-converter.ts"></script>

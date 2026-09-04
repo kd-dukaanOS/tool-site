@@ -13,6 +13,13 @@ import {
   Receipt,
   PiggyBank
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { deposit:"Deposit Amount (₹)", depositHelp:"Lump sum amount you're depositing.", rate:"Interest Rate (% p.a.)", rateHelp:"Rate offered by the bank.", tenure:"Tenure (Years)", tenureHelp:"Deposit duration, e.g. 1.5 for 1 year 6 months.", frequency:"Compounding Frequency (times/year)", frequencyHelp:"Most Indian FDs compound quarterly (4).", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"FD Calculator", emptyDesc:"Calculate your Fixed Deposit maturity value and estimated TDS.", tip1:"Maturity Value", tip2:"Total Interest Earned", tip3:"Effective Annual Yield", tip4:"Estimated TDS", maturity:"Maturity Value", interest:"Total Interest Earned", principal:"Principal Invested", yield:"Effective Annual Yield", tds:"Estimated TDS", netInterest:"Net Interest After TDS", aboutTitle:"About this Calculator", aboutText:"Calculates your Fixed Deposit maturity value using compound interest, plus an estimated TDS deduction (10% flat, applied when annualised interest exceeds ₹40,000 as per general Indian tax rules). This is an estimate only — actual TDS depends on your PAN status, Form 15G/15H, and total taxable income." },
+  es: { deposit:"Monto del Depósito (₹)", depositHelp:"Suma global que estás depositando.", rate:"Tasa de Interés (% anual)", rateHelp:"Tasa ofrecida por el banco.", tenure:"Plazo (Años)", tenureHelp:"Duración del depósito, ej. 1.5 para 1 año 6 meses.", frequency:"Frecuencia de Capitalización (veces/año)", frequencyHelp:"La mayoría de los FD indios capitalizan trimestralmente (4).", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de FD", emptyDesc:"Calcula el valor de vencimiento de tu Depósito Fijo y el TDS estimado.", tip1:"Valor de Vencimiento", tip2:"Interés Total Ganado", tip3:"Rendimiento Anual Efectivo", tip4:"TDS Estimado", maturity:"Valor de Vencimiento", interest:"Interés Total Ganado", principal:"Capital Invertido", yield:"Rendimiento Anual Efectivo", tds:"TDS Estimado", netInterest:"Interés Neto Después de TDS", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el valor de vencimiento de tu Depósito Fijo usando interés compuesto, más una deducción TDS estimada (10% fijo, aplicado cuando el interés anualizado excede ₹40,000 según las reglas fiscales generales de India). Esto es solo una estimación — el TDS real depende de tu estado PAN, Formulario 15G/15H, e ingreso imponible total." },
+}[lang];
 ---
 
 <section class="fd-calculator">
@@ -23,46 +30,46 @@ import {
 
       <CalculatorField
         id="principal"
-        label="Deposit Amount (₹)"
+        label={copy.deposit}
         type="number"
         placeholder="e.g. 100000"
         required={true}
         min="0"
         step="1"
-        helpText="Lump sum amount you're depositing."
+        helpText={copy.depositHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Interest Rate (% p.a.)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 7.5"
         required={true}
         min="0"
         step="0.01"
-        helpText="Rate offered by the bank."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorField
         id="tenureYears"
-        label="Tenure (Years)"
+        label={copy.tenure}
         type="number"
         placeholder="e.g. 5"
         required={true}
         min="0"
         step="0.25"
-        helpText="Deposit duration, e.g. 1.5 for 1 year 6 months."
+        helpText={copy.tenureHelp}
       />
 
       <CalculatorField
         id="compoundingFrequency"
-        label="Compounding Frequency (times/year)"
+        label={copy.frequency}
         type="number"
         value="4"
         required={true}
         min="1"
         step="1"
-        helpText="Most Indian FDs compound quarterly (4)."
+        helpText={copy.frequencyHelp}
       />
 
       <CalculatorActions
@@ -70,6 +77,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -86,14 +96,9 @@ import {
 
         <EmptyState
           icon="🏦"
-          title="FD Calculator"
-          description="Calculate your Fixed Deposit maturity value and estimated TDS."
-          tips={[
-            "Maturity Value",
-            "Total Interest Earned",
-            "Effective Annual Yield",
-            "Estimated TDS"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
 
       </div>
@@ -107,39 +112,39 @@ import {
 
           <ResultCard
             id="maturityResult"
-            title="Maturity Value"
+            title={copy.maturity}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="interestResult"
-            title="Total Interest Earned"
+            title={copy.interest}
             icon={TrendingUp}
           />
 
           <ResultCard
             id="principalResult"
-            title="Principal Invested"
+            title={copy.principal}
             icon={Coins}
           />
 
           <ResultCard
             id="yieldResult"
-            title="Effective Annual Yield"
+            title={copy.yield}
             icon={Percent}
           />
 
           <ResultCard
             id="tdsResult"
-            title="Estimated TDS"
+            title={copy.tds}
             icon={Receipt}
             accent="warning"
           />
 
           <ResultCard
             id="netInterestResult"
-            title="Net Interest After TDS"
+            title={copy.netInterest}
             icon={PiggyBank}
           />
 
@@ -147,15 +152,10 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
           <p>
-            Calculates your Fixed Deposit maturity value using
-            compound interest, plus an estimated TDS deduction
-            (10% flat, applied when annualised interest exceeds
-            ₹40,000 as per general Indian tax rules). This is an
-            estimate only — actual TDS depends on your PAN status,
-            Form 15G/15H, and total taxable income.
+            {copy.aboutText}
           </p>
 
         </section>
@@ -168,6 +168,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/fd-calculator";
 </script>

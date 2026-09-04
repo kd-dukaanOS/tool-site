@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { CalendarDays, Hash } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { startDate:"Start Date", endDate:"End Date", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Select dates to calculate difference", emptyDesc:"Years, months, and days between the dates will appear here.", years:"Years", months:"Months", days:"Days", totalDays:"Total Days", totalWeeks:"Total Weeks", negativeNote:"end date is before start date" },
+  es: { startDate:"Fecha de Inicio", endDate:"Fecha de Fin", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Selecciona fechas para calcular la diferencia", emptyDesc:"Los años, meses y días entre las fechas aparecerán aquí.", years:"Años", months:"Meses", days:"Días", totalDays:"Días Totales", totalWeeks:"Semanas Totales", negativeNote:"la fecha de fin es anterior a la fecha de inicio" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="startDate" label="Start Date" type="date" />
-    <CalculatorField id="endDate" label="End Date" type="date" />
+    <CalculatorField id="startDate" label={copy.startDate} type="date" />
+    <CalculatorField id="endDate" label={copy.endDate} type="date" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -20,24 +27,30 @@ import { CalendarDays, Hash } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Select dates to calculate difference"
-      description="Years, months, and days between the dates will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="yearsResult" title="Years" icon={CalendarDays} accent="primary" size="lg" />
-      <ResultCard id="monthsResult" title="Months" icon={CalendarDays} accent="neutral" />
-      <ResultCard id="daysResult" title="Days" icon={CalendarDays} accent="neutral" />
-      <ResultCard id="totalDaysResult" title="Total Days" icon={Hash} accent="neutral" />
-      <ResultCard id="totalWeeksResult" title="Total Weeks" icon={Hash} accent="neutral" />
+      <ResultCard id="yearsResult" title={copy.years} icon={CalendarDays} accent="primary" size="lg" />
+      <ResultCard id="monthsResult" title={copy.months} icon={CalendarDays} accent="neutral" />
+      <ResultCard id="daysResult" title={copy.days} icon={CalendarDays} accent="neutral" />
+      <ResultCard id="totalDaysResult" title={copy.totalDays} icon={Hash} accent="neutral" />
+      <ResultCard id="totalWeeksResult" title={copy.totalWeeks} icon={Hash} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/date-difference-calculator.ts"></script>

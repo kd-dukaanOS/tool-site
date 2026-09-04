@@ -27,6 +27,7 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 let lastInput: Parameters<typeof calculateCapitalGains>[0] | null = null;
 let lastResult: ReturnType<typeof calculateCapitalGains> | null = null;
 
@@ -57,7 +58,7 @@ function calculate() {
     itemizedDeduction: parseFloat(itemizedInput.value) || 0,
   };
 
-  const error = validateCapitalGainsInput(input);
+  const error = validateCapitalGainsInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -96,7 +97,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyCapitalGainsSummary(lastInput, lastResult));
+  copyToClipboard(copyCapitalGainsSummary(lastInput, lastResult, lang));
 }
 
 deductionModeSelect?.addEventListener("change", toggleItemizedRow);

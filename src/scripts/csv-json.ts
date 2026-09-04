@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = { en: { convertErr:"Could not convert — check your input format." }, es: { convertErr:"No se pudo convertir — revisa el formato de tu entrada." } }[lang];
 let lastInput: CsvJsonInput | null = null;
 
 function showError(msg: string) {
@@ -37,7 +39,7 @@ function calculate() {
     mode: modeInput.value as "csvToJson" | "jsonToCsv",
   };
 
-  const err = validateCsvJsonInput(input);
+  const err = validateCsvJsonInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -50,7 +52,7 @@ function calculate() {
     emptyState.hidden = true;
     resultsContainer.hidden = false;
   } catch {
-    showError("Could not convert — check your input format.");
+    showError(t.convertErr);
   }
 }
 
