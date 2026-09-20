@@ -33,9 +33,9 @@ export function calculateMortgageRefinance(
   return { oldPayment, newPayment, monthlySavings, breakEvenMonths, lifetimeInterestSavings };
 }
 
-export function validateMortgageRefinanceInputs(currentBalance: number, currentTermRemainingMonths: number, newTermMonths: number): string | null {
-  if (currentBalance <= 0) return "Current loan balance must be greater than zero.";
-  if (currentTermRemainingMonths <= 0) return "Remaining term must be greater than zero.";
-  if (newTermMonths <= 0) return "New loan term must be greater than zero.";
+export function validateMortgageRefinanceInputs(currentBalance: number, currentTermRemainingMonths: number, newTermMonths: number, lang: "en" | "es" = "en"): string | null {
+  if (currentBalance <= 0) return lang === "es" ? "El saldo actual del préstamo debe ser mayor a cero." : "Current loan balance must be greater than zero.";
+  if (currentTermRemainingMonths <= 0) return lang === "es" ? "El plazo restante debe ser mayor a cero." : "Remaining term must be greater than zero.";
+  if (newTermMonths <= 0) return lang === "es" ? "El nuevo plazo del préstamo debe ser mayor a cero." : "New loan term must be greater than zero.";
   return null;
 }

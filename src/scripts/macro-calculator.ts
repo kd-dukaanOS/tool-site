@@ -21,6 +21,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: MacroInput | null = null;
 
 function showError(msg: string) {
@@ -44,7 +46,7 @@ function calculate() {
     goal: goalInput.value,
   };
 
-  const err = validateMacroInput(input);
+  const err = validateMacroInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -75,7 +77,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateMacro(lastInput);
-  copyToClipboard(copyMacroSummary(lastInput, result));
+  copyToClipboard(copyMacroSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -19,6 +19,14 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { fillFields:"Please fill all required fields.", finalPayable:"final payable amount" },
+  es: { fillFields:"Por favor completa todos los campos requeridos.", finalPayable:"monto final a pagar" },
+}[lang];
+
+
+
 let lastInput: VATInput | null = null;
 
 function showError(msg: string) {
@@ -41,11 +49,11 @@ function calculate() {
   };
 
   if (!input.amount || input.vatRate === undefined) {
-    showError("Please fill all required fields.");
+    showError(t.fillFields);
     return;
   }
 
-  const err = validateVATInput(input);
+  const err = validateVATInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -57,7 +65,7 @@ function calculate() {
   setValue("netAmountResult", formatCurrency(result.netAmount, currency));
   setValue("vatAmountResult", formatCurrency(result.vatAmount, currency));
   setValue("grossAmountResult", formatCurrency(result.grossAmount, currency));
-  setSubtitle("grossAmountResult", "final payable amount");
+  setSubtitle("grossAmountResult", t.finalPayable);
 
   lastInput = input;
 

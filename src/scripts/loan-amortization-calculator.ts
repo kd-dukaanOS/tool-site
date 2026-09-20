@@ -21,6 +21,8 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const scheduleTableBody = document.getElementById("scheduleTableBody") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: Parameters<typeof calculateLoanAmortization>[0] | null = null;
 let lastResult: ReturnType<typeof calculateLoanAmortization> | null = null;
 
@@ -57,7 +59,7 @@ function calculate() {
     extraMonthlyPayment: parseFloat(extraPaymentInput.value) || 0,
   };
 
-  const error = validateLoanAmortizationInput(input);
+  const error = validateLoanAmortizationInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -71,7 +73,7 @@ function calculate() {
 
   const years = Math.floor(result.payoffMonths / 12);
   const months = result.payoffMonths % 12;
-  setValue("payoffTimeResult", `${years}y ${months}m`);
+  setValue("payoffTimeResult", lang === "es" ? `${years}a ${months}m` : `${years}y ${months}m`);
 
   renderScheduleTable(result.yearlySchedule);
 
@@ -96,7 +98,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyLoanAmortizationSummary(lastInput, lastResult));
+  copyToClipboard(copyLoanAmortizationSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

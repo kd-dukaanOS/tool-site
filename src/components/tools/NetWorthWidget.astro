@@ -5,46 +5,56 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Landmark, Wallet, TrendingDown, Scale } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { assetsGroup:"Assets", cash:"Cash & Savings", investments:"Investments", realEstate:"Real Estate Value", otherAssets:"Other Assets", liabilitiesGroup:"Liabilities", mortgageDebt:"Mortgage Balance", loanDebt:"Other Loans", creditCardDebt:"Credit Card Debt", otherLiabilities:"Other Liabilities", emptyTitle:"Net Worth Calculator", emptyDesc:"Add up your assets and liabilities to see your total net worth.", tip1:"Total Assets", tip2:"Total Liabilities", tip3:"Net Worth", netWorth:"Net Worth", totalAssets:"Total Assets", totalLiabilities:"Total Liabilities", debtRatio:"Debt-to-Asset Ratio", positive:"Positive", negative:"Negative", aboutTitle:"About this Calculator", aboutText:"Totals your assets (cash, investments, real estate, other) and liabilities (mortgage, loans, credit cards, other), then subtracts to give your net worth and a debt-to-asset ratio showing how leveraged your position is." },
+  es: { assetsGroup:"Activos", cash:"Efectivo y Ahorros", investments:"Inversiones", realEstate:"Valor de Bienes Raíces", otherAssets:"Otros Activos", liabilitiesGroup:"Pasivos", mortgageDebt:"Saldo Hipotecario", loanDebt:"Otros Préstamos", creditCardDebt:"Deuda de Tarjeta de Crédito", otherLiabilities:"Otros Pasivos", emptyTitle:"Calculadora de Patrimonio Neto", emptyDesc:"Suma tus activos y pasivos para ver tu patrimonio neto total.", tip1:"Activos Totales", tip2:"Pasivos Totales", tip3:"Patrimonio Neto", netWorth:"Patrimonio Neto", totalAssets:"Activos Totales", totalLiabilities:"Pasivos Totales", debtRatio:"Ratio Deuda-Activo", positive:"Positivo", negative:"Negativo", aboutTitle:"Acerca de esta Calculadora", aboutText:"Suma tus activos (efectivo, inversiones, bienes raíces, otros) y pasivos (hipoteca, préstamos, tarjetas de crédito, otros), luego resta para obtener tu patrimonio neto y un ratio deuda-activo que muestra qué tan apalancada está tu posición." },
+}[lang];
 ---
 <section class="nw-calculator">
   <div class="nw-layout">
     <aside class="nw-sidebar">
       <div class="nw-group">
-        <h3>Assets</h3>
-        <CalculatorField id="cash" label="Cash & Savings" type="number" placeholder="e.g. 15000" min="0" step="1" />
-        <CalculatorField id="investments" label="Investments" type="number" placeholder="e.g. 60000" min="0" step="1" />
-        <CalculatorField id="realEstate" label="Real Estate Value" type="number" placeholder="e.g. 300000" min="0" step="1" />
-        <CalculatorField id="otherAssets" label="Other Assets" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <h3>{copy.assetsGroup}</h3>
+        <CalculatorField id="cash" label={copy.cash} type="number" placeholder="e.g. 15000" min="0" step="1" />
+        <CalculatorField id="investments" label={copy.investments} type="number" placeholder="e.g. 60000" min="0" step="1" />
+        <CalculatorField id="realEstate" label={copy.realEstate} type="number" placeholder="e.g. 300000" min="0" step="1" />
+        <CalculatorField id="otherAssets" label={copy.otherAssets} type="number" placeholder="e.g. 10000" min="0" step="1" />
       </div>
       <div class="nw-group">
-        <h3>Liabilities</h3>
-        <CalculatorField id="mortgageDebt" label="Mortgage Balance" type="number" placeholder="e.g. 220000" min="0" step="1" />
-        <CalculatorField id="loanDebt" label="Other Loans" type="number" placeholder="e.g. 12000" min="0" step="1" />
-        <CalculatorField id="creditCardDebt" label="Credit Card Debt" type="number" placeholder="e.g. 3000" min="0" step="1" />
-        <CalculatorField id="otherLiabilities" label="Other Liabilities" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.liabilitiesGroup}</h3>
+        <CalculatorField id="mortgageDebt" label={copy.mortgageDebt} type="number" placeholder="e.g. 220000" min="0" step="1" />
+        <CalculatorField id="loanDebt" label={copy.loanDebt} type="number" placeholder="e.g. 12000" min="0" step="1" />
+        <CalculatorField id="creditCardDebt" label={copy.creditCardDebt} type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <CalculatorField id="otherLiabilities" label={copy.otherLiabilities} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="nw-content">
       <div id="emptyState">
-        <EmptyState icon="💰" title="Net Worth Calculator" description="Add up your assets and liabilities to see your total net worth." tips={["Total Assets", "Total Liabilities", "Net Worth"]} />
+        <EmptyState icon="💰" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="netWorthResult" title="Net Worth" icon={Landmark} accent="success" subtitle=" " />
-          <ResultCard id="totalAssetsResult" title="Total Assets" icon={Wallet} />
-          <ResultCard id="totalLiabilitiesResult" title="Total Liabilities" icon={TrendingDown} />
-          <ResultCard id="debtRatioResult" title="Debt-to-Asset Ratio" icon={Scale} />
+          <ResultCard id="netWorthResult" title={copy.netWorth} icon={Landmark} accent="success" subtitle=" " />
+          <ResultCard id="totalAssetsResult" title={copy.totalAssets} icon={Wallet} />
+          <ResultCard id="totalLiabilitiesResult" title={copy.totalLiabilities} icon={TrendingDown} />
+          <ResultCard id="debtRatioResult" title={copy.debtRatio} icon={Scale} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Totals your assets (cash, investments, real estate, other) and liabilities (mortgage, loans, credit cards, other), then subtracts to give your net worth and a debt-to-asset ratio showing how leveraged your position is.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/net-worth-calculator";
 </script>

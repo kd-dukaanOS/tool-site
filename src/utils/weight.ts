@@ -26,10 +26,13 @@ export const WEIGHT_LABELS: Record<string, string> = {
   lb: "Pound",
 };
 
-export function validateWeightInput(i: WeightInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
+export function validateWeightInput(i: WeightInput, lang: "en" | "es" = "en"): string | null {
+  const t = lang === "es"
+    ? { num:"Ingresa un número válido.", units:"Selecciona ambas unidades.", diff:"Elige dos unidades diferentes." }
+    : { num:"Enter a valid number.", units:"Select both units.", diff:"Choose two different units." };
+  if (i.value === undefined || Number.isNaN(i.value)) return t.num;
+  if (!i.fromUnit || !i.toUnit) return t.units;
+  if (i.fromUnit === i.toUnit) return t.diff;
   return null;
 }
 

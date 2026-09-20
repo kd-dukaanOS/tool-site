@@ -75,7 +75,7 @@ export function computeDiff(text1: string, text2: string): DiffResult {
 
 export function formatDiffHtml(result: DiffResult): string {
   if (result.lines.length === 0) {
-    return "No differences found � texts are identical.";
+    return "No differences found — texts are identical.";
   }
 
   return result.lines
@@ -116,9 +116,9 @@ export function copyDiffSummary(
     return `
 Resumen de Diferencias
 
-Líneas Agregadas: ${result.stats.added}
-Líneas Eliminadas: ${result.stats.removed}
-Líneas Sin Cambios: ${result.stats.unchanged}
+LÃ­neas Agregadas: ${result.stats.added}
+LÃ­neas Eliminadas: ${result.stats.removed}
+LÃ­neas Sin Cambios: ${result.stats.unchanged}
 Similitud: ${result.stats.similarity}%
 
 --- Diferencia ---

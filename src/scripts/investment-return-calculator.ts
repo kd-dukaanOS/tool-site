@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["initialInvestment", "monthlyContribution", "years", "endingValue"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -40,7 +42,7 @@ function calculate() {
 
   const [initialInvestment, monthlyContribution, years, endingValue] = fieldIds.map(val);
 
-  const validationError = validateInvestmentReturnInputs(initialInvestment, years, endingValue);
+  const validationError = validateInvestmentReturnInputs(initialInvestment, years, endingValue, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -52,9 +54,16 @@ function calculate() {
   setValue("totalGainResult", fmtCurrency(result.totalGain));
   setValue("totalReturnPercentResult", fmtPercent(result.totalReturnPercent));
   setValue("totalContributedResult", fmtCurrency(result.totalContributed));
-  setSubtitle("annualizedReturnResult", `Over ${years} years`);
+  setSubtitle("annualizedReturnResult", lang === "es" ? `En ${years} años` : `Over ${years} years`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Retorno de Inversión
+
+Total Aportado: ${fmtCurrency(result.totalContributed)}
+Ganancia Total: ${fmtCurrency(result.totalGain)}
+Retorno Total: ${fmtPercent(result.totalReturnPercent)}
+Retorno Anualizado (CAGR): ${fmtPercent(result.annualizedReturnPercent)}
+`.trim() : `
 Investment Return Summary
 
 Total Contributed: ${fmtCurrency(result.totalContributed)}

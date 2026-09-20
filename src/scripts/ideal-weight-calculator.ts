@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: IdealWeightInput | null = null;
 
 function showError(msg: string) {
@@ -38,11 +40,11 @@ function calculate() {
   };
 
   if (!input.heightCm) {
-    showError("Please enter your height.");
+    showError(lang === "es" ? "Por favor ingresa tu altura." : "Please enter your height.");
     return;
   }
 
-  const err = validateIdealWeightInput(input);
+  const err = validateIdealWeightInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -52,8 +54,8 @@ function calculate() {
 
   setValue("idealWeightResult", `${result.idealWeightKg} kg`);
   setValue("healthyRangeResult", `${result.healthyRangeMinKg} - ${result.healthyRangeMaxKg} kg`);
-  setSubtitle("idealWeightResult", "Devine formula estimate");
-  setSubtitle("healthyRangeResult", "based on BMI 18.5-24.9");
+  setSubtitle("idealWeightResult", lang === "es" ? "Estimación fórmula Devine" : "Devine formula estimate");
+  setSubtitle("healthyRangeResult", lang === "es" ? "según IMC 18.5-24.9" : "based on BMI 18.5-24.9");
 
   lastInput = input;
 
@@ -74,7 +76,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateIdealWeight(lastInput);
-  copyToClipboard(copyIdealWeightSummary(lastInput, result));
+  copyToClipboard(copyIdealWeightSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

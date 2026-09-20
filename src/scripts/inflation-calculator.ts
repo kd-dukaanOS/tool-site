@@ -24,6 +24,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: InflationInput | null = null;
 let lastResult: InflationResult | null = null;
 
@@ -46,7 +48,7 @@ function calculate() {
     annualRate: parseFloat(rateInput.value),
   };
 
-  const validationError = validateInflationInput(input);
+  const validationError = validateInflationInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -91,7 +93,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyInflationSummary(lastInput, lastResult, currentCurrency));
+  copyToClipboard(copyInflationSummary(lastInput, lastResult, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

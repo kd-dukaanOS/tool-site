@@ -15,6 +15,12 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const uuidOutput = document.getElementById("uuidOutput") as HTMLTextAreaElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { v4:"Version 4 (Random)", nil:"Nil UUID" },
+  es: { v4:"Versión 4 (Aleatorio)", nil:"UUID Nulo" },
+}[lang];
+
 let lastUuids: string[] = [];
 
 function showError(m: string) { errorBox.textContent = m; errorBox.hidden = false; }
@@ -30,7 +36,7 @@ function format(uuid: string): string {
 function generate() {
   clearError();
   const count = parseInt(countInput.value, 10);
-  const err = validateUuidCount(count);
+  const err = validateUuidCount(count, lang);
   if (err) { showError(err); return; }
 
   const version = versionSelect.value as UuidVersion;
@@ -40,7 +46,7 @@ function generate() {
   lastUuids = uuids;
 
   setValue("countResult", uuids.length);
-  setValue("versionResult", version === "v4" ? "Version 4 (Random)" : "Nil UUID");
+  setValue("versionResult", version === "v4" ? t.v4 : t.nil);
   setValue("lengthResult", uuids[0]?.length ?? 0);
 
   emptyState.hidden = true;

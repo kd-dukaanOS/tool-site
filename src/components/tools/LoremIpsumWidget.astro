@@ -4,27 +4,34 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Type, Hash, AlignLeft } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { generate:"Generate", paragraphs:"Paragraphs", sentences:"Sentences", words:"Words", count:"Count", startWith:'Start with "Lorem ipsum..."', emptyTitle:"Lorem Ipsum Generator", emptyDesc:"Generate placeholder text for designs, mockups and layouts.", tip1:"Paragraphs, Sentences or Words", tip2:"Classic Lorem Start", tip3:"Word & Char Count", tip4:"Copy Output", wordsResult:"Words", charsResult:"Characters", paragraphsResult:"Paragraphs", output:"Generated Text", aboutTitle:"About this Tool", aboutText:"Generate placeholder Lorem Ipsum text in paragraphs, sentences or words for use in designs, wireframes and content mockups." },
+  es: { generate:"Generar", paragraphs:"Párrafos", sentences:"Oraciones", words:"Palabras", count:"Cantidad", startWith:'Comenzar con "Lorem ipsum..."', emptyTitle:"Generador de Lorem Ipsum", emptyDesc:"Genera texto de relleno para diseños, mockups y maquetas.", tip1:"Párrafos, Oraciones o Palabras", tip2:"Inicio Clásico Lorem", tip3:"Conteo de Palabras y Caracteres", tip4:"Copiar Salida", wordsResult:"Palabras", charsResult:"Caracteres", paragraphsResult:"Párrafos", output:"Texto Generado", aboutTitle:"Acerca de esta Herramienta", aboutText:"Genera texto de relleno Lorem Ipsum en párrafos, oraciones o palabras para usar en diseños, wireframes y maquetas de contenido." },
+}[lang];
 ---
 <section class="lorem-ipsum">
   <div class="lorem-layout">
     <aside class="lorem-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="loremType">Generate</label>
+        <label class="tool-label" for="loremType">{copy.generate}</label>
         <select id="loremType" class="tool-select">
-          <option value="paragraphs">Paragraphs</option>
-          <option value="sentences">Sentences</option>
-          <option value="words">Words</option>
+          <option value="paragraphs">{copy.paragraphs}</option>
+          <option value="sentences">{copy.sentences}</option>
+          <option value="words">{copy.words}</option>
         </select>
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="loremCount">Count</label>
+        <label class="tool-label" for="loremCount">{copy.count}</label>
         <input id="loremCount" type="number" class="tool-input" value="5" min="1" max="500" />
       </div>
 
       <div class="tool-checkbox-field">
         <input id="startWithLorem" type="checkbox" checked />
-        <label for="startWithLorem">Start with "Lorem ipsum..."</label>
+        <label for="startWithLorem">{copy.startWith}</label>
       </div>
 
       <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -35,33 +42,36 @@ import { Type, Hash, AlignLeft } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📝"
-          title="Lorem Ipsum Generator"
-          description="Generate placeholder text for designs, mockups and layouts."
-          tips={["Paragraphs, Sentences or Words", "Classic Lorem Start", "Word & Char Count", "Copy Output"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="wordsResult" title="Words" icon={Type} />
-          <ResultCard id="charsResult" title="Characters" icon={Hash} />
-          <ResultCard id="paragraphsResult" title="Paragraphs" icon={AlignLeft} />
+          <ResultCard id="wordsResult" title={copy.wordsResult} icon={Type} />
+          <ResultCard id="charsResult" title={copy.charsResult} icon={Hash} />
+          <ResultCard id="paragraphsResult" title={copy.paragraphsResult} icon={AlignLeft} />
         </ResultsGrid>
 
         <div class="tool-field">
-          <label class="tool-label" for="loremOutput">Generated Text</label>
+          <label class="tool-label" for="loremOutput">{copy.output}</label>
           <textarea id="loremOutput" class="tool-textarea" readonly></textarea>
         </div>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Generate placeholder Lorem Ipsum text in paragraphs, sentences or words for use in designs, wireframes and content mockups.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/lorem-ipsum";
 </script>

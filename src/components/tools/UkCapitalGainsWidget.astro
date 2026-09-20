@@ -5,41 +5,51 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingUp, Receipt, Percent, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { gainDetails:"Gain Details", totalGain:"Total Capital Gain (£)", income:"Income", otherIncome:"Other Taxable Income (£)", personalAllowance:"Personal Allowance (£)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Capital Gains Tax Calculator", emptyDesc:"Estimate CGT owed using the 2026/27 exemption and rates.", tip1:"Total Tax Owed", tip2:"Taxable Gain", tip3:"Rate Breakdown", totalTaxOwed:"Total Tax Owed", taxableGain:"Taxable Gain", taxAtBasicRate:"Tax at 18%", taxAtHigherRate:"Tax at 24%", aboutTitle:"About this Calculator", aboutText:"Applies the £3,000 annual exemption to your gain, then splits the remaining taxable amount across the 18% and 24% Capital Gains Tax rates based on your other income and unused basic rate band." },
+  es: { gainDetails:"Detalles de la Ganancia", totalGain:"Ganancia de Capital Total (£)", income:"Ingresos", otherIncome:"Otros Ingresos Imponibles (£)", personalAllowance:"Asignación Personal (£)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto sobre Ganancias de Capital del Reino Unido", emptyDesc:"Estima el CGT adeudado usando la exención y tasas de 2026/27.", tip1:"Impuesto Total Adeudado", tip2:"Ganancia Imponible", tip3:"Desglose de Tasas", totalTaxOwed:"Impuesto Total Adeudado", taxableGain:"Ganancia Imponible", taxAtBasicRate:"Impuesto al 18%", taxAtHigherRate:"Impuesto al 24%", aboutTitle:"Acerca de esta Calculadora", aboutText:"Aplica la exención anual de £3,000 a tu ganancia, luego divide el monto imponible restante entre las tasas del 18% y 24% de Impuesto sobre Ganancias de Capital según tus otros ingresos y el tramo de tasa básica no utilizado." },
+}[lang];
 ---
 <section class="ukcg-calculator">
   <div class="ukcg-layout">
     <aside class="ukcg-sidebar">
       <div class="ukcg-group">
-        <h3>Gain Details</h3>
-        <CalculatorField id="totalGain" label="Total Capital Gain (£)" type="number" placeholder="e.g. 12600" min="0" step="1" />
+        <h3>{copy.gainDetails}</h3>
+        <CalculatorField id="totalGain" label={copy.totalGain} type="number" placeholder="e.g. 12600" min="0" step="1" />
       </div>
       <div class="ukcg-group">
-        <h3>Income</h3>
-        <CalculatorField id="otherTaxableIncome" label="Other Taxable Income (£)" type="number" placeholder="e.g. 20000" min="0" step="1" />
-        <CalculatorField id="personalAllowance" label="Personal Allowance (£)" type="number" placeholder="e.g. 12570" min="0" step="1" />
+        <h3>{copy.income}</h3>
+        <CalculatorField id="otherTaxableIncome" label={copy.otherIncome} type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <CalculatorField id="personalAllowance" label={copy.personalAllowance} type="number" placeholder="e.g. 12570" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukcg-content">
       <div id="emptyState">
-        <EmptyState icon="📈" title="UK Capital Gains Tax Calculator" description="Estimate CGT owed using the 2026/27 exemption and rates." tips={["Total Tax Owed", "Taxable Gain", "Rate Breakdown"]} />
+        <EmptyState icon="📈" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalTaxOwedResult" title="Total Tax Owed" icon={Receipt} accent="success" subtitle=" " />
-          <ResultCard id="taxableGainResult" title="Taxable Gain" icon={TrendingUp} />
-          <ResultCard id="taxAtBasicRateResult" title="Tax at 18%" icon={Percent} />
-          <ResultCard id="taxAtHigherRateResult" title="Tax at 24%" icon={Wallet} />
+          <ResultCard id="totalTaxOwedResult" title={copy.totalTaxOwed} icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="taxableGainResult" title={copy.taxableGain} icon={TrendingUp} />
+          <ResultCard id="taxAtBasicRateResult" title={copy.taxAtBasicRate} icon={Percent} />
+          <ResultCard id="taxAtHigherRateResult" title={copy.taxAtHigherRate} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Applies the £3,000 annual exemption to your gain, then splits the remaining taxable amount across the 18% and 24% Capital Gains Tax rates based on your other income and unused basic rate band.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-capital-gains-calculator";
 </script>

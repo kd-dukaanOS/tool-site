@@ -11,9 +11,12 @@ export interface VATResult {
   grossAmount: number;
 }
 
-export function validateVATInput(i: VATInput): string | null {
-  if (i.amount <= 0) return "Enter a valid amount.";
-  if (i.vatRate < 0 || i.vatRate > 50) return "Enter a realistic VAT rate.";
+export function validateVATInput(i: VATInput, lang: "en" | "es" = "en"): string | null {
+  const t = lang === "es"
+    ? { amount:"Ingresa un monto válido.", rate:"Ingresa una tasa de IVA realista." }
+    : { amount:"Enter a valid amount.", rate:"Enter a realistic VAT rate." };
+  if (i.amount <= 0) return t.amount;
+  if (i.vatRate < 0 || i.vatRate > 50) return t.rate;
   return null;
 }
 

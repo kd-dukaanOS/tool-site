@@ -5,49 +5,59 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, TrendingDown, Landmark, AlertTriangle } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { taxYearGroup:"Tax Year", incomeGroup:"Income & Room", previousIncome:"Previous Year Earned Income", unusedRoom:"Unused Contribution Room", contribGroup:"Contribution", plannedContribution:"Planned Contribution", marginalTaxRate:"Marginal Tax Rate (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"RRSP Calculator", emptyDesc:"Find your RRSP contribution room and estimated tax savings.", tip1:"Contribution Room", tip2:"Tax Savings", tip3:"Penalty Check", contribRoom:"Available Contribution Room", contribApplied:"Contribution Applied", taxSavings:"Estimated Tax Savings", penaltyTax:"Penalty Tax", none:"None", overContribution:"Over-contribution detected", withinLimit:"Within limit", aboutTitle:"About this Calculator", aboutText:"Estimates your RRSP contribution room, tax savings, and any CRA over-contribution penalty using current annual dollar limits for 2025 and 2026." },
+  es: { taxYearGroup:"Año Fiscal", incomeGroup:"Ingreso y Espacio", previousIncome:"Ingreso Ganado del Año Anterior", unusedRoom:"Espacio de Aporte No Utilizado", contribGroup:"Aporte", plannedContribution:"Aporte Planeado", marginalTaxRate:"Tasa de Impuesto Marginal (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora RRSP", emptyDesc:"Encuentra tu espacio de aporte RRSP y el ahorro fiscal estimado.", tip1:"Espacio de Aporte", tip2:"Ahorro Fiscal", tip3:"Verificación de Penalidad", contribRoom:"Espacio de Aporte Disponible", contribApplied:"Aporte Aplicado", taxSavings:"Ahorro Fiscal Estimado", penaltyTax:"Impuesto de Penalidad", none:"Ninguno", overContribution:"Sobre-aporte detectado", withinLimit:"Dentro del límite", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu espacio de aporte RRSP, ahorro fiscal, y cualquier penalidad CRA por sobre-aporte usando los límites anuales actuales para 2025 y 2026." },
+}[lang];
 ---
 <section class="rrsp-calculator">
   <div class="rrsp-layout">
     <aside class="rrsp-sidebar">
       <div class="rrsp-group">
-        <h3>Tax Year</h3>
+        <h3>{copy.taxYearGroup}</h3>
         <CalculatorField type="select" id="taxYear" label="">
           <option value="2025">2025</option>
           <option value="2026">2026</option>
         </CalculatorField>
       </div>
       <div class="rrsp-group">
-        <h3>Income & Room</h3>
-        <CalculatorField id="previousYearEarnedIncome" label="Previous Year Earned Income" type="number" placeholder="e.g. 80000" min="0" step="1" />
-        <CalculatorField id="unusedContributionRoom" label="Unused Contribution Room" type="number" placeholder="e.g. 5000" min="0" step="1" />
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="previousYearEarnedIncome" label={copy.previousIncome} type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField id="unusedContributionRoom" label={copy.unusedRoom} type="number" placeholder="e.g. 5000" min="0" step="1" />
       </div>
       <div class="rrsp-group">
-        <h3>Contribution</h3>
-        <CalculatorField id="plannedContribution" label="Planned Contribution" type="number" placeholder="e.g. 10000" min="0" step="1" />
-        <CalculatorField id="marginalTaxRate" label="Marginal Tax Rate (%)" type="number" placeholder="e.g. 30" min="0" step="0.1" />
+        <h3>{copy.contribGroup}</h3>
+        <CalculatorField id="plannedContribution" label={copy.plannedContribution} type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <CalculatorField id="marginalTaxRate" label={copy.marginalTaxRate} type="number" placeholder="e.g. 30" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="rrsp-content">
       <div id="emptyState">
-        <EmptyState icon="🍁" title="RRSP Calculator" description="Find your RRSP contribution room and estimated tax savings." tips={["Contribution Room", "Tax Savings", "Penalty Check"]} />
+        <EmptyState icon="🍁" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="contributionRoomResult" title="Available Contribution Room" icon={PiggyBank} accent="success" />
-          <ResultCard id="maxContributionResult" title="Contribution Applied" icon={Landmark} />
-          <ResultCard id="taxSavingsResult" title="Estimated Tax Savings" icon={TrendingDown} />
-          <ResultCard id="penaltyTaxResult" title="Penalty Tax" icon={AlertTriangle} subtitle=" " />
+          <ResultCard id="contributionRoomResult" title={copy.contribRoom} icon={PiggyBank} accent="success" />
+          <ResultCard id="maxContributionResult" title={copy.contribApplied} icon={Landmark} />
+          <ResultCard id="taxSavingsResult" title={copy.taxSavings} icon={TrendingDown} />
+          <ResultCard id="penaltyTaxResult" title={copy.penaltyTax} icon={AlertTriangle} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your RRSP contribution room, tax savings, and any CRA over-contribution penalty using current annual dollar limits for 2025 and 2026.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/rrsp-calculator";
 </script>

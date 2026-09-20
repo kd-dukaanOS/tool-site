@@ -12,13 +12,13 @@ export function minifyJson(input: string): string {
   return JSON.stringify(JSON.parse(input));
 }
 
-export function validateJson(input: string): string | null {
-  if (!input.trim()) return "Please enter JSON to format.";
+export function validateJson(input: string, lang: "en" | "es" = "en"): string | null {
+  if (!input.trim()) return lang === "es" ? "Por favor ingresa JSON para formatear." : "Please enter JSON to format.";
   try {
     JSON.parse(input);
     return null;
   } catch (e) {
-    return "Invalid JSON: " + (e as Error).message;
+    return (lang === "es" ? "JSON inválido: " : "Invalid JSON: ") + (e as Error).message;
   }
 }
 

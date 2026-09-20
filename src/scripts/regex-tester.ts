@@ -14,6 +14,8 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const highlightedOutput = document.getElementById("highlightedOutput") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastPattern = "";
 let lastFlags = "";
 let lastResult: ReturnType<typeof testRegex> | null = null;
@@ -27,13 +29,13 @@ function run() {
   const flags = flagsInput.value;
   const text = textInput.value;
 
-  const inputErr = validateRegexInput(pattern, text);
+  const inputErr = validateRegexInput(pattern, text, lang);
   if (inputErr) { showError(inputErr); return; }
 
   const result = testRegex(pattern, flags, text);
 
   if (!result.isValid) {
-    showError(result.error || "Invalid regex pattern.");
+    showError(result.error || (lang === "es" ? "Patrón de expresión regular inválido." : "Invalid regex pattern."));
     return;
   }
 
@@ -63,7 +65,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastResult) return;
-  copyToClipboard(copyRegexSummary(lastPattern, lastFlags, lastResult));
+  copyToClipboard(copyRegexSummary(lastPattern, lastFlags, lastResult, lang));
 }
 
 testBtn?.addEventListener("click", run);

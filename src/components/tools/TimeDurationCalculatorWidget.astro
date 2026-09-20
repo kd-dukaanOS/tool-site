@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Clock, Hash } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { startTime:"Start Time", endTime:"End Time", emptyTitle:"Enter times to calculate duration", emptyDesc:"Duration between the two times will appear here.", duration:"Duration", totalMinutes:"Total Minutes", crossesMidnight:"crosses midnight", fillBoth:"Please enter both times." },
+  es: { startTime:"Hora de Inicio", endTime:"Hora de Fin", emptyTitle:"Ingresa las horas para calcular la duración", emptyDesc:"La duración entre las dos horas aparecerá aquí.", duration:"Duración", totalMinutes:"Minutos Totales", crossesMidnight:"cruza la medianoche", fillBoth:"Por favor ingresa ambas horas." },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="startTime" label="Start Time" type="time" />
-    <CalculatorField id="endTime" label="End Time" type="time" />
+    <CalculatorField id="startTime" label={copy.startTime} type="time" />
+    <CalculatorField id="endTime" label={copy.endTime} type="time" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -26,15 +33,20 @@ import { Clock, Hash } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter times to calculate duration"
-      description="Duration between the two times will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="durationResult" title="Duration" icon={Clock} accent="primary" size="lg" />
-      <ResultCard id="totalMinutesResult" title="Total Minutes" icon={Hash} accent="neutral" />
+      <ResultCard id="durationResult" title={copy.duration} icon={Clock} accent="primary" size="lg" />
+      <ResultCard id="totalMinutesResult" title={copy.totalMinutes} icon={Hash} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang, crossesMidnightLabel: copy.crossesMidnight, fillBothMsg: copy.fillBoth }}>
+  window.calcLang = calcLang;
+  window.tdCrossesMidnightLabel = crossesMidnightLabel;
+  window.tdFillBothMsg = fillBothMsg;
+</script>
 <script src="../../scripts/time-duration-calculator.ts"></script>

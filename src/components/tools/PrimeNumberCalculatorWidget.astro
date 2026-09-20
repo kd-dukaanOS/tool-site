@@ -1,15 +1,22 @@
-﻿---
+---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { CircleCheckBig, Hash, ArrowLeft, ArrowRight } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { number:"Number", emptyTitle:"Enter a number to check", emptyDesc:"Whether it's prime, its factors, and nearby primes will appear here.", result:"Result", factors:"Factors", nearestBelow:"Nearest Prime Below", nearestAbove:"Nearest Prime Above", prime:"Prime", notPrime:"Not Prime", none:"None", fillNumber:"Please enter a number." },
+  es: { number:"Número", emptyTitle:"Ingresa un número para verificar", emptyDesc:"Si es primo, sus factores y los primos cercanos aparecerán aquí.", result:"Resultado", factors:"Factores", nearestBelow:"Primo Más Cercano Abajo", nearestAbove:"Primo Más Cercano Arriba", prime:"Primo", notPrime:"No es Primo", none:"Ninguno", fillNumber:"Por favor ingresa un número." },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="number" label="Number" type="number" placeholder="e.g. 29" />
+    <CalculatorField id="number" label={copy.number} type="number" placeholder="e.g. 29" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -25,18 +32,25 @@ import { CircleCheckBig, Hash, ArrowLeft, ArrowRight } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter a number to check"
-      description="Whether it's prime, its factors, and nearby primes will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="isPrimeResult" title="Result" icon={CircleCheckBig} accent="primary" size="lg" />
-      <ResultCard id="factorsResult" title="Factors" icon={Hash} accent="neutral" />
-      <ResultCard id="nearestBelowResult" title="Nearest Prime Below" icon={ArrowLeft} accent="neutral" />
-      <ResultCard id="nearestAboveResult" title="Nearest Prime Above" icon={ArrowRight} accent="neutral" />
+      <ResultCard id="isPrimeResult" title={copy.result} icon={CircleCheckBig} accent="primary" size="lg" />
+      <ResultCard id="factorsResult" title={copy.factors} icon={Hash} accent="neutral" />
+      <ResultCard id="nearestBelowResult" title={copy.nearestBelow} icon={ArrowLeft} accent="neutral" />
+      <ResultCard id="nearestAboveResult" title={copy.nearestAbove} icon={ArrowRight} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang, primeLabel: copy.prime, notPrimeLabel: copy.notPrime, noneLabel: copy.none, fillNumberMsg: copy.fillNumber }}>
+  window.calcLang = calcLang;
+  window.pnPrimeLabel = primeLabel;
+  window.pnNotPrimeLabel = notPrimeLabel;
+  window.pnNoneLabel = noneLabel;
+  window.pnFillNumberMsg = fillNumberMsg;
+</script>
 <script src="../../scripts/prime-number-calculator.ts"></script>
 

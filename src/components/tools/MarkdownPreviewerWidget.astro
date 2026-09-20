@@ -4,12 +4,19 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { FileText, Heading, Link2, Image as ImageIcon } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { label:"Markdown", emptyTitle:"Markdown Previewer", emptyDesc:"Write Markdown and preview the rendered HTML live.", tip1:"Live Preview", tip2:"Headings, Links, Images", tip3:"Word Count", tip4:"Copy HTML", words:"Words", headings:"Headings", links:"Links", images:"Images", preview:"Preview", aboutTitle:"About this Tool", aboutText:"Write Markdown on the left and see the rendered HTML preview instantly, with word, heading, link and image counts." },
+  es: { label:"Markdown", emptyTitle:"Visor de Markdown", emptyDesc:"Escribe Markdown y previsualiza el HTML renderizado en vivo.", tip1:"Vista Previa en Vivo", tip2:"Encabezados, Enlaces, Imágenes", tip3:"Conteo de Palabras", tip4:"Copiar HTML", words:"Palabras", headings:"Encabezados", links:"Enlaces", images:"Imágenes", preview:"Vista Previa", aboutTitle:"Acerca de esta Herramienta", aboutText:"Escribe Markdown a la izquierda y ve la vista previa del HTML renderizado al instante, con conteo de palabras, encabezados, enlaces e imágenes." },
+}[lang];
 ---
 <section class="md-previewer">
   <div class="md-layout">
     <aside class="md-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="markdownInput">Markdown</label>
+        <label class="tool-label" for="markdownInput">{copy.label}</label>
         <textarea id="markdownInput" class="tool-textarea" placeholder="# Heading&#10;Type Markdown here..."></textarea>
       </div>
       <CalculatorActions calculateId="renderBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -20,34 +27,37 @@ import { FileText, Heading, Link2, Image as ImageIcon } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📄"
-          title="Markdown Previewer"
-          description="Write Markdown and preview the rendered HTML live."
-          tips={["Live Preview", "Headings, Links, Images", "Word Count", "Copy HTML"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="wordsResult" title="Words" icon={FileText} />
-          <ResultCard id="headingsResult" title="Headings" icon={Heading} />
-          <ResultCard id="linksResult" title="Links" icon={Link2} />
-          <ResultCard id="imagesResult" title="Images" icon={ImageIcon} />
+          <ResultCard id="wordsResult" title={copy.words} icon={FileText} />
+          <ResultCard id="headingsResult" title={copy.headings} icon={Heading} />
+          <ResultCard id="linksResult" title={copy.links} icon={Link2} />
+          <ResultCard id="imagesResult" title={copy.images} icon={ImageIcon} />
         </ResultsGrid>
 
         <div class="tool-field">
-          <label class="tool-label">Preview</label>
+          <label class="tool-label">{copy.preview}</label>
           <div id="markdownPreview" class="markdown-preview"></div>
         </div>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Write Markdown on the left and see the rendered HTML preview instantly, with word, heading, link and image counts.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/markdown-previewer";
 </script>

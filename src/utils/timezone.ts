@@ -10,10 +10,19 @@ export interface TimezoneResult {
   hourDifference: number;
 }
 
-export function validateTimezoneInput(i: TimezoneInput): string | null {
-  if (!i.dateTime) return "Please select a date and time.";
-  if (!i.fromTimezone) return "Please select a source timezone.";
-  if (!i.toTimezone) return "Please select a target timezone.";
+export function validateTimezoneInput(i: TimezoneInput, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    dateTime: "Selecciona una fecha y hora.",
+    from: "Selecciona una zona horaria de origen.",
+    to: "Selecciona una zona horaria de destino.",
+  } : {
+    dateTime: "Please select a date and time.",
+    from: "Please select a source timezone.",
+    to: "Please select a target timezone.",
+  };
+  if (!i.dateTime) return msg.dateTime;
+  if (!i.fromTimezone) return msg.from;
+  if (!i.toTimezone) return msg.to;
   return null;
 }
 
@@ -73,7 +82,19 @@ export function calculateTimezoneConversion(i: TimezoneInput): TimezoneResult {
   };
 }
 
-export function copyTimezoneSummary(i: TimezoneInput, r: TimezoneResult): string {
+export function copyTimezoneSummary(i: TimezoneInput, r: TimezoneResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Conversión de Zona Horaria
+
+De: ${i.fromTimezone}
+A: ${i.toTimezone}
+
+Original: ${i.dateTime}
+Convertido: ${r.convertedFormatted}
+Diferencia: ${r.hourDifference >= 0 ? "+" : ""}${r.hourDifference} horas
+`.trim();
+  }
   return `
 Time Zone Conversion Summary
 

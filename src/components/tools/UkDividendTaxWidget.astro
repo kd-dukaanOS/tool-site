@@ -5,45 +5,55 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PoundSterling, Percent, Wallet, ShieldCheck } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { taxYear:"Tax Year", yearCurrent:"2026/27 (current)", year2:"2025/26", year3:"2024/25", income:"Income", otherIncome:"Other Taxable Income (salary, pension, etc.)", dividendIncome:"Dividend Income", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Dividend Tax Calculator", emptyDesc:"Work out tax on your UK dividend income for the current and recent tax years.", tip1:"Total Tax", tip2:"Net Dividend", tip3:"Effective Rate", totalTax:"Total Dividend Tax", netDividend:"Net Dividend Income", effectiveRate:"Effective Rate", allowanceUsed:"Tax-Free Allowance Used", aboutTitle:"About this Calculator", aboutText:"Stacks your dividend income on top of your other taxable income, applies your Personal Allowance (with tapering above £100,000), the £500 dividend allowance, and the correct basic/higher/additional rate bands for the selected UK tax year." },
+  es: { taxYear:"Año Fiscal", yearCurrent:"2026/27 (actual)", year2:"2025/26", year3:"2024/25", income:"Ingresos", otherIncome:"Otros Ingresos Imponibles (salario, pensión, etc.)", dividendIncome:"Ingresos por Dividendos", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto sobre Dividendos del Reino Unido", emptyDesc:"Calcula el impuesto sobre tus ingresos por dividendos del Reino Unido para el año fiscal actual y años recientes.", tip1:"Impuesto Total", tip2:"Dividendo Neto", tip3:"Tasa Efectiva", totalTax:"Impuesto Total sobre Dividendos", netDividend:"Ingreso Neto por Dividendos", effectiveRate:"Tasa Efectiva", allowanceUsed:"Asignación Libre de Impuestos Utilizada", aboutTitle:"Acerca de esta Calculadora", aboutText:"Suma tus ingresos por dividendos a tus otros ingresos imponibles, aplica tu Asignación Personal (con reducción gradual por encima de £100,000), la asignación de dividendos de £500, y los tramos correctos de tasa básica/alta/adicional para el año fiscal del Reino Unido seleccionado." },
+}[lang];
 ---
 <section class="ukdt-calculator">
   <div class="ukdt-layout">
     <aside class="ukdt-sidebar">
       <div class="ukdt-group">
-        <h3>Tax Year</h3>
+        <h3>{copy.taxYear}</h3>
         <CalculatorField type="select" id="taxYear" label="">
-          <option value="2026-27">2026/27 (current)</option>
-          <option value="2025-26">2025/26</option>
-          <option value="2024-25">2024/25</option>
+          <option value="2026-27">{copy.yearCurrent}</option>
+          <option value="2025-26">{copy.year2}</option>
+          <option value="2024-25">{copy.year3}</option>
         </CalculatorField>
       </div>
       <div class="ukdt-group">
-        <h3>Income</h3>
-        <CalculatorField id="otherIncome" label="Other Taxable Income (salary, pension, etc.)" type="number" placeholder="e.g. 12570" min="0" step="1" />
-        <CalculatorField id="dividendIncome" label="Dividend Income" type="number" placeholder="e.g. 20000" min="0" step="1" />
+        <h3>{copy.income}</h3>
+        <CalculatorField id="otherIncome" label={copy.otherIncome} type="number" placeholder="e.g. 12570" min="0" step="1" />
+        <CalculatorField id="dividendIncome" label={copy.dividendIncome} type="number" placeholder="e.g. 20000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukdt-content">
       <div id="emptyState">
-        <EmptyState icon="💷" title="UK Dividend Tax Calculator" description="Work out tax on your UK dividend income for the current and recent tax years." tips={["Total Tax", "Net Dividend", "Effective Rate"]} />
+        <EmptyState icon="💷" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalTaxResult" title="Total Dividend Tax" icon={PoundSterling} accent="warning" subtitle=" " />
-          <ResultCard id="netDividendResult" title="Net Dividend Income" icon={Wallet} accent="success" />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
-          <ResultCard id="allowanceUsedResult" title="Tax-Free Allowance Used" icon={ShieldCheck} />
+          <ResultCard id="totalTaxResult" title={copy.totalTax} icon={PoundSterling} accent="warning" subtitle=" " />
+          <ResultCard id="netDividendResult" title={copy.netDividend} icon={Wallet} accent="success" />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} />
+          <ResultCard id="allowanceUsedResult" title={copy.allowanceUsed} icon={ShieldCheck} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Stacks your dividend income on top of your other taxable income, applies your Personal Allowance (with tapering above £100,000), the £500 dividend allowance, and the correct basic/higher/additional rate bands for the selected UK tax year.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-dividend-tax-calculator";
 </script>

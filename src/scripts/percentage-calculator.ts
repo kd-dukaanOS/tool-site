@@ -4,9 +4,11 @@ import {
   percentInsight,
   validatePercentInputs,
   copyPercentSummary,
-  MODE_INFO,
+  getModeInfo,
   type PercentMode,
 } from "../utils/percentage";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 import { setValue, copyToClipboard } from "../utils/calculator";
 
@@ -36,7 +38,7 @@ let lastValue2: number | null = null;
 let lastResult: ReturnType<typeof calculatePercent> | null = null;
 
 function applyModeLabels() {
-  const info = MODE_INFO[currentMode];
+  const info = getModeInfo(currentMode, lang);
   value1Label.textContent = info.value1Label;
   value2Label.textContent = info.value2Label;
   modeHint.textContent = info.hint;
@@ -59,7 +61,7 @@ function calculate() {
   const value1 = parseFloat(value1Input.value);
   const value2 = parseFloat(value2Input.value);
 
-  const validationError = validatePercentInputs(currentMode, value1, value2);
+  const validationError = validatePercentInputs(currentMode, value1, value2, lang);
 
   if (validationError) {
     showError(validationError);
@@ -72,9 +74,9 @@ function calculate() {
     ? `${result.positive ? "+" : ""}${result.result}%`
     : result.result);
 
-  setValue("expressionResult", percentExpression(currentMode, value1, value2, result));
+  setValue("expressionResult", percentExpression(currentMode, value1, value2, result, lang));
 
-  insightBox.textContent = percentInsight(currentMode, result);
+  insightBox.textContent = percentInsight(currentMode, result, lang);
   insightBox.hidden = false;
 
   lastValue1 = value1;
@@ -102,7 +104,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastValue1 === null || lastValue2 === null || !lastResult) return;
-  copyToClipboard(copyPercentSummary(currentMode, lastValue1, lastValue2, lastResult));
+  copyToClipboard(copyPercentSummary(currentMode, lastValue1, lastValue2, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

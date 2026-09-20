@@ -13,6 +13,8 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
 const fieldIds = ["existingMrr", "newCustomerMrr", "expansionMrr", "churnedMrr", "contractionMrr"];
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -25,7 +27,7 @@ function calculate() {
   clearError();
   const [existingMrr, newCustomerMrr, expansionMrr, churnedMrr, contractionMrr] = fieldIds.map(val);
 
-  const err = validateMrrInputs(existingMrr);
+  const err = validateMrrInputs(existingMrr, lang);
   if (err) { showError(err); return; }
 
   const result = calculateMrr(existingMrr, newCustomerMrr, expansionMrr, churnedMrr, contractionMrr);
@@ -34,9 +36,16 @@ function calculate() {
   setValue("netNewMrrResult", fmtCurrency(result.netNewMrr));
   setValue("arrResult", fmtCurrency(result.arr));
   setValue("churnedMrrResult", fmtCurrency(result.churnedMrr + result.contractionMrr));
-  setSubtitle("totalMrrResult", result.netNewMrr >= 0 ? "Growing" : "Shrinking");
+  setSubtitle("totalMrrResult", result.netNewMrr >= 0 ? (lang === "es" ? "Creciendo" : "Growing") : (lang === "es" ? "Disminuyendo" : "Shrinking"));
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de MRR
+
+MRR Total: ${fmtCurrency(result.totalMrr)}
+MRR Neto Nuevo: ${fmtCurrency(result.netNewMrr)}
+ARR Proyectado: ${fmtCurrency(result.arr)}
+MRR Perdido + Contracción: ${fmtCurrency(result.churnedMrr + result.contractionMrr)}
+`.trim() : `
 MRR Summary
 
 Total MRR: ${fmtCurrency(result.totalMrr)}

@@ -17,6 +17,10 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const crossesMidnightLabel = (window as any).tdCrossesMidnightLabel || "crosses midnight";
+const fillBothMsg = (window as any).tdFillBothMsg || "Please enter both times.";
+
 let lastInput: TimeDurationInput | null = null;
 
 function showError(msg: string) {
@@ -33,7 +37,7 @@ function calculate() {
   clearError();
 
   if (!startTimeInput.value || !endTimeInput.value) {
-    showError("Please enter both times.");
+    showError(fillBothMsg);
     return;
   }
 
@@ -42,7 +46,7 @@ function calculate() {
     endTime: endTimeInput.value,
   };
 
-  const err = validateTimeDurationInput(input);
+  const err = validateTimeDurationInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -52,7 +56,7 @@ function calculate() {
 
   setValue("durationResult", `${result.hours}h ${result.minutes}m`);
   setValue("totalMinutesResult", result.totalMinutes);
-  setSubtitle("durationResult", result.crossesMidnight ? "crosses midnight" : "");
+  setSubtitle("durationResult", result.crossesMidnight ? crossesMidnightLabel : "");
 
   lastInput = input;
 
@@ -74,7 +78,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateTimeDuration(lastInput);
-  copyToClipboard(copyTimeDurationSummary(lastInput, result));
+  copyToClipboard(copyTimeDurationSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

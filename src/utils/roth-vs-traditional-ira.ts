@@ -68,9 +68,18 @@ export function calculateRothVsTraditional(
   };
 }
 
-export function validateRothVsTraditionalInputs(magi: number, annualContribution: number, yearsToGrow: number): string | null {
-  if (magi < 0) return "MAGI cannot be negative.";
-  if (annualContribution <= 0) return "Annual contribution must be greater than zero.";
-  if (yearsToGrow <= 0) return "Years to grow must be greater than zero.";
+export function validateRothVsTraditionalInputs(magi: number, annualContribution: number, yearsToGrow: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    magi: "El MAGI no puede ser negativo.",
+    contrib: "El aporte anual debe ser mayor a cero.",
+    years: "Los años para crecer deben ser mayor a cero.",
+  } : {
+    magi: "MAGI cannot be negative.",
+    contrib: "Annual contribution must be greater than zero.",
+    years: "Years to grow must be greater than zero.",
+  };
+  if (magi < 0) return msg.magi;
+  if (annualContribution <= 0) return msg.contrib;
+  if (yearsToGrow <= 0) return msg.years;
   return null;
 }

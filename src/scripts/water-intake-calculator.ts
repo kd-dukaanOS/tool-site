@@ -18,6 +18,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { enterWeight:"Please enter your weight.", perDay:"per day", eachGlass:"250ml each" },
+  es: { enterWeight:"Por favor ingresa tu peso.", perDay:"por día", eachGlass:"250ml cada uno" },
+}[lang];
+
 let lastInput: WaterIntakeInput | null = null;
 
 function showError(msg: string) {
@@ -40,11 +46,11 @@ function calculate() {
   };
 
   if (!input.weightKg) {
-    showError("Please enter your weight.");
+    showError(t.enterWeight);
     return;
   }
 
-  const err = validateWaterIntakeInput(input);
+  const err = validateWaterIntakeInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -54,8 +60,8 @@ function calculate() {
 
   setValue("litersResult", `${result.litersPerDay} L`);
   setValue("glassesResult", `${result.glassesPerDay} glasses`);
-  setSubtitle("litersResult", "per day");
-  setSubtitle("glassesResult", "250ml each");
+  setSubtitle("litersResult", t.perDay);
+  setSubtitle("glassesResult", t.eachGlass);
 
   lastInput = input;
 

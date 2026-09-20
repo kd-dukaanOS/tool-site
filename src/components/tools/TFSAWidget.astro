@@ -5,48 +5,65 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Landmark, TrendingUp, AlertTriangle } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { eligibilityGroup:"Eligibility", eligibleYear:"Year You Became Eligible", currentYear:"Current Tax Year", historyGroup:"Contribution History", totalContributed:"Total Contributed to Date", withdrawals:"Withdrawals This Year", newGroup:"New Contribution", planned:"Planned New Contribution", expectedReturn:"Expected Return (%/yr)", years:"Years to Grow", emptyTitle:"TFSA Calculator", emptyDesc:"Find your TFSA contribution room and projected tax-free growth.", tip1:"Available Room", tip2:"Total Room", tip3:"Projected Balance", availableRoom:"Available Room", totalRoom:"Total Room Since Eligible", projectedBalance:"Projected Balance", penaltyTax:"Penalty Tax", overContribution:"Over-contribution detected", withinLimit:"Within limit", none:"None", aboutTitle:"About this Calculator", aboutText:"Calculates your total and available TFSA contribution room since your eligibility year, flags over-contribution penalties, and projects tax-free growth.", totalRoomSince:"Total Room Since", availableRoomThisYear:"Available Room This Year", monthlyPenalty:"Monthly Penalty Tax (if over-contributed)" },
+  es: { eligibilityGroup:"Elegibilidad", eligibleYear:"Año en que Fuiste Elegible", currentYear:"Año Fiscal Actual", historyGroup:"Historial de Aportaciones", totalContributed:"Total Aportado a la Fecha", withdrawals:"Retiros Este Año", newGroup:"Nueva Aportación", planned:"Nueva Aportación Planeada", expectedReturn:"Rendimiento Esperado (%/año)", years:"Años de Crecimiento", emptyTitle:"Calculadora de TFSA", emptyDesc:"Calcula tu margen de aportación TFSA y el crecimiento libre de impuestos proyectado.", tip1:"Margen Disponible", tip2:"Margen Total", tip3:"Saldo Proyectado", availableRoom:"Margen Disponible", totalRoom:"Margen Total Desde Elegibilidad", projectedBalance:"Saldo Proyectado", penaltyTax:"Impuesto de Penalización", overContribution:"Exceso de aportación detectado", withinLimit:"Dentro del límite", none:"Ninguno", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu margen de aportación TFSA total y disponible desde tu año de elegibilidad, señala penalizaciones por exceso de aportación y proyecta el crecimiento libre de impuestos.", totalRoomSince:"Margen Total Desde", availableRoomThisYear:"Margen Disponible Este Año", monthlyPenalty:"Impuesto de Penalización Mensual (si hay exceso)" },
+}[lang];
 ---
 <section class="tfsa-calculator">
   <div class="tfsa-layout">
     <aside class="tfsa-sidebar">
       <div class="tfsa-group">
-        <h3>Eligibility</h3>
-        <CalculatorField id="eligibleYear" label="Year You Became Eligible" type="number" placeholder="e.g. 2009" min="2009" step="1" />
-        <CalculatorField id="currentYear" label="Current Tax Year" type="number" placeholder="e.g. 2026" min="2009" step="1" />
+        <h3>{copy.eligibilityGroup}</h3>
+        <CalculatorField id="eligibleYear" label={copy.eligibleYear} type="number" placeholder="e.g. 2009" min="2009" step="1" />
+        <CalculatorField id="currentYear" label={copy.currentYear} type="number" placeholder="e.g. 2026" min="2009" step="1" />
       </div>
       <div class="tfsa-group">
-        <h3>Contribution History</h3>
-        <CalculatorField id="totalContributedToDate" label="Total Contributed to Date" type="number" placeholder="e.g. 50000" min="0" step="1" />
-        <CalculatorField id="withdrawalsThisYear" label="Withdrawals This Year" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.historyGroup}</h3>
+        <CalculatorField id="totalContributedToDate" label={copy.totalContributed} type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="withdrawalsThisYear" label={copy.withdrawals} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <div class="tfsa-group">
-        <h3>New Contribution</h3>
-        <CalculatorField id="plannedContribution" label="Planned New Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
-        <CalculatorField id="expectedReturn" label="Expected Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
-        <CalculatorField id="yearsToGrow" label="Years to Grow" type="number" placeholder="e.g. 10" min="1" step="1" />
+        <h3>{copy.newGroup}</h3>
+        <CalculatorField id="plannedContribution" label={copy.planned} type="number" placeholder="e.g. 7000" min="0" step="1" />
+        <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <CalculatorField id="yearsToGrow" label={copy.years} type="number" placeholder="e.g. 10" min="1" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="tfsa-content">
       <div id="emptyState">
-        <EmptyState icon="🍁" title="TFSA Calculator" description="Find your TFSA contribution room and projected tax-free growth." tips={["Available Room", "Total Room", "Projected Balance"]} />
+        <EmptyState icon="🍁" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="availableRoomResult" title="Available Room" icon={PiggyBank} accent="success" />
-          <ResultCard id="totalRoomResult" title="Total Room Since Eligible" icon={Landmark} />
-          <ResultCard id="projectedBalanceResult" title="Projected Balance" icon={TrendingUp} />
-          <ResultCard id="penaltyTaxResult" title="Penalty Tax" icon={AlertTriangle} subtitle=" " />
+          <ResultCard id="availableRoomResult" title={copy.availableRoom} icon={PiggyBank} accent="success" />
+          <ResultCard id="totalRoomResult" title={copy.totalRoom} icon={Landmark} />
+          <ResultCard id="projectedBalanceResult" title={copy.projectedBalance} icon={TrendingUp} />
+          <ResultCard id="penaltyTaxResult" title={copy.penaltyTax} icon={AlertTriangle} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your total and available TFSA contribution room since your eligibility year, flags over-contribution penalties, and projects tax-free growth.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, overContributionLabel: copy.overContribution, withinLimitLabel: copy.withinLimit, noneLabel: copy.none, totalRoomSinceLabel: copy.totalRoomSince, availableRoomThisYearLabel: copy.availableRoomThisYear, monthlyPenaltyLabel: copy.monthlyPenalty, projectedBalanceLabel: copy.projectedBalance }}>
+  window.calcLang = calcLang;
+  window.tfsaOverContributionLabel = overContributionLabel;
+  window.tfsaWithinLimitLabel = withinLimitLabel;
+  window.tfsaNoneLabel = noneLabel;
+  window.tfsaTotalRoomSinceLabel = totalRoomSinceLabel;
+  window.tfsaAvailableRoomThisYearLabel = availableRoomThisYearLabel;
+  window.tfsaMonthlyPenaltyLabel = monthlyPenaltyLabel;
+  window.tfsaProjectedBalanceLabel = projectedBalanceLabel;
+</script>
 <script>
   import "../../scripts/tfsa-calculator";
 </script>

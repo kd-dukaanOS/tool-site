@@ -12,6 +12,13 @@ import {
   Percent,
   TrendingDown
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { amount:"Amount", amountHelp:"Today's amount you want to project.", years:"Time Period (Years)", yearsHelp:"Number of years into the future.", rate:"Annual Inflation Rate (%)", rateHelp:"Check your country's long-term average inflation rate.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Inflation Calculator", emptyDesc:"See how inflation erodes purchasing power over time.", tip1:"Future Value Needed", tip2:"Purchasing Power Left", tip3:"Total Inflation %", tip4:"Purchasing Power Lost", futureValue:"Future Value Needed", purchasingPower:"Purchasing Power Left", totalInflation:"Total Inflation Over Period", powerLost:"Purchasing Power Lost", aboutTitle:"About this Calculator", aboutText:"Shows two sides of inflation: the future amount you'd need to buy what today's amount buys now, and how much today's amount will actually be worth in real terms after N years of inflation. All calculations run locally with the rate you provide — no external data required." },
+  es: { amount:"Monto", amountHelp:"El monto actual que deseas proyectar.", years:"Período de Tiempo (Años)", yearsHelp:"Número de años hacia el futuro.", rate:"Tasa de Inflación Anual (%)", rateHelp:"Verifica la tasa de inflación promedio a largo plazo de tu país.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Inflación", emptyDesc:"Observa cómo la inflación erosiona el poder adquisitivo con el tiempo.", tip1:"Valor Futuro Necesario", tip2:"Poder Adquisitivo Restante", tip3:"Inflación Total %", tip4:"Poder Adquisitivo Perdido", futureValue:"Valor Futuro Necesario", purchasingPower:"Poder Adquisitivo Restante", totalInflation:"Inflación Total en el Período", powerLost:"Poder Adquisitivo Perdido", aboutTitle:"Acerca de esta Calculadora", aboutText:"Muestra dos caras de la inflación: el monto futuro que necesitarías para comprar lo que el monto actual compra hoy, y cuánto valdrá realmente el monto actual en términos reales después de N años de inflación. Todos los cálculos se ejecutan localmente con la tasa que proporciones — no se requieren datos externos." },
+}[lang];
 ---
 
 <section class="inf-calculator">
@@ -24,35 +31,35 @@ import {
 
       <CalculatorField
         id="amount"
-        label="Amount"
+        label={copy.amount}
         type="number"
         placeholder="e.g. 100000"
         required={true}
         min="0"
         step="1"
-        helpText="Today's amount you want to project."
+        helpText={copy.amountHelp}
       />
 
       <CalculatorField
         id="years"
-        label="Time Period (Years)"
+        label={copy.years}
         type="number"
         placeholder="e.g. 10"
         required={true}
         min="0"
         step="1"
-        helpText="Number of years into the future."
+        helpText={copy.yearsHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Annual Inflation Rate (%)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 6"
         required={true}
         min="0"
         step="0.01"
-        helpText="Check your country's long-term average inflation rate."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorActions
@@ -60,6 +67,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -76,14 +86,9 @@ import {
 
         <EmptyState
           icon="📉"
-          title="Inflation Calculator"
-          description="See how inflation erodes purchasing power over time."
-          tips={[
-            "Future Value Needed",
-            "Purchasing Power Left",
-            "Total Inflation %",
-            "Purchasing Power Lost"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
 
       </div>
@@ -97,27 +102,27 @@ import {
 
           <ResultCard
             id="futureValueResult"
-            title="Future Value Needed"
+            title={copy.futureValue}
             icon={TrendingUp}
             accent="warning"
           />
 
           <ResultCard
             id="purchasingPowerResult"
-            title="Purchasing Power Left"
+            title={copy.purchasingPower}
             icon={Wallet}
             accent="danger"
           />
 
           <ResultCard
             id="totalInflationResult"
-            title="Total Inflation Over Period"
+            title={copy.totalInflation}
             icon={Percent}
           />
 
           <ResultCard
             id="powerLostResult"
-            title="Purchasing Power Lost"
+            title={copy.powerLost}
             icon={TrendingDown}
           />
 
@@ -125,15 +130,9 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Shows two sides of inflation: the future amount you'd need
-            to buy what today's amount buys now, and how much today's
-            amount will actually be worth in real terms after N years
-            of inflation. All calculations run locally with the rate
-            you provide — no external data required.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -145,6 +144,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/inflation-calculator";
 </script>

@@ -26,15 +26,25 @@ const BASE_PATTERNS: Record<Base, RegExp> = {
   16: /^[0-9A-Fa-f]+$/,
 };
 
-export function validateBaseInput(value: string, base: Base): string | null {
-  if (!value.trim()) return "Please enter a number to convert.";
+export function validateBaseInput(value: string, base: Base, lang: "en" | "es" = "en"): string | null {
+  if (!value.trim()) return lang === "es" ? "Por favor ingresa un número para convertir." : "Please enter a number to convert.";
   if (!BASE_PATTERNS[base].test(value.trim())) {
-    return `Invalid digits for base ${base}.`;
+    return lang === "es" ? `Dígitos inválidos para la base ${base}.` : `Invalid digits for base ${base}.`;
   }
   return null;
 }
 
-export function copyBaseSummary(input: string, fromBase: Base, r: BaseResult): string {
+export function copyBaseSummary(input: string, fromBase: Base, r: BaseResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `Conversión de Base Numérica
+
+Entrada: ${input} (base ${fromBase})
+
+Binario: ${r.binary}
+Octal: ${r.octal}
+Decimal: ${r.decimal}
+Hexadecimal: ${r.hex}`.trim();
+  }
   return `Number Base Conversion
 
 Input: ${input} (base ${fromBase})

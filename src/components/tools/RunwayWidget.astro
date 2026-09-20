@@ -5,46 +5,56 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Timer, Gauge, Flame, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { cashGroup:"Cash Position", currentCash:"Current Cash Balance", monthlyGroup:"Monthly Numbers", monthlyRevenue:"Monthly Revenue", monthlyExpenses:"Monthly Expenses", growthGroup:"Growth Assumptions", revenueGrowth:"Monthly Revenue Growth (%)", expenseGrowth:"Monthly Expense Growth (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Runway Calculator", emptyDesc:"Project your runway using current burn rate and revenue/expense growth trends.", tip1:"Dynamic Runway", tip2:"Static Runway", tip3:"6-Month Forecast", dynamicRunway:"Dynamic Runway", staticRunway:"Static Runway", netBurn:"Current Net Burn", balanceIn6Mo:"Balance in 6 Months", growthNote:"With revenue/expense growth applied", cashFlowPositive:"Cash flow positive", months:"mo", plus120:"120+ mo", aboutTitle:"About this Calculator", aboutText:"Projects runway two ways: a static estimate based on your current net burn rate, and a dynamic month-by-month simulation that applies your expected monthly revenue and expense growth rates." },
+  es: { cashGroup:"Posición de Efectivo", currentCash:"Saldo de Efectivo Actual", monthlyGroup:"Cifras Mensuales", monthlyRevenue:"Ingresos Mensuales", monthlyExpenses:"Gastos Mensuales", growthGroup:"Supuestos de Crecimiento", revenueGrowth:"Crecimiento Mensual de Ingresos (%)", expenseGrowth:"Crecimiento Mensual de Gastos (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Runway", emptyDesc:"Proyecta tu runway usando la tasa de quema actual y las tendencias de crecimiento de ingresos/gastos.", tip1:"Runway Dinámico", tip2:"Runway Estático", tip3:"Pronóstico de 6 Meses", dynamicRunway:"Runway Dinámico", staticRunway:"Runway Estático", netBurn:"Quema Neta Actual", balanceIn6Mo:"Saldo en 6 Meses", growthNote:"Con crecimiento de ingresos/gastos aplicado", cashFlowPositive:"Flujo de caja positivo", months:"mes", plus120:"120+ mes", aboutTitle:"Acerca de esta Calculadora", aboutText:"Proyecta el runway de dos formas: una estimación estática basada en tu tasa de quema neta actual, y una simulación mes a mes dinámica que aplica tus tasas esperadas de crecimiento de ingresos y gastos." },
+}[lang];
 ---
 <section class="rwc-calculator">
   <div class="rwc-layout">
     <aside class="rwc-sidebar">
       <div class="rwc-group">
-        <h3>Cash Position</h3>
-        <CalculatorField id="currentCashBalance" label="Current Cash Balance" type="number" placeholder="e.g. 300000" min="0" step="1" />
+        <h3>{copy.cashGroup}</h3>
+        <CalculatorField id="currentCashBalance" label={copy.currentCash} type="number" placeholder="e.g. 300000" min="0" step="1" />
       </div>
       <div class="rwc-group">
-        <h3>Monthly Numbers</h3>
-        <CalculatorField id="monthlyRevenue" label="Monthly Revenue" type="number" placeholder="e.g. 15000" min="0" step="1" />
-        <CalculatorField id="monthlyExpenses" label="Monthly Expenses" type="number" placeholder="e.g. 40000" min="0" step="1" />
+        <h3>{copy.monthlyGroup}</h3>
+        <CalculatorField id="monthlyRevenue" label={copy.monthlyRevenue} type="number" placeholder="e.g. 15000" min="0" step="1" />
+        <CalculatorField id="monthlyExpenses" label={copy.monthlyExpenses} type="number" placeholder="e.g. 40000" min="0" step="1" />
       </div>
       <div class="rwc-group">
-        <h3>Growth Assumptions</h3>
-        <CalculatorField id="monthlyRevenueGrowthRate" label="Monthly Revenue Growth (%)" type="number" placeholder="e.g. 5" step="0.1" />
-        <CalculatorField id="monthlyExpenseGrowthRate" label="Monthly Expense Growth (%)" type="number" placeholder="e.g. 2" step="0.1" />
+        <h3>{copy.growthGroup}</h3>
+        <CalculatorField id="monthlyRevenueGrowthRate" label={copy.revenueGrowth} type="number" placeholder="e.g. 5" step="0.1" />
+        <CalculatorField id="monthlyExpenseGrowthRate" label={copy.expenseGrowth} type="number" placeholder="e.g. 2" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="rwc-content">
       <div id="emptyState">
-        <EmptyState icon="⏳" title="Runway Calculator" description="Project your runway using current burn rate and revenue/expense growth trends." tips={["Dynamic Runway", "Static Runway", "6-Month Forecast"]} />
+        <EmptyState icon="⏳" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="dynamicRunwayResult" title="Dynamic Runway" icon={Timer} accent="warning" subtitle=" " />
-          <ResultCard id="staticRunwayResult" title="Static Runway" icon={Gauge} />
-          <ResultCard id="netBurnResult" title="Current Net Burn" icon={Flame} />
-          <ResultCard id="balanceIn6MoResult" title="Balance in 6 Months" icon={Wallet} />
+          <ResultCard id="dynamicRunwayResult" title={copy.dynamicRunway} icon={Timer} accent="warning" subtitle=" " />
+          <ResultCard id="staticRunwayResult" title={copy.staticRunway} icon={Gauge} />
+          <ResultCard id="netBurnResult" title={copy.netBurn} icon={Flame} />
+          <ResultCard id="balanceIn6MoResult" title={copy.balanceIn6Mo} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects runway two ways: a static estimate based on your current net burn rate, and a dynamic month-by-month simulation that applies your expected monthly revenue and expense growth rates.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/runway-calculator";
 </script>

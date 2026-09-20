@@ -5,43 +5,53 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, Wallet, TrendingUp, Calendar } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { youGroup:"You", currentAge:"Current Age", retirementAge:"Retirement Age", currentBalance:"Current Roth IRA Balance", growthGroup:"Contributions & Growth", annualContribution:"Annual Contribution", expectedReturn:"Expected Annual Return (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Roth IRA Calculator", emptyDesc:"Project your Roth IRA balance at retirement with tax-free growth.", tip1:"Projected Balance", tip2:"Total Contributions", tip3:"Investment Growth", projectedBalance:"Projected Balance", totalContributions:"Total Contributions", investmentGrowth:"Investment Growth", yearsInvested:"Years Invested", yearsSuffix:"years", taxFreeNote:"Tax-free at withdrawal", aboutTitle:"About this Calculator", aboutText:"Projects your Roth IRA balance at retirement using your current balance, annual contribution, and expected return, compounded yearly until withdrawal — all growth is tax-free at qualified withdrawal." },
+  es: { youGroup:"Tú", currentAge:"Edad Actual", retirementAge:"Edad de Jubilación", currentBalance:"Saldo Actual de Roth IRA", growthGroup:"Aportes y Crecimiento", annualContribution:"Aporte Anual", expectedReturn:"Retorno Anual Esperado (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Roth IRA", emptyDesc:"Proyecta tu saldo de Roth IRA al jubilarte con crecimiento libre de impuestos.", tip1:"Saldo Proyectado", tip2:"Aportes Totales", tip3:"Crecimiento de Inversión", projectedBalance:"Saldo Proyectado", totalContributions:"Aportes Totales", investmentGrowth:"Crecimiento de Inversión", yearsInvested:"Años Invertidos", yearsSuffix:"años", taxFreeNote:"Libre de impuestos al retirar", aboutTitle:"Acerca de esta Calculadora", aboutText:"Proyecta tu saldo de Roth IRA al jubilarte usando tu saldo actual, aporte anual y retorno esperado, compuesto anualmente hasta el retiro — todo el crecimiento está libre de impuestos al retiro calificado." },
+}[lang];
 ---
 <section class="ri-calculator">
   <div class="ri-layout">
     <aside class="ri-sidebar">
       <div class="ri-group">
-        <h3>You</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 28" min="1" step="1" />
-        <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" min="1" step="1" />
-        <CalculatorField id="currentBalance" label="Current Roth IRA Balance" type="number" placeholder="e.g. 8000" min="0" step="1" />
+        <h3>{copy.youGroup}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 28" min="1" step="1" />
+        <CalculatorField id="retirementAge" label={copy.retirementAge} type="number" placeholder="e.g. 65" min="1" step="1" />
+        <CalculatorField id="currentBalance" label={copy.currentBalance} type="number" placeholder="e.g. 8000" min="0" step="1" />
       </div>
       <div class="ri-group">
-        <h3>Contributions & Growth</h3>
-        <CalculatorField id="annualContribution" label="Annual Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
-        <CalculatorField id="expectedReturn" label="Expected Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <h3>{copy.growthGroup}</h3>
+        <CalculatorField id="annualContribution" label={copy.annualContribution} type="number" placeholder="e.g. 7000" min="0" step="1" />
+        <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ri-content">
       <div id="emptyState">
-        <EmptyState icon="🌱" title="Roth IRA Calculator" description="Project your Roth IRA balance at retirement with tax-free growth." tips={["Projected Balance", "Total Contributions", "Investment Growth"]} />
+        <EmptyState icon="🌱" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="projectedBalanceResult" title="Projected Balance" icon={PiggyBank} accent="success" subtitle=" " />
-          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={Wallet} />
-          <ResultCard id="investmentGrowthResult" title="Investment Growth" icon={TrendingUp} />
-          <ResultCard id="yearsInvestedResult" title="Years Invested" icon={Calendar} />
+          <ResultCard id="projectedBalanceResult" title={copy.projectedBalance} icon={PiggyBank} accent="success" subtitle=" " />
+          <ResultCard id="totalContributionsResult" title={copy.totalContributions} icon={Wallet} />
+          <ResultCard id="investmentGrowthResult" title={copy.investmentGrowth} icon={TrendingUp} />
+          <ResultCard id="yearsInvestedResult" title={copy.yearsInvested} icon={Calendar} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects your Roth IRA balance at retirement using your current balance, annual contribution, and expected return, compounded yearly until withdrawal — all growth is tax-free at qualified withdrawal.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/roth-ira-calculator";
 </script>

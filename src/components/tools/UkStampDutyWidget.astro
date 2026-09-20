@@ -5,41 +5,51 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Home, Percent, Wallet, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { groupTitle:"Property Details", priceLabel:"Purchase Price (£)", buyerTypeLabel:"Buyer Type", standard:"Standard (home mover)", firstTime:"First-time buyer", additional:"Additional property (2nd home/buy-to-let)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Stamp Duty Calculator", emptyDesc:"Calculate SDLT owed on your property purchase.", tip1:"Stamp Duty Owed", tip2:"Effective Rate", tip3:"Total Cost", dutyTitle:"Stamp Duty Owed", rateTitle:"Effective Rate", totalCostTitle:"Total Cost", priceTitle:"Purchase Price", aboutTitle:"About this Calculator", aboutText:"Applies the current SDLT bands progressively to your purchase price, adjusting for first-time buyer relief or the 5% additional dwellings surcharge based on your buyer type.", surcharge:"Includes 5% surcharge" },
+  es: { groupTitle:"Detalles de la Propiedad", priceLabel:"Precio de Compra (£)", buyerTypeLabel:"Tipo de Comprador", standard:"Estándar (cambio de vivienda)", firstTime:"Comprador primerizo", additional:"Propiedad adicional (2da vivienda/alquiler)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto de Timbre del Reino Unido", emptyDesc:"Calcula el SDLT adeudado en tu compra de propiedad.", tip1:"Impuesto de Timbre Adeudado", tip2:"Tasa Efectiva", tip3:"Costo Total", dutyTitle:"Impuesto de Timbre Adeudado", rateTitle:"Tasa Efectiva", totalCostTitle:"Costo Total", priceTitle:"Precio de Compra", aboutTitle:"Acerca de esta Calculadora", aboutText:"Aplica progresivamente las bandas SDLT actuales a tu precio de compra, ajustando por el alivio de comprador primerizo o el recargo del 5% de viviendas adicionales según tu tipo de comprador.", surcharge:"Incluye recargo del 5%" },
+}[lang];
 ---
 <section class="uksd-calculator">
   <div class="uksd-layout">
     <aside class="uksd-sidebar">
       <div class="uksd-group">
-        <h3>Property Details</h3>
-        <CalculatorField id="purchasePrice" label="Purchase Price (£)" type="number" placeholder="e.g. 350000" min="0" step="1" />
-        <CalculatorField type="select" id="buyerType" label="Buyer Type">
-          <option value="standard">Standard (home mover)</option>
-          <option value="first-time">First-time buyer</option>
-          <option value="additional">Additional property (2nd home/buy-to-let)</option>
+        <h3>{copy.groupTitle}</h3>
+        <CalculatorField id="purchasePrice" label={copy.priceLabel} type="number" placeholder="e.g. 350000" min="0" step="1" />
+        <CalculatorField type="select" id="buyerType" label={copy.buyerTypeLabel}>
+          <option value="standard">{copy.standard}</option>
+          <option value="first-time">{copy.firstTime}</option>
+          <option value="additional">{copy.additional}</option>
         </CalculatorField>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="uksd-content">
       <div id="emptyState">
-        <EmptyState icon="🏠" title="UK Stamp Duty Calculator" description="Calculate SDLT owed on your property purchase." tips={["Stamp Duty Owed", "Effective Rate", "Total Cost"]} />
+        <EmptyState icon="🏠" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="stampDutyOwedResult" title="Stamp Duty Owed" icon={Receipt} accent="success" subtitle=" " />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
-          <ResultCard id="totalCostResult" title="Total Cost" icon={Wallet} />
-          <ResultCard id="purchasePriceResult" title="Purchase Price" icon={Home} />
+          <ResultCard id="stampDutyOwedResult" title={copy.dutyTitle} icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="effectiveRateResult" title={copy.rateTitle} icon={Percent} />
+          <ResultCard id="totalCostResult" title={copy.totalCostTitle} icon={Wallet} />
+          <ResultCard id="purchasePriceResult" title={copy.priceTitle} icon={Home} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Applies the current SDLT bands progressively to your purchase price, adjusting for first-time buyer relief or the 5% additional dwellings surcharge based on your buyer type.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-stamp-duty-calculator";
 </script>

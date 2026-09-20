@@ -9,9 +9,9 @@ export interface PrimeResult {
   nearestPrimeAbove: number;
 }
 
-export function validatePrimeInput(i: PrimeInput): string | null {
-  if (!Number.isInteger(i.number)) return "Enter a whole number.";
-  if (i.number < 1) return "Enter a positive whole number.";
+export function validatePrimeInput(i: PrimeInput, lang: "en" | "es" = "en"): string | null {
+  if (!Number.isInteger(i.number)) return lang === "es" ? "Ingresa un número entero." : "Enter a whole number.";
+  if (i.number < 1) return lang === "es" ? "Ingresa un número entero positivo." : "Enter a positive whole number.";
   return null;
 }
 
@@ -53,7 +53,19 @@ export function calculatePrime(i: PrimeInput): PrimeResult {
   return { isPrime, factors, nearestPrimeBelow: below, nearestPrimeAbove: above };
 }
 
-export function copyPrimeSummary(i: PrimeInput, r: PrimeResult): string {
+export function copyPrimeSummary(i: PrimeInput, r: PrimeResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Verificación de Número Primo
+
+Número: ${i.number}
+
+Es Primo: ${r.isPrime ? "Sí" : "No"}
+Factores: ${r.factors.join(", ")}
+Primo Más Cercano Abajo: ${r.nearestPrimeBelow ?? "Ninguno"}
+Primo Más Cercano Arriba: ${r.nearestPrimeAbove}
+`.trim();
+  }
   return `
 Prime Number Check
 

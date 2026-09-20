@@ -1,12 +1,13 @@
 ---
+// src/pages/es/date-time/timezone-calculator.astro
 import Layout from "../../../layouts/Layout.astro";
-import { BusinessDaysCalculatorWidget } from "../../../components/tools/BusinessDaysCalculatorWidget.astro";
+import TimezoneCalculatorWidget from "../../../components/tools/TimezoneCalculatorWidget.astro";
 import CalculatorContent from "../../../components/content/CalculatorContent.astro";
 import { tools, categoryIcons } from "../../../data/tools.js";
-import { businessDaysCalculatorContent } from "../../../data/calculators/es/business-days-calculator.ts";
+import { timezoneCalculatorContent } from "../../../data/calculators/es/timezone-calculator.ts";
 
-const tool = tools.find((t) => t.slug === "business-days-calculator")!;
-const content = businessDaysCalculatorContent;
+const tool = tools.find((t) => t.slug === "timezone-calculator")!;
+const content = timezoneCalculatorContent;
 ---
 
 <Layout
@@ -19,31 +20,28 @@ const content = businessDaysCalculatorContent;
   breadcrumbs={[
     { name: "Inicio", url: "/es/" },
     { name: "Fecha y Hora", url: "/es/date-time/" },
-    { name: "Calculadora de Días Hábiles", url: "/es/date-time/business-days-calculator/" },
+    { name: "Calculadora de Zona Horaria", url: "/es/date-time/timezone-calculator/" },
   ]}
-  appName="Calculadora de Días Hábiles"
+  appName="Calculadora de Zona Horaria"
 >
   <div class="wrap">
     <p class="breadcrumb">
-      <a href="/es/">Inicio</a> / <a href="/es/date-time/">Fecha y Hora</a> / Calculadora de Días Hábiles
+      <a href="/es/">Inicio</a> / <a href="/es/date-time/">Fecha y Hora</a> / Calculadora de Zona Horaria
     </p>
-
     <div class="category-header">
       <div class="cat-icon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["date-time"]} />
       </div>
       <div class="category-header-text">
-        <h1>Calculadora de Días Hábiles</h1>
-        <p>Cuenta los días laborables entre dos fechas, excluyendo fines de semana</p>
+        <h1>Calculadora de Zona Horaria</h1>
+        <p>Convierte entre cualquier par de zonas horarias</p>
       </div>
-      <button id="bookmark-btn" class="bookmark-btn" data-slug="business-days-calculator" data-name="Calculadora de Días Hábiles" data-url="/es/date-time/business-days-calculator/" aria-label="Guardar esta herramienta">
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="timezone-calculator" data-name="Calculadora de Zona Horaria" data-url="/es/date-time/timezone-calculator/" aria-label="Guardar esta herramienta">
         <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
         <span class="bookmark-btn-label">Guardar</span>
       </button>
     </div>
-
-    <BusinessDaysCalculatorWidget lang="es" />
-
+    <TimezoneCalculatorWidget lang="es" />
     <CalculatorContent {...content} lang="es" allTools={tools} />
   </div>
 </Layout>

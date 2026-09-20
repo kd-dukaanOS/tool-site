@@ -14,11 +14,21 @@ export const TEMPERATURE_LABELS: Record<string, string> = {
   k: "Kelvin",
 };
 
-export function validateTemperatureInput(i: TemperatureInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
-  if (i.fromUnit === "k" && i.value < 0) return "Kelvin cannot be negative.";
+export const TEMPERATURE_LABELS_ES: Record<string, string> = {
+  c: "Celsius",
+  f: "Fahrenheit",
+  k: "Kelvin",
+};
+
+export function getTemperatureLabel(unit: string, lang: "en" | "es" = "en"): string {
+  return lang === "es" ? TEMPERATURE_LABELS_ES[unit] : TEMPERATURE_LABELS[unit];
+}
+
+export function validateTemperatureInput(i: TemperatureInput, lang: "en" | "es" = "en"): string | null {
+  if (i.value === undefined || Number.isNaN(i.value)) return lang === "es" ? "Ingresa un número válido." : "Enter a valid number.";
+  if (!i.fromUnit || !i.toUnit) return lang === "es" ? "Selecciona ambas unidades." : "Select both units.";
+  if (i.fromUnit === i.toUnit) return lang === "es" ? "Elige dos unidades diferentes." : "Choose two different units.";
+  if (i.fromUnit === "k" && i.value < 0) return lang === "es" ? "Kelvin no puede ser negativo." : "Kelvin cannot be negative.";
   return null;
 }
 
@@ -37,7 +47,14 @@ export function calculateTemperature(i: TemperatureInput): TemperatureResult {
   return { convertedValue: Math.round(result * 1000) / 1000 };
 }
 
-export function copyTemperatureSummary(i: TemperatureInput, r: TemperatureResult): string {
+export function copyTemperatureSummary(i: TemperatureInput, r: TemperatureResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Temperatura
+
+${i.value}°${getTemperatureLabel(i.fromUnit, "es")[0]} = ${r.convertedValue}°${getTemperatureLabel(i.toUnit, "es")[0]}
+`.trim();
+  }
   return `
 Temperature Conversion
 

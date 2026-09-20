@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["currentAge", "retirementAge", "currentBalance", "annualContribution", "expectedReturn"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +38,7 @@ function calculate() {
 
   const [currentAge, retirementAge, currentBalance, annualContribution, expectedReturn] = fieldIds.map(val);
 
-  const validationError = validateRothIRAInputs(currentAge, retirementAge, annualContribution);
+  const validationError = validateRothIRAInputs(currentAge, retirementAge, annualContribution, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -47,10 +49,17 @@ function calculate() {
   setValue("projectedBalanceResult", fmtCurrency(result.projectedBalance));
   setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
   setValue("investmentGrowthResult", fmtCurrency(result.investmentGrowth));
-  setValue("yearsInvestedResult", `${result.yearsInvested} years`);
-  setSubtitle("projectedBalanceResult", "Tax-free at withdrawal");
+  setValue("yearsInvestedResult", lang === "es" ? `${result.yearsInvested} años` : `${result.yearsInvested} years`);
+  setSubtitle("projectedBalanceResult", lang === "es" ? "Libre de impuestos al retirar" : "Tax-free at withdrawal");
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Proyección de Roth IRA
+
+Saldo Proyectado: ${fmtCurrency(result.projectedBalance)}
+Aportes Totales: ${fmtCurrency(result.totalContributions)}
+Crecimiento de Inversión: ${fmtCurrency(result.investmentGrowth)}
+Años Invertidos: ${result.yearsInvested}
+`.trim() : `
 Roth IRA Projection Summary
 
 Projected Balance: ${fmtCurrency(result.projectedBalance)}

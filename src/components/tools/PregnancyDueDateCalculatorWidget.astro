@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Baby, CalendarHeart, Hash } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { lastPeriod:"First Day of Last Period", cycleLength:"Average Cycle Length (days)", emptyTitle:"Enter details to estimate due date", emptyDesc:"Estimated due date and current progress will appear here.", dueDate:"Estimated Due Date", currentProgress:"Current Progress", trimester:"Trimester", daysRemaining:"Days Remaining", dayLabel:"day", estimated:"estimated", weekLabel:"Week", fillDate:"Please select your last period date." },
+  es: { lastPeriod:"Primer Día de Tu Último Período", cycleLength:"Duración Promedio del Ciclo (días)", emptyTitle:"Ingresa los datos para estimar la fecha de parto", emptyDesc:"La fecha de parto estimada y el progreso actual aparecerán aquí.", dueDate:"Fecha de Parto Estimada", currentProgress:"Progreso Actual", trimester:"Trimestre", daysRemaining:"Días Restantes", dayLabel:"día", estimated:"estimado", weekLabel:"Semana", fillDate:"Por favor selecciona la fecha de tu último período." },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="lastPeriodDate" label="First Day of Last Period" type="date" />
-    <CalculatorField id="cycleLength" label="Average Cycle Length (days)" type="number" placeholder="e.g. 28" />
+    <CalculatorField id="lastPeriodDate" label={copy.lastPeriod} type="date" />
+    <CalculatorField id="cycleLength" label={copy.cycleLength} type="number" placeholder="e.g. 28" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -26,17 +33,24 @@ import { Baby, CalendarHeart, Hash } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter details to estimate due date"
-      description="Estimated due date and current progress will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="dueDateResult" title="Estimated Due Date" icon={CalendarHeart} accent="primary" size="lg" />
-      <ResultCard id="currentWeekResult" title="Current Progress" icon={Baby} accent="neutral" />
-      <ResultCard id="trimesterResult" title="Trimester" icon={Hash} accent="neutral" />
-      <ResultCard id="daysRemainingResult" title="Days Remaining" icon={Hash} accent="neutral" />
+      <ResultCard id="dueDateResult" title={copy.dueDate} icon={CalendarHeart} accent="primary" size="lg" />
+      <ResultCard id="currentWeekResult" title={copy.currentProgress} icon={Baby} accent="neutral" />
+      <ResultCard id="trimesterResult" title={copy.trimester} icon={Hash} accent="neutral" />
+      <ResultCard id="daysRemainingResult" title={copy.daysRemaining} icon={Hash} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang, weekLabel: copy.weekLabel, dayLabel: copy.dayLabel, estimatedLabel: copy.estimated, fillDateMsg: copy.fillDate }}>
+  window.calcLang = calcLang;
+  window.pddWeekLabel = weekLabel;
+  window.pddDayLabel = dayLabel;
+  window.pddEstimatedLabel = estimatedLabel;
+  window.pddFillDateMsg = fillDateMsg;
+</script>
 <script src="../../scripts/pregnancy-due-date-calculator.ts"></script>

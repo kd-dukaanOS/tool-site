@@ -16,6 +16,12 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
 const numericFieldIds = ["otherIncome", "dividendIncome"];
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { taxYear:"Tax year", header:"UK Dividend Tax Summary", totalTax:"Total Dividend Tax", netDividend:"Net Dividend Income", effectiveRate:"Effective Rate", allowanceUsed:"Tax-Free Allowance Used", errNegative:"Other income cannot be negative.", errDividend:"Enter a dividend income greater than zero." },
+  es: { taxYear:"Año fiscal", header:"Resumen del Impuesto sobre Dividendos del Reino Unido", totalTax:"Impuesto Total sobre Dividendos", netDividend:"Ingreso Neto por Dividendos", effectiveRate:"Tasa Efectiva", allowanceUsed:"Asignación Libre de Impuestos Utilizada", errNegative:"Otros ingresos no pueden ser negativos.", errDividend:"Ingresa un ingreso por dividendos mayor que cero." },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -30,7 +36,10 @@ function calculate() {
   const taxYear = strVal("taxYear");
 
   const err = validateUkDividendTaxInputs(otherIncome, dividendIncome);
-  if (err) { showError(err); return; }
+  if (err) {
+    showError(otherIncome < 0 ? t.errNegative : t.errDividend);
+    return;
+  }
 
   const result = calculateUkDividendTax(otherIncome, dividendIncome, taxYear);
 
@@ -38,15 +47,15 @@ function calculate() {
   setValue("netDividendResult", fmtCurrency(result.netDividendIncome));
   setValue("effectiveRateResult", `${result.effectiveRate.toFixed(1)}%`);
   setValue("allowanceUsedResult", fmtCurrency(result.taxFreeAmount));
-  setSubtitle("totalTaxResult", `Tax year ${taxYear}`);
+  setSubtitle("totalTaxResult", `${t.taxYear} ${taxYear}`);
 
   lastSummary = `
-UK Dividend Tax Summary (${taxYear})
+${t.header} (${taxYear})
 
-Total Dividend Tax: ${fmtCurrency(result.totalDividendTax)}
-Net Dividend Income: ${fmtCurrency(result.netDividendIncome)}
-Effective Rate: ${result.effectiveRate.toFixed(1)}%
-Tax-Free Allowance Used: ${fmtCurrency(result.taxFreeAmount)}
+${t.totalTax}: ${fmtCurrency(result.totalDividendTax)}
+${t.netDividend}: ${fmtCurrency(result.netDividendIncome)}
+${t.effectiveRate}: ${result.effectiveRate.toFixed(1)}%
+${t.allowanceUsed}: ${fmtCurrency(result.taxFreeAmount)}
 `.trim();
 
   emptyState.hidden = true;

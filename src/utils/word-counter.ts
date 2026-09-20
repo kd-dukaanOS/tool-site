@@ -62,8 +62,9 @@ export function getWordFrequency(text: string, topN = 10): { word: string; count
     .map(([word, count]) => ({ word, count }));
 }
 
-export function validateTextInput(text: string): string | null {
-  if (!text.trim()) return "Please enter or paste text to analyze.";
+export function validateTextInput(text: string, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? "Por favor ingresa o pega texto para analizar." : "Please enter or paste text to analyze.";
+  if (!text.trim()) return msg;
   return null;
 }
 

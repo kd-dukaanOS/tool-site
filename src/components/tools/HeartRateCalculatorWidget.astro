@@ -1,33 +1,93 @@
 ---
 import CalculatorField from "../calculator/CalculatorField.astro";
-import ActionButtons from "../calculator/ActionButtons.astro";
+import CalculatorActions from "../calculator/ActionButtons.astro";
+import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
-import EmptyState from "../calculator/EmptyState.astro";
+
 import { HeartPulse, Flame, Activity, Zap, Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { ageLabel:"Age", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter your age to see heart rate zones", emptyDesc:"Your training zones based on max heart rate will appear here.", maxHr:"Max Heart Rate", warmUp:"Warm Up (50-60%)", fatBurn:"Fat Burn (60-70%)", cardio:"Cardio (70-80%)", hardcore:"Hardcore (80-90%)", peak:"Peak (90-100%)" },
+  es: { ageLabel:"Edad", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa tu edad para ver las zonas de frecuencia cardíaca", emptyDesc:"Tus zonas de entrenamiento según tu frecuencia cardíaca máxima aparecerán aquí.", maxHr:"Frecuencia Cardíaca Máxima", warmUp:"Calentamiento (50-60%)", fatBurn:"Quema de Grasa (60-70%)", cardio:"Cardio (70-80%)", hardcore:"Intenso (80-90%)", peak:"Máximo (90-100%)" },
+}[lang];
 ---
 
-<div class="calculator-widget">
-  <div class="calculator-inputs">
-    <CalculatorField id="age" label="Age" type="number" placeholder="e.g. 30" />
+<section class="hr-calculator">
+  <div class="hr-layout">
 
-    <div id="errorBox" class="error-box" role="alert" hidden></div>
+    <aside class="hr-sidebar">
+      <CalculatorField
+        id="age"
+        label="Age"
+        type="number"
+        placeholder="e.g. 30"
+        required={true}
+        min="1"
+        max="120"
+        step="1"
+      />
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
+      <CalculatorActions
+        calculateId="calculateBtn"
+        resetId="resetBtn"
+        copyId="copyBtn"
+        showCopy={true}
+      />
+
+      <div id="errorBox" class="error-box" hidden></div>
+    </aside>
+
+    <main class="hr-content">
+      <div id="emptyState">
+        <EmptyState
+          icon="❤️"
+          title="Heart Rate Zone Calculator"
+          description="Enter your age to see your max heart rate and training zones."
+          tips={["Max Heart Rate", "5 Training Zones"]}
+        />
+      </div>
+
+      <div id="resultsContainer" hidden>
+        <ResultsGrid columns={3}>
+          <ResultCard id="maxHrResult" title="Max Heart Rate" icon={HeartPulse} accent="primary" size="lg" />
+          <ResultCard id="warmUpResult" title="Warm Up (50-60%)" icon={Gauge} />
+          <ResultCard id="fatBurnResult" title="Fat Burn (60-70%)" icon={Flame} accent="success" />
+          <ResultCard id="cardioResult" title="Cardio (70-80%)" icon={Activity} />
+          <ResultCard id="hardcoreResult" title="Hardcore (80-90%)" icon={Zap} />
+          <ResultCard id="peakResult" title="Peak (90-100%)" icon={HeartPulse} accent="neutral" />
+        </ResultsGrid>
+
+        <section class="calculator-info">
+          <h2>About this Calculator</h2>
+          <p>
+            Estimates your maximum heart rate using the standard 220-minus-age formula, then
+            breaks it into five training zones from warm up to peak effort.
+          </p>
+        </section>
+      </div>
+    </main>
+
   </div>
+</section>
 
-  <div class="calculator-output">
-    <EmptyState id="emptyState" title="Enter your age to see heart rate zones" description="Your training zones based on max heart rate will appear here." />
+<script>
+  import "../../scripts/heartrate-calculator";
+</script>
 
-    <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="maxHrResult" title="Max Heart Rate" icon={HeartPulse} accent="primary" size="lg" />
-      <ResultCard id="warmUpResult" title="Warm Up (50-60%)" icon={Gauge} accent="neutral" />
-      <ResultCard id="fatBurnResult" title="Fat Burn (60-70%)" icon={Flame} accent="success" />
-      <ResultCard id="cardioResult" title="Cardio (70-80%)" icon={Activity} accent="neutral" />
-      <ResultCard id="hardcoreResult" title="Hardcore (80-90%)" icon={Zap} accent="neutral" />
-      <ResultCard id="peakResult" title="Peak (90-100%)" icon={HeartPulse} accent="neutral" />
-    </ResultsGrid>
-  </div>
-</div>
-
-<script src="../../scripts/heartrate-calculator.ts"></script>
+<style>
+.hr-calculator{ width:100%; }
+.hr-layout{ display:grid; grid-template-columns:340px minmax(0,1fr); gap:32px; align-items:start; }
+.hr-sidebar{ position:sticky; top:24px; display:flex; flex-direction:column; gap:20px; }
+.hr-content{ display:flex; flex-direction:column; gap:28px; min-width:0; }
+.calculator-info{ padding:24px; border:1px solid var(--border-subtle); border-radius:18px; background:var(--bg-card); }
+.calculator-info h2{ margin:0 0 12px; font-size:1.15rem; font-weight:700; color:var(--text-primary); }
+.calculator-info p{ margin:0; line-height:1.8; font-size:.95rem; color:var(--text-secondary); }
+.error-box{ display:flex; align-items:center; padding:14px 16px; border-radius:14px; background:#FEF2F2; border:1px solid #FCA5A5; color:#B91C1C; font-size:.92rem; font-weight:600; }
+:global(.dark) .error-box{ background:#2A1111; border-color:#7F1D1D; color:#FECACA; }
+@media(max-width:1024px){ .hr-layout{ grid-template-columns:1fr; } .hr-sidebar{ position:static; } }
+@media(max-width:768px){ .hr-layout{ gap:24px; } .hr-content{ gap:20px; } }
+@media(max-width:640px){ .calculator-info{ padding:18px; } }
+</style>

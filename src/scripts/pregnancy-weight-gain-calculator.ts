@@ -19,6 +19,10 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const byWeekLabel = (window as any).pwgByWeekLabel || "by week";
+const fillAllMsg = (window as any).pwgFillAllMsg || "Please fill all required fields.";
+
 let lastInput: PregnancyWeightGainInput | null = null;
 
 function showError(msg: string) {
@@ -42,23 +46,23 @@ function calculate() {
   };
 
   if (!input.prePregnancyWeightKg || !input.heightCm || !input.currentWeekOfPregnancy) {
-    showError("Please fill all required fields.");
+    showError(fillAllMsg);
     return;
   }
 
-  const err = validatePregnancyWeightGainInput(input);
+  const err = validatePregnancyWeightGainInput(input, lang);
   if (err) {
     showError(err);
     return;
   }
 
-  const result = calculatePregnancyWeightGain(input);
+  const result = calculatePregnancyWeightGain(input, lang);
 
   setValue("bmiResult", result.prePregnancyBMI);
   setValue("totalGainResult", `${result.recommendedTotalGainMinKg} - ${result.recommendedTotalGainMaxKg} kg`);
   setValue("gainToDateResult", `${result.recommendedGainToDateMinKg} - ${result.recommendedGainToDateMaxKg} kg`);
   setSubtitle("bmiResult", result.bmiCategory);
-  setSubtitle("gainToDateResult", `by week ${input.currentWeekOfPregnancy}`);
+  setSubtitle("gainToDateResult", `${byWeekLabel} ${input.currentWeekOfPregnancy}`);
 
   lastInput = input;
 
@@ -81,8 +85,8 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput) return;
-  const result = calculatePregnancyWeightGain(lastInput);
-  copyToClipboard(copyPregnancyWeightGainSummary(lastInput, result));
+  const result = calculatePregnancyWeightGain(lastInput, lang);
+  copyToClipboard(copyPregnancyWeightGainSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

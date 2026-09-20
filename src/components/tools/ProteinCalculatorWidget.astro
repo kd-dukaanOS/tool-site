@@ -5,37 +5,47 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Beef, TrendingUp, Flame } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { weightLabel:"Weight (kg)", goalLabel:"Goal", sedentary:"Sedentary / Low activity", maintenance:"General Maintenance", muscleGain:"Muscle Gain", fatLoss:"Fat Loss", athlete:"Athlete / High Performance", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter your weight to calculate protein needs", emptyDesc:"Your daily protein target will appear here.", recommended:"Recommended Protein", dailyRange:"Daily Range", calories:"Calories from Protein" },
+  es: { weightLabel:"Peso (kg)", goalLabel:"Objetivo", sedentary:"Sedentario / Baja actividad", maintenance:"Mantenimiento General", muscleGain:"Ganancia Muscular", fatLoss:"Pérdida de Grasa", athlete:"Atleta / Alto Rendimiento", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa tu peso para calcular tus necesidades de proteína", emptyDesc:"Tu objetivo diario de proteína aparecerá aquí.", recommended:"Proteína Recomendada", dailyRange:"Rango Diario", calories:"Calorías de la Proteína" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="weightKg" label="Weight (kg)" type="number" placeholder="e.g. 70" />
+    <CalculatorField id="weightKg" label={copy.weightLabel} type="number" placeholder="e.g. 70" />
 
     <div class="field-group">
-      <label for="goal">Goal</label>
+      <label for="goal">{copy.goalLabel}</label>
       <select id="goal" class="calculator-input">
-        <option value="sedentary">Sedentary / Low activity</option>
-        <option value="maintenance" selected>General Maintenance</option>
-        <option value="muscleGain">Muscle Gain</option>
-        <option value="fatLoss">Fat Loss</option>
-        <option value="athlete">Athlete / High Performance</option>
+        <option value="sedentary">{copy.sedentary}</option>
+        <option value="maintenance" selected>{copy.maintenance}</option>
+        <option value="muscleGain">{copy.muscleGain}</option>
+        <option value="fatLoss">{copy.fatLoss}</option>
+        <option value="athlete">{copy.athlete}</option>
       </select>
     </div>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
-    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} />
+    <ActionButtons calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showDownload={false} showShare={false} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
   </div>
 
   <div class="calculator-output">
-    <EmptyState id="emptyState" title="Enter your weight to calculate protein needs" description="Your daily protein target will appear here." />
+    <EmptyState id="emptyState" title={copy.emptyTitle} description={copy.emptyDesc} />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="proteinResult" title="Recommended Protein" icon={Beef} accent="primary" size="lg" />
-      <ResultCard id="rangeResult" title="Daily Range" icon={TrendingUp} accent="neutral" />
-      <ResultCard id="caloriesResult" title="Calories from Protein" icon={Flame} accent="neutral" />
+      <ResultCard id="proteinResult" title={copy.recommended} icon={Beef} accent="primary" size="lg" />
+      <ResultCard id="rangeResult" title={copy.dailyRange} icon={TrendingUp} accent="neutral" />
+      <ResultCard id="caloriesResult" title={copy.calories} icon={Flame} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/protein-calculator.ts"></script>

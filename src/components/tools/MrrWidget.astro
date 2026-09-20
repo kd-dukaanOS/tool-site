@@ -5,43 +5,53 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Repeat, TrendingUp, CalendarClock, TrendingDown } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { startGroup:"Starting Point", existingMrr:"Existing MRR (start of month)", moveGroup:"Movement This Month", newCustomerMrr:"New Customer MRR", expansionMrr:"Expansion MRR (upgrades)", churnedMrr:"Churned MRR (lost customers)", contractionMrr:"Contraction MRR (downgrades)", emptyTitle:"MRR Calculator", emptyDesc:"Track your Monthly Recurring Revenue movement and projected ARR.", tip1:"Total MRR", tip2:"Net New MRR", tip3:"Projected ARR", totalMrr:"Total MRR", netNewMrr:"Net New MRR", arr:"Projected ARR", churnedContraction:"Churned + Contraction", growing:"Growing", shrinking:"Shrinking", aboutTitle:"About this Calculator", aboutText:"Breaks down your Monthly Recurring Revenue movement — new, expansion, churned, and contraction MRR — to find your net new MRR, updated total MRR, and projected Annual Recurring Revenue." },
+  es: { startGroup:"Punto de Partida", existingMrr:"MRR Existente (inicio de mes)", moveGroup:"Movimiento de Este Mes", newCustomerMrr:"MRR de Nuevos Clientes", expansionMrr:"MRR de Expansión (mejoras)", churnedMrr:"MRR Perdido (clientes cancelados)", contractionMrr:"MRR de Contracción (bajas de plan)", emptyTitle:"Calculadora de MRR", emptyDesc:"Rastrea el movimiento de tus Ingresos Recurrentes Mensuales y el ARR proyectado.", tip1:"MRR Total", tip2:"MRR Neto Nuevo", tip3:"ARR Proyectado", totalMrr:"MRR Total", netNewMrr:"MRR Neto Nuevo", arr:"ARR Proyectado", churnedContraction:"Perdido + Contracción", growing:"Creciendo", shrinking:"Disminuyendo", aboutTitle:"Acerca de esta Calculadora", aboutText:"Desglosa el movimiento de tus Ingresos Recurrentes Mensuales — nuevo, expansión, perdido y contracción — para encontrar tu MRR neto nuevo, el MRR total actualizado y los Ingresos Recurrentes Anuales proyectados." },
+}[lang];
 ---
 <section class="mrr-calculator">
   <div class="mrr-layout">
     <aside class="mrr-sidebar">
       <div class="mrr-group">
-        <h3>Starting Point</h3>
-        <CalculatorField id="existingMrr" label="Existing MRR (start of month)" type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <h3>{copy.startGroup}</h3>
+        <CalculatorField id="existingMrr" label={copy.existingMrr} type="number" placeholder="e.g. 50000" min="0" step="1" />
       </div>
       <div class="mrr-group">
-        <h3>Movement This Month</h3>
-        <CalculatorField id="newCustomerMrr" label="New Customer MRR" type="number" placeholder="e.g. 8000" min="0" step="1" />
-        <CalculatorField id="expansionMrr" label="Expansion MRR (upgrades)" type="number" placeholder="e.g. 3000" min="0" step="1" />
-        <CalculatorField id="churnedMrr" label="Churned MRR (lost customers)" type="number" placeholder="e.g. 2000" min="0" step="1" />
-        <CalculatorField id="contractionMrr" label="Contraction MRR (downgrades)" type="number" placeholder="e.g. 1000" min="0" step="1" />
+        <h3>{copy.moveGroup}</h3>
+        <CalculatorField id="newCustomerMrr" label={copy.newCustomerMrr} type="number" placeholder="e.g. 8000" min="0" step="1" />
+        <CalculatorField id="expansionMrr" label={copy.expansionMrr} type="number" placeholder="e.g. 3000" min="0" step="1" />
+        <CalculatorField id="churnedMrr" label={copy.churnedMrr} type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <CalculatorField id="contractionMrr" label={copy.contractionMrr} type="number" placeholder="e.g. 1000" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mrr-content">
       <div id="emptyState">
-        <EmptyState icon="🔁" title="MRR Calculator" description="Track your Monthly Recurring Revenue movement and projected ARR." tips={["Total MRR", "Net New MRR", "Projected ARR"]} />
+        <EmptyState icon="🔁" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalMrrResult" title="Total MRR" icon={Repeat} accent="success" subtitle=" " />
-          <ResultCard id="netNewMrrResult" title="Net New MRR" icon={TrendingUp} />
-          <ResultCard id="arrResult" title="Projected ARR" icon={CalendarClock} />
-          <ResultCard id="churnedMrrResult" title="Churned + Contraction" icon={TrendingDown} />
+          <ResultCard id="totalMrrResult" title={copy.totalMrr} icon={Repeat} accent="success" subtitle=" " />
+          <ResultCard id="netNewMrrResult" title={copy.netNewMrr} icon={TrendingUp} />
+          <ResultCard id="arrResult" title={copy.arr} icon={CalendarClock} />
+          <ResultCard id="churnedMrrResult" title={copy.churnedContraction} icon={TrendingDown} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Breaks down your Monthly Recurring Revenue movement — new, expansion, churned, and contraction MRR — to find your net new MRR, updated total MRR, and projected Annual Recurring Revenue.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/mrr-calculator";
 </script>

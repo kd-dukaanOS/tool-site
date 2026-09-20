@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -39,7 +41,7 @@ function calculate() {
   const annualSalary = val("annualSalary");
   const plan = sel("plan");
 
-  const validationError = validateUkStudentLoanInputs(annualSalary);
+  const validationError = validateUkStudentLoanInputs(annualSalary, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -51,9 +53,18 @@ function calculate() {
   setValue("annualRepaymentResult", fmtCurrency(result.annualRepayment));
   setValue("thresholdResult", fmtCurrency(result.threshold));
   setValue("repaymentRateResult", `${result.repaymentRate}%`);
-  setSubtitle("monthlyRepaymentResult", "Deducted via payroll");
+  setSubtitle("monthlyRepaymentResult", lang === "es" ? "Deducido vía nómina" : "Deducted via payroll");
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Pago de Préstamo Estudiantil del Reino Unido
+
+Plan: ${plan}
+Salario Anual: ${fmtCurrency(annualSalary)}
+Umbral de Pago: ${fmtCurrency(result.threshold)}
+Tasa de Pago: ${result.repaymentRate}%
+Pago Mensual: ${fmtCurrency(result.monthlyRepayment)}
+Pago Anual: ${fmtCurrency(result.annualRepayment)}
+`.trim() : `
 UK Student Loan Repayment Summary
 
 Plan: ${plan}

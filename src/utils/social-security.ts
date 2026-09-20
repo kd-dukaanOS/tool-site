@@ -91,9 +91,18 @@ export function calculateSocialSecurity(
   };
 }
 
-export function validateSSInputs(birthYear: number, monthlyAIME: number, plannedClaimingAge: number): string | null {
-  if (birthYear < 1930 || birthYear > 2010) return "Enter a valid birth year.";
-  if (monthlyAIME <= 0) return "Average indexed monthly earnings must be greater than zero.";
-  if (plannedClaimingAge < 62 || plannedClaimingAge > 70) return "Claiming age must be between 62 and 70.";
+export function validateSSInputs(birthYear: number, monthlyAIME: number, plannedClaimingAge: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    birthYear: "Ingresa un año de nacimiento válido.",
+    aime: "El promedio de ingresos mensuales indexados debe ser mayor a cero.",
+    claimingAge: "La edad de reclamo debe estar entre 62 y 70.",
+  } : {
+    birthYear: "Enter a valid birth year.",
+    aime: "Average indexed monthly earnings must be greater than zero.",
+    claimingAge: "Claiming age must be between 62 and 70.",
+  };
+  if (birthYear < 1930 || birthYear > 2010) return msg.birthYear;
+  if (monthlyAIME <= 0) return msg.aime;
+  if (plannedClaimingAge < 62 || plannedClaimingAge > 70) return msg.claimingAge;
   return null;
 }

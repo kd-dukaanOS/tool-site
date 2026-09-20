@@ -13,9 +13,9 @@ export interface SalesTaxResult {
   grossAmount: number;
 }
 
-export function validateSalesTaxInput(i: SalesTaxInput): string | null {
-  if (i.amount <= 0) return "Enter a valid amount.";
-  if (i.taxRate < 0 || i.taxRate > 50) return "Enter a realistic tax rate.";
+export function validateSalesTaxInput(i: SalesTaxInput, lang: "en" | "es" = "en"): string | null {
+  if (i.amount <= 0) return lang === "es" ? "Ingresa un monto válido." : "Enter a valid amount.";
+  if (i.taxRate < 0 || i.taxRate > 50) return lang === "es" ? "Ingresa una tasa de impuesto realista." : "Enter a realistic tax rate.";
   return null;
 }
 
@@ -44,8 +44,21 @@ export function calculateSalesTax(i: SalesTaxInput): SalesTaxResult {
 export function copySalesTaxSummary(
   i: SalesTaxInput,
   r: SalesTaxResult,
-  currency: CurrencyCode = getSavedCurrency()
+  currency: CurrencyCode = getSavedCurrency(),
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Impuesto de Venta
+
+Monto: ${formatCurrency(i.amount, currency)} (${i.isTaxIncluded ? "impuesto incluido" : "impuesto excluido"})
+Tasa de Impuesto: ${i.taxRate}%
+
+Monto Neto: ${formatCurrency(r.netAmount, currency)}
+Monto del Impuesto: ${formatCurrency(r.taxAmount, currency)}
+Monto Bruto: ${formatCurrency(r.grossAmount, currency)}
+`.trim();
+  }
   return `
 Sales Tax Summary
 

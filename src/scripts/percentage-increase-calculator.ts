@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: PercentageIncreaseInput | null = null;
 
 function showError(msg: string) {
@@ -38,11 +40,11 @@ function calculate() {
   };
 
   if (!input.originalValue || input.newValue === undefined || newInput.value === "") {
-    showError("Please fill all fields.");
+    showError(lang === "es" ? "Por favor completa todos los campos." : "Please fill all fields.");
     return;
   }
 
-  const err = validatePercentageIncreaseInput(input);
+  const err = validatePercentageIncreaseInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -55,7 +57,7 @@ function calculate() {
     "percentResult",
     `${result.percentageIncrease >= 0 ? "+" : ""}${result.percentageIncrease}%`
   );
-  setSubtitle("percentResult", result.percentageIncrease >= 0 ? "increase" : "decrease");
+  setSubtitle("percentResult", result.percentageIncrease >= 0 ? (lang === "es" ? "aumento" : "increase") : (lang === "es" ? "disminución" : "decrease"));
 
   lastInput = input;
 
@@ -77,7 +79,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculatePercentageIncrease(lastInput);
-  copyToClipboard(copyPercentageIncreaseSummary(lastInput, result));
+  copyToClipboard(copyPercentageIncreaseSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

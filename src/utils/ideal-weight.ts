@@ -9,8 +9,10 @@ export interface IdealWeightResult {
   healthyRangeMaxKg: number;
 }
 
-export function validateIdealWeightInput(i: IdealWeightInput): string | null {
-  if (i.heightCm < 100 || i.heightCm > 250) return "Enter a realistic height (100-250 cm).";
+export function validateIdealWeightInput(i: IdealWeightInput, lang: "en" | "es" = "en"): string | null {
+  if (i.heightCm < 100 || i.heightCm > 250) {
+    return lang === "es" ? "Ingresa una altura realista (100-250 cm)." : "Enter a realistic height (100-250 cm).";
+  }
   return null;
 }
 
@@ -34,7 +36,19 @@ export function calculateIdealWeight(i: IdealWeightInput): IdealWeightResult {
   };
 }
 
-export function copyIdealWeightSummary(i: IdealWeightInput, r: IdealWeightResult): string {
+export function copyIdealWeightSummary(i: IdealWeightInput, r: IdealWeightResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    const genderEs = i.gender === "male" ? "Masculino" : "Femenino";
+    return `
+Resumen de Peso Ideal
+
+Género: ${genderEs}
+Altura: ${i.heightCm} cm
+
+Peso Ideal: ${r.idealWeightKg} kg
+Rango de Peso Saludable: ${r.healthyRangeMinKg} kg - ${r.healthyRangeMaxKg} kg
+`.trim();
+  }
   return `
 Ideal Weight Summary
 

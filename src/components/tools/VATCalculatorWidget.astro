@@ -6,16 +6,23 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { DollarSign, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { amount:"Amount", amountPh:"e.g. 1000", vatRate:"VAT Rate (%)", vatRatePh:"e.g. 20", included:"Amount already includes VAT", emptyTitle:"Enter amount to calculate VAT", emptyDesc:"Net, VAT, and gross amounts will appear here.", net:"Net Amount", vat:"VAT Amount", gross:"Gross Amount" },
+  es: { amount:"Monto", amountPh:"ej. 1000", vatRate:"Tasa de IVA (%)", vatRatePh:"ej. 20", included:"El monto ya incluye IVA", emptyTitle:"Ingresa un monto para calcular el IVA", emptyDesc:"Los montos neto, IVA y bruto aparecerán aquí.", net:"Monto Neto", vat:"Monto IVA", gross:"Monto Bruto" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CurrencySelector />
-    <CalculatorField id="amount" label="Amount" type="number" placeholder="e.g. 1000" />    <CalculatorField id="vatRate" label="VAT Rate (%)" type="number" placeholder="e.g. 20" />
+    <CalculatorField id="amount" label={copy.amount} type="number" placeholder={copy.amountPh} />    <CalculatorField id="vatRate" label={copy.vatRate} type="number" placeholder={copy.vatRatePh} />
 
     <label class="checkbox-field">
       <input type="checkbox" id="isVatIncluded" />
-      <span>Amount already includes VAT</span>
+      <span>{copy.included}</span>
     </label>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -44,4 +51,10 @@ import { DollarSign, Receipt } from "@lucide/astro";
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/vat-calculator.ts"></script>

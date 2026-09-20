@@ -10,9 +10,9 @@ export interface ROIResult {
   annualizedROI: number | null;
 }
 
-export function validateROIInput(i: ROIInput): string | null {
-  if (i.investedAmount <= 0) return "Enter a valid invested amount.";
-  if (i.currentValue <= 0) return "Enter a valid current value.";
+export function validateROIInput(i: ROIInput, lang: "en" | "es" = "en"): string | null {
+  if (i.investedAmount <= 0) return lang === "es" ? "Ingresa un monto invertido válido." : "Enter a valid invested amount.";
+  if (i.currentValue <= 0) return lang === "es" ? "Ingresa un valor actual válido." : "Enter a valid current value.";
   return null;
 }
 
@@ -34,7 +34,20 @@ export function calculateROI(i: ROIInput): ROIResult {
 
 import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyROISummary(i: ROIInput, r: ROIResult, currency: CurrencyCode = "INR"): string {
+export function copyROISummary(i: ROIInput, r: ROIResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Cálculo de ROI
+
+Monto Invertido: ${formatCurrency(i.investedAmount, currency)}
+Valor Actual: ${formatCurrency(i.currentValue, currency)}
+${i.years ? `Período de Tiempo: ${i.years} años` : ""}
+
+Ganancia Neta: ${formatCurrency(r.netProfit, currency)}
+ROI: ${r.roiPercent}%
+${r.annualizedROI !== null ? `ROI Anualizado: ${r.annualizedROI}%` : ""}
+`.trim();
+  }
   return `
 ROI Calculation Summary
 

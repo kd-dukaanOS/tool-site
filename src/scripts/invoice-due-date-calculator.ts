@@ -18,6 +18,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: InvoiceDueDateInput | null = null;
 
 function showError(msg: string) {
@@ -34,7 +36,7 @@ function calculate() {
   clearError();
 
   if (!invoiceDateInput.value) {
-    showError("Please select an invoice date.");
+    showError(lang === "es" ? "Por favor selecciona una fecha de factura." : "Please select an invoice date.");
     return;
   }
 
@@ -44,11 +46,11 @@ function calculate() {
   };
 
   if (!input.paymentTermsDays) {
-    showError("Please enter payment terms.");
+    showError(lang === "es" ? "Por favor ingresa el plazo de pago." : "Please enter payment terms.");
     return;
   }
 
-  const err = validateInvoiceDueDateInput(input);
+  const err = validateInvoiceDueDateInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -59,11 +61,11 @@ function calculate() {
   setValue("dueDateResult", formatDueDate(result.dueDate));
 
   if (result.isOverdue) {
-    setValue("statusResult", "Overdue");
-    setSubtitle("statusResult", `${Math.abs(result.daysRemaining)} days past due`);
+    setValue("statusResult", lang === "es" ? "Vencida" : "Overdue");
+    setSubtitle("statusResult", lang === "es" ? `${Math.abs(result.daysRemaining)} días de retraso` : `${Math.abs(result.daysRemaining)} days past due`);
   } else {
-    setValue("statusResult", `${result.daysRemaining} days left`);
-    setSubtitle("statusResult", result.status === "due-soon" ? "due soon" : "on track");
+    setValue("statusResult", lang === "es" ? `${result.daysRemaining} días restantes` : `${result.daysRemaining} days left`);
+    setSubtitle("statusResult", result.status === "due-soon" ? (lang === "es" ? "vence pronto" : "due soon") : (lang === "es" ? "en curso" : "on track"));
   }
 
   lastInput = input;
@@ -86,7 +88,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateInvoiceDueDate(lastInput);
-  copyToClipboard(copyInvoiceDueDateSummary(lastInput, result));
+  copyToClipboard(copyInvoiceDueDateSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -5,50 +5,60 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, DollarSign, Calendar, TrendingDown } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { savingsGroup:"Savings & Withdrawal", currentSavings:"Current Retirement Savings", withdrawalRate:"Withdrawal Rate (%)", birthYear:"Birth Year", otherIncomeGroup:"Other Income", socialSecurity:"Annual Social Security", pension:"Annual Pension", otherIncome:"Other Annual Income", assumptionsGroup:"Assumptions", expectedReturn:"Expected Return (%/yr)", inflationRate:"Inflation Rate (%/yr)", retirementYears:"Retirement Horizon (years)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Retirement Income Calculator", emptyDesc:"Estimate your sustainable retirement income and portfolio longevity.", tip1:"Monthly Income", tip2:"Annual Income", tip3:"Portfolio Outlook", monthlyIncome:"Monthly Retirement Income", annualIncome:"Annual Retirement Income", rmdBegin:"RMDs Begin", portfolioOutlook:"Portfolio Outlook", aboutTitle:"About this Calculator", aboutText:"Estimates your sustainable monthly and annual retirement income by combining a safe withdrawal rate from savings with Social Security, pension, and other income, then simulates portfolio longevity." },
+  es: { savingsGroup:"Ahorros y Retiro", currentSavings:"Ahorros Actuales para el Retiro", withdrawalRate:"Tasa de Retiro (%)", birthYear:"Año de Nacimiento", otherIncomeGroup:"Otros Ingresos", socialSecurity:"Seguro Social Anual", pension:"Pensión Anual", otherIncome:"Otros Ingresos Anuales", assumptionsGroup:"Supuestos", expectedReturn:"Retorno Esperado (%/año)", inflationRate:"Tasa de Inflación (%/año)", retirementYears:"Horizonte de Jubilación (años)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Ingreso de Jubilación", emptyDesc:"Estima tu ingreso de jubilación sostenible y la duración de tu portafolio.", tip1:"Ingreso Mensual", tip2:"Ingreso Anual", tip3:"Panorama del Portafolio", monthlyIncome:"Ingreso Mensual de Jubilación", annualIncome:"Ingreso Anual de Jubilación", rmdBegin:"Inicio de RMD", portfolioOutlook:"Panorama del Portafolio", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu ingreso mensual y anual sostenible de jubilación combinando una tasa de retiro segura de tus ahorros con el Seguro Social, pensión y otros ingresos, luego simula la duración del portafolio." },
+}[lang];
 ---
 <section class="ric-calculator">
   <div class="ric-layout">
     <aside class="ric-sidebar">
       <div class="ric-group">
-        <h3>Savings & Withdrawal</h3>
-        <CalculatorField id="currentSavings" label="Current Retirement Savings" type="number" placeholder="e.g. 1000000" min="0" step="1" />
-        <CalculatorField id="withdrawalRate" label="Withdrawal Rate (%)" type="number" placeholder="e.g. 4" min="0" step="0.1" />
-        <CalculatorField id="birthYear" label="Birth Year" type="number" placeholder="e.g. 1965" min="1930" step="1" />
+        <h3>{copy.savingsGroup}</h3>
+        <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 1000000" min="0" step="1" />
+        <CalculatorField id="withdrawalRate" label={copy.withdrawalRate} type="number" placeholder="e.g. 4" min="0" step="0.1" />
+        <CalculatorField id="birthYear" label={copy.birthYear} type="number" placeholder="e.g. 1965" min="1930" step="1" />
       </div>
       <div class="ric-group">
-        <h3>Other Income</h3>
-        <CalculatorField id="annualSocialSecurity" label="Annual Social Security" type="number" placeholder="e.g. 24000" min="0" step="1" />
-        <CalculatorField id="annualPension" label="Annual Pension" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="otherAnnualIncome" label="Other Annual Income" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.otherIncomeGroup}</h3>
+        <CalculatorField id="annualSocialSecurity" label={copy.socialSecurity} type="number" placeholder="e.g. 24000" min="0" step="1" />
+        <CalculatorField id="annualPension" label={copy.pension} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="otherAnnualIncome" label={copy.otherIncome} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <div class="ric-group">
-        <h3>Assumptions</h3>
-        <CalculatorField id="expectedAnnualReturn" label="Expected Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
-        <CalculatorField id="inflationRate" label="Inflation Rate (%/yr)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="retirementYears" label="Retirement Horizon (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+        <h3>{copy.assumptionsGroup}</h3>
+        <CalculatorField id="expectedAnnualReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <CalculatorField id="inflationRate" label={copy.inflationRate} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="retirementYears" label={copy.retirementYears} type="number" placeholder="e.g. 30" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ric-content">
       <div id="emptyState">
-        <EmptyState icon="🏖️" title="Retirement Income Calculator" description="Estimate your sustainable retirement income and portfolio longevity." tips={["Monthly Income", "Annual Income", "Portfolio Outlook"]} />
+        <EmptyState icon="🏖️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlyIncomeResult" title="Monthly Retirement Income" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="totalAnnualIncomeResult" title="Annual Retirement Income" icon={DollarSign} />
-          <ResultCard id="rmdAgeResult" title="RMDs Begin" icon={Calendar} />
-          <ResultCard id="depletionResult" title="Portfolio Outlook" icon={TrendingDown} subtitle=" " />
+          <ResultCard id="monthlyIncomeResult" title={copy.monthlyIncome} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="totalAnnualIncomeResult" title={copy.annualIncome} icon={DollarSign} />
+          <ResultCard id="rmdAgeResult" title={copy.rmdBegin} icon={Calendar} />
+          <ResultCard id="depletionResult" title={copy.portfolioOutlook} icon={TrendingDown} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your sustainable monthly and annual retirement income by combining a safe withdrawal rate from savings with Social Security, pension, and other income, then simulates portfolio longevity.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/retirement-income-calculator";
 </script>

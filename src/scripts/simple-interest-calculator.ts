@@ -21,6 +21,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: SimpleInterestInput | null = null;
 let lastResult: SimpleInterestResult | null = null;
 
@@ -43,7 +45,7 @@ function calculate() {
     years: parseFloat(yearsInput.value),
   };
 
-  const validationError = validateSimpleInterestInput(input);
+  const validationError = validateSimpleInterestInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -80,7 +82,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copySimpleInterestSummary(lastInput, lastResult));
+  copyToClipboard(copySimpleInterestSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

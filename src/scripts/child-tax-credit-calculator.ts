@@ -33,26 +33,6 @@ Máximo Reembolsable (ACTC Adicional): ${fmtCurrency(r.refundableCap)}
 `.trim() },
 }[lang];
 
-const lang = (window as any).calcLang === "es" ? "es" : "en";
-const t = {
-  en: { reduced:"Reduced by income phase-out", full:"Full credit amount", maxActc:"Max Additional CTC (refundable)", summary:(r:any)=>`
-Child Tax Credit Summary (2026)
-
-Final Credit Amount: ${fmtCurrency(r.finalCredit)}
-Base Credit (before phase-out): ${fmtCurrency(r.totalBaseCredit)}
-Phase-Out Reduction: ${fmtCurrency(r.phaseOutReduction)}
-Max Refundable (Additional CTC): ${fmtCurrency(r.refundableCap)}
-`.trim() },
-  es: { reduced:"Reducido por límite de ingresos", full:"Monto de crédito completo", maxActc:"Máximo ACTC Adicional (reembolsable)", summary:(r:any)=>`
-Resumen de Crédito Tributario por Hijos (2026)
-
-Monto de Crédito Final: ${fmtCurrency(r.finalCredit)}
-Crédito Base (antes de reducción): ${fmtCurrency(r.totalBaseCredit)}
-Reducción por Ingresos: ${fmtCurrency(r.phaseOutReduction)}
-Máximo Reembolsable (ACTC Adicional): ${fmtCurrency(r.refundableCap)}
-`.trim() },
-}[lang];
-
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {

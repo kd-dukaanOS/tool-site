@@ -20,33 +20,22 @@ export interface HomeAffordabilityResult {
   totalMonthlyPayment: number;
 }
 
-export function validateHomeAffordabilityInput(input: HomeAffordabilityInput): string | null {
+export function validateHomeAffordabilityInput(input: HomeAffordabilityInput, lang: "en" | "es" = "en"): string | null {
   const { annualIncome, monthlyDebts, downPayment, interestRate, loanTermYears, propertyTaxRate, annualInsurance, maxDTI } = input;
+  const msg = lang === "es" ? {
+    income:"Por favor ingresa un ingreso anual válido mayor a 0.", debts:"Por favor ingresa un monto de deudas mensuales válido (0 o más).", down:"Por favor ingresa un pago inicial válido (0 o más).", rate:"Por favor ingresa una tasa de interés válida (0 o más).", term:"Por favor ingresa un plazo de préstamo válido mayor a 0.", tax:"Por favor ingresa una tasa de impuesto predial válida (0 o más).", ins:"Por favor ingresa un monto de seguro anual válido (0 o más).", dti:"Por favor ingresa una relación deuda-ingreso máxima válida (1–100).",
+  } : {
+    income:"Please enter a valid annual income greater than 0.", debts:"Please enter a valid monthly debts amount (0 or more).", down:"Please enter a valid down payment (0 or more).", rate:"Please enter a valid interest rate (0 or more).", term:"Please enter a valid loan term greater than 0.", tax:"Please enter a valid property tax rate (0 or more).", ins:"Please enter a valid annual insurance amount (0 or more).", dti:"Please enter a valid maximum debt-to-income ratio (1–100).",
+  };
 
-  if (!annualIncome || Number.isNaN(annualIncome) || annualIncome <= 0) {
-    return "Please enter a valid annual income greater than 0.";
-  }
-  if (Number.isNaN(monthlyDebts) || monthlyDebts < 0) {
-    return "Please enter a valid monthly debts amount (0 or more).";
-  }
-  if (Number.isNaN(downPayment) || downPayment < 0) {
-    return "Please enter a valid down payment (0 or more).";
-  }
-  if (Number.isNaN(interestRate) || interestRate < 0) {
-    return "Please enter a valid interest rate (0 or more).";
-  }
-  if (!loanTermYears || loanTermYears <= 0) {
-    return "Please enter a valid loan term greater than 0.";
-  }
-  if (Number.isNaN(propertyTaxRate) || propertyTaxRate < 0) {
-    return "Please enter a valid property tax rate (0 or more).";
-  }
-  if (Number.isNaN(annualInsurance) || annualInsurance < 0) {
-    return "Please enter a valid annual insurance amount (0 or more).";
-  }
-  if (!maxDTI || maxDTI <= 0 || maxDTI > 100) {
-    return "Please enter a valid maximum debt-to-income ratio (1–100).";
-  }
+  if (!annualIncome || Number.isNaN(annualIncome) || annualIncome <= 0) return msg.income;
+  if (Number.isNaN(monthlyDebts) || monthlyDebts < 0) return msg.debts;
+  if (Number.isNaN(downPayment) || downPayment < 0) return msg.down;
+  if (Number.isNaN(interestRate) || interestRate < 0) return msg.rate;
+  if (!loanTermYears || loanTermYears <= 0) return msg.term;
+  if (Number.isNaN(propertyTaxRate) || propertyTaxRate < 0) return msg.tax;
+  if (Number.isNaN(annualInsurance) || annualInsurance < 0) return msg.ins;
+  if (!maxDTI || maxDTI <= 0 || maxDTI > 100) return msg.dti;
   return null;
 }
 
@@ -80,11 +69,32 @@ export function calculateHomeAffordability(input: HomeAffordabilityInput): HomeA
   return { maxHomePrice, maxLoanAmount, monthlyPI, monthlyTax, monthlyInsurance, totalMonthlyPayment };
 }
 
-export function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
-}
+export { formatCurrency } from "./currency";
 
-export function copyHomeAffordabilitySummary(input: HomeAffordabilityInput, result: HomeAffordabilityResult): string {
+export function copyHomeAffordabilitySummary(input: HomeAffordabilityInput, result: HomeAffordabilityResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Asequibilidad de Vivienda
+
+Ingreso Anual:
+${formatCurrency(input.annualIncome)}
+
+Deudas Mensuales:
+${formatCurrency(input.monthlyDebts)}
+
+Pago Inicial:
+${formatCurrency(input.downPayment)}
+
+Precio Máximo de Vivienda:
+${formatCurrency(result.maxHomePrice)}
+
+Monto Máximo del Préstamo:
+${formatCurrency(result.maxLoanAmount)}
+
+Pago Mensual Estimado (PITI):
+${formatCurrency(result.totalMonthlyPayment)}
+`.trim();
+  }
   return `
 Home Affordability Summary
 

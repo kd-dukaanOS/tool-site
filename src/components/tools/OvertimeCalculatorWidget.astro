@@ -8,6 +8,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Wallet, Clock, TrendingUp, Zap } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { hourlyRate:"Hourly Rate ($)", hourlyRateHelp:"Your regular pay per hour.", regularHours:"Regular Hours", regularHoursHelp:"Hours worked at your regular rate.", overtimeHours:"Overtime Hours", overtimeHoursHelp:"Hours worked beyond regular hours.", overtimeMultiplier:"Overtime Multiplier", overtimeMultiplierHelp:"Common rates: 1.5x (time-and-a-half), 2x (double time).", emptyTitle:"Overtime Calculator", emptyDesc:"Find your total pay including overtime, and see your effective overtime rate.", tip1:"Total Pay", tip2:"Regular Pay", tip3:"Overtime Pay", tip4:"Overtime Rate", totalPay:"Total Pay", regularPay:"Regular Pay", overtimePay:"Overtime Pay", effectiveRate:"Overtime Rate", aboutTitle:"About this Calculator", aboutText:"Calculates your total pay including overtime, using your hourly rate, regular hours, overtime hours and overtime multiplier. All calculations run locally — no external data or paid service is required." },
+  es: { hourlyRate:"Tarifa por Hora ($)", hourlyRateHelp:"Tu pago regular por hora.", regularHours:"Horas Regulares", regularHoursHelp:"Horas trabajadas a tu tarifa regular.", overtimeHours:"Horas Extra", overtimeHoursHelp:"Horas trabajadas más allá de las horas regulares.", overtimeMultiplier:"Multiplicador de Horas Extra", overtimeMultiplierHelp:"Tarifas comunes: 1.5x (tiempo y medio), 2x (tiempo doble).", emptyTitle:"Calculadora de Horas Extra", emptyDesc:"Calcula tu pago total incluyendo horas extra, y ve tu tarifa efectiva de horas extra.", tip1:"Pago Total", tip2:"Pago Regular", tip3:"Pago de Horas Extra", tip4:"Tarifa de Horas Extra", totalPay:"Pago Total", regularPay:"Pago Regular", overtimePay:"Pago de Horas Extra", effectiveRate:"Tarifa de Horas Extra", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu pago total incluyendo horas extra, usando tu tarifa por hora, horas regulares, horas extra y multiplicador de horas extra. Todos los cálculos se ejecutan localmente — no se requiere ningún servicio externo ni de pago." },
+}[lang];
 ---
 
 <section class="ot-calculator">
@@ -16,46 +23,46 @@ import { Wallet, Clock, TrendingUp, Zap } from "@lucide/astro";
     <aside class="ot-sidebar">
       <CalculatorField
         id="hourlyRate"
-        label="Hourly Rate ($)"
+        label={copy.hourlyRate}
         type="number"
         placeholder="e.g. 20"
         required={true}
         min="0"
         step="0.01"
-        helpText="Your regular pay per hour."
+        helpText={copy.hourlyRateHelp}
       />
 
       <CalculatorField
         id="regularHours"
-        label="Regular Hours"
+        label={copy.regularHours}
         type="number"
         placeholder="e.g. 40"
         required={true}
         min="0"
         step="0.5"
-        helpText="Hours worked at your regular rate."
+        helpText={copy.regularHoursHelp}
       />
 
       <CalculatorField
         id="overtimeHours"
-        label="Overtime Hours"
+        label={copy.overtimeHours}
         type="number"
         placeholder="e.g. 5"
         required={true}
         min="0"
         step="0.5"
-        helpText="Hours worked beyond regular hours."
+        helpText={copy.overtimeHoursHelp}
       />
 
       <CalculatorField
         id="overtimeMultiplier"
-        label="Overtime Multiplier"
+        label={copy.overtimeMultiplier}
         type="number"
         placeholder="e.g. 1.5"
         required={true}
         min="1.01"
         step="0.1"
-        helpText="Common rates: 1.5x (time-and-a-half), 2x (double time)."
+        helpText={copy.overtimeMultiplierHelp}
       />
 
       <CalculatorActions
@@ -72,27 +79,23 @@ import { Wallet, Clock, TrendingUp, Zap } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="⏱️"
-          title="Overtime Calculator"
-          description="Find your total pay including overtime, and see your effective overtime rate."
-          tips={["Total Pay", "Regular Pay", "Overtime Pay", "Overtime Rate"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalPayResult" title="Total Pay" icon={Wallet} accent="success" size="lg" />
-          <ResultCard id="regularPayResult" title="Regular Pay" icon={Clock} />
-          <ResultCard id="overtimePayResult" title="Overtime Pay" icon={TrendingUp} accent="primary" />
-          <ResultCard id="effectiveRateResult" title="Overtime Rate" icon={Zap} />
+          <ResultCard id="totalPayResult" title={copy.totalPay} icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="regularPayResult" title={copy.regularPay} icon={Clock} />
+          <ResultCard id="overtimePayResult" title={copy.overtimePay} icon={TrendingUp} accent="primary" />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Zap} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your total pay including overtime, using your hourly rate, regular hours,
-            overtime hours and overtime multiplier. All calculations run locally — no external
-            data or paid service is required.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -100,6 +103,9 @@ import { Wallet, Clock, TrendingUp, Zap } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/overtime-calculator";
 </script>

@@ -16,14 +16,14 @@ export interface NPSResult {
   monthlyPension: number;
 }
 
-export function validateNPSInput(i: NPSInput): string | null {
+export function validateNPSInput(i: NPSInput, lang: "en" | "es" = "en"): string | null {
   if (i.currentAge <= 0 || i.currentAge >= i.retirementAge)
-    return "Current age must be less than retirement age.";
-  if (i.retirementAge > 75) return "Retirement age cannot exceed 75.";
-  if (i.monthlyContribution <= 0) return "Enter a valid monthly contribution.";
-  if (i.expectedReturn <= 0 || i.expectedReturn > 30) return "Enter a realistic expected return.";
-  if (i.annuityPercent < 40 || i.annuityPercent > 100) return "Annuity purchase must be 40% to 100%.";
-  if (i.annuityRate <= 0 || i.annuityRate > 15) return "Enter a realistic annuity rate.";
+    return lang === "es" ? "La edad actual debe ser menor que la edad de jubilación." : "Current age must be less than retirement age.";
+  if (i.retirementAge > 75) return lang === "es" ? "La edad de jubilación no puede exceder 75." : "Retirement age cannot exceed 75.";
+  if (i.monthlyContribution <= 0) return lang === "es" ? "Ingresa una aportación mensual válida." : "Enter a valid monthly contribution.";
+  if (i.expectedReturn <= 0 || i.expectedReturn > 30) return lang === "es" ? "Ingresa un rendimiento esperado realista." : "Enter a realistic expected return.";
+  if (i.annuityPercent < 40 || i.annuityPercent > 100) return lang === "es" ? "La compra de anualidad debe ser de 40% a 100%." : "Annuity purchase must be 40% to 100%.";
+  if (i.annuityRate <= 0 || i.annuityRate > 15) return lang === "es" ? "Ingresa una tasa de anualidad realista." : "Enter a realistic annuity rate.";
   return null;
 }
 
@@ -53,7 +53,26 @@ export function calculateNPS(i: NPSInput): NPSResult {
   };
 }
 
-export function copyNPSSummary(i: NPSInput, r: NPSResult): string {
+export function copyNPSSummary(i: NPSInput, r: NPSResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Cálculo NPS
+
+Edad Actual: ${i.currentAge}
+Edad de Jubilación: ${i.retirementAge}
+Aportación Mensual: ₹${i.monthlyContribution}
+Rendimiento Esperado: ${i.expectedReturn}%
+Compra de Anualidad: ${i.annuityPercent}%
+Tasa de Anualidad: ${i.annuityRate}%
+
+Total Invertido: ₹${r.totalInvested}
+Crecimiento Total: ₹${r.totalGrowth}
+Capital al Vencimiento: ₹${r.maturityCorpus}
+Retiro de Suma Global: ₹${r.lumpsumWithdrawal}
+Capital de Anualidad: ₹${r.annuityCorpus}
+Pensión Mensual: ₹${r.monthlyPension}
+`.trim();
+  }
   return `
 NPS Calculation Summary
 

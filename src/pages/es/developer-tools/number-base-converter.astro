@@ -1,0 +1,47 @@
+---
+// src/pages/es/developer-tools/number-base-converter.astro
+import Layout from "../../../layouts/Layout.astro";
+import NumberBaseConverterWidget from "../../../components/tools/NumberBaseConverterWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { numberBaseConverterContent } from "../../../data/calculators/es/number-base-converter.ts";
+
+const tool = tools.find((t) => t.slug === "number-base-converter")!;
+const content = numberBaseConverterContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Herramientas de Desarrollo", url: "/es/developer-tools/" },
+    { name: "Convertidor de Bases Numéricas", url: "/es/developer-tools/number-base-converter/" },
+  ]}
+  appName="Convertidor de Bases Numéricas"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/developer-tools/">Herramientas de Desarrollo</a> / Convertidor de Bases Numéricas
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["developer-tools"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Convertidor de Bases Numéricas</h1>
+        <p>Binario, octal, decimal y hexadecimal</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="number-base-converter" data-name="Convertidor de Bases Numéricas" data-url="/es/developer-tools/number-base-converter/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <NumberBaseConverterWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

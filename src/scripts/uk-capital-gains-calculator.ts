@@ -15,6 +15,12 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["totalGain", "otherTaxableIncome", "personalAllowance"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { afterExemption:"After £3,000 annual exemption", header:"UK Capital Gains Tax Summary", totalGain:"Total Gain", taxableGain:"Taxable Gain (after £3,000 exemption)", taxAtBasicRate:"Tax at 18% (basic rate band)", taxAtHigherRate:"Tax at 24% (higher rate)", totalTaxOwed:"Total Tax Owed", invalidGain:"Enter a total gain greater than zero." },
+  es: { afterExemption:"Después de la exención anual de £3,000", header:"Resumen del Impuesto sobre Ganancias de Capital del Reino Unido", totalGain:"Ganancia Total", taxableGain:"Ganancia Imponible (después de la exención de £3,000)", taxAtBasicRate:"Impuesto al 18% (tramo de tasa básica)", taxAtHigherRate:"Impuesto al 24% (tasa alta)", totalTaxOwed:"Impuesto Total Adeudado", invalidGain:"Ingresa una ganancia total mayor que cero." },
+}[lang];
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -38,7 +44,7 @@ function calculate() {
 
   const validationError = validateUkCapitalGainsInputs(totalGain);
   if (validationError) {
-    showError(validationError);
+    showError(t.invalidGain);
     return;
   }
 
@@ -48,16 +54,16 @@ function calculate() {
   setValue("taxableGainResult", fmtCurrency(result.taxableGain));
   setValue("taxAtBasicRateResult", fmtCurrency(result.taxAtBasicRate));
   setValue("taxAtHigherRateResult", fmtCurrency(result.taxAtHigherRate));
-  setSubtitle("totalTaxOwedResult", "After £3,000 annual exemption");
+  setSubtitle("totalTaxOwedResult", t.afterExemption);
 
   lastSummary = `
-UK Capital Gains Tax Summary
+${t.header}
 
-Total Gain: ${fmtCurrency(result.totalGain)}
-Taxable Gain (after £3,000 exemption): ${fmtCurrency(result.taxableGain)}
-Tax at 18% (basic rate band): ${fmtCurrency(result.taxAtBasicRate)}
-Tax at 24% (higher rate): ${fmtCurrency(result.taxAtHigherRate)}
-Total Tax Owed: ${fmtCurrency(result.totalTaxOwed)}
+${t.totalGain}: ${fmtCurrency(result.totalGain)}
+${t.taxableGain}: ${fmtCurrency(result.taxableGain)}
+${t.taxAtBasicRate}: ${fmtCurrency(result.taxAtBasicRate)}
+${t.taxAtHigherRate}: ${fmtCurrency(result.taxAtHigherRate)}
+${t.totalTaxOwed}: ${fmtCurrency(result.totalTaxOwed)}
 `.trim();
 
   emptyState.hidden = true;

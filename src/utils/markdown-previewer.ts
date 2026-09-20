@@ -45,8 +45,8 @@ export function renderMarkdown(md: string): string {
   return html;
 }
 
-export function validateMarkdownInput(md: string): string | null {
-  if (!md.trim()) return "Please enter Markdown text.";
+export function validateMarkdownInput(md: string, lang: "en" | "es" = "en"): string | null {
+  if (!md.trim()) return lang === "es" ? "Por favor ingresa texto en Markdown." : "Please enter Markdown text.";
   return null;
 }
 

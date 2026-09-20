@@ -14,6 +14,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { currentSalary: number; raisePercent: number } | null = null;
 let lastResult: ReturnType<typeof calculateRaise> | null = null;
 
@@ -34,7 +36,7 @@ function calculate() {
     raisePercent: parseFloat(raisePercentInput.value),
   };
 
-  const error = validateRaiseInput(input);
+  const error = validateRaiseInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -70,7 +72,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyRaiseSummary(lastInput, lastResult));
+  copyToClipboard(copyRaiseSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

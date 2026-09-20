@@ -4,28 +4,35 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Weight } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", valuePh:"Enter value", from:"From", to:"To", mg:"Milligram", g:"Gram", kg:"Kilogram", tonne:"Tonne", oz:"Ounce", lb:"Pound", emptyTitle:"Weight Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", valuePh:"Ingresa un valor", from:"De", to:"A", mg:"Miligramo", g:"Gramo", kg:"Kilogramo", tonne:"Tonelada", oz:"Onza", lb:"Libra", emptyTitle:"Convertidor de Peso", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder={copy.valuePh} />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="mg">Milligram</option>
-      <option value="g">Gram</option>
-      <option value="kg" selected>Kilogram</option>
-      <option value="tonne">Tonne</option>
-      <option value="oz">Ounce</option>
-      <option value="lb">Pound</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="mg">{copy.mg}</option>
+      <option value="g">{copy.g}</option>
+      <option value="kg" selected>{copy.kg}</option>
+      <option value="tonne">{copy.tonne}</option>
+      <option value="oz">{copy.oz}</option>
+      <option value="lb">{copy.lb}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="mg">Milligram</option>
-      <option value="g">Gram</option>
-      <option value="kg">Kilogram</option>
-      <option value="tonne">Tonne</option>
-      <option value="oz">Ounce</option>
-      <option value="lb" selected>Pound</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="mg">{copy.mg}</option>
+      <option value="g">{copy.g}</option>
+      <option value="kg">{copy.kg}</option>
+      <option value="tonne">{copy.tonne}</option>
+      <option value="oz">{copy.oz}</option>
+      <option value="lb" selected>{copy.lb}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -35,13 +42,16 @@ import { Weight } from "@lucide/astro";
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="?" title="Weight Converter" description="Enter a value to convert." />
+      <EmptyState icon="?" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Weight} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Weight} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/weight-calculator.ts"></script>

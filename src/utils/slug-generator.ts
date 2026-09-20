@@ -40,8 +40,8 @@ export function generateSlug(text: string, opts: SlugOptions): string {
   return slug;
 }
 
-export function validateSlugInput(text: string): string | null {
-  if (!text.trim()) return "Please enter text to convert into a slug.";
+export function validateSlugInput(text: string, lang: "en" | "es" = "en"): string | null {
+  if (!text.trim()) return lang === "es" ? "Ingresa un texto para convertir en slug." : "Please enter text to convert into a slug.";
   return null;
 }
 

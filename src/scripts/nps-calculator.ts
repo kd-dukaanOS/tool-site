@@ -16,6 +16,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: NPSInput | null = null;
 
 function showError(msg: string) {
@@ -52,7 +54,7 @@ function calculate() {
     return;
   }
 
-  const err = validateNPSInput(input);
+  const err = validateNPSInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -66,7 +68,7 @@ function calculate() {
   setValue("lumpsumResult", `₹${result.lumpsumWithdrawal.toLocaleString("en-IN")}`);
   setValue("annuityCorpusResult", `₹${result.annuityCorpus.toLocaleString("en-IN")}`);
   setValue("pensionResult", `₹${result.monthlyPension.toLocaleString("en-IN")}`);
-  setSubtitle("pensionResult", "per month after retirement");
+  setSubtitle("pensionResult", lang === "es" ? "al mes después de jubilarte" : "per month after retirement");
 
   lastInput = input;
 
@@ -92,7 +94,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateNPS(lastInput);
-  copyToClipboard(copyNPSSummary(lastInput, result));
+  copyToClipboard(copyNPSSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

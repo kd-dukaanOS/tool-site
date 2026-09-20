@@ -30,10 +30,10 @@ export const LENGTH_LABELS: Record<string, string> = {
   mi: "Mile",
 };
 
-export function validateLengthInput(i: LengthInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
+export function validateLengthInput(i: LengthInput, lang: "en" | "es" = "en"): string | null {
+  if (i.value === undefined || Number.isNaN(i.value)) return lang === "es" ? "Ingresa un número válido." : "Enter a valid number.";
+  if (!i.fromUnit || !i.toUnit) return lang === "es" ? "Selecciona ambas unidades." : "Select both units.";
+  if (i.fromUnit === i.toUnit) return lang === "es" ? "Elige dos unidades diferentes." : "Choose two different units.";
   return null;
 }
 
@@ -43,10 +43,16 @@ export function calculateLength(i: LengthInput): LengthResult {
   return { convertedValue };
 }
 
-export function copyLengthSummary(i: LengthInput, r: LengthResult): string {
-  return `
-Length Conversion
+export const LENGTH_LABELS_ES: Record<string, string> = {
+  mm: "Milímetro", cm: "Centímetro", m: "Metro", km: "Kilómetro", in: "Pulgada", ft: "Pie", yd: "Yarda", mi: "Milla",
+};
 
-${i.value} ${LENGTH_LABELS[i.fromUnit]} = ${r.convertedValue} ${LENGTH_LABELS[i.toUnit]}
+export function copyLengthSummary(i: LengthInput, r: LengthResult, lang: "en" | "es" = "en"): string {
+  const labels = lang === "es" ? LENGTH_LABELS_ES : LENGTH_LABELS;
+  const title = lang === "es" ? "Conversión de Longitud" : "Length Conversion";
+  return `
+${title}
+
+${i.value} ${labels[i.fromUnit]} = ${r.convertedValue} ${labels[i.toUnit]}
 `.trim();
 }

@@ -17,6 +17,8 @@ const fieldIds = [
   "monthlyRevenueGrowthRate", "monthlyExpenseGrowthRate",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -29,18 +31,28 @@ function calculate() {
   clearError();
   const [currentCashBalance, monthlyRevenue, monthlyExpenses, monthlyRevenueGrowthRate, monthlyExpenseGrowthRate] = fieldIds.map(val);
 
-  const err = validateRunwayInputs(currentCashBalance, monthlyExpenses);
+  const err = validateRunwayInputs(currentCashBalance, monthlyExpenses, lang);
   if (err) { showError(err); return; }
 
   const result = calculateRunway(currentCashBalance, monthlyRevenue, monthlyExpenses, monthlyRevenueGrowthRate, monthlyExpenseGrowthRate);
 
-  setValue("dynamicRunwayResult", result.dynamicRunwayMonths === null ? "120+ mo" : `${result.dynamicRunwayMonths} mo`);
-  setValue("staticRunwayResult", result.staticRunwayMonths === null ? "Cash flow positive" : `${result.staticRunwayMonths} mo`);
+  const dynamicText = result.dynamicRunwayMonths === null ? (lang === "es" ? "120+ mes" : "120+ mo") : `${result.dynamicRunwayMonths} ${lang === "es" ? "mes" : "mo"}`;
+  const staticText = result.staticRunwayMonths === null ? (lang === "es" ? "Flujo de caja positivo" : "Cash flow positive") : `${result.staticRunwayMonths} ${lang === "es" ? "mes" : "mo"}`;
+
+  setValue("dynamicRunwayResult", dynamicText);
+  setValue("staticRunwayResult", staticText);
   setValue("netBurnResult", fmtCurrency(result.currentNetBurn));
   setValue("balanceIn6MoResult", fmtCurrency(result.projectedBalanceIn6Months));
-  setSubtitle("dynamicRunwayResult", "With revenue/expense growth applied");
+  setSubtitle("dynamicRunwayResult", lang === "es" ? "Con crecimiento de ingresos/gastos aplicado" : "With revenue/expense growth applied");
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Runway
+
+Runway Dinámico (con crecimiento): ${result.dynamicRunwayMonths === null ? "120+ meses" : result.dynamicRunwayMonths + " meses"}
+Runway Estático (tasa actual): ${result.staticRunwayMonths === null ? "Flujo de caja positivo" : result.staticRunwayMonths + " meses"}
+Quema Neta Actual: ${fmtCurrency(result.currentNetBurn)}/mes
+Saldo Proyectado en 6 Meses: ${fmtCurrency(result.projectedBalanceIn6Months)}
+`.trim() : `
 Runway Summary
 
 Dynamic Runway (with growth): ${result.dynamicRunwayMonths === null ? "120+ months" : result.dynamicRunwayMonths + " months"}

@@ -4,22 +4,29 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Thermometer } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", from:"From", to:"To", celsius:"Celsius", fahrenheit:"Fahrenheit", kelvin:"Kelvin", emptyTitle:"Temperature Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", from:"De", to:"A", celsius:"Celsius", fahrenheit:"Fahrenheit", kelvin:"Kelvin", emptyTitle:"Convertidor de Temperatura", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder="Enter value" />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="c" selected>Celsius</option>
-      <option value="f">Fahrenheit</option>
-      <option value="k">Kelvin</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="c" selected>{copy.celsius}</option>
+      <option value="f">{copy.fahrenheit}</option>
+      <option value="k">{copy.kelvin}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="c">Celsius</option>
-      <option value="f" selected>Fahrenheit</option>
-      <option value="k">Kelvin</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="c">{copy.celsius}</option>
+      <option value="f" selected>{copy.fahrenheit}</option>
+      <option value="k">{copy.kelvin}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -29,13 +36,16 @@ import { Thermometer } from "@lucide/astro";
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="??" title="Temperature Converter" description="Enter a value to convert." />
+      <EmptyState icon="??" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Thermometer} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Thermometer} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/temperature-calculator.ts"></script>

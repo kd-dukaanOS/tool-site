@@ -6,58 +6,68 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Scale, Sparkles, Landmark, CheckCircle2 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { filingGroup:"Filing Info", taxYear:"Tax Year", y2025:"2025 (filed 2026)", y2026:"2026 (filed 2027)", filingStatus:"Filing Status", single:"Single", hoh:"Head of Household", mfj:"Married Filing Jointly", mfs:"Married Filing Separately", magi:"Modified AGI (MAGI)", age:"Your Age", contribGroup:"Contribution & Tax Rates", annualContribution:"Annual Contribution", currentTaxRate:"Current Tax Rate (%)", retirementTaxRate:"Retirement Tax Rate (%)", growthGroup:"Growth", annualReturnRate:"Annual Return (%)", yearsToGrow:"Years to Grow", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Roth vs Traditional IRA Calculator", emptyDesc:"Compare after-tax retirement value between Roth and Traditional IRAs.", tip1:"Better Option", tip2:"Roth After-Tax Value", tip3:"Traditional After-Tax Value", betterOption:"Better Option", rothFV:"Roth After-Tax Value", traditionalFV:"Traditional After-Tax Value", rothEligibility:"Roth Eligibility", rothIRA:"Roth IRA", traditionalIRA:"Traditional IRA", fullyEligible:"Fully Eligible", partiallyEligible:"Partially Eligible", notEligible:"Not Eligible", byPrefix:"By", aboutTitle:"About this Calculator", aboutText:"Compares the after-tax retirement value of a Roth versus Traditional IRA using your current and expected future tax rates, growth rate, and time horizon." },
+  es: { filingGroup:"Información de Declaración", taxYear:"Año Fiscal", y2025:"2025 (declarado 2026)", y2026:"2026 (declarado 2027)", filingStatus:"Estado Civil Tributario", single:"Soltero", hoh:"Cabeza de Familia", mfj:"Casado Declarando en Conjunto", mfs:"Casado Declarando por Separado", magi:"AGI Modificado (MAGI)", age:"Tu Edad", contribGroup:"Aporte y Tasas de Impuesto", annualContribution:"Aporte Anual", currentTaxRate:"Tasa de Impuesto Actual (%)", retirementTaxRate:"Tasa de Impuesto en Jubilación (%)", growthGroup:"Crecimiento", annualReturnRate:"Retorno Anual (%)", yearsToGrow:"Años para Crecer", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora Roth vs Traditional IRA", emptyDesc:"Compara el valor después de impuestos en la jubilación entre Roth y Traditional IRA.", tip1:"Mejor Opción", tip2:"Valor Roth Después de Impuestos", tip3:"Valor Traditional Después de Impuestos", betterOption:"Mejor Opción", rothFV:"Valor Roth Después de Impuestos", traditionalFV:"Valor Traditional Después de Impuestos", rothEligibility:"Elegibilidad Roth", rothIRA:"Roth IRA", traditionalIRA:"Traditional IRA", fullyEligible:"Totalmente Elegible", partiallyEligible:"Parcialmente Elegible", notEligible:"No Elegible", byPrefix:"Por", aboutTitle:"Acerca de esta Calculadora", aboutText:"Compara el valor después de impuestos en la jubilación entre una Roth y una Traditional IRA usando tus tasas de impuesto actuales y futuras esperadas, la tasa de crecimiento y el horizonte de tiempo." },
+}[lang];
 ---
 <section class="rvt-calculator">
   <div class="rvt-layout">
     <aside class="rvt-sidebar">
       <div class="rvt-group">
-        <h3>Filing Info</h3>
-        <CalculatorField type="select" id="taxYear" label="Tax Year">
-  <option value="2025">2025 (filed 2026)</option>
-  <option value="2026">2026 (filed 2027)</option>
+        <h3>{copy.filingGroup}</h3>
+        <CalculatorField type="select" id="taxYear" label={copy.taxYear}>
+  <option value="2025">{copy.y2025}</option>
+  <option value="2026">{copy.y2026}</option>
 </CalculatorField>
-        <CalculatorField type="select" id="filingStatus" label="Filing Status">
-  <option value="single">Single</option>
-  <option value="hoh">Head of Household</option>
-  <option value="mfj">Married Filing Jointly</option>
-  <option value="mfs">Married Filing Separately</option>
+        <CalculatorField type="select" id="filingStatus" label={copy.filingStatus}>
+  <option value="single">{copy.single}</option>
+  <option value="hoh">{copy.hoh}</option>
+  <option value="mfj">{copy.mfj}</option>
+  <option value="mfs">{copy.mfs}</option>
 </CalculatorField>
-        <CalculatorField id="magi" label="Modified AGI (MAGI)" type="number" placeholder="e.g. 80000" min="0" step="1" />
-        <CalculatorField id="age" label="Your Age" type="number" placeholder="e.g. 35" min="18" step="1" />
+        <CalculatorField id="magi" label={copy.magi} type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField id="age" label={copy.age} type="number" placeholder="e.g. 35" min="18" step="1" />
       </div>
       <div class="rvt-group">
-        <h3>Contribution & Tax Rates</h3>
-        <CalculatorField id="annualContribution" label="Annual Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
-        <CalculatorField id="currentTaxRate" label="Current Tax Rate (%)" type="number" placeholder="e.g. 22" min="0" step="0.1" />
-        <CalculatorField id="retirementTaxRate" label="Retirement Tax Rate (%)" type="number" placeholder="e.g. 12" min="0" step="0.1" />
+        <h3>{copy.contribGroup}</h3>
+        <CalculatorField id="annualContribution" label={copy.annualContribution} type="number" placeholder="e.g. 7000" min="0" step="1" />
+        <CalculatorField id="currentTaxRate" label={copy.currentTaxRate} type="number" placeholder="e.g. 22" min="0" step="0.1" />
+        <CalculatorField id="retirementTaxRate" label={copy.retirementTaxRate} type="number" placeholder="e.g. 12" min="0" step="0.1" />
       </div>
       <div class="rvt-group">
-        <h3>Growth</h3>
-        <CalculatorField id="annualReturnRate" label="Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
-        <CalculatorField id="yearsToGrow" label="Years to Grow" type="number" placeholder="e.g. 25" min="1" step="1" />
+        <h3>{copy.growthGroup}</h3>
+        <CalculatorField id="annualReturnRate" label={copy.annualReturnRate} type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="yearsToGrow" label={copy.yearsToGrow} type="number" placeholder="e.g. 25" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="rvt-content">
       <div id="emptyState">
-        <EmptyState icon="⚖️" title="Roth vs Traditional IRA Calculator" description="Compare after-tax retirement value between Roth and Traditional IRAs." tips={["Better Option", "Roth After-Tax Value", "Traditional After-Tax Value"]} />
+        <EmptyState icon="⚖️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="betterOptionResult" title="Better Option" icon={Scale} accent="success" subtitle=" " />
-          <ResultCard id="rothFVResult" title="Roth After-Tax Value" icon={Sparkles} />
-          <ResultCard id="traditionalFVResult" title="Traditional After-Tax Value" icon={Landmark} />
-          <ResultCard id="rothEligibilityResult" title="Roth Eligibility" icon={CheckCircle2} />
+          <ResultCard id="betterOptionResult" title={copy.betterOption} icon={Scale} accent="success" subtitle=" " />
+          <ResultCard id="rothFVResult" title={copy.rothFV} icon={Sparkles} />
+          <ResultCard id="traditionalFVResult" title={copy.traditionalFV} icon={Landmark} />
+          <ResultCard id="rothEligibilityResult" title={copy.rothEligibility} icon={CheckCircle2} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Compares the after-tax retirement value of a Roth versus Traditional IRA using your current and expected future tax rates, growth rate, and time horizon.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/roth-vs-traditional-ira-calculator";
 </script>

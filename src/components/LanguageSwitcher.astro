@@ -1,16 +1,14 @@
 ---
+import { getAlternateUrls } from "../utils/i18n";
+
 interface Props {
   lang?: "en" | "es";
 }
 const { lang = "en" } = Astro.props as Props;
 
-const currentPath = Astro.url.pathname;
-const basePath = currentPath.startsWith("/es")
-  ? currentPath.replace(/^\/es/, "") || "/"
-  : currentPath;
-
-const enHref = basePath;
-const esHref = basePath === "/" ? "/es/" : `/es${basePath}`;
+const alternates = getAlternateUrls(Astro.url.pathname, lang);
+const enHref = alternates.en || "/";
+const esHref = alternates.es || "/es/";
 ---
 <div class="ts-lang-switch">
   <button class="ts-nav-icon-btn" id="lang-switch-toggle" aria-haspopup="true" aria-expanded="false" aria-label="Change language">

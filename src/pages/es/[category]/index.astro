@@ -1,0 +1,109 @@
+---
+// src/pages/es/[category]/index.astro
+import Layout from "../../../layouts/Layout.astro";
+import { categoryIcons } from "../../../data/tools.js";
+import { SPANISH_CATEGORIES, SPANISH_TOOLS } from "../../../utils/i18n";
+
+export function getStaticPaths() {
+  return SPANISH_CATEGORIES.map((cat) => ({
+    params: { category: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+interface Props {
+  category: (typeof SPANISH_CATEGORIES)[number];
+}
+
+const { category } = Astro.props as Props;
+const categoryTools = SPANISH_TOOLS.filter((t) => t.category === category.slug);
+---
+
+<Layout
+  lang="es"
+  title={`${category.name} — Herramientas y Calculadoras | TooManyToolz`}
+  description={`${category.description} Calculadoras online gratuitas y privadas.`}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: category.name, url: `/es/${category.slug}/` },
+  ]}
+>
+  <div class="wrap">
+    <p class="breadcrumb"><a href="/es/">Inicio</a> / {category.name}</p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[category.slug as keyof typeof categoryIcons]} />
+      </div>
+      <div>
+        <h1>{category.name}</h1>
+        <p>{category.description} — {categoryTools.length} {categoryTools.length === 1 ? "herramienta" : "herramientas"}.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="tool-grid">
+        {categoryTools.map((tool) => (
+          <a href={`/es/${tool.category}/${tool.slug}/`} class="tool-card">
+            <div class="tool-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons[tool.category as keyof typeof categoryIcons]} />
+            </div>
+            <div><h4>{tool.name}</h4><p>{tool.desc}</p></div>
+            <button class="fav" data-slug={tool.slug} data-name={tool.name} data-url={`/es/${tool.category}/${tool.slug}/`} aria-label="Guardar herramienta">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9.3-8.7C1 8.4 2.7 5 6.3 5 8.4 5 10 6.2 12 8.5 14 6.2 15.6 5 17.7 5c3.6 0 5.3 3.4 3.6 7.3C19 16.5 12 21 12 21z"/></svg>
+            </button>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <script>
+    const getBookmarks = () => JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
+    const setBookmarks = (arr: any[]) => localStorage.setItem('bookmarkedTools', JSON.stringify(arr));
+
+    document.querySelectorAll('.fav').forEach((btn) => {
+      const slug = (btn as HTMLElement).dataset.slug;
+      if (getBookmarks().some((b: any) => b.slug === slug)) btn.classList.add('active');
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const b = {
+          slug: (btn as HTMLElement).dataset.slug,
+          name: (btn as HTMLElement).dataset.name,
+          url: (btn as HTMLElement).dataset.url
+        };
+        let marks = getBookmarks();
+        if (marks.some((m: any) => m.slug === b.slug)) {
+          marks = marks.filter((m: any) => m.slug !== b.slug);
+          btn.classList.remove('active');
+        } else {
+          marks.push(b);
+          btn.classList.add('active');
+        }
+        setBookmarks(marks);
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--space-6, 24px); }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); margin: 24px 0 16px; }
+  .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text-primary); }
+  .category-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+  .category-header h1 { font-size: 28px; font-weight: 800; color: var(--text-primary); margin: 0 0 4px; }
+  .category-header p { font-size: 15px; color: var(--text-secondary); margin: 0; }
+  .cat-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--bg-card); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: var(--color-primary); flex-shrink: 0; }
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 48px; }
+  .tool-card { display: flex; align-items: flex-start; gap: 14px; padding: 18px; border-radius: var(--radius-lg, 14px); background: var(--bg-card); border: 1px solid var(--border-subtle); text-decoration: none; color: inherit; transition: all 0.2s ease; position: relative; }
+  .tool-card:hover { transform: translateY(-2px); border-color: var(--border-hover); box-shadow: var(--shadow-sm); }
+  .tool-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-page); display: flex; align-items: center; justify-content: center; color: var(--color-primary); flex-shrink: 0; }
+  .tool-card h4 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
+  .tool-card p { font-size: 12.5px; color: var(--text-secondary); margin: 0; line-height: 1.4; }
+  .fav { position: absolute; top: 12px; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px; }
+  .fav.active { color: #ef4444; }
+</style>

@@ -15,6 +15,12 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["loanAmount", "interestRate", "loanTermYears", "extraMonthlyPayment"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const withExtraLabel = (window as any).stlWithExtraLabel || "With extra payments";
+const standardTermLabel = (window as any).stlStandardTermLabel || "Standard term";
+const yLabel = (window as any).stlYLabel || "y";
+const mLabel = (window as any).stlMLabel || "m";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +42,7 @@ function calculate() {
 
   const [loanAmount, interestRate, loanTermYears, extraMonthlyPayment] = fieldIds.map(val);
 
-  const validationError = validateStudentLoanInputs(loanAmount, loanTermYears);
+  const validationError = validateStudentLoanInputs(loanAmount, loanTermYears, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -47,10 +53,17 @@ function calculate() {
   setValue("monthlyPaymentResult", fmtCurrency(result.monthlyPayment));
   setValue("totalInterestResult", fmtCurrency(result.totalInterest));
   setValue("totalPaidResult", fmtCurrency(result.totalPaid));
-  setValue("payoffTimeResult", `${Math.floor(result.payoffMonths / 12)}y ${result.payoffMonths % 12}m`);
-  setSubtitle("payoffTimeResult", extraMonthlyPayment > 0 ? "With extra payments" : "Standard term");
+  setValue("payoffTimeResult", `${Math.floor(result.payoffMonths / 12)}${yLabel} ${result.payoffMonths % 12}${mLabel}`);
+  setSubtitle("payoffTimeResult", extraMonthlyPayment > 0 ? withExtraLabel : standardTermLabel);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Préstamo Estudiantil
+
+Pago Mensual: ${fmtCurrency(result.monthlyPayment)}
+Interés Total Pagado: ${fmtCurrency(result.totalInterest)}
+Total Pagado: ${fmtCurrency(result.totalPaid)}
+Tiempo de Pago: ${Math.floor(result.payoffMonths / 12)}${yLabel} ${result.payoffMonths % 12}${mLabel}
+`.trim() : `
 Student Loan Summary
 
 Monthly Payment: ${fmtCurrency(result.monthlyPayment)}

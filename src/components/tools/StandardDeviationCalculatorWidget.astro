@@ -5,20 +5,27 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Sigma, BarChart2, Calculator } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { numbers:"Numbers (comma or space separated)", sample:"Treat as sample (not full population)", emptyTitle:"Enter numbers to calculate deviation", emptyDesc:"Standard deviation, variance, and mean will appear here.", stdDev:"Standard Deviation", variance:"Variance", mean:"Mean", sampleLabel:"sample", populationLabel:"population" },
+  es: { numbers:"Números (separados por coma o espacio)", sample:"Tratar como muestra (no población completa)", emptyTitle:"Ingresa números para calcular la desviación", emptyDesc:"La desviación estándar, varianza y media aparecerán aquí.", stdDev:"Desviación Estándar", variance:"Varianza", mean:"Media", sampleLabel:"muestra", populationLabel:"población" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CalculatorField
       id="numbers"
-      label="Numbers (comma or space separated)"
+      label={copy.numbers}
       type="text"
       placeholder="e.g. 4, 8, 6, 5, 3"
     />
 
     <label class="checkbox-field">
       <input type="checkbox" id="isSample" />
-      <span>Treat as sample (not full population)</span>
+      <span>{copy.sample}</span>
     </label>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -35,16 +42,21 @@ import { Sigma, BarChart2, Calculator } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter numbers to calculate deviation"
-      description="Standard deviation, variance, and mean will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="stdDevResult" title="Standard Deviation" icon={Sigma} accent="primary" size="lg" />
-      <ResultCard id="varianceResult" title="Variance" icon={BarChart2} accent="neutral" />
-      <ResultCard id="meanResult" title="Mean" icon={Calculator} accent="neutral" />
+      <ResultCard id="stdDevResult" title={copy.stdDev} icon={Sigma} accent="primary" size="lg" />
+      <ResultCard id="varianceResult" title={copy.variance} icon={BarChart2} accent="neutral" />
+      <ResultCard id="meanResult" title={copy.mean} icon={Calculator} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang, sampleLabel: copy.sampleLabel, populationLabel: copy.populationLabel }}>
+  window.calcLang = calcLang;
+  window.sdSampleLabel = sampleLabel;
+  window.sdPopulationLabel = populationLabel;
+</script>
 <script src="../../scripts/standard-deviation-calculator.ts"></script>

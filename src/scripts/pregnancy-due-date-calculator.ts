@@ -17,6 +17,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const weekLabel = (window as any).pddWeekLabel || "Week";
+const dayLabel = (window as any).pddDayLabel || "day";
+const estimatedLabel = (window as any).pddEstimatedLabel || "estimated";
+const fillDateMsg = (window as any).pddFillDateMsg || "Please select your last period date.";
+
 let lastInput: PregnancyDueDateInput | null = null;
 
 function showError(msg: string) {
@@ -33,7 +39,7 @@ function calculate() {
   clearError();
 
   if (!lastPeriodInput.value) {
-    showError("Please select your last period date.");
+    showError(fillDateMsg);
     return;
   }
 
@@ -42,7 +48,7 @@ function calculate() {
     cycleLength: Number(cycleLengthInput.value) || 28,
   };
 
-  const err = validatePregnancyDueDateInput(input);
+  const err = validatePregnancyDueDateInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -50,12 +56,12 @@ function calculate() {
 
   const result = calculatePregnancyDueDate(input);
 
-  setValue("dueDateResult", result.dueDate.toLocaleDateString("en-US"));
-  setValue("currentWeekResult", `Week ${result.currentWeek}`);
+  setValue("dueDateResult", result.dueDate.toLocaleDateString(lang === "es" ? "es-ES" : "en-US"));
+  setValue("currentWeekResult", `${weekLabel} ${result.currentWeek}`);
   setValue("trimesterResult", result.trimester);
   setValue("daysRemainingResult", result.daysRemaining);
-  setSubtitle("currentWeekResult", `day ${result.currentDay}`);
-  setSubtitle("dueDateResult", "estimated");
+  setSubtitle("currentWeekResult", `${dayLabel} ${result.currentDay}`);
+  setSubtitle("dueDateResult", estimatedLabel);
 
   lastInput = input;
 
@@ -77,7 +83,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculatePregnancyDueDate(lastInput);
-  copyToClipboard(copyPregnancyDueDateSummary(lastInput, result));
+  copyToClipboard(copyPregnancyDueDateSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

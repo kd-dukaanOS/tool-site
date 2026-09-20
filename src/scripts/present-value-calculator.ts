@@ -15,6 +15,10 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["futureValue", "discountRate", "years", "compoundingFrequency"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const discountedOverLabel = (window as any).pvDiscountedOverLabel || "Discounted over";
+const pvYearsLabel = (window as any).pvYearsLabel || "years";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -35,7 +39,7 @@ function calculate() {
 
   const [futureValue, discountRate, years, compoundingFrequency] = fieldIds.map(val);
 
-  const validationError = validatePresentValueInputs(futureValue, years, discountRate);
+  const validationError = validatePresentValueInputs(futureValue, years, discountRate, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -46,9 +50,15 @@ function calculate() {
   setValue("presentValueResult", fmtCurrency(result.presentValue));
   setValue("futureValueOutResult", fmtCurrency(result.totalFutureValue));
   setValue("discountAmountResult", fmtCurrency(result.discountAmount));
-  setSubtitle("presentValueResult", `Discounted over ${years} years`);
+  setSubtitle("presentValueResult", `${discountedOverLabel} ${years} ${pvYearsLabel}`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Valor Presente
+
+Valor Presente: ${fmtCurrency(result.presentValue)}
+Valor Futuro: ${fmtCurrency(result.totalFutureValue)}
+Monto de Descuento: ${fmtCurrency(result.discountAmount)}
+`.trim() : `
 Present Value Summary
 
 Present Value: ${fmtCurrency(result.presentValue)}

@@ -5,33 +5,43 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, CalendarDays, Repeat, MinusCircle } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { grossLabel:"Gross Annual Salary", grossHelp:"Your gross salary before deductions (GBP).", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Take-Home Pay Calculator", emptyDesc:"See your net salary after Income Tax and National Insurance.", tip1:"Net Annual Pay", tip2:"Income Tax", tip3:"National Insurance", netAnnualTitle:"Net Annual Pay", netMonthlyTitle:"Net Monthly", netWeeklyTitle:"Net Weekly", totalDeductionsTitle:"Total Deductions", aboutTitle:"About this Calculator", aboutText:"Estimates net pay after Income Tax and National Insurance (England/Wales/NI rates). Results are estimates — verify against current HMRC figures.", effectiveRateSuffix:"effective rate" },
+  es: { grossLabel:"Salario Anual Bruto", grossHelp:"Tu salario bruto antes de deducciones (GBP).", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Salario Neto del Reino Unido", emptyDesc:"Observa tu salario neto después del Impuesto sobre la Renta y el Seguro Nacional.", tip1:"Pago Anual Neto", tip2:"Impuesto sobre la Renta", tip3:"Seguro Nacional", netAnnualTitle:"Pago Anual Neto", netMonthlyTitle:"Neto Mensual", netWeeklyTitle:"Neto Semanal", totalDeductionsTitle:"Deducciones Totales", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima el salario neto después del Impuesto sobre la Renta y el Seguro Nacional (tasas de Inglaterra/Gales/Irlanda del Norte). Los resultados son estimaciones — verifica con las cifras actuales de HMRC.", effectiveRateSuffix:"tasa efectiva" },
+}[lang];
 ---
 <section class="ukts-calculator">
   <div class="ukts-layout">
     <aside class="ukts-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Salary" type="number" required={true} helpText="Your gross salary before deductions (GBP)." />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="grossIncome" label={copy.grossLabel} type="number" required={true} helpText={copy.grossHelp} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukts-content">
       <div id="emptyState">
-        <EmptyState icon="🇬🇧" title="UK Take-Home Pay Calculator" description="See your net salary after Income Tax and National Insurance." tips={["Net Annual Pay", "Income Tax", "National Insurance"]} />
+        <EmptyState icon="🇬🇧" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="netAnnualResult" title="Net Annual Pay" icon={Wallet} subtitle=" " />
-          <ResultCard id="netMonthlyResult" title="Net Monthly" icon={CalendarDays} />
-          <ResultCard id="netWeeklyResult" title="Net Weekly" icon={Repeat} />
-          <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={MinusCircle} />
+          <ResultCard id="netAnnualResult" title={copy.netAnnualTitle} icon={Wallet} subtitle=" " />
+          <ResultCard id="netMonthlyResult" title={copy.netMonthlyTitle} icon={CalendarDays} />
+          <ResultCard id="netWeeklyResult" title={copy.netWeeklyTitle} icon={Repeat} />
+          <ResultCard id="totalDeductionsResult" title={copy.totalDeductionsTitle} icon={MinusCircle} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates net pay after Income Tax and National Insurance (England/Wales/NI rates). Results are estimates — verify against current HMRC figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-take-home-pay";
 </script>

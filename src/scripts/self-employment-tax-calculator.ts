@@ -21,6 +21,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: Parameters<typeof calculateSelfEmploymentTax>[0] | null = null;
 let lastResult: ReturnType<typeof calculateSelfEmploymentTax> | null = null;
 
@@ -42,7 +44,7 @@ function calculate() {
     taxYear: taxYearSelect.value as TaxYear,
   };
 
-  const error = validateSelfEmploymentTaxInput(input);
+  const error = validateSelfEmploymentTaxInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -76,7 +78,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copySelfEmploymentTaxSummary(lastInput, lastResult));
+  copyToClipboard(copySelfEmploymentTaxSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

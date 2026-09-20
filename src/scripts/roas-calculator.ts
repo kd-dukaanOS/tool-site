@@ -14,6 +14,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { revenue: number; adSpend: number } | null = null;
 let lastResult: ReturnType<typeof calculateRoas> | null = null;
 
@@ -34,7 +36,7 @@ function calculate() {
     adSpend: parseFloat(adSpendInput.value),
   };
 
-  const error = validateRoasInput(input);
+  const error = validateRoasInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -70,7 +72,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyRoasSummary(lastInput, lastResult));
+  copyToClipboard(copyRoasSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

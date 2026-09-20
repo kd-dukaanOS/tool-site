@@ -12,14 +12,21 @@ export interface RaiseResult {
   monthlyIncrease: number;
 }
 
-export function validateRaiseInput(input: RaiseInput): string | null {
+export function validateRaiseInput(input: RaiseInput, lang: "en" | "es" = "en"): string | null {
   const { currentSalary, raisePercent } = input;
+  const msg = lang === "es" ? {
+    salary: "Por favor ingresa un salario actual válido mayor a 0.",
+    percent: "Por favor ingresa un porcentaje de aumento válido.",
+  } : {
+    salary: "Please enter a valid current salary greater than 0.",
+    percent: "Please enter a valid raise percentage.",
+  };
 
   if (!currentSalary || Number.isNaN(currentSalary) || currentSalary <= 0) {
-    return "Please enter a valid current salary greater than 0.";
+    return msg.salary;
   }
   if (raisePercent === undefined || Number.isNaN(raisePercent)) {
-    return "Please enter a valid raise percentage.";
+    return msg.percent;
   }
 
   return null;
@@ -37,7 +44,27 @@ export function calculateRaise(input: RaiseInput): RaiseResult {
 
 
 
-export function copyRaiseSummary(input: RaiseInput, result: RaiseResult): string {
+export function copyRaiseSummary(input: RaiseInput, result: RaiseResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Aumento Salarial
+
+Salario Actual:
+${formatCurrency(input.currentSalary)}
+
+Aumento:
+${input.raisePercent}%
+
+Monto del Aumento:
+${formatCurrency(result.raiseAmount)}
+
+Nuevo Salario:
+${formatCurrency(result.newSalary)}
+
+Incremento Mensual:
+${formatCurrency(result.monthlyIncrease)}
+`.trim();
+  }
   return `
 Raise Summary
 

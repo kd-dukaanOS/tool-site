@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: MMMInput | null = null;
 
 function showError(msg: string) {
@@ -36,7 +38,7 @@ function calculate() {
     numbers: parseNumberList(numbersInput.value),
   };
 
-  const err = validateMMMInput(input);
+  const err = validateMMMInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -46,7 +48,7 @@ function calculate() {
 
   setValue("meanResult", result.mean);
   setValue("medianResult", result.median);
-  setValue("modeResult", result.mode.length ? result.mode.join(", ") : "No mode");
+  setValue("modeResult", result.mode.length ? result.mode.join(", ") : (lang === "es" ? "Sin moda" : "No mode"));
   setValue("rangeResult", result.range);
   setSubtitle("modeResult", result.mode.length > 1 ? "multimodal" : "");
 
@@ -69,7 +71,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateMeanMedianMode(lastInput);
-  copyToClipboard(copyMMMSummary(lastInput, result));
+  copyToClipboard(copyMMMSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

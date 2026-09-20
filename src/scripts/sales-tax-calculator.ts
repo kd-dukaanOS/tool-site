@@ -18,6 +18,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: SalesTaxInput | null = null;
 
 function showError(msg: string) {
@@ -40,11 +42,11 @@ function calculate() {
   };
 
   if (!input.amount || input.taxRate === undefined) {
-    showError("Please fill all required fields.");
+    showError(lang === "es" ? "Por favor completa todos los campos requeridos." : "Please fill all required fields.");
     return;
   }
 
-  const err = validateSalesTaxInput(input);
+  const err = validateSalesTaxInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -56,7 +58,7 @@ function calculate() {
   setValue("netAmountResult", formatCurrency(result.netAmount, currency));
   setValue("taxAmountResult", formatCurrency(result.taxAmount, currency));
   setValue("grossAmountResult", formatCurrency(result.grossAmount, currency));
-  setSubtitle("grossAmountResult", "final payable amount");
+  setSubtitle("grossAmountResult", lang === "es" ? "monto final a pagar" : "final payable amount");
 
   lastInput = input;
 
@@ -79,7 +81,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateSalesTax(lastInput);
-  copyToClipboard(copySalesTaxSummary(lastInput, result, getSavedCurrency()));
+  copyToClipboard(copySalesTaxSummary(lastInput, result, getSavedCurrency(), lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

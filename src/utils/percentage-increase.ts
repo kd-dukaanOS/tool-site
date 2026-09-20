@@ -8,9 +8,9 @@ export interface PercentageIncreaseResult {
   percentageIncrease: number;
 }
 
-export function validatePercentageIncreaseInput(i: PercentageIncreaseInput): string | null {
-  if (i.originalValue <= 0) return "Enter a valid original value.";
-  if (i.newValue < 0) return "Enter a valid new value.";
+export function validatePercentageIncreaseInput(i: PercentageIncreaseInput, lang: "en" | "es" = "en"): string | null {
+  if (i.originalValue <= 0) return lang === "es" ? "Ingresa un valor original válido." : "Enter a valid original value.";
+  if (i.newValue < 0) return lang === "es" ? "Ingresa un nuevo valor válido." : "Enter a valid new value.";
   return null;
 }
 
@@ -26,8 +26,20 @@ export function calculatePercentageIncrease(i: PercentageIncreaseInput): Percent
 
 export function copyPercentageIncreaseSummary(
   i: PercentageIncreaseInput,
-  r: PercentageIncreaseResult
+  r: PercentageIncreaseResult,
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Aumento Porcentual
+
+Valor Original: ${i.originalValue}
+Nuevo Valor: ${i.newValue}
+
+Cambio: ${r.increaseAmount}
+Porcentaje de ${r.percentageIncrease >= 0 ? "Aumento" : "Disminución"}: ${Math.abs(r.percentageIncrease)}%
+`.trim();
+  }
   return `
 Percentage Increase Summary
 

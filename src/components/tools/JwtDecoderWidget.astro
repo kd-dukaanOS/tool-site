@@ -1,15 +1,22 @@
-﻿---
+---
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { KeyRound, ShieldAlert, CalendarClock, CalendarX, CodeXml } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { token:"JWT Token", emptyTitle:"JWT Decoder", emptyDesc:"Decode and inspect JSON Web Tokens instantly.", tip1:"Header & Payload", tip2:"Expiry Check", tip3:"Algorithm", tip4:"Copy Summary", status:"Status", algorithm:"Algorithm", issued:"Issued At", expires:"Expires At", header:"Header", payload:"Payload", aboutTitle:"About this Tool", aboutText:"Decode JWT header and payload, check expiry status and algorithm — entirely client-side, your token never leaves your browser." },
+  es: { token:"Token JWT", emptyTitle:"Decodificador JWT", emptyDesc:"Decodifica e inspecciona JSON Web Tokens al instante.", tip1:"Encabezado y Payload", tip2:"Verificación de Expiración", tip3:"Algoritmo", tip4:"Copiar Resumen", status:"Estado", algorithm:"Algoritmo", issued:"Emitido", expires:"Expira", header:"Encabezado", payload:"Payload", aboutTitle:"Acerca de esta Herramienta", aboutText:"Decodifica el encabezado y payload del JWT, verifica el estado de expiración y el algoritmo — todo del lado del cliente, tu token nunca sale de tu navegador." },
+}[lang];
 ---
 <section class="jwt-decoder">
   <div class="jwt-layout">
     <aside class="jwt-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="jwtInput">JWT Token</label>
+        <label class="tool-label" for="jwtInput">{copy.token}</label>
         <textarea id="jwtInput" class="tool-textarea" placeholder="eyJhbGciOiJIUzI1NiIs..."></textarea>
       </div>
       <CalculatorActions calculateId="decodeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -19,19 +26,19 @@ import { KeyRound, ShieldAlert, CalendarClock, CalendarX, CodeXml } from "@lucid
     <main class="jwt-content">
       <div id="emptyState">
         <EmptyState
-          icon="ðŸ”‘"
-          title="JWT Decoder"
-          description="Decode and inspect JSON Web Tokens instantly."
-          tips={["Header & Payload", "Expiry Check", "Algorithm", "Copy Summary"]}
+          icon="🔑"
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="statusResult" title="Status" icon={ShieldAlert} />
-          <ResultCard id="algResult" title="Algorithm" icon={KeyRound} />
-          <ResultCard id="issuedResult" title="Issued At" icon={CalendarClock} />
-          <ResultCard id="expiresResult" title="Expires At" icon={CalendarX} />
+          <ResultCard id="statusResult" title={copy.status} icon={ShieldAlert} />
+          <ResultCard id="algResult" title={copy.algorithm} icon={KeyRound} />
+          <ResultCard id="issuedResult" title={copy.issued} icon={CalendarClock} />
+          <ResultCard id="expiresResult" title={copy.expires} icon={CalendarX} />
         </ResultsGrid>
 
         <div class="tool-grid-2">
@@ -47,13 +54,16 @@ import { KeyRound, ShieldAlert, CalendarClock, CalendarX, CodeXml } from "@lucid
 
         <section class="calculator-info">
           <h2>About this Tool</h2>
-          <p>Decode JWT header and payload, check expiry status and algorithm â€” entirely client-side, your token never leaves your browser.</p>
+          <p>Decode JWT header and payload, check expiry status and algorithm — entirely client-side, your token never leaves your browser.</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/jwt-decoder";
 </script>

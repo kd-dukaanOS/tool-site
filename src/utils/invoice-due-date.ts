@@ -10,9 +10,9 @@ export interface InvoiceDueDateResult {
   status: "upcoming" | "due-soon" | "overdue";
 }
 
-export function validateInvoiceDueDateInput(i: InvoiceDueDateInput): string | null {
-  if (Number.isNaN(i.invoiceDate.getTime())) return "Please select a valid invoice date.";
-  if (i.paymentTermsDays <= 0) return "Enter valid payment terms (in days).";
+export function validateInvoiceDueDateInput(i: InvoiceDueDateInput, lang: "en" | "es" = "en"): string | null {
+  if (Number.isNaN(i.invoiceDate.getTime())) return lang === "es" ? "Selecciona una fecha de factura válida." : "Please select a valid invoice date.";
+  if (i.paymentTermsDays <= 0) return lang === "es" ? "Ingresa un plazo de pago válido (en días)." : "Enter valid payment terms (in days).";
   return null;
 }
 
@@ -46,8 +46,20 @@ export function formatDueDate(date: Date): string {
 
 export function copyInvoiceDueDateSummary(
   i: InvoiceDueDateInput,
-  r: InvoiceDueDateResult
+  r: InvoiceDueDateResult,
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Vencimiento de Factura
+
+Fecha de Factura: ${i.invoiceDate.toLocaleDateString("es-ES")}
+Plazo de Pago: ${i.paymentTermsDays} días
+
+Fecha de Vencimiento: ${formatDueDate(r.dueDate)}
+Estado: ${r.isOverdue ? "Vencida" : `${r.daysRemaining} días restantes`}
+`.trim();
+  }
   return `
 Invoice Due Date Summary
 

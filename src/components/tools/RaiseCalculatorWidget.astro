@@ -9,6 +9,13 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { currentSalary:"Current Salary ($)", currentSalaryHelp:"Your current annual salary.", raisePercent:"Raise (%)", raisePercentHelp:"Percentage increase you're getting or requesting.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Raise Calculator", emptyDesc:"Find your new salary and raise amount from your current salary and raise percentage.", tip1:"New Salary", tip2:"Raise Amount", tip3:"Monthly Increase", newSalary:"New Salary", raiseAmount:"Raise Amount", monthlyIncrease:"Monthly Increase", aboutTitle:"About this Calculator", aboutText:"Calculates your new salary and raise amount from your current salary and raise percentage. All calculations run locally — no external data or paid service is required." },
+  es: { currentSalary:"Salario Actual ($)", currentSalaryHelp:"Tu salario anual actual.", raisePercent:"Aumento (%)", raisePercentHelp:"Porcentaje de aumento que recibirás o solicitarás.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Aumento Salarial", emptyDesc:"Encuentra tu nuevo salario y el monto del aumento a partir de tu salario actual y el porcentaje de aumento.", tip1:"Nuevo Salario", tip2:"Monto del Aumento", tip3:"Incremento Mensual", newSalary:"Nuevo Salario", raiseAmount:"Monto del Aumento", monthlyIncrease:"Incremento Mensual", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu nuevo salario y el monto del aumento a partir de tu salario actual y el porcentaje de aumento. Todos los cálculos se ejecutan localmente — no se requieren datos externos ni servicios pagados." },
+}[lang];
 ---
 
 <section class="raise-calculator">
@@ -19,23 +26,23 @@ import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
 
       <CalculatorField
         id="currentSalary"
-        label="Current Salary ($)"
+        label={copy.currentSalary}
         type="number"
         placeholder="e.g. 60000"
         required={true}
         min="0"
         step="1"
-        helpText="Your current annual salary."
+        helpText={copy.currentSalaryHelp}
       />
 
       <CalculatorField
         id="raisePercent"
-        label="Raise (%)"
+        label={copy.raisePercent}
         type="number"
         placeholder="e.g. 5"
         required={true}
         step="0.1"
-        helpText="Percentage increase you're getting or requesting."
+        helpText={copy.raisePercentHelp}
       />
 
       <CalculatorActions
@@ -43,6 +50,9 @@ import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -52,25 +62,22 @@ import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📈"
-          title="Raise Calculator"
-          description="Find your new salary and raise amount from your current salary and raise percentage."
-          tips={["New Salary", "Raise Amount", "Monthly Increase"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="newSalaryResult" title="New Salary" icon={Wallet} accent="success" size="lg" />
-          <ResultCard id="raiseAmountResult" title="Raise Amount" icon={TrendingUp} accent="primary" />
-          <ResultCard id="monthlyIncreaseResult" title="Monthly Increase" icon={CalendarDays} />
+          <ResultCard id="newSalaryResult" title={copy.newSalary} icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="raiseAmountResult" title={copy.raiseAmount} icon={TrendingUp} accent="primary" />
+          <ResultCard id="monthlyIncreaseResult" title={copy.monthlyIncrease} icon={CalendarDays} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your new salary and raise amount from your current salary and raise percentage.
-            All calculations run locally — no external data or paid service is required.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -78,6 +85,9 @@ import { Wallet, TrendingUp, CalendarDays } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/raise-calculator";
 </script>

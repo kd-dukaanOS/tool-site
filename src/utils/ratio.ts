@@ -11,9 +11,9 @@ export interface RatioResult {
   percentageB: number;
 }
 
-export function validateRatioInput(i: RatioInput): string | null {
-  if (i.valueA <= 0) return "Enter a valid first value.";
-  if (i.valueB <= 0) return "Enter a valid second value.";
+export function validateRatioInput(i: RatioInput, lang: "en" | "es" = "en"): string | null {
+  if (i.valueA <= 0) return lang === "es" ? "Ingresa un primer valor válido." : "Enter a valid first value.";
+  if (i.valueB <= 0) return lang === "es" ? "Ingresa un segundo valor válido." : "Enter a valid second value.";
   return null;
 }
 
@@ -42,7 +42,18 @@ export function calculateRatio(i: RatioInput): RatioResult {
   };
 }
 
-export function copyRatioSummary(i: RatioInput, r: RatioResult): string {
+export function copyRatioSummary(i: RatioInput, r: RatioResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Razón
+
+Valores: ${i.valueA} : ${i.valueB}
+
+Razón Simplificada: ${r.simplifiedA} : ${r.simplifiedB}
+Razón Decimal: ${r.decimalRatio}
+División Porcentual: ${r.percentageA}% : ${r.percentageB}%
+`.trim();
+  }
   return `
 Ratio Summary
 

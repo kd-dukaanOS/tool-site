@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -39,7 +41,7 @@ function calculate() {
   const purchasePrice = val("purchasePrice");
   const buyerType = sel("buyerType") as "standard" | "first-time" | "additional";
 
-  const validationError = validateUkStampDutyInputs(purchasePrice);
+  const validationError = validateUkStampDutyInputs(purchasePrice, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -52,11 +54,22 @@ function calculate() {
   setValue("effectiveRateResult", `${result.effectiveRate.toFixed(2)}%`);
   setValue("totalCostResult", fmtCurrency(netAfterTax));
   setValue("purchasePriceResult", fmtCurrency(purchasePrice));
-  setSubtitle("stampDutyOwedResult", buyerType === "additional" ? "Includes 5% surcharge" : " ");
+  setSubtitle("stampDutyOwedResult", buyerType === "additional" ? (lang === "es" ? "Incluye recargo del 5%" : "Includes 5% surcharge") : " ");
 
   const breakdownText = result.breakdown.map((b) => `${b.band}: ${b.rate}% = ${fmtCurrency(b.taxForBand)}`).join("\n");
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Impuesto de Timbre del Reino Unido
+
+Precio de Compra: ${fmtCurrency(purchasePrice)}
+Tipo de Comprador: ${buyerType}
+Impuesto de Timbre Adeudado: ${fmtCurrency(result.stampDutyOwed)}
+Tasa Efectiva: ${result.effectiveRate.toFixed(2)}%
+Costo Total: ${fmtCurrency(netAfterTax)}
+
+Desglose:
+${breakdownText}
+`.trim() : `
 UK Stamp Duty Land Tax Summary
 
 Purchase Price: ${fmtCurrency(purchasePrice)}

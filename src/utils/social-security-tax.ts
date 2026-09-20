@@ -29,7 +29,7 @@ export function calculateSocialSecurityTax(
   return { taxableWages, employeeSSTax, employerSSTax, selfEmploymentSSTax, wagesOverCap, maxPossibleTax, isAtCap };
 }
 
-export function validateSSTaxInputs(annualWages: number): string | null {
-  if (annualWages <= 0) return "Annual wages must be greater than zero.";
+export function validateSSTaxInputs(annualWages: number, lang: "en" | "es" = "en"): string | null {
+  if (annualWages <= 0) return lang === "es" ? "Los salarios anuales deben ser mayores a cero." : "Annual wages must be greater than zero.";
   return null;
 }

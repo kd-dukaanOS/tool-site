@@ -5,48 +5,58 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, Landmark, Building2, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { personalGroup:"Personal", currentAgeLabel:"Current Age", retirementAgeLabel:"Retirement Age", currentPotLabel:"Current Pension Pot (£)", salaryGroup:"Salary & Contributions", annualSalaryLabel:"Annual Salary (£)", employeePctLabel:"Employee Contribution (%)", employerPctLabel:"Employer Contribution (%)", assumptionsGroup:"Assumptions", returnLabel:"Expected Return (%/yr)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Pension Calculator", emptyDesc:"Project your pension pot including tax relief and employer contributions.", tip1:"Projected Pot", tip2:"Tax Relief", tip3:"Employer Contributions", projectedPotTitle:"Projected Pot", yourContribTitle:"Your Contributions", employerContribTitle:"Employer Contributions", taxReliefTitle:"Tax Relief Added", aboutTitle:"About this Calculator", aboutText:"Projects your UK pension pot by combining your contributions, automatic basic-rate tax relief, and employer contributions, then compounding the total at your expected return until retirement." },
+  es: { personalGroup:"Personal", currentAgeLabel:"Edad Actual", retirementAgeLabel:"Edad de Jubilación", currentPotLabel:"Fondo de Pensión Actual (£)", salaryGroup:"Salario y Contribuciones", annualSalaryLabel:"Salario Anual (£)", employeePctLabel:"Contribución del Empleado (%)", employerPctLabel:"Contribución del Empleador (%)", assumptionsGroup:"Suposiciones", returnLabel:"Retorno Esperado (%/año)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Pensión del Reino Unido", emptyDesc:"Proyecta tu fondo de pensión incluyendo el alivio fiscal y las contribuciones del empleador.", tip1:"Fondo Proyectado", tip2:"Alivio Fiscal", tip3:"Contribuciones del Empleador", projectedPotTitle:"Fondo Proyectado", yourContribTitle:"Tus Contribuciones", employerContribTitle:"Contribuciones del Empleador", taxReliefTitle:"Alivio Fiscal Agregado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Proyecta tu fondo de pensión del Reino Unido combinando tus contribuciones, el alivio fiscal automático de tasa básica, y las contribuciones del empleador, luego capitalizando el total a tu retorno esperado hasta la jubilación." },
+}[lang];
 ---
 <section class="ukpen-calculator">
   <div class="ukpen-layout">
     <aside class="ukpen-sidebar">
       <div class="ukpen-group">
-        <h3>Personal</h3>
-        <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" min="1" step="1" />
-        <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" min="1" step="1" />
-        <CalculatorField id="currentPot" label="Current Pension Pot (£)" type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <h3>{copy.personalGroup}</h3>
+        <CalculatorField id="currentAge" label={copy.currentAgeLabel} type="number" placeholder="e.g. 30" min="1" step="1" />
+        <CalculatorField id="retirementAge" label={copy.retirementAgeLabel} type="number" placeholder="e.g. 65" min="1" step="1" />
+        <CalculatorField id="currentPot" label={copy.currentPotLabel} type="number" placeholder="e.g. 10000" min="0" step="1" />
       </div>
       <div class="ukpen-group">
-        <h3>Salary & Contributions</h3>
-        <CalculatorField id="annualSalary" label="Annual Salary (£)" type="number" placeholder="e.g. 35000" min="0" step="1" />
-        <CalculatorField id="employeeContributionPercent" label="Employee Contribution (%)" type="number" placeholder="e.g. 5" min="0" step="0.1" />
-        <CalculatorField id="employerContributionPercent" label="Employer Contribution (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <h3>{copy.salaryGroup}</h3>
+        <CalculatorField id="annualSalary" label={copy.annualSalaryLabel} type="number" placeholder="e.g. 35000" min="0" step="1" />
+        <CalculatorField id="employeeContributionPercent" label={copy.employeePctLabel} type="number" placeholder="e.g. 5" min="0" step="0.1" />
+        <CalculatorField id="employerContributionPercent" label={copy.employerPctLabel} type="number" placeholder="e.g. 3" min="0" step="0.1" />
       </div>
       <div class="ukpen-group">
-        <h3>Assumptions</h3>
-        <CalculatorField id="expectedReturn" label="Expected Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <h3>{copy.assumptionsGroup}</h3>
+        <CalculatorField id="expectedReturn" label={copy.returnLabel} type="number" placeholder="e.g. 6" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukpen-content">
       <div id="emptyState">
-        <EmptyState icon="🇬🇧" title="UK Pension Calculator" description="Project your pension pot including tax relief and employer contributions." tips={["Projected Pot", "Tax Relief", "Employer Contributions"]} />
+        <EmptyState icon="🇬🇧" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="projectedPotResult" title="Projected Pot" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="totalContributionsResult" title="Your Contributions" icon={Landmark} />
-          <ResultCard id="employerContributionsResult" title="Employer Contributions" icon={Building2} />
-          <ResultCard id="taxReliefAddedResult" title="Tax Relief Added" icon={Percent} />
+          <ResultCard id="projectedPotResult" title={copy.projectedPotTitle} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="totalContributionsResult" title={copy.yourContribTitle} icon={Landmark} />
+          <ResultCard id="employerContributionsResult" title={copy.employerContribTitle} icon={Building2} />
+          <ResultCard id="taxReliefAddedResult" title={copy.taxReliefTitle} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects your UK pension pot by combining your contributions, automatic basic-rate tax relief, and employer contributions, then compounding the total at your expected return until retirement.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-pension-calculator";
 </script>

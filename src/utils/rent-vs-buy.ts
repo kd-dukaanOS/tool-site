@@ -83,9 +83,18 @@ export function calculateRentVsBuy(
   };
 }
 
-export function validateRentVsBuyInputs(homePrice: number, monthlyRent: number, comparisonYears: number): string | null {
-  if (homePrice <= 0) return "Home price must be greater than zero.";
-  if (monthlyRent <= 0) return "Monthly rent must be greater than zero.";
-  if (comparisonYears <= 0) return "Comparison period must be greater than zero.";
+export function validateRentVsBuyInputs(homePrice: number, monthlyRent: number, comparisonYears: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    price: "El precio de la vivienda debe ser mayor a cero.",
+    rent: "La renta mensual debe ser mayor a cero.",
+    years: "El período de comparación debe ser mayor a cero.",
+  } : {
+    price: "Home price must be greater than zero.",
+    rent: "Monthly rent must be greater than zero.",
+    years: "Comparison period must be greater than zero.",
+  };
+  if (homePrice <= 0) return msg.price;
+  if (monthlyRent <= 0) return msg.rent;
+  if (comparisonYears <= 0) return msg.years;
   return null;
 }

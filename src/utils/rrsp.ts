@@ -31,8 +31,15 @@ export function calculateRRSP(
   return { contributionRoom, maxAllowedContribution, taxSavings, excessContribution, penaltyTax };
 }
 
-export function validateRRSPInputs(previousYearEarnedIncome: number, plannedContribution: number): string | null {
-  if (previousYearEarnedIncome < 0) return "Previous year's earned income cannot be negative.";
-  if (plannedContribution <= 0) return "Planned contribution must be greater than zero.";
+export function validateRRSPInputs(previousYearEarnedIncome: number, plannedContribution: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    income: "El ingreso ganado del año anterior no puede ser negativo.",
+    contrib: "El aporte planeado debe ser mayor a cero.",
+  } : {
+    income: "Previous year's earned income cannot be negative.",
+    contrib: "Planned contribution must be greater than zero.",
+  };
+  if (previousYearEarnedIncome < 0) return msg.income;
+  if (plannedContribution <= 0) return msg.contrib;
   return null;
 }

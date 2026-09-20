@@ -68,7 +68,7 @@ export function calculateTaxBracket(filingStatus: FilingStatus, taxableIncome: n
   return { taxableIncome, totalTax, marginalRate: marginalRate * 100, effectiveRate, bracketBreakdown };
 }
 
-export function validateTaxBracketInputs(taxableIncome: number): string | null {
-  if (taxableIncome <= 0) return "Taxable income must be greater than zero.";
+export function validateTaxBracketInputs(taxableIncome: number, lang: "en" | "es" = "en"): string | null {
+  if (taxableIncome <= 0) return lang === "es" ? "El ingreso gravable debe ser mayor a cero." : "Taxable income must be greater than zero.";
   return null;
 }

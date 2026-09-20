@@ -13,20 +13,20 @@ export interface OvertimeResult {
   effectiveOvertimeRate: number;
 }
 
-export function validateOvertimeInput(input: OvertimeInput): string | null {
+export function validateOvertimeInput(input: OvertimeInput, lang: "en" | "es" = "en"): string | null {
   const { hourlyRate, regularHours, overtimeHours, overtimeMultiplier } = input;
 
   if (!hourlyRate || Number.isNaN(hourlyRate) || hourlyRate <= 0) {
-    return "Please enter a valid hourly rate greater than 0.";
+    return lang === "es" ? "Por favor ingresa una tarifa por hora válida mayor a 0." : "Please enter a valid hourly rate greater than 0.";
   }
   if (regularHours === undefined || Number.isNaN(regularHours) || regularHours < 0) {
-    return "Please enter valid regular hours (0 or more).";
+    return lang === "es" ? "Por favor ingresa horas regulares válidas (0 o más)." : "Please enter valid regular hours (0 or more).";
   }
   if (overtimeHours === undefined || Number.isNaN(overtimeHours) || overtimeHours < 0) {
-    return "Please enter valid overtime hours (0 or more).";
+    return lang === "es" ? "Por favor ingresa horas extra válidas (0 o más)." : "Please enter valid overtime hours (0 or more).";
   }
   if (!overtimeMultiplier || Number.isNaN(overtimeMultiplier) || overtimeMultiplier <= 1) {
-    return "Please enter a valid overtime multiplier greater than 1 (e.g. 1.5).";
+    return lang === "es" ? "Por favor ingresa un multiplicador de horas extra válido mayor a 1 (ej. 1.5)." : "Please enter a valid overtime multiplier greater than 1 (e.g. 1.5).";
   }
 
   return null;
@@ -51,7 +51,33 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
-export function copyOvertimeSummary(input: OvertimeInput, result: OvertimeResult): string {
+export function copyOvertimeSummary(input: OvertimeInput, result: OvertimeResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Pago de Horas Extra
+
+Tarifa por Hora:
+${formatCurrency(input.hourlyRate)}
+
+Horas Regulares:
+${input.regularHours}
+
+Horas Extra:
+${input.overtimeHours}
+
+Multiplicador de Horas Extra:
+${input.overtimeMultiplier}x
+
+Pago Regular:
+${formatCurrency(result.regularPay)}
+
+Pago de Horas Extra:
+${formatCurrency(result.overtimePay)}
+
+Pago Total:
+${formatCurrency(result.totalPay)}
+`.trim();
+  }
   return `
 Overtime Pay Summary
 

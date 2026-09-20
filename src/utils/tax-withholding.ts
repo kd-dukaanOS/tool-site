@@ -92,7 +92,7 @@ export function calculateTaxWithholding(
   };
 }
 
-export function validateWithholdingInputs(grossPayPerPeriod: number): string | null {
-  if (grossPayPerPeriod <= 0) return "Gross pay per period must be greater than zero.";
+export function validateWithholdingInputs(grossPayPerPeriod: number, lang: "en" | "es" = "en"): string | null {
+  if (grossPayPerPeriod <= 0) return lang === "es" ? "El pago bruto por período debe ser mayor a cero." : "Gross pay per period must be greater than zero.";
   return null;
 }

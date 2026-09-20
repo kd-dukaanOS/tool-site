@@ -6,6 +6,7 @@ import {
   copyHomeAffordabilitySummary,
 } from "../utils/home-affordability";
 import { setValue, copyToClipboard } from "../utils/calculator";
+import { getSavedCurrency, onCurrencyChange } from "../utils/currency";
 
 const annualIncomeInput = document.getElementById("annualIncome") as HTMLInputElement;
 const monthlyDebtsInput = document.getElementById("monthlyDebts") as HTMLInputElement;
@@ -23,6 +24,8 @@ const copyBtn = document.getElementById("copyBtn");
 const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 
 let lastInput: Parameters<typeof calculateHomeAffordability>[0] | null = null;
 let lastResult: ReturnType<typeof calculateHomeAffordability> | null = null;
@@ -50,18 +53,19 @@ function calculate() {
     maxDTI: parseFloat(maxDTIInput.value),
   };
 
-  const error = validateHomeAffordabilityInput(input);
+  const error = validateHomeAffordabilityInput(input, lang);
   if (error) {
     showError(error);
     return;
   }
 
   const result = calculateHomeAffordability(input);
+  const currency = getSavedCurrency();
 
-  setValue("maxHomePriceResult", formatCurrency(result.maxHomePrice));
-  setValue("maxLoanAmountResult", formatCurrency(result.maxLoanAmount));
-  setValue("monthlyPaymentResult", formatCurrency(result.totalMonthlyPayment));
-  setValue("monthlyPIResult", formatCurrency(result.monthlyPI));
+  setValue("maxHomePriceResult", formatCurrency(result.maxHomePrice, currency));
+  setValue("maxLoanAmountResult", formatCurrency(result.maxLoanAmount, currency));
+  setValue("monthlyPaymentResult", formatCurrency(result.totalMonthlyPayment, currency));
+  setValue("monthlyPIResult", formatCurrency(result.monthlyPI, currency));
 
   lastInput = input;
   lastResult = result;
@@ -69,6 +73,10 @@ function calculate() {
   emptyState.hidden = true;
   resultsContainer.hidden = false;
 }
+
+onCurrencyChange(() => {
+  if (lastInput && lastResult) calculate();
+});
 
 function reset() {
   annualIncomeInput.value = "";
@@ -88,7 +96,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyHomeAffordabilitySummary(lastInput, lastResult));
+  copyToClipboard(copyHomeAffordabilitySummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

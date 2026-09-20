@@ -19,6 +19,9 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const WEIGHT_LABELS_ES: Record<string, string> = { mg:"Miligramo", g:"Gramo", kg:"Kilogramo", tonne:"Tonelada", oz:"Onza", lb:"Libra" };
+
 let lastInput: WeightInput | null = null;
 
 function showError(msg: string) {
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateWeightInput(input);
+  const err = validateWeightInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculateWeight(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", WEIGHT_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", lang === "es" ? WEIGHT_LABELS_ES[input.toUnit] : WEIGHT_LABELS[input.toUnit]);
 
   lastInput = input;
 

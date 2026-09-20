@@ -14,15 +14,21 @@ export interface PregnancyWeightGainResult {
   recommendedGainToDateMaxKg: number;
 }
 
-export function validatePregnancyWeightGainInput(i: PregnancyWeightGainInput): string | null {
-  if (i.prePregnancyWeightKg <= 0) return "Enter a valid pre-pregnancy weight.";
-  if (i.heightCm <= 0 || i.heightCm > 250) return "Enter a realistic height.";
+export function validatePregnancyWeightGainInput(i: PregnancyWeightGainInput, lang: "en" | "es" = "en"): string | null {
+  if (i.prePregnancyWeightKg <= 0) return lang === "es" ? "Ingresa un peso pre-embarazo válido." : "Enter a valid pre-pregnancy weight.";
+  if (i.heightCm <= 0 || i.heightCm > 250) return lang === "es" ? "Ingresa una altura realista." : "Enter a realistic height.";
   if (i.currentWeekOfPregnancy < 1 || i.currentWeekOfPregnancy > 42)
-    return "Enter a valid week of pregnancy (1-42).";
+    return lang === "es" ? "Ingresa una semana de embarazo válida (1-42)." : "Enter a valid week of pregnancy (1-42).";
   return null;
 }
 
-function getBMICategory(bmi: number): string {
+function getBMICategory(bmi: number, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    if (bmi < 18.5) return "Bajo peso";
+    if (bmi < 25) return "Peso normal";
+    if (bmi < 30) return "Sobrepeso";
+    return "Obesidad";
+  }
   if (bmi < 18.5) return "Underweight";
   if (bmi < 25) return "Normal weight";
   if (bmi < 30) return "Overweight";
@@ -44,14 +50,16 @@ const TWIN_RANGES: Record<string, [number, number]> = {
 };
 
 export function calculatePregnancyWeightGain(
-  i: PregnancyWeightGainInput
+  i: PregnancyWeightGainInput,
+  lang: "en" | "es" = "en"
 ): PregnancyWeightGainResult {
   const heightM = i.heightCm / 100;
   const bmi = i.prePregnancyWeightKg / (heightM * heightM);
-  const category = getBMICategory(bmi);
+  const enCategory = getBMICategory(bmi, "en");
+  const category = getBMICategory(bmi, lang);
 
   const ranges = i.isTwins ? TWIN_RANGES : SINGLE_RANGES;
-  const [minTotal, maxTotal] = ranges[category];
+  const [minTotal, maxTotal] = ranges[enCategory];
 
   const progressRatio = Math.min(1, i.currentWeekOfPregnancy / 40);
 
@@ -67,8 +75,23 @@ export function calculatePregnancyWeightGain(
 
 export function copyPregnancyWeightGainSummary(
   i: PregnancyWeightGainInput,
-  r: PregnancyWeightGainResult
+  r: PregnancyWeightGainResult,
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Aumento de Peso en el Embarazo
+
+Peso Pre-Embarazo: ${i.prePregnancyWeightKg} kg
+Altura: ${i.heightCm} cm
+Semana Actual: ${i.currentWeekOfPregnancy}
+${i.isTwins ? "Embarazo de Gemelos" : "Embarazo Único"}
+
+IMC Pre-Embarazo: ${r.prePregnancyBMI} (${r.bmiCategory})
+Aumento Total Recomendado: ${r.recommendedTotalGainMinKg} - ${r.recommendedTotalGainMaxKg} kg
+Aumento Recomendado Hasta Ahora: ${r.recommendedGainToDateMinKg} - ${r.recommendedGainToDateMaxKg} kg
+`.trim();
+  }
   return `
 Pregnancy Weight Gain Summary
 

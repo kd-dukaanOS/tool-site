@@ -1,0 +1,47 @@
+---
+// src/pages/es/math-stats/mean-median-mode-calculator.astro
+import Layout from "../../../layouts/Layout.astro";
+import MeanMedianModeCalculatorWidget from "../../../components/tools/MeanMedianModeCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { meanMedianModeCalculatorContent } from "../../../data/calculators/es/mean-median-mode-calculator.ts";
+
+const tool = tools.find((t) => t.slug === "mean-median-mode-calculator")!;
+const content = meanMedianModeCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Matemáticas y Estadística", url: "/es/math-stats/" },
+    { name: "Media, Mediana y Moda", url: "/es/math-stats/mean-median-mode-calculator/" },
+  ]}
+  appName="Media, Mediana y Moda"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/math-stats/">Matemáticas y Estadística</a> / Media, Mediana y Moda
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["math-stats"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Media, Mediana y Moda</h1>
+        <p>Encuentra la tendencia central de tus datos</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="mean-median-mode-calculator" data-name="Media, Mediana y Moda" data-url="/es/math-stats/mean-median-mode-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <MeanMedianModeCalculatorWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

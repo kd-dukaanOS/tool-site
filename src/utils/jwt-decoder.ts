@@ -39,13 +39,29 @@ export function decodeJwt(token: string): JwtParts {
   };
 }
 
-export function validateJwtInput(token: string): string | null {
-  if (!token.trim()) return "Please paste a JWT token.";
-  if (token.trim().split(".").length !== 3) return "Invalid JWT format — expected 3 dot-separated parts.";
+export function validateJwtInput(token: string, lang: "en" | "es" = "en"): string | null {
+  if (!token.trim()) return lang === "es" ? "Por favor pega un token JWT." : "Please paste a JWT token.";
+  if (token.trim().split(".").length !== 3) return lang === "es" ? "Formato JWT inválido — se esperaban 3 partes separadas por puntos." : "Invalid JWT format — expected 3 dot-separated parts.";
   return null;
 }
 
-export function copyJwtSummary(token: string, parts: JwtParts): string {
+export function copyJwtSummary(token: string, parts: JwtParts, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `Resumen de Decodificación JWT
+
+Token:
+${token}
+
+Encabezado:
+${JSON.stringify(parts.header, null, 2)}
+
+Payload:
+${JSON.stringify(parts.payload, null, 2)}
+
+Emitido: ${parts.issuedAt ?? "N/D"}
+Expira: ${parts.expiresAt ?? "N/D"}
+Estado: ${parts.isExpired ? "Expirado" : "Válido"}`.trim();
+  }
   return `JWT Decode Summary
 
 Token:

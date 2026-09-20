@@ -51,9 +51,18 @@ export function calculateUkPension(
   };
 }
 
-export function validateUkPensionInputs(currentAge: number, retirementAge: number): string | null {
-  if (currentAge <= 0) return "Current age must be greater than zero.";
-  if (retirementAge <= currentAge) return "Retirement age must be greater than current age.";
-  if (retirementAge < 55) return "Private pensions generally can't be accessed before age 55 (rising to 57 from 2028).";
+export function validateUkPensionInputs(currentAge: number, retirementAge: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    age: "La edad actual debe ser mayor a cero.",
+    retire: "La edad de jubilación debe ser mayor que la edad actual.",
+    min55: "Las pensiones privadas generalmente no se pueden acceder antes de los 55 años (subiendo a 57 desde 2028).",
+  } : {
+    age: "Current age must be greater than zero.",
+    retire: "Retirement age must be greater than current age.",
+    min55: "Private pensions generally can't be accessed before age 55 (rising to 57 from 2028).",
+  };
+  if (currentAge <= 0) return msg.age;
+  if (retirementAge <= currentAge) return msg.retire;
+  if (retirementAge < 55) return msg.min55;
   return null;
 }

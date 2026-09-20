@@ -11,24 +11,35 @@ export interface InflationResult {
   purchasingPowerLostPercent: number;
 }
 
-export function validateInflationInput(input: InflationInput): string | null {
+export function validateInflationInput(input: InflationInput, lang: "en" | "es" = "en"): string | null {
 
   const { amount, years, annualRate } = input;
+  const msg = lang === "es" ? {
+    amount: "Por favor ingresa un monto mayor a 0.",
+    years: "Por favor ingresa un período de tiempo mayor a 0.",
+    rate: "Por favor ingresa una tasa de inflación mayor a 0.",
+    realistic: "Por favor ingresa un período realista (menos de 100 años).",
+  } : {
+    amount: "Please enter an amount greater than 0.",
+    years: "Please enter a time period greater than 0.",
+    rate: "Please enter an inflation rate greater than 0.",
+    realistic: "Please enter a realistic time period (under 100 years).",
+  };
 
   if (!amount || Number.isNaN(amount) || amount <= 0) {
-    return "Please enter an amount greater than 0.";
+    return msg.amount;
   }
 
   if (!years || Number.isNaN(years) || years <= 0) {
-    return "Please enter a time period greater than 0.";
+    return msg.years;
   }
 
   if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) {
-    return "Please enter an inflation rate greater than 0.";
+    return msg.rate;
   }
 
   if (years > 100) {
-    return "Please enter a realistic time period (under 100 years).";
+    return msg.realistic;
   }
 
   return null;
@@ -67,7 +78,31 @@ export function formatPercent(value: number): string {
   return `${value.toFixed(2)}%`;
 }
 
-export function copyInflationSummary(input: InflationInput, result: InflationResult, currency: CurrencyCode = "INR"): string {
+export function copyInflationSummary(input: InflationInput, result: InflationResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Impacto de la Inflación
+
+Monto Hoy:
+${formatCurrency(input.amount, currency)}
+
+Período de Tiempo:
+${input.years} Años
+
+Tasa de Inflación Anual:
+${input.annualRate}%
+
+Valor Futuro Necesario (mismo poder adquisitivo):
+${formatCurrency(result.futureValueNeeded, currency)}
+
+Poder Adquisitivo Después de ${input.years} Años:
+${formatCurrency(result.purchasingPowerFuture, currency)}
+
+Poder Adquisitivo Perdido:
+${formatPercent(result.purchasingPowerLostPercent)}
+`.trim();
+  }
 
   return `
 Inflation Impact Summary

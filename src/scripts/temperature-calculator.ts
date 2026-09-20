@@ -3,8 +3,11 @@ import {
   validateTemperatureInput,
   copyTemperatureSummary,
   TEMPERATURE_LABELS,
+  getTemperatureLabel,
   type TemperatureInput,
 } from "../utils/temperature";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
 const valueInput = document.getElementById("value") as HTMLInputElement;
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value as TemperatureInput["toUnit"],
   };
 
-  const err = validateTemperatureInput(input);
+  const err = validateTemperatureInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculateTemperature(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", TEMPERATURE_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", getTemperatureLabel(input.toUnit, lang));
 
   lastInput = input;
 
@@ -68,7 +71,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateTemperature(lastInput);
-  copyToClipboard(copyTemperatureSummary(lastInput, result));
+  copyToClipboard(copyTemperatureSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

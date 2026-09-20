@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: RatioInput | null = null;
 
 function showError(msg: string) {
@@ -38,11 +40,11 @@ function calculate() {
   };
 
   if (!input.valueA || !input.valueB) {
-    showError("Please fill both fields.");
+    showError(lang === "es" ? "Por favor completa ambos campos." : "Please fill both fields.");
     return;
   }
 
-  const err = validateRatioInput(input);
+  const err = validateRatioInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -53,7 +55,7 @@ function calculate() {
   setValue("simplifiedResult", `${result.simplifiedA} : ${result.simplifiedB}`);
   setValue("decimalResult", result.decimalRatio);
   setValue("percentageResult", `${result.percentageA}% : ${result.percentageB}%`);
-  setSubtitle("percentageResult", "share of total");
+  setSubtitle("percentageResult", lang === "es" ? "parte del total" : "share of total");
 
   lastInput = input;
 
@@ -75,7 +77,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateRatio(lastInput);
-  copyToClipboard(copyRatioSummary(lastInput, result));
+  copyToClipboard(copyRatioSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

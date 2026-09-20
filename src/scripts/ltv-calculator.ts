@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["homeValue", "loanBalance", "secondLienBalance"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +38,7 @@ function calculate() {
 
   const [homeValue, loanBalance, secondLienBalance] = fieldIds.map(val);
 
-  const validationError = validateLTVInputs(homeValue, loanBalance);
+  const validationError = validateLTVInputs(homeValue, loanBalance, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -47,11 +49,18 @@ function calculate() {
   setValue("ltvResult", `${result.ltvRatio.toFixed(1)}%`);
   setValue("cltvResult", result.cltvRatio === null ? "N/A" : `${result.cltvRatio.toFixed(1)}%`);
   setValue("equityResult", fmtCurrency(result.equityAmount));
-  setValue("pmiStatusResult", result.pmiLikely ? "PMI Likely" : "No PMI Needed");
-  setSubtitle("equityResult", `${result.equityPercent.toFixed(1)}% equity`);
-  setSubtitle("pmiStatusResult", result.pmiLikely ? `Pay down ${fmtCurrency(result.amountToReach80)} to reach 80% LTV` : "Below 80% LTV threshold");
+  setValue("pmiStatusResult", result.pmiLikely ? (lang === "es" ? "PMI Probable" : "PMI Likely") : (lang === "es" ? "Sin PMI" : "No PMI Needed"));
+  setSubtitle("equityResult", lang === "es" ? `${result.equityPercent.toFixed(1)}% de capital` : `${result.equityPercent.toFixed(1)}% equity`);
+  setSubtitle("pmiStatusResult", result.pmiLikely ? (lang === "es" ? `Abona ${fmtCurrency(result.amountToReach80)} para llegar a 80% LTV` : `Pay down ${fmtCurrency(result.amountToReach80)} to reach 80% LTV`) : (lang === "es" ? "Por debajo del umbral de 80% LTV" : "Below 80% LTV threshold"));
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen LTV
+
+Ratio Préstamo-Valor: ${result.ltvRatio.toFixed(1)}%
+LTV Combinado: ${result.cltvRatio === null ? "N/D" : `${result.cltvRatio.toFixed(1)}%`}
+Capital de Vivienda: ${fmtCurrency(result.equityAmount)} (${result.equityPercent.toFixed(1)}%)
+Estado del PMI: ${result.pmiLikely ? "Probablemente requerido" : "No requerido"}
+`.trim() : `
 LTV Summary
 
 Loan-to-Value Ratio: ${result.ltvRatio.toFixed(1)}%

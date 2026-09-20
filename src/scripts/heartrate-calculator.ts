@@ -16,6 +16,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: HeartRateInput | null = null;
 
 function showError(msg: string) {
@@ -32,7 +34,7 @@ function calculate() {
 
   const input: HeartRateInput = { age: toNumber(ageInput.value) };
 
-  const err = validateHeartRateInput(input);
+  const err = validateHeartRateInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -63,7 +65,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateHeartRate(lastInput);
-  copyToClipboard(copyHeartRateSummary(lastInput, result));
+  copyToClipboard(copyHeartRateSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

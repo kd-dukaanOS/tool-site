@@ -30,10 +30,13 @@ export const VOLUME_LABELS: Record<string, string> = {
   floz: "Fluid Ounce",
 };
 
-export function validateVolumeInput(i: VolumeInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
+export function validateVolumeInput(i: VolumeInput, lang: "en" | "es" = "en"): string | null {
+  const t = lang === "es"
+    ? { num:"Ingresa un número válido.", units:"Selecciona ambas unidades.", diff:"Elige dos unidades diferentes." }
+    : { num:"Enter a valid number.", units:"Select both units.", diff:"Choose two different units." };
+  if (i.value === undefined || Number.isNaN(i.value)) return t.num;
+  if (!i.fromUnit || !i.toUnit) return t.units;
+  if (i.fromUnit === i.toUnit) return t.diff;
   return null;
 }
 

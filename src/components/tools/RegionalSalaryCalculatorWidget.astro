@@ -5,42 +5,52 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Clock3, Sun, CalendarDays, Repeat, CalendarRange, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { periodLabel:"I'm entering", annualOpt:"Annual Salary", hourlyOpt:"Hourly Rate", amount:"Amount", amountHelp:"Enter the hourly rate or annual salary.", hoursPerWeek:"Hours per Week", hoursPerWeekHelp:"Default: 40", weeksPerYear:"Weeks per Year", weeksPerYearHelp:"Default: 52", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Salary Calculator", emptyDesc:"Convert your pay between hourly, weekly, monthly and annual.", tip1:"Hourly to Annual", tip2:"Annual to Hourly", tip3:"Full Pay Breakdown", hourly:"Hourly", daily:"Daily", weekly:"Weekly", biweekly:"Biweekly", monthly:"Monthly", annual:"Annual", aboutTitle:"About this Calculator", aboutText:"Converts gross pay between hourly, daily, weekly, biweekly, monthly and annual figures. For net pay after tax, use the country-specific Take-Home Pay Calculator." },
+  es: { periodLabel:"Estoy ingresando", annualOpt:"Salario Anual", hourlyOpt:"Tarifa por Hora", amount:"Monto", amountHelp:"Ingresa la tarifa por hora o el salario anual.", hoursPerWeek:"Horas por Semana", hoursPerWeekHelp:"Por defecto: 40", weeksPerYear:"Semanas por Año", weeksPerYearHelp:"Por defecto: 52", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Salario", emptyDesc:"Convierte tu pago entre hora, semana, mes y año.", tip1:"De Hora a Año", tip2:"De Año a Hora", tip3:"Desglose Completo de Pago", hourly:"Por Hora", daily:"Diario", weekly:"Semanal", biweekly:"Quincenal", monthly:"Mensual", annual:"Anual", aboutTitle:"Acerca de esta Calculadora", aboutText:"Convierte el pago bruto entre cifras por hora, diarias, semanales, quincenales, mensuales y anuales. Para el pago neto después de impuestos, usa la Calculadora de Salario Neto específica de tu país." },
+}[lang];
 ---
 <section class="salary-calculator">
   <div class="salary-layout">
     <aside class="salary-sidebar">
-      <label class="field-label" for="period">I'm entering</label>
+      <label class="field-label" for="period">{copy.periodLabel}</label>
       <select id="period" class="field-select">
-        <option value="annual">Annual Salary</option>
-        <option value="hourly">Hourly Rate</option>
+        <option value="annual">{copy.annualOpt}</option>
+        <option value="hourly">{copy.hourlyOpt}</option>
       </select>
-      <CalculatorField id="amount" label="Amount" type="number" required={true} helpText="Enter the hourly rate or annual salary." />
-      <CalculatorField id="hoursPerWeek" label="Hours per Week" type="number" helpText="Default: 40" />
-      <CalculatorField id="weeksPerYear" label="Weeks per Year" type="number" helpText="Default: 52" />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="amount" label={copy.amount} type="number" required={true} helpText={copy.amountHelp} />
+      <CalculatorField id="hoursPerWeek" label={copy.hoursPerWeek} type="number" helpText={copy.hoursPerWeekHelp} />
+      <CalculatorField id="weeksPerYear" label={copy.weeksPerYear} type="number" helpText={copy.weeksPerYearHelp} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="salary-content">
       <div id="emptyState">
-        <EmptyState icon="💰" title="Salary Calculator" description="Convert your pay between hourly, weekly, monthly and annual." tips={["Hourly to Annual", "Annual to Hourly", "Full Pay Breakdown"]} />
+        <EmptyState icon="💰" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="hourlyResult" title="Hourly" icon={Clock3} />
-          <ResultCard id="dailyResult" title="Daily" icon={Sun} />
-          <ResultCard id="weeklyResult" title="Weekly" icon={CalendarDays} />
-          <ResultCard id="biweeklyResult" title="Biweekly" icon={Repeat} />
-          <ResultCard id="monthlyResult" title="Monthly" icon={CalendarRange} />
-          <ResultCard id="annualResult" title="Annual" icon={Wallet} subtitle=" " />
+          <ResultCard id="hourlyResult" title={copy.hourly} icon={Clock3} />
+          <ResultCard id="dailyResult" title={copy.daily} icon={Sun} />
+          <ResultCard id="weeklyResult" title={copy.weekly} icon={CalendarDays} />
+          <ResultCard id="biweeklyResult" title={copy.biweekly} icon={Repeat} />
+          <ResultCard id="monthlyResult" title={copy.monthly} icon={CalendarRange} />
+          <ResultCard id="annualResult" title={copy.annual} icon={Wallet} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Converts gross pay between hourly, daily, weekly, biweekly, monthly and annual figures. For net pay after tax, use the country-specific Take-Home Pay Calculator.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/regional-salary-calculator";
 </script>

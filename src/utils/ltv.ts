@@ -37,9 +37,9 @@ export function calculateLTV(
   };
 }
 
-export function validateLTVInputs(homeValue: number, loanBalance: number): string | null {
-  if (homeValue <= 0) return "Home value must be greater than zero.";
-  if (loanBalance < 0) return "Loan balance cannot be negative.";
-  if (loanBalance > homeValue * 3) return "Loan balance seems unrealistic relative to home value.";
+export function validateLTVInputs(homeValue: number, loanBalance: number, lang: "en" | "es" = "en"): string | null {
+  if (homeValue <= 0) return lang === "es" ? "El valor de la vivienda debe ser mayor a cero." : "Home value must be greater than zero.";
+  if (loanBalance < 0) return lang === "es" ? "El saldo del préstamo no puede ser negativo." : "Loan balance cannot be negative.";
+  if (loanBalance > homeValue * 3) return lang === "es" ? "El saldo del préstamo parece poco realista respecto al valor de la vivienda." : "Loan balance seems unrealistic relative to home value.";
   return null;
 }

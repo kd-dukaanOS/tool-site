@@ -14,6 +14,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function showError(msg: string) { errorBox.textContent = msg; errorBox.hidden = false; }
@@ -27,13 +29,13 @@ function calculate() {
   const weeksPerYear = parseFloat(weeksInput.value) || 52;
 
   if (!amount || amount <= 0) {
-    return showError("Please enter a valid amount greater than 0.");
+    return showError(lang === "es" ? "Por favor ingresa un monto válido mayor a 0." : "Please enter a valid amount greater than 0.");
   }
   if (hoursPerWeek <= 0 || hoursPerWeek > 168) {
-    return showError("Hours per week must be between 1 and 168.");
+    return showError(lang === "es" ? "Las horas por semana deben estar entre 1 y 168." : "Hours per week must be between 1 and 168.");
   }
   if (weeksPerYear <= 0 || weeksPerYear > 52) {
-    return showError("Weeks per year must be between 1 and 52.");
+    return showError(lang === "es" ? "Las semanas por año deben estar entre 1 y 52." : "Weeks per year must be between 1 and 52.");
   }
 
   const r = convertSalary(amount, period, hoursPerWeek, weeksPerYear);
@@ -44,15 +46,25 @@ function calculate() {
   setValue("biweeklyResult", formatCurrency(r.biweekly, "USD"));
   setValue("monthlyResult", formatCurrency(r.monthly, "USD"));
   setValue("annualResult", formatCurrency(r.annual, "USD"));
-  setSubtitle("annualResult", "gross, before tax");
+  setSubtitle("annualResult", lang === "es" ? "bruto, antes de impuestos" : "gross, before tax");
 
-  lastSummary = `Salary Conversion Summary\n\n` +
+  lastSummary = lang === "es" ? (
+    `Resumen de Conversión de Salario\n\n` +
+    `Por Hora: ${formatCurrency(r.hourly, "USD")}\n` +
+    `Diario: ${formatCurrency(r.daily, "USD")}\n` +
+    `Semanal: ${formatCurrency(r.weekly, "USD")}\n` +
+    `Quincenal: ${formatCurrency(r.biweekly, "USD")}\n` +
+    `Mensual: ${formatCurrency(r.monthly, "USD")}\n` +
+    `Anual: ${formatCurrency(r.annual, "USD")}\n`
+  ) : (
+    `Salary Conversion Summary\n\n` +
     `Hourly: ${formatCurrency(r.hourly, "USD")}\n` +
     `Daily: ${formatCurrency(r.daily, "USD")}\n` +
     `Weekly: ${formatCurrency(r.weekly, "USD")}\n` +
     `Biweekly: ${formatCurrency(r.biweekly, "USD")}\n` +
     `Monthly: ${formatCurrency(r.monthly, "USD")}\n` +
-    `Annual: ${formatCurrency(r.annual, "USD")}\n`;
+    `Annual: ${formatCurrency(r.annual, "USD")}\n`
+  );
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

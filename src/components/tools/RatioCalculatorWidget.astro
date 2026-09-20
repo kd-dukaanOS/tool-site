@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Divide, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { valueA:"First Value", valueB:"Second Value", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter values to simplify ratio", emptyDesc:"Simplified ratio and percentage split will appear here.", simplified:"Simplified Ratio", decimal:"Decimal Ratio", percentage:"Percentage Split", subtitle:"share of total" },
+  es: { valueA:"Primer Valor", valueB:"Segundo Valor", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa valores para simplificar la razón", emptyDesc:"La razón simplificada y el porcentaje aparecerán aquí.", simplified:"Razón Simplificada", decimal:"Razón Decimal", percentage:"División Porcentual", subtitle:"parte del total" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="valueA" label="First Value" type="number" placeholder="e.g. 4" />
-    <CalculatorField id="valueB" label="Second Value" type="number" placeholder="e.g. 6" />
+    <CalculatorField id="valueA" label={copy.valueA} type="number" placeholder="e.g. 4" />
+    <CalculatorField id="valueB" label={copy.valueB} type="number" placeholder="e.g. 6" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -20,22 +27,28 @@ import { Divide, Percent } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter values to simplify ratio"
-      description="Simplified ratio and percentage split will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="simplifiedResult" title="Simplified Ratio" icon={Divide} accent="primary" size="lg" />
-      <ResultCard id="decimalResult" title="Decimal Ratio" icon={Divide} accent="neutral" />
-      <ResultCard id="percentageResult" title="Percentage Split" icon={Percent} accent="neutral" />
+      <ResultCard id="simplifiedResult" title={copy.simplified} icon={Divide} accent="primary" size="lg" />
+      <ResultCard id="decimalResult" title={copy.decimal} icon={Divide} accent="neutral" />
+      <ResultCard id="percentageResult" title={copy.percentage} icon={Percent} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/ratio-calculator.ts"></script>

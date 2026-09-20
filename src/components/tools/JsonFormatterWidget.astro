@@ -1,21 +1,28 @@
-﻿---
+---
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Braces, Layers, HardDrive } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { input:"Input JSON", format:"Format", minify:"Minify", emptyTitle:"JSON Formatter", emptyDesc:"Format, minify and validate JSON instantly.", tip1:"Format", tip2:"Minify", tip3:"Validate", tip4:"Key & Depth Stats", keys:"Keys", depth:"Depth", size:"Size", output:"Output", aboutTitle:"About this Tool", aboutText:"Format, minify and validate JSON with key count, depth and size stats — all in your browser." },
+  es: { input:"JSON de Entrada", format:"Formatear", minify:"Minificar", emptyTitle:"Formateador JSON", emptyDesc:"Formatea, minifica y valida JSON al instante.", tip1:"Formatear", tip2:"Minificar", tip3:"Validar", tip4:"Estadísticas de Claves y Profundidad", keys:"Claves", depth:"Profundidad", size:"Tamaño", output:"Salida", aboutTitle:"Acerca de esta Herramienta", aboutText:"Formatea, minifica y valida JSON con estadísticas de claves, profundidad y tamaño — todo en tu navegador." },
+}[lang];
 ---
 <section class="json-formatter">
   <div class="json-layout">
     <aside class="json-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="jsonInput">Input JSON</label>
+        <label class="tool-label" for="jsonInput">{copy.input}</label>
         <textarea id="jsonInput" class="tool-textarea" placeholder='{"name": "example"}'></textarea>
       </div>
 
       <div class="tool-actions">
-        <button id="formatBtn" class="tool-btn tool-btn-primary">Format</button>
-        <button id="minifyBtn" class="tool-btn tool-btn-secondary">Minify</button>
+        <button id="formatBtn" class="tool-btn tool-btn-primary">{copy.format}</button>
+        <button id="minifyBtn" class="tool-btn tool-btn-secondary">{copy.minify}</button>
       </div>
 
       <CalculatorActions calculateId="" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -26,9 +33,9 @@ import { Braces, Layers, HardDrive } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="{}"
-          title="JSON Formatter"
-          description="Format, minify and validate JSON instantly."
-          tips={["Format", "Minify", "Validate", "Key & Depth Stats"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
@@ -46,13 +53,16 @@ import { Braces, Layers, HardDrive } from "@lucide/astro";
 
         <section class="calculator-info">
           <h2>About this Tool</h2>
-          <p>Format, minify and validate JSON with key count, depth and size stats â€” all in your browser.</p>
+          <p>Format, minify and validate JSON with key count, depth and size stats — all in your browser.</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/json-formatter";
 </script>

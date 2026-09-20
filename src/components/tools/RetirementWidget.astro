@@ -5,37 +5,47 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { PiggyBank, TrendingUp, Wallet, Landmark } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { currentAge:"Current Age", retirementAge:"Retirement Age", currentSavings:"Current Retirement Savings", monthlyContribution:"Monthly Contribution", annualReturn:"Expected Annual Return (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Retirement Calculator", emptyDesc:"Project your retirement savings and estimated monthly income.", tip1:"Projected Savings", tip2:"Total Growth", tip3:"Monthly Income", projectedSavings:"Projected Savings", totalContributions:"Total Contributions", totalGrowth:"Total Growth", monthlyIncome:"Est. Monthly Income", withdrawalNote:"at 4% withdrawal rate", aboutTitle:"About this Calculator", aboutText:"Projects your retirement savings using compound growth on your current balance plus future monthly contributions, then estimates a sustainable monthly income using the 4% withdrawal rule." },
+  es: { currentAge:"Edad Actual", retirementAge:"Edad de Jubilación", currentSavings:"Ahorros Actuales para el Retiro", monthlyContribution:"Aporte Mensual", annualReturn:"Retorno Anual Esperado (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Jubilación", emptyDesc:"Proyecta tus ahorros para el retiro y el ingreso mensual estimado.", tip1:"Ahorros Proyectados", tip2:"Crecimiento Total", tip3:"Ingreso Mensual", projectedSavings:"Ahorros Proyectados", totalContributions:"Aportes Totales", totalGrowth:"Crecimiento Total", monthlyIncome:"Ingreso Mensual Est.", withdrawalNote:"con tasa de retiro del 4%", aboutTitle:"Acerca de esta Calculadora", aboutText:"Proyecta tus ahorros para el retiro usando crecimiento compuesto sobre tu saldo actual más futuros aportes mensuales, luego estima un ingreso mensual sostenible usando la regla de retiro del 4%." },
+}[lang];
 ---
 <section class="ret-calculator">
   <div class="ret-layout">
     <aside class="ret-sidebar">
-      <CalculatorField id="currentAge" label="Current Age" type="number" placeholder="e.g. 30" required={true} min="1" step="1" />
-      <CalculatorField id="retirementAge" label="Retirement Age" type="number" placeholder="e.g. 65" required={true} min="1" step="1" />
-      <CalculatorField id="currentSavings" label="Current Retirement Savings" type="number" placeholder="e.g. 20000" min="0" step="1" />
-      <CalculatorField id="monthlyContribution" label="Monthly Contribution" type="number" placeholder="e.g. 500" min="0" step="1" />
-      <CalculatorField id="annualReturn" label="Expected Annual Return (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorField id="currentAge" label={copy.currentAge} type="number" placeholder="e.g. 30" required={true} min="1" step="1" />
+      <CalculatorField id="retirementAge" label={copy.retirementAge} type="number" placeholder="e.g. 65" required={true} min="1" step="1" />
+      <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 20000" min="0" step="1" />
+      <CalculatorField id="monthlyContribution" label={copy.monthlyContribution} type="number" placeholder="e.g. 500" min="0" step="1" />
+      <CalculatorField id="annualReturn" label={copy.annualReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ret-content">
       <div id="emptyState">
-        <EmptyState icon="🏖️" title="Retirement Calculator" description="Project your retirement savings and estimated monthly income." tips={["Projected Savings", "Total Growth", "Monthly Income"]} />
+        <EmptyState icon="🏖️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="projectedSavingsResult" title="Projected Savings" icon={PiggyBank} accent="success" />
-          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={Wallet} />
-          <ResultCard id="totalGrowthResult" title="Total Growth" icon={TrendingUp} />
-          <ResultCard id="monthlyIncomeResult" title="Est. Monthly Income" icon={Landmark} subtitle=" " />
+          <ResultCard id="projectedSavingsResult" title={copy.projectedSavings} icon={PiggyBank} accent="success" />
+          <ResultCard id="totalContributionsResult" title={copy.totalContributions} icon={Wallet} />
+          <ResultCard id="totalGrowthResult" title={copy.totalGrowth} icon={TrendingUp} />
+          <ResultCard id="monthlyIncomeResult" title={copy.monthlyIncome} icon={Landmark} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Projects your retirement savings using compound growth on your current balance plus future monthly contributions, then estimates a sustainable monthly income using the 4% withdrawal rule.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/retirement-calculator";
 </script>

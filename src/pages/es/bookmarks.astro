@@ -1,0 +1,118 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+<Layout
+  lang="es"
+  title="Favoritos — TooManyToolz"
+  description="Tus herramientas guardadas, almacenadas de forma privada en tu navegador."
+>
+  <div class="wrap">
+    <h1>Tus Favoritos</h1>
+    <p class="bookmarks-sub">Herramientas que has guardado, almacenadas localmente en este navegador.</p>
+    <div id="bookmarks-list" class="bookmarks-grid"></div>
+    <div id="bookmarks-empty" class="bookmarks-empty" style="display:none;">
+      <p>Aún no tienes herramientas guardadas.</p>
+      <p class="bookmarks-empty-sub">Haz clic en el botón de estrella en cualquier herramienta para añadirla aquí.</p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const list = document.getElementById('bookmarks-list');
+  const empty = document.getElementById('bookmarks-empty');
+  const saved = JSON.parse(localStorage.getItem('bookmarkedTools') || '[]');
+  if (!saved.length) {
+    if (empty) empty.style.display = 'block';
+  } else {
+    if (list) {
+      list.innerHTML = saved.map((b: any) => `
+        <div class="bookmark-item">
+          <a href="${b.url}" class="bookmark-item-link">${b.name}</a>
+          <button data-slug="${b.slug}" class="remove-bookmark" aria-label="Eliminar de favoritos">✕</button>
+        </div>
+      `).join('');
+      list.querySelectorAll('.remove-bookmark').forEach(el => {
+        el.addEventListener('click', () => {
+          const btn = el as HTMLButtonElement;
+          const slug = btn.dataset.slug;
+          const updated = JSON.parse(localStorage.getItem('bookmarkedTools') || '[]').filter((b: any) => b.slug !== slug);
+          localStorage.setItem('bookmarkedTools', JSON.stringify(updated));
+          btn.closest('.bookmark-item')?.remove();
+          if (!updated.length && empty) empty.style.display = 'block';
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+  .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+  .wrap h1 { font-family: var(--font-sans); font-size: var(--fs-h1, 32px); font-weight: 800; color: var(--text-primary); margin: 0 0 6px; }
+  .bookmarks-sub { color: var(--text-secondary); font-size: var(--fs-body, 15px); margin: 0 0 32px; }
+</style>
+<style is:global>
+  .bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .bookmark-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card, var(--surface));
+    border: 1px solid var(--border-subtle, var(--border));
+    border-radius: var(--radius-lg, 12px);
+    padding: 14px 16px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .bookmark-item:hover {
+    border-color: var(--border-hover, var(--border));
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+  .bookmark-item-link {
+    font-size: var(--fs-body, 14.5px);
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .bookmark-item-link:hover {
+    color: var(--color-primary);
+  }
+  .remove-bookmark {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    line-height: 1;
+    transition: color 0.15s ease;
+  }
+  .remove-bookmark:hover {
+    color: #ef4444;
+  }
+  .bookmarks-empty {
+    text-align: center;
+    padding: 64px 0;
+    color: var(--text-secondary);
+  }
+  .bookmarks-empty p:first-child {
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--text-primary);
+    margin: 0 0 6px;
+  }
+  .bookmarks-empty-sub {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .bookmarks-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

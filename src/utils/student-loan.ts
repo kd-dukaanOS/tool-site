@@ -41,8 +41,8 @@ export function calculateStudentLoan(
   };
 }
 
-export function validateStudentLoanInputs(loanAmount: number, loanTermYears: number): string | null {
-  if (loanAmount <= 0) return "Loan amount must be greater than zero.";
-  if (loanTermYears <= 0) return "Loan term must be greater than zero.";
+export function validateStudentLoanInputs(loanAmount: number, loanTermYears: number, lang: "en" | "es" = "en"): string | null {
+  if (loanAmount <= 0) return lang === "es" ? "El monto del préstamo debe ser mayor a cero." : "Loan amount must be greater than zero.";
+  if (loanTermYears <= 0) return lang === "es" ? "El plazo del préstamo debe ser mayor a cero." : "Loan term must be greater than zero.";
   return null;
 }

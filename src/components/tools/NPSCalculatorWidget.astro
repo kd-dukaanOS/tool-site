@@ -13,6 +13,13 @@ import {
   Landmark,
   Banknote
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { contribution:"Monthly Contribution (₹)", expectedReturn:"Expected Return Rate (% p.a.)", years:"Years to Retirement", annuityPercent:"Annuity Purchase (%)", annuityPercentHelp:"Minimum 40% as per NPS rules.", annuityRate:"Annuity Rate (% p.a.)", emptyTitle:"NPS Calculator", emptyDesc:"Estimate your NPS retirement corpus and monthly pension.", tip1:"Total Corpus at Retirement", tip2:"Lump Sum Withdrawal", tip3:"Annuity Corpus", tip4:"Estimated Monthly Pension", corpus:"Total Corpus", growth:"Total Growth", invested:"Total Invested", lumpSum:"Lump Sum Withdrawal", annuityCorpus:"Annuity Corpus", pension:"Monthly Pension", perMonth:"per month after retirement", fillAll:"Please fill all fields." },
+  es: { contribution:"Aportación Mensual (₹)", expectedReturn:"Tasa de Rendimiento Esperada (% anual)", years:"Años para Jubilarse", annuityPercent:"Compra de Anualidad (%)", annuityPercentHelp:"Mínimo 40% según las reglas del NPS.", annuityRate:"Tasa de Anualidad (% anual)", emptyTitle:"Calculadora de NPS", emptyDesc:"Calcula tu capital de jubilación NPS y pensión mensual.", tip1:"Capital Total al Jubilarte", tip2:"Retiro de Suma Global", tip3:"Capital de Anualidad", tip4:"Pensión Mensual Estimada", corpus:"Capital Total", growth:"Crecimiento Total", invested:"Total Invertido", lumpSum:"Retiro de Suma Global", annuityCorpus:"Capital de Anualidad", pension:"Pensión Mensual", perMonth:"al mes después de jubilarte", fillAll:"Por favor completa todos los campos." },
+}[lang];
 ---
 
 <section class="nps-calculator">
@@ -93,13 +100,13 @@ import {
 
         <EmptyState
           icon="🏛️"
-          title="NPS Calculator"
-          description="Estimate your NPS retirement corpus and monthly pension."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Total Corpus at Retirement",
-            "Lump Sum Withdrawal",
-            "Annuity Corpus",
-            "Estimated Monthly Pension"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -114,38 +121,38 @@ import {
 
           <ResultCard
             id="corpusResult"
-            title="Total Corpus"
+            title={copy.corpus}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="growthResult"
-            title="Total Growth"
+            title={copy.growth}
             icon={TrendingUp}
           />
 
           <ResultCard
             id="investedResult"
-            title="Total Invested"
+            title={copy.invested}
             icon={Coins}
           />
 
           <ResultCard
             id="lumpSumResult"
-            title="Lump Sum Withdrawal"
+            title={copy.lumpSum}
             icon={Banknote}
           />
 
           <ResultCard
             id="annuityCorpusResult"
-            title="Annuity Corpus"
+            title={copy.annuityCorpus}
             icon={Landmark}
           />
 
           <ResultCard
             id="pensionResult"
-            title="Monthly Pension"
+            title={copy.pension}
             icon={PiggyBank}
           />
 
@@ -159,6 +166,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/nps-calculator";
 </script>

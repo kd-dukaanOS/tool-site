@@ -23,9 +23,9 @@ export function calculateNetWorth(
   return { totalAssets, totalLiabilities, netWorth, debtToAssetRatio };
 }
 
-export function validateNetWorthInputs(totalAssets: number, totalLiabilities: number): string | null {
-  if (totalAssets < 0) return "Assets cannot be negative.";
-  if (totalLiabilities < 0) return "Liabilities cannot be negative.";
-  if (totalAssets === 0 && totalLiabilities === 0) return "Please enter at least one asset or liability.";
+export function validateNetWorthInputs(totalAssets: number, totalLiabilities: number, lang: "en" | "es" = "en"): string | null {
+  if (totalAssets < 0) return lang === "es" ? "Los activos no pueden ser negativos." : "Assets cannot be negative.";
+  if (totalLiabilities < 0) return lang === "es" ? "Los pasivos no pueden ser negativos." : "Liabilities cannot be negative.";
+  if (totalAssets === 0 && totalLiabilities === 0) return lang === "es" ? "Por favor ingresa al menos un activo o pasivo." : "Please enter at least one asset or liability.";
   return null;
 }

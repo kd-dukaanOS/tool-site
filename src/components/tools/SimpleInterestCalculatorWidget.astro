@@ -12,6 +12,13 @@ import {
   CalendarDays,
   Clock3
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { principalLabel:"Principal Amount (₹)", principalHelp:"The initial amount you are investing or borrowing.", rateLabel:"Annual Interest Rate (%)", rateHelp:"The yearly interest rate.", yearsLabel:"Time Period (Years)", yearsHelp:"Duration of the loan or deposit.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Simple Interest Calculator", emptyDesc:"Calculate interest earned or paid on a fixed principal.", tip1:"Total Interest", tip2:"Total Amount", tip3:"Monthly Interest", tip4:"Daily Interest", amount:"Total Amount", interest:"Total Interest", principal:"Principal Invested", monthly:"Monthly Interest", daily:"Daily Interest", aboutTitle:"About this Calculator", aboutText:"Simple Interest is calculated only on the original principal, unlike compound interest where interest is added back and earns further interest. Formula used: SI = (P × R × T) / 100." },
+  es: { principalLabel:"Monto Principal (₹)", principalHelp:"El monto inicial que estás invirtiendo o pidiendo prestado.", rateLabel:"Tasa de Interés Anual (%)", rateHelp:"La tasa de interés anual.", yearsLabel:"Plazo (Años)", yearsHelp:"Duración del préstamo o depósito.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Interés Simple", emptyDesc:"Calcula el interés ganado o pagado sobre un principal fijo.", tip1:"Interés Total", tip2:"Monto Total", tip3:"Interés Mensual", tip4:"Interés Diario", amount:"Monto Total", interest:"Interés Total", principal:"Principal Invertido", monthly:"Interés Mensual", daily:"Interés Diario", aboutTitle:"Acerca de esta Calculadora", aboutText:"El Interés Simple se calcula solo sobre el principal original, a diferencia del interés compuesto donde el interés se reinvierte y genera más interés. Fórmula usada: SI = (P × R × T) / 100." },
+}[lang];
 ---
 
 <section class="si-calculator">
@@ -22,35 +29,35 @@ import {
 
       <CalculatorField
         id="principal"
-        label="Principal Amount (₹)"
+        label={copy.principalLabel}
         type="number"
         placeholder="e.g. 100000"
         required={true}
         min="0"
         step="1"
-        helpText="The initial amount you are investing or borrowing."
+        helpText={copy.principalHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Annual Interest Rate (%)"
+        label={copy.rateLabel}
         type="number"
         placeholder="e.g. 8.5"
         required={true}
         min="0"
         step="0.01"
-        helpText="The yearly interest rate."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorField
         id="years"
-        label="Time Period (Years)"
+        label={copy.yearsLabel}
         type="number"
         placeholder="e.g. 5"
         required={true}
         min="0"
         step="0.5"
-        helpText="Duration of the loan or deposit."
+        helpText={copy.yearsHelp}
       />
 
       <CalculatorActions
@@ -58,6 +65,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -74,13 +84,13 @@ import {
 
         <EmptyState
           icon="💵"
-          title="Simple Interest Calculator"
-          description="Calculate interest earned or paid on a fixed principal."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Total Interest",
-            "Total Amount",
-            "Monthly Interest",
-            "Daily Interest"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -95,32 +105,32 @@ import {
 
           <ResultCard
             id="amountResult"
-            title="Total Amount"
+            title={copy.amount}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="interestResult"
-            title="Total Interest"
+            title={copy.interest}
             icon={TrendingUp}
           />
 
           <ResultCard
             id="principalResult"
-            title="Principal Invested"
+            title={copy.principal}
             icon={Coins}
           />
 
           <ResultCard
             id="monthlyResult"
-            title="Monthly Interest"
+            title={copy.monthly}
             icon={CalendarDays}
           />
 
           <ResultCard
             id="dailyResult"
-            title="Daily Interest"
+            title={copy.daily}
             icon={Clock3}
           />
 
@@ -128,13 +138,9 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Simple Interest is calculated only on the original principal,
-            unlike compound interest where interest is added back and
-            earns further interest. Formula used: SI = (P × R × T) / 100.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -146,6 +152,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/simple-interest-calculator";
 </script>

@@ -47,8 +47,8 @@ export function calculateMortgageOverpayment(
   return { standardPayment, newPayoffMonths: months, monthsSaved, interestSaved, totalInterestNew };
 }
 
-export function validateMortgageOverpaymentInputs(currentBalance: number, remainingTermMonths: number): string | null {
-  if (currentBalance <= 0) return "Current loan balance must be greater than zero.";
-  if (remainingTermMonths <= 0) return "Remaining term must be greater than zero.";
+export function validateMortgageOverpaymentInputs(currentBalance: number, remainingTermMonths: number, lang: "en" | "es" = "en"): string | null {
+  if (currentBalance <= 0) return lang === "es" ? "El saldo actual del préstamo debe ser mayor a cero." : "Current loan balance must be greater than zero.";
+  if (remainingTermMonths <= 0) return lang === "es" ? "El plazo restante debe ser mayor a cero." : "Remaining term must be greater than zero.";
   return null;
 }

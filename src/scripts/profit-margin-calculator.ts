@@ -16,6 +16,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { revenue: number; cost: number } | null = null;
 let lastResult: ReturnType<typeof calculateProfitMargin> | null = null;
 
@@ -36,7 +38,7 @@ function calculate() {
     cost: parseFloat(costInput.value),
   };
 
-  const error = validateProfitMarginInput(input);
+  const error = validateProfitMarginInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -75,7 +77,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult, currentCurrency));
+  copyToClipboard(copyProfitMarginSummary(lastInput, lastResult, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

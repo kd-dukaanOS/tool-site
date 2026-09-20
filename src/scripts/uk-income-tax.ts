@@ -11,6 +11,12 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const t = {
+  en: { effectiveRate:"effective rate", header:"UK Income Tax (England/Wales/NI)", grossIncome:"Gross Income", personalAllowance:"Personal Allowance", taxableIncome:"Taxable Income", incomeTaxOwed:"Income Tax Owed", effectiveRateLabel:"Effective Rate", marginalRate:"Marginal Rate", afterTax:"After-Tax Income" },
+  es: { effectiveRate:"tasa efectiva", header:"Impuesto sobre la Renta del Reino Unido (Inglaterra/Gales/NI)", grossIncome:"Ingreso Bruto", personalAllowance:"Asignación Personal", taxableIncome:"Ingreso Imponible", incomeTaxOwed:"Impuesto Adeudado", effectiveRateLabel:"Tasa Efectiva", marginalRate:"Tasa Marginal", afterTax:"Ingreso Después de Impuestos" },
+}[lang];
+
 let lastSummary = "";
 
 function showError(msg: string) { errorBox.textContent = msg; errorBox.hidden = false; }
@@ -20,25 +26,25 @@ function calculate() {
   clearError();
   const grossIncome = parseFloat(incomeInput.value);
 
-  const err = validateIncome(grossIncome);
+  const err = validateIncome(grossIncome, lang);
   if (err) return showError(err);
 
   const r = calculateUKIncomeTax(grossIncome);
 
   setValue("incomeTaxResult", formatCurrency(r.incomeTax, "GBP"));
-  setSubtitle("incomeTaxResult", `${r.effectiveRate.toFixed(1)}% effective rate`);
+  setSubtitle("incomeTaxResult", `${r.effectiveRate.toFixed(1)}% ${t.effectiveRate}`);
   setValue("marginalRateResult", `${(r.marginalRate * 100).toFixed(0)}%`);
   setValue("taxableIncomeResult", formatCurrency(r.taxableIncome, "GBP"));
   setValue("afterTaxResult", formatCurrency(r.afterTaxIncome, "GBP"));
 
-  lastSummary = `UK Income Tax (England/Wales/NI)\n\n` +
-    `Gross Income: ${formatCurrency(r.grossAnnual, "GBP")}\n` +
-    `Personal Allowance: ${formatCurrency(r.personalAllowance, "GBP")}\n` +
-    `Taxable Income: ${formatCurrency(r.taxableIncome, "GBP")}\n` +
-    `Income Tax Owed: ${formatCurrency(r.incomeTax, "GBP")}\n` +
-    `Effective Rate: ${r.effectiveRate.toFixed(1)}%\n` +
-    `Marginal Rate: ${(r.marginalRate * 100).toFixed(0)}%\n` +
-    `After-Tax Income: ${formatCurrency(r.afterTaxIncome, "GBP")}\n`;
+  lastSummary = `${t.header}\n\n` +
+    `${t.grossIncome}: ${formatCurrency(r.grossAnnual, "GBP")}\n` +
+    `${t.personalAllowance}: ${formatCurrency(r.personalAllowance, "GBP")}\n` +
+    `${t.taxableIncome}: ${formatCurrency(r.taxableIncome, "GBP")}\n` +
+    `${t.incomeTaxOwed}: ${formatCurrency(r.incomeTax, "GBP")}\n` +
+    `${t.effectiveRateLabel}: ${r.effectiveRate.toFixed(1)}%\n` +
+    `${t.marginalRate}: ${(r.marginalRate * 100).toFixed(0)}%\n` +
+    `${t.afterTax}: ${formatCurrency(r.afterTaxIncome, "GBP")}\n`;
 
   emptyState.hidden = true;
   resultsContainer.hidden = false;

@@ -1,109 +1,142 @@
-export const jsonFormatterContent = {
-  meta: {
-    seoTitle: "JSON Formatter & Validator - Format, Minify JSON Online",
-    metaDescription: "Format, minify and validate JSON online for free. Instantly see key count, nesting depth and size.",
-    canonicalSlug: "/json-formatter",
-    ogTitle: "JSON Formatter & Validator - Format and Minify JSON",
-    ogDescription: "Instantly format, minify and validate JSON with key count, depth and size stats.",
-    twitterTitle: "Free JSON Formatter & Validator",
-    twitterDescription: "Format, minify and validate JSON instantly in your browser.",
-  },
+// Client-side logic for the JSON Formatter widget.
+// Wires up: #jsonInput, #jsonOutput, #formatBtn, #minifyBtn, #resetBtn, #copyBtn,
+// #errorBox, #emptyState, #resultsContainer, #keysResult, #depthResult, #sizeResult
 
-  hero: { text: "Format, minify and validate JSON instantly. Paste raw JSON and get a clean, indented output with key count, depth and size stats." },
+function initJsonFormatter() {
+  const input = document.getElementById("jsonInput") as HTMLTextAreaElement | null;
+  const output = document.getElementById("jsonOutput") as HTMLTextAreaElement | null;
+  const formatBtn = document.getElementById("formatBtn");
+  const minifyBtn = document.getElementById("minifyBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const errorBox = document.getElementById("errorBox");
+  const emptyState = document.getElementById("emptyState");
+  const resultsContainer = document.getElementById("resultsContainer");
+  const keysResult = document.getElementById("keysResult");
+  const depthResult = document.getElementById("depthResult");
+  const sizeResult = document.getElementById("sizeResult");
 
-  about: { text: `The JSON Formatter beautifies messy JSON, minifies it for production, and validates syntax with clear error messages.
+  if (!input || !output) return;
 
-It's useful for debugging API responses, cleaning up config files, preparing JSON for production use, and quickly checking whether a JSON payload is valid.
+  const lang = (window as any).calcLang === "es" ? "es" : "en";
+  const msg = {
+    en: { empty: "Please enter some JSON first.", invalid: "Invalid JSON: " },
+    es: { empty: "Por favor ingresa JSON primero.", invalid: "JSON inválido: " },
+  }[lang];
 
-The tool shows key count, nesting depth and byte size alongside the formatted output for quick structural insight.
+  function showError(text: string) {
+    if (!errorBox) return;
+    errorBox.textContent = text;
+    errorBox.hidden = false;
+    if (resultsContainer) resultsContainer.hidden = true;
+    if (emptyState) emptyState.hidden = false;
+  }
 
-Limitations: it validates strict JSON syntax only — JSON5, JSONC (with comments) or trailing commas are not supported.
+  function clearError() {
+    if (!errorBox) return;
+    errorBox.hidden = true;
+    errorBox.textContent = "";
+  }
 
-All processing happens locally in your browser — nothing is uploaded to a server.` },
+  function countKeys(value: unknown): number {
+    if (Array.isArray(value)) {
+      return value.reduce((sum: number, item) => sum + countKeys(item), 0);
+    }
+    if (value !== null && typeof value === "object") {
+      const obj = value as Record<string, unknown>;
+      return Object.keys(obj).reduce(
+        (sum, key) => sum + 1 + countKeys(obj[key]),
+        0
+      );
+    }
+    return 0;
+  }
 
-  formula: {
-    formula: "Valid JSON = Balanced brackets + quoted keys + no trailing commas",
-    variables: [
-      { symbol: "Depth", meaning: "Maximum level of nested objects or arrays" },
-      { symbol: "Key Count", meaning: "Total number of keys across the entire structure" },
-    ],
-    explanation: "The formatter parses the input against the JSON specification, then re-serializes it with consistent indentation or removes whitespace for minification.",
-    interpretation: "A JSON document with mismatched brackets, unquoted keys, or trailing commas fails validation and returns an error with the exact location.",
-  },
+  function maxDepth(value: unknown): number {
+    if (Array.isArray(value)) {
+      if (value.length === 0) return 1;
+      return 1 + Math.max(...value.map(maxDepth));
+    }
+    if (value !== null && typeof value === "object") {
+      const vals = Object.values(value as Record<string, unknown>);
+      if (vals.length === 0) return 1;
+      return 1 + Math.max(...vals.map(maxDepth));
+    }
+    return 0;
+  }
 
-  steps: [
-    "Paste your JSON into the input field.",
-    "Click Format to beautify or Minify to compress.",
-    "Review key count, depth and size stats.",
-    "Fix any syntax errors shown, if the JSON is invalid.",
-    "Copy the output using the copy button.",
-  ],
+  function formatBytes(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
 
-  examples: [
-    {
-      inputs: `{"name":"John","age":30}`,
-      result: `{\n  "name": "John",\n  "age": 30\n}`,
-      explanation: "Compact JSON formatted with proper indentation for readability.",
-    },
-    {
-      inputs: `{\n  "name": "John",\n  "age": 30\n}`,
-      result: `{"name":"John","age":30}`,
-      explanation: "Formatted JSON minified for production use, removing all whitespace.",
-    },
-    {
-      inputs: `{"name": "John",}`,
-      result: "Syntax error: trailing comma not allowed",
-      explanation: "Strict JSON validation flags trailing commas, which are invalid per the JSON spec.",
-    },
-  ],
+  function updateStats(parsed: unknown, serialized: string) {
+    if (keysResult) keysResult.textContent = String(countKeys(parsed));
+    if (depthResult) depthResult.textContent = String(maxDepth(parsed));
+    if (sizeResult) sizeResult.textContent = formatBytes(new TextEncoder().encode(serialized).length);
+  }
 
-  practicalUses: [
-    "Debugging API response payloads",
-    "Cleaning up minified JSON for readability",
-    "Minifying JSON config files for production deployment",
-    "Validating JSON before using it in code",
-    "Checking structure depth and key count of large JSON files",
-    "Formatting JSON for documentation or sharing with teammates",
-    "Converting pretty-printed JSON to compact form for smaller payloads",
-    "Spotting syntax errors before deploying a configuration change",
-  ],
+  function parseInput(): unknown | null {
+    const raw = input!.value.trim();
+    if (!raw) {
+      showError(msg.empty);
+      return null;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      const errMessage = e instanceof Error ? e.message : String(e);
+      showError(msg.invalid + errMessage);
+      return null;
+    }
+  }
 
-  expertTips: [
-    "Use minified JSON for production APIs to reduce payload size.",
-    "Use formatted JSON during development and debugging for readability.",
-    "Trailing commas and single quotes are common causes of invalid JSON — check these first.",
-    "Large JSON files with deep nesting are easier to review broken into smaller sections.",
-    "Key count and depth stats can help spot unexpectedly large or deeply nested payloads.",
-    "Always validate JSON before sending it to an API to avoid silent failures.",
-  ],
+  function reveal() {
+    clearError();
+    if (emptyState) emptyState.hidden = true;
+    if (resultsContainer) resultsContainer.hidden = false;
+  }
 
-  commonMistakes: [
-    { mistake: "Using single quotes instead of double quotes", fix: "JSON requires double quotes around keys and string values — single quotes are invalid." },
-    { mistake: "Adding a trailing comma after the last item", fix: "Remove the comma after the final key-value pair or array item." },
-    { mistake: "Leaving keys unquoted", fix: "All JSON object keys must be wrapped in double quotes." },
-    { mistake: "Assuming comments are allowed", fix: "Standard JSON doesn't support comments — remove them or use JSONC-aware tools separately." },
-    { mistake: "Pasting JavaScript objects instead of JSON", fix: "JavaScript object literals allow syntax JSON doesn't, like unquoted keys or trailing commas — convert to strict JSON first." },
-  ],
+  formatBtn?.addEventListener("click", () => {
+    const parsed = parseInput();
+    if (parsed === null) return;
+    const pretty = JSON.stringify(parsed, null, 2);
+    output!.value = pretty;
+    updateStats(parsed, pretty);
+    reveal();
+  });
 
-  faq: [
-    { q: "Does this validate JSON syntax?", a: "Yes, invalid JSON shows a clear error message with details, including the line and character where the problem occurs." },
-    { q: "Is my JSON data sent to a server?", a: "No, formatting happens entirely in your browser using JavaScript. Your data never leaves your device." },
-    { q: "What is the difference between formatting and minifying JSON?", a: "Formatting adds indentation and line breaks so JSON is easy to read. Minifying removes all unnecessary whitespace to make the file as small as possible, which is useful for production and APIs." },
-    { q: "Can this tool handle large JSON files?", a: "Yes, it can process large JSON documents directly in your browser, though very large files (several MB) may take a moment depending on your device." },
-    { q: "Why is my JSON showing a syntax error?", a: "Common causes are trailing commas, missing quotes around keys, single quotes instead of double quotes, or unescaped special characters. The error message will point to the exact location." },
-    { q: "Does this tool support JSON5 or JSONC (JSON with comments)?", a: "No, this formatter follows strict JSON syntax as defined by the JSON specification, which does not allow comments or trailing commas." },
-    { q: "Can I use this JSON formatter offline?", a: "Once the page has loaded, formatting and validation run locally in your browser, so it works even without an active internet connection." },
-    { q: "Is there a limit to how many keys or how much nesting depth this tool supports?", a: "There's no hard-coded limit — performance depends on your browser and device rather than the tool itself." },
-    { q: "What is JSON nesting depth?", a: "It's the maximum number of levels an object or array is nested inside another object or array within the document." },
-    { q: "Can I convert JSON to a minified single line?", a: "Yes, using the minify option compresses the JSON into a single line with no unnecessary whitespace." },
-  ],
+  minifyBtn?.addEventListener("click", () => {
+    const parsed = parseInput();
+    if (parsed === null) return;
+    const compact = JSON.stringify(parsed);
+    output!.value = compact;
+    updateStats(parsed, compact);
+    reveal();
+  });
 
-  relatedCalculators: ["Diff Checker", "Regex Tester", "URL Encoder/Decoder", "CSV to JSON Converter", "Base64 Encoder/Decoder", "Markdown Previewer"],
+  resetBtn?.addEventListener("click", () => {
+    input!.value = "";
+    output!.value = "";
+    clearError();
+    if (resultsContainer) resultsContainer.hidden = true;
+    if (emptyState) emptyState.hidden = false;
+  });
 
-  structuredData: ["FAQPage", "WebPage", "BreadcrumbList", "SoftwareApplication"],
+  copyBtn?.addEventListener("click", async () => {
+    if (!output!.value) return;
+    try {
+      await navigator.clipboard.writeText(output!.value);
+    } catch {
+      output!.select();
+      document.execCommand("copy");
+    }
+  });
+}
 
-  headingStructure: {
-    h1: "JSON Formatter & Validator",
-    h2: ["About", "Formula", "How to Use", "Examples", "Tips", "Common Mistakes", "FAQ", "Related Calculators"],
-  },
-};
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initJsonFormatter);
+} else {
+  initJsonFormatter();
+}

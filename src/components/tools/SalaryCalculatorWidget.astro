@@ -15,6 +15,13 @@ import {
   Building2,
   Receipt
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { ctc:"Annual CTC (₹)", ctcHelp:"Total Cost to Company per year.", basic:"Basic Salary (% of CTC)", hra:"HRA (% of Basic)", empPF:"Employee PF (% of Basic)", empPFHelp:"Standard is 12%.", erPF:"Employer PF (% of Basic)", erPFHelp:"Part of CTC, not part of gross salary.", pt:"Professional Tax (₹/month)", ptHelp:"State-specific, often ₹200/month.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Salary Calculator", emptyDesc:"Break down your CTC into Basic, HRA, PF and take-home salary.", tip1:"Monthly & Annual Take Home", tip2:"Basic, HRA, Special Allowance", tip3:"Employee & Employer PF", tip4:"Professional Tax", monthlyTakeHome:"Monthly Take Home", annualTakeHome:"Annual Take Home", monthlyGross:"Monthly Gross Salary", monthlyBasic:"Monthly Basic", monthlyHRA:"Monthly HRA", specialAllowance:"Monthly Special Allowance", empPFResult:"Employee PF (Monthly)", erPFResult:"Employer PF (Monthly)", ptResult:"Professional Tax (Annual)", aboutTitle:"About this Calculator", aboutText:"This calculator breaks your Annual CTC into Basic, HRA, Special Allowance, PF contributions and Professional Tax to estimate your monthly and annual in-hand (take-home) salary. Employer PF is part of your CTC but not part of your gross salary or take-home pay." },
+  es: { ctc:"CTC Anual (₹)", ctcHelp:"Costo Total para la Empresa por año.", basic:"Salario Base (% del CTC)", hra:"HRA (% del Base)", empPF:"PF del Empleado (% del Base)", empPFHelp:"El estándar es 12%.", erPF:"PF del Empleador (% del Base)", erPFHelp:"Parte del CTC, no del salario bruto.", pt:"Impuesto Profesional (₹/mes)", ptHelp:"Específico del estado, a menudo ₹200/mes.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Salario", emptyDesc:"Desglosa tu CTC en Base, HRA, PF y salario neto.", tip1:"Salario Neto Mensual y Anual", tip2:"Base, HRA, Asignación Especial", tip3:"PF del Empleado y Empleador", tip4:"Impuesto Profesional", monthlyTakeHome:"Salario Neto Mensual", annualTakeHome:"Salario Neto Anual", monthlyGross:"Salario Bruto Mensual", monthlyBasic:"Base Mensual", monthlyHRA:"HRA Mensual", specialAllowance:"Asignación Especial Mensual", empPFResult:"PF del Empleado (Mensual)", erPFResult:"PF del Empleador (Mensual)", ptResult:"Impuesto Profesional (Anual)", aboutTitle:"Acerca de esta Calculadora", aboutText:"Esta calculadora desglosa tu CTC Anual en Base, HRA, Asignación Especial, contribuciones PF e Impuesto Profesional para estimar tu salario neto mensual y anual. El PF del Empleador es parte de tu CTC pero no de tu salario bruto ni neto." },
+}[lang];
 ---
 
 <section class="sal-calculator">
@@ -25,18 +32,18 @@ import {
 
       <CalculatorField
         id="annualCTC"
-        label="Annual CTC (₹)"
+        label={copy.ctc}
         type="number"
         placeholder="e.g. 1200000"
         required={true}
         min="0"
         step="1"
-        helpText="Total Cost to Company per year."
+        helpText={copy.ctcHelp}
       />
 
       <CalculatorField
         id="basicPercent"
-        label="Basic Salary (% of CTC)"
+        label={copy.basic}
         type="number"
         value="40"
         min="1"
@@ -47,7 +54,7 @@ import {
 
       <CalculatorField
         id="hraPercent"
-        label="HRA (% of Basic)"
+        label={copy.hra}
         type="number"
         value="50"
         min="0"
@@ -58,34 +65,34 @@ import {
 
       <CalculatorField
         id="employeePFPercent"
-        label="Employee PF (% of Basic)"
+        label={copy.empPF}
         type="number"
         value="12"
         min="0"
         max="100"
         step="1"
-        helpText="Standard is 12%."
+        helpText={copy.empPFHelp}
       />
 
       <CalculatorField
         id="employerPFPercent"
-        label="Employer PF (% of Basic)"
+        label={copy.erPF}
         type="number"
         value="12"
         min="0"
         max="100"
         step="1"
-        helpText="Part of CTC, not part of gross salary."
+        helpText={copy.erPFHelp}
       />
 
       <CalculatorField
         id="professionalTaxMonthly"
-        label="Professional Tax (₹/month)"
+        label={copy.pt}
         type="number"
         value="200"
         min="0"
         step="1"
-        helpText="State-specific, often ₹200/month."
+        helpText={copy.ptHelp}
       />
 
       <CalculatorActions
@@ -93,6 +100,9 @@ import {
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -109,14 +119,9 @@ import {
 
         <EmptyState
           icon="ðŸ§¾"
-          title="Salary Calculator"
-          description="Break down your CTC into Basic, HRA, PF and take-House salary."
-          tips={[
-            "Monthly & Annual Take House",
-            "Basic, HRA, Special Allowance",
-            "Employee & Employer PF",
-            "Professional Tax"
-          ]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
 
       </div>
@@ -130,57 +135,57 @@ import {
 
           <ResultCard
             id="monthlyTakeHomeResult"
-            title="Monthly Take House"
+            title={copy.monthlyTakeHome}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="annualTakeHomeResult"
-            title="Annual Take House"
+            title={copy.annualTakeHome}
             icon={Banknote}
             accent="success"
           />
 
           <ResultCard
             id="monthlyGrossResult"
-            title="Monthly Gross Salary"
+            title={copy.monthlyGross}
             icon={Landmark}
           />
 
           <ResultCard
             id="basicResult"
-            title="Monthly Basic"
+            title={copy.monthlyBasic}
             icon={Layers}
           />
 
           <ResultCard
             id="hraResult"
-            title="Monthly HRA"
+            title={copy.monthlyHRA}
             icon={House}
           />
 
           <ResultCard
             id="specialAllowanceResult"
-            title="Monthly Special Allowance"
+            title={copy.specialAllowance}
             icon={Layers}
           />
 
           <ResultCard
             id="employeePFResult"
-            title="Employee PF (Monthly)"
+            title={copy.empPFResult}
             icon={ShieldCheck}
           />
 
           <ResultCard
             id="employerPFResult"
-            title="Employer PF (Monthly)"
+            title={copy.erPFResult}
             icon={Building2}
           />
 
           <ResultCard
             id="professionalTaxResult"
-            title="Professional Tax (Annual)"
+            title={copy.ptResult}
             icon={Receipt}
           />
 
@@ -188,15 +193,9 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            This calculator breaks your Annual CTC into Basic, HRA,
-            Special Allowance, PF contributions and Professional Tax
-            to estimate your monthly and annual in-hand (take-House)
-            salary. Employer PF is part of your CTC but not part of
-            your gross salary or take-House pay.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -208,6 +207,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/salary-calculator";
 </script>

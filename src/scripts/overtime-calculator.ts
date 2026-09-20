@@ -15,6 +15,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { hourlyRate: number; regularHours: number; overtimeHours: number; overtimeMultiplier: number } | null = null;
 let lastResult: ReturnType<typeof calculateOvertime> | null = null;
 
@@ -37,7 +39,7 @@ function calculate() {
     overtimeMultiplier: parseFloat(overtimeMultiplierInput.value) || 1.5,
   };
 
-  const error = validateOvertimeInput(input);
+  const error = validateOvertimeInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -48,7 +50,7 @@ function calculate() {
   setValue("totalPayResult", formatCurrency(result.totalPay));
   setValue("regularPayResult", formatCurrency(result.regularPay));
   setValue("overtimePayResult", formatCurrency(result.overtimePay));
-  setValue("effectiveRateResult", `${formatCurrency(result.effectiveOvertimeRate)}/hr`);
+  setValue("effectiveRateResult", `${formatCurrency(result.effectiveOvertimeRate)}${lang === "es" ? "/h" : "/hr"}`);
 
   lastInput = input;
   lastResult = result;
@@ -71,7 +73,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyOvertimeSummary(lastInput, lastResult));
+  copyToClipboard(copyOvertimeSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

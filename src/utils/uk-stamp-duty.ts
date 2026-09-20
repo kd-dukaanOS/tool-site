@@ -55,7 +55,7 @@ export function calculateUkStampDuty(
   return { stampDutyOwed, effectiveRate, breakdown };
 }
 
-export function validateUkStampDutyInputs(purchasePrice: number): string | null {
-  if (purchasePrice <= 0) return "Enter a purchase price greater than zero.";
+export function validateUkStampDutyInputs(purchasePrice: number, lang: "en" | "es" = "en"): string | null {
+  if (purchasePrice <= 0) return lang === "es" ? "Ingresa un precio de compra mayor a cero." : "Enter a purchase price greater than zero.";
   return null;
 }

@@ -1,0 +1,47 @@
+---
+// src/pages/es/math-stats/prime-number-calculator.astro
+import Layout from "../../../layouts/Layout.astro";
+import PrimeNumberCalculatorWidget from "../../../components/tools/PrimeNumberCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { primeNumberCalculatorContent } from "../../../data/calculators/es/prime-number-calculator.ts";
+
+const tool = tools.find((t) => t.slug === "prime-number-calculator")!;
+const content = primeNumberCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Matemáticas y Estadística", url: "/es/math-stats/" },
+    { name: "Números Primos", url: "/es/math-stats/prime-number-calculator/" },
+  ]}
+  appName="Calculadora de Números Primos"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/math-stats/">Matemáticas y Estadística</a> / Números Primos
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["math-stats"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Números Primos</h1>
+        <p>Verifica si un número es primo y sus factores</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="prime-number-calculator" data-name="Números Primos" data-url="/es/math-stats/prime-number-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <PrimeNumberCalculatorWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

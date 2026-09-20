@@ -9,6 +9,13 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { DollarSign, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { revenue:"Revenue ($)", revenueHelp:"Total sales revenue.", expenses:"Total Expenses ($)", expensesHelp:"All costs: COGS, operating expenses, taxes, interest.", emptyTitle:"Net Profit Calculator", emptyDesc:"Find your net profit and net profit margin from total revenue and total expenses.", tip1:"Net Profit", tip2:"Net Margin %", netProfit:"Net Profit", netMargin:"Net Profit Margin", aboutTitle:"About this Calculator", aboutText:"Calculates your net profit and net profit margin from total revenue and total expenses, covering COGS, operating costs, interest and taxes. All calculations run locally — no external data or paid service is required." },
+  es: { revenue:"Ingresos ($)", revenueHelp:"Ingresos totales por ventas.", expenses:"Gastos Totales ($)", expensesHelp:"Todos los costos: COGS, gastos operativos, impuestos, intereses.", emptyTitle:"Calculadora de Utilidad Neta", emptyDesc:"Calcula tu utilidad neta y margen de utilidad neta a partir de tus ingresos y gastos totales.", tip1:"Utilidad Neta", tip2:"Margen Neto %", netProfit:"Utilidad Neta", netMargin:"Margen de Utilidad Neta", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu utilidad neta y margen de utilidad neta a partir de tus ingresos y gastos totales, cubriendo COGS, costos operativos, intereses e impuestos. Todos los cálculos se ejecutan localmente — no se requiere ningún servicio externo ni de pago." },
+}[lang];
 ---
 
 <section class="np-calculator">
@@ -19,24 +26,24 @@ import { DollarSign, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="revenue"
-        label="Revenue ($)"
+        label={copy.revenue}
         type="number"
         placeholder="e.g. 20000"
         required={true}
         min="0"
         step="0.01"
-        helpText="Total sales revenue."
+        helpText={copy.revenueHelp}
       />
 
       <CalculatorField
         id="totalExpenses"
-        label="Total Expenses ($)"
+        label={copy.expenses}
         type="number"
         placeholder="e.g. 15000"
         required={true}
         min="0"
         step="0.01"
-        helpText="All costs: COGS, operating expenses, taxes, interest."
+        helpText={copy.expensesHelp}
       />
 
       <CalculatorActions
@@ -53,25 +60,21 @@ import { DollarSign, Percent } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="💰"
-          title="Net Profit Calculator"
-          description="Find your net profit and net profit margin from total revenue and total expenses."
-          tips={["Net Profit", "Net Margin %"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="netProfitResult" title="Net Profit" icon={DollarSign} accent="success" size="lg" />
-          <ResultCard id="netMarginResult" title="Net Profit Margin" icon={Percent} accent="primary" />
+          <ResultCard id="netProfitResult" title={copy.netProfit} icon={DollarSign} accent="success" size="lg" />
+          <ResultCard id="netMarginResult" title={copy.netMargin} icon={Percent} accent="primary" />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your net profit and net profit margin from total revenue and total expenses,
-            covering COGS, operating costs, interest and taxes. All calculations run locally —
-            no external data or paid service is required.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -79,6 +82,9 @@ import { DollarSign, Percent } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/net-profit-calculator";
 </script>

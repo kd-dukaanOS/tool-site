@@ -13,6 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -35,7 +37,7 @@ function calculate() {
   const annualWages = val("annualWages");
   const isSelfEmployed = (document.getElementById("employmentType") as HTMLSelectElement)?.value === "self";
 
-  const validationError = validateSSTaxInputs(annualWages);
+  const validationError = validateSSTaxInputs(annualWages, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -45,17 +47,24 @@ function calculate() {
 
   if (isSelfEmployed) {
     setValue("primaryTaxResult", fmtCurrency(result.selfEmploymentSSTax));
-    setSubtitle("primaryTaxResult", "Self-Employment SS Tax (12.4%)");
+    setSubtitle("primaryTaxResult", lang === "es" ? "Impuesto SS por Trabajo Independiente (12.4%)" : "Self-Employment SS Tax (12.4%)");
   } else {
     setValue("primaryTaxResult", fmtCurrency(result.employeeSSTax));
-    setSubtitle("primaryTaxResult", "Your Withheld SS Tax (6.2%)");
+    setSubtitle("primaryTaxResult", lang === "es" ? "Tu Impuesto SS Retenido (6.2%)" : "Your Withheld SS Tax (6.2%)");
   }
   setValue("taxableWagesResult", fmtCurrency(result.taxableWages));
   setValue("wagesOverCapResult", fmtCurrency(result.wagesOverCap));
-  setValue("capStatusResult", result.isAtCap ? "At Wage Base Cap" : "Below Cap");
-  setSubtitle("capStatusResult", `2026 Cap: ${fmtCurrency(184500)}`);
+  setValue("capStatusResult", result.isAtCap ? (lang === "es" ? "En el Tope Salarial" : "At Wage Base Cap") : (lang === "es" ? "Debajo del Tope" : "Below Cap"));
+  setSubtitle("capStatusResult", lang === "es" ? `Tope 2026: ${fmtCurrency(184500)}` : `2026 Cap: ${fmtCurrency(184500)}`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Impuesto de Seguro Social (2026)
+
+${isSelfEmployed ? "Impuesto SS por Trabajo Independiente (12.4%)" : "Impuesto SS Retenido del Empleado (6.2%)"}: ${fmtCurrency(isSelfEmployed ? result.selfEmploymentSSTax : result.employeeSSTax)}
+Salarios Gravables: ${fmtCurrency(result.taxableWages)}
+Salarios Sobre el Tope 2026 ($184,500): ${fmtCurrency(result.wagesOverCap)}
+Estado del Tope: ${result.isAtCap ? "En el tope salarial" : "Debajo del tope salarial"}
+`.trim() : `
 Social Security Tax Summary (2026)
 
 ${isSelfEmployed ? "Self-Employment SS Tax (12.4%)" : "Employee SS Tax Withheld (6.2%)"}: ${fmtCurrency(isSelfEmployed ? result.selfEmploymentSSTax : result.employeeSSTax)}

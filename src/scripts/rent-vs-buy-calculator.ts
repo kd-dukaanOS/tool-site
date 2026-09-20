@@ -20,6 +20,8 @@ const fieldIds = [
   "investmentReturnRate", "comparisonYears",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -46,7 +48,7 @@ function calculate() {
     investmentReturnRate, comparisonYears,
   ] = fieldIds.map(val);
 
-  const validationError = validateRentVsBuyInputs(homePrice, monthlyRent, comparisonYears);
+  const validationError = validateRentVsBuyInputs(homePrice, monthlyRent, comparisonYears, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -61,16 +63,26 @@ function calculate() {
 
   setValue("buyNetWorthResult", fmtCurrency(result.buyerNetWorth));
   setValue("rentNetWorthResult", fmtCurrency(result.renterNetWorth));
-  setValue("betterOptionResult", result.betterOption === "buy" ? "Buying" : "Renting");
-  setValue("breakEvenResult", result.breakEvenYear === null ? "Beyond range" : `Year ${result.breakEvenYear}`);
-  setSubtitle("betterOptionResult", `Over ${comparisonYears} years`);
+  const betterOptionText = result.betterOption === "buy" ? (lang === "es" ? "Comprar" : "Buying") : (lang === "es" ? "Alquilar" : "Renting");
+  const breakEvenText = result.breakEvenYear === null ? (lang === "es" ? "Fuera del rango" : "Beyond range") : `${lang === "es" ? "Año" : "Year"} ${result.breakEvenYear}`;
 
-  lastSummary = `
+  setValue("betterOptionResult", betterOptionText);
+  setValue("breakEvenResult", breakEvenText);
+  setSubtitle("betterOptionResult", lang === "es" ? `Durante ${comparisonYears} años` : `Over ${comparisonYears} years`);
+
+  lastSummary = lang === "es" ? `
+Resumen de Alquilar vs Comprar
+
+Patrimonio Neto al Comprar: ${fmtCurrency(result.buyerNetWorth)}
+Patrimonio Neto al Alquilar: ${fmtCurrency(result.renterNetWorth)}
+Mejor Opción: ${betterOptionText}
+Año de Equilibrio: ${result.breakEvenYear === null ? "Fuera del rango de comparación" : `Año ${result.breakEvenYear}`}
+`.trim() : `
 Rent vs Buy Summary
 
 Net Worth if Buying: ${fmtCurrency(result.buyerNetWorth)}
 Net Worth if Renting: ${fmtCurrency(result.renterNetWorth)}
-Better Option: ${result.betterOption === "buy" ? "Buying" : "Renting"}
+Better Option: ${betterOptionText}
 Break-Even Year: ${result.breakEvenYear === null ? "Beyond comparison range" : `Year ${result.breakEvenYear}`}
 `.trim();
 

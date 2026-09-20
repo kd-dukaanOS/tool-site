@@ -5,16 +5,23 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { IndianRupee, CircleMinus, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { basic:"Basic Salary (₹)", hra:"HRA (₹)", allowances:"Other Allowances (₹)", pf:"PF (%)", pt:"Professional Tax (₹)", otherDeductions:"Other Deductions (₹)", emptyTitle:"Enter salary details to calculate payroll", emptyDesc:"Gross, deductions, and net salary will appear here.", gross:"Gross Salary", pfDeduction:"PF Deduction", totalDeductions:"Total Deductions", netSalary:"Net Salary", takeHome:"take-home pay", fillBasic:"Please enter basic salary." },
+  es: { basic:"Salario Base (₹)", hra:"HRA (₹)", allowances:"Otras Asignaciones (₹)", pf:"PF (%)", pt:"Impuesto Profesional (₹)", otherDeductions:"Otras Deducciones (₹)", emptyTitle:"Ingresa los datos salariales para calcular la nómina", emptyDesc:"El salario bruto, las deducciones y el salario neto aparecerán aquí.", gross:"Salario Bruto", pfDeduction:"Deducción de PF", totalDeductions:"Deducciones Totales", netSalary:"Salario Neto", takeHome:"pago neto a recibir", fillBasic:"Por favor ingresa el salario base." },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="basicSalary" label="Basic Salary (₹)" type="number" placeholder="e.g. 30000" />
-    <CalculatorField id="hra" label="HRA (₹)" type="number" placeholder="e.g. 12000" />
-    <CalculatorField id="otherAllowances" label="Other Allowances (₹)" type="number" placeholder="e.g. 3000" />
-    <CalculatorField id="pfPercent" label="PF (%)" type="number" placeholder="e.g. 12" />
-    <CalculatorField id="professionalTax" label="Professional Tax (₹)" type="number" placeholder="e.g. 200" />
-    <CalculatorField id="otherDeductions" label="Other Deductions (₹)" type="number" placeholder="e.g. 500" />
+    <CalculatorField id="basicSalary" label={copy.basic} type="number" placeholder="e.g. 30000" />
+    <CalculatorField id="hra" label={copy.hra} type="number" placeholder="e.g. 12000" />
+    <CalculatorField id="otherAllowances" label={copy.allowances} type="number" placeholder="e.g. 3000" />
+    <CalculatorField id="pfPercent" label={copy.pf} type="number" placeholder="e.g. 12" />
+    <CalculatorField id="professionalTax" label={copy.pt} type="number" placeholder="e.g. 200" />
+    <CalculatorField id="otherDeductions" label={copy.otherDeductions} type="number" placeholder="e.g. 500" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -30,18 +37,21 @@ import { IndianRupee, CircleMinus, Wallet } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter salary details to calculate payroll"
-      description="Gross, deductions, and net salary will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="grossSalaryResult" title="Gross Salary" icon={IndianRupee} accent="neutral" />
-      <ResultCard id="pfDeductionResult" title="PF Deduction" icon={CircleMinus} accent="warning" />
-      <ResultCard id="totalDeductionsResult" title="Total Deductions" icon={CircleMinus} accent="danger" />
-      <ResultCard id="netSalaryResult" title="Net Salary" icon={Wallet} accent="success" size="lg" />
+      <ResultCard id="grossSalaryResult" title={copy.gross} icon={IndianRupee} accent="neutral" />
+      <ResultCard id="pfDeductionResult" title={copy.pfDeduction} icon={CircleMinus} accent="warning" />
+      <ResultCard id="totalDeductionsResult" title={copy.totalDeductions} icon={CircleMinus} accent="danger" />
+      <ResultCard id="netSalaryResult" title={copy.netSalary} icon={Wallet} accent="success" size="lg" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/payroll-calculator.ts"></script>
 

@@ -47,13 +47,21 @@ function escapeHtml(str: string): string {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export function validateRegexInput(pattern: string, text: string): string | null {
-  if (!pattern.trim()) return "Please enter a regex pattern.";
-  if (!text.trim()) return "Please enter test text.";
+export function validateRegexInput(pattern: string, text: string, lang: "en" | "es" = "en"): string | null {
+  if (!pattern.trim()) return lang === "es" ? "Por favor ingresa un patrón de expresión regular." : "Please enter a regex pattern.";
+  if (!text.trim()) return lang === "es" ? "Por favor ingresa un texto de prueba." : "Please enter test text.";
   return null;
 }
 
-export function copyRegexSummary(pattern: string, flags: string, result: RegexResult): string {
+export function copyRegexSummary(pattern: string, flags: string, result: RegexResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `Resumen de Prueba de Expresión Regular
+
+Patrón: /${pattern}/${flags}
+Coincidencias Encontradas: ${result.matches.length}
+
+${result.matches.map((m, i) => `${i + 1}. "${m.match}" en el índice ${m.index}`).join("\n")}`.trim();
+  }
   return `Regex Test Summary
 
 Pattern: /${pattern}/${flags}

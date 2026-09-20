@@ -67,16 +67,17 @@ export function validateAffordabilityInputs(
   monthlyDebts: number,
   downPayment: number,
   annualRatePercent: number,
-  loanYears: number
+  loanYears: number,
+  lang: "en" | "es" = "en"
 ): string | null {
   if ([annualIncome, monthlyDebts, downPayment, annualRatePercent, loanYears].some(Number.isNaN)) {
-    return "Please fill in all required fields with valid numbers.";
+    return lang === "es" ? "Por favor completa todos los campos requeridos con números válidos." : "Please fill in all required fields with valid numbers.";
   }
-  if (annualIncome <= 0) return "Annual income must be greater than zero.";
-  if (monthlyDebts < 0) return "Monthly debts cannot be negative.";
-  if (downPayment < 0) return "Down payment cannot be negative.";
-  if (annualRatePercent < 0) return "Interest rate cannot be negative.";
-  if (loanYears <= 0) return "Loan term must be greater than zero.";
-  if (annualIncome > 1000000000) return "Please enter a realistic income.";
+  if (annualIncome <= 0) return lang === "es" ? "El ingreso anual debe ser mayor a cero." : "Annual income must be greater than zero.";
+  if (monthlyDebts < 0) return lang === "es" ? "Las deudas mensuales no pueden ser negativas." : "Monthly debts cannot be negative.";
+  if (downPayment < 0) return lang === "es" ? "El pago inicial no puede ser negativo." : "Down payment cannot be negative.";
+  if (annualRatePercent < 0) return lang === "es" ? "La tasa de interés no puede ser negativa." : "Interest rate cannot be negative.";
+  if (loanYears <= 0) return lang === "es" ? "El plazo del préstamo debe ser mayor a cero." : "Loan term must be greater than zero.";
+  if (annualIncome > 1000000000) return lang === "es" ? "Por favor ingresa un ingreso realista." : "Please enter a realistic income.";
   return null;
 }

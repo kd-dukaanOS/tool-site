@@ -53,10 +53,20 @@ export function calculateInvestmentReturn(
 export function validateInvestmentReturnInputs(
   initialInvestment: number,
   years: number,
-  endingValue: number
+  endingValue: number,
+  lang: "en" | "es" = "en"
 ): string | null {
-  if (initialInvestment < 0) return "Initial investment cannot be negative.";
-  if (years <= 0) return "Number of years must be greater than zero.";
-  if (endingValue <= 0) return "Ending value must be greater than zero.";
+  const msg = lang === "es" ? {
+    initial: "La inversión inicial no puede ser negativa.",
+    years: "El número de años debe ser mayor que cero.",
+    ending: "El valor final debe ser mayor que cero.",
+  } : {
+    initial: "Initial investment cannot be negative.",
+    years: "Number of years must be greater than zero.",
+    ending: "Ending value must be greater than zero.",
+  };
+  if (initialInvestment < 0) return msg.initial;
+  if (years <= 0) return msg.years;
+  if (endingValue <= 0) return msg.ending;
   return null;
 }

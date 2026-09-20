@@ -5,23 +5,30 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Landmark, TrendingDown, DollarSign } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { futureGroup:"Future Amount", futureValue:"Future Value", years:"Years Until Received", discountGroup:"Discount Rate", discountRate:"Discount Rate (%)", compounding:"Compounding Frequency", annually:"Annually", monthly:"Monthly", quarterly:"Quarterly", daily:"Daily", emptyTitle:"Present Value Calculator", emptyDesc:"Find what a future sum of money is worth today.", tip1:"Present Value", tip2:"Future Value", tip3:"Discount Amount", presentValue:"Present Value", futureValueOut:"Future Value", discountAmount:"Discount Amount", discountedOver:"Discounted over", yearsLabel:"years", aboutTitle:"About this Calculator", aboutText:"Discounts a future sum of money back to its equivalent value today, based on your chosen discount rate and compounding frequency." },
+  es: { futureGroup:"Monto Futuro", futureValue:"Valor Futuro", years:"Años Hasta Recibirlo", discountGroup:"Tasa de Descuento", discountRate:"Tasa de Descuento (%)", compounding:"Frecuencia de Capitalización", annually:"Anual", monthly:"Mensual", quarterly:"Trimestral", daily:"Diaria", emptyTitle:"Calculadora de Valor Presente", emptyDesc:"Calcula cuánto vale hoy una suma de dinero futura.", tip1:"Valor Presente", tip2:"Valor Futuro", tip3:"Monto de Descuento", presentValue:"Valor Presente", futureValueOut:"Valor Futuro", discountAmount:"Monto de Descuento", discountedOver:"Descontado a lo largo de", yearsLabel:"años", aboutTitle:"Acerca de esta Calculadora", aboutText:"Descuenta una suma de dinero futura a su valor equivalente hoy, según la tasa de descuento y la frecuencia de capitalización elegidas." },
+}[lang];
 ---
 <section class="pv-calculator">
   <div class="pv-layout">
     <aside class="pv-sidebar">
       <div class="pv-group">
-        <h3>Future Amount</h3>
-        <CalculatorField id="futureValue" label="Future Value" type="number" placeholder="e.g. 50000" min="0" step="1" />
-        <CalculatorField id="years" label="Years Until Received" type="number" placeholder="e.g. 10" min="1" step="1" />
+        <h3>{copy.futureGroup}</h3>
+        <CalculatorField id="futureValue" label={copy.futureValue} type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="years" label={copy.years} type="number" placeholder="e.g. 10" min="1" step="1" />
       </div>
       <div class="pv-group">
-        <h3>Discount Rate</h3>
-        <CalculatorField id="discountRate" label="Discount Rate (%)" type="number" placeholder="e.g. 6" min="-100" step="0.1" />
-        <CalculatorField type="select" id="compoundingFrequency" label="Compounding Frequency">
-  <option value="1">Annually</option>
-  <option value="12">Monthly</option>
-  <option value="4">Quarterly</option>
-  <option value="365">Daily</option>
+        <h3>{copy.discountGroup}</h3>
+        <CalculatorField id="discountRate" label={copy.discountRate} type="number" placeholder="e.g. 6" min="-100" step="0.1" />
+        <CalculatorField type="select" id="compoundingFrequency" label={copy.compounding}>
+  <option value="1">{copy.annually}</option>
+  <option value="12">{copy.monthly}</option>
+  <option value="4">{copy.quarterly}</option>
+  <option value="365">{copy.daily}</option>
 </CalculatorField>
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -29,22 +36,27 @@ import { Landmark, TrendingDown, DollarSign } from "@lucide/astro";
     </aside>
     <main class="pv-content">
       <div id="emptyState">
-        <EmptyState icon="⏳" title="Present Value Calculator" description="Find what a future sum of money is worth today." tips={["Present Value", "Future Value", "Discount Amount"]} />
+        <EmptyState icon="⏳" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="presentValueResult" title="Present Value" icon={Landmark} accent="success" subtitle=" " />
-          <ResultCard id="futureValueOutResult" title="Future Value" icon={DollarSign} />
-          <ResultCard id="discountAmountResult" title="Discount Amount" icon={TrendingDown} />
+          <ResultCard id="presentValueResult" title={copy.presentValue} icon={Landmark} accent="success" subtitle=" " />
+          <ResultCard id="futureValueOutResult" title={copy.futureValueOut} icon={DollarSign} />
+          <ResultCard id="discountAmountResult" title={copy.discountAmount} icon={TrendingDown} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Discounts a future sum of money back to its equivalent value today, based on your chosen discount rate and compounding frequency.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, discountedOverLabel: copy.discountedOver, yearsLabel: copy.yearsLabel }}>
+  window.calcLang = calcLang;
+  window.pvDiscountedOverLabel = discountedOverLabel;
+  window.pvYearsLabel = yearsLabel;
+</script>
 <script>
   import "../../scripts/present-value-calculator";
 </script>

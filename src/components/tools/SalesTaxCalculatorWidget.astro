@@ -6,17 +6,24 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { DollarSign, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { amount:"Amount", taxRate:"Tax Rate (%)", checkboxLabel:"Amount already includes tax", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter amount to calculate sales tax", emptyDesc:"Net, tax, and gross amounts will appear here.", netAmount:"Net Amount", taxAmount:"Tax Amount", grossAmount:"Gross Amount", subtitle:"final payable amount" },
+  es: { amount:"Monto", taxRate:"Tasa de Impuesto (%)", checkboxLabel:"El monto ya incluye impuesto", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa un monto para calcular el impuesto de venta", emptyDesc:"Los montos neto, impuesto y bruto aparecerán aquí.", netAmount:"Monto Neto", taxAmount:"Monto del Impuesto", grossAmount:"Monto Bruto", subtitle:"monto final a pagar" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CurrencySelector />
-    <CalculatorField id="amount" label="Amount" type="number" placeholder="e.g. 1000" />
-    <CalculatorField id="taxRate" label="Tax Rate (%)" type="number" placeholder="e.g. 18" />
+    <CalculatorField id="amount" label={copy.amount} type="number" placeholder="e.g. 1000" />
+    <CalculatorField id="taxRate" label={copy.taxRate} type="number" placeholder="e.g. 18" />
 
     <label class="checkbox-field">
       <input type="checkbox" id="isTaxIncluded" />
-      <span>Amount already includes tax</span>
+      <span>{copy.checkboxLabel}</span>
     </label>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -27,22 +34,28 @@ import { DollarSign, Receipt } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter amount to calculate sales tax"
-      description="Net, tax, and gross amounts will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="netAmountResult" title="Net Amount" icon={DollarSign} accent="neutral" />
-      <ResultCard id="taxAmountResult" title="Tax Amount" icon={Receipt} accent="warning" />
-      <ResultCard id="grossAmountResult" title="Gross Amount" icon={DollarSign} accent="primary" size="lg" />
+      <ResultCard id="netAmountResult" title={copy.netAmount} icon={DollarSign} accent="neutral" />
+      <ResultCard id="taxAmountResult" title={copy.taxAmount} icon={Receipt} accent="warning" />
+      <ResultCard id="grossAmountResult" title={copy.grossAmount} icon={DollarSign} accent="primary" size="lg" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/sales-tax-calculator.ts"></script>

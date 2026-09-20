@@ -18,6 +18,15 @@ const fieldIds = [
   "plannedContribution", "expectedReturn", "yearsToGrow",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const overContributionLabel = (window as any).tfsaOverContributionLabel || "Over-contribution detected";
+const withinLimitLabel = (window as any).tfsaWithinLimitLabel || "Within limit";
+const noneLabel = (window as any).tfsaNoneLabel || "None";
+const totalRoomSinceLabel = (window as any).tfsaTotalRoomSinceLabel || "Total Room Since";
+const availableRoomThisYearLabel = (window as any).tfsaAvailableRoomThisYearLabel || "Available Room This Year";
+const monthlyPenaltyLabel = (window as any).tfsaMonthlyPenaltyLabel || "Monthly Penalty Tax (if over-contributed)";
+const projectedBalanceLabel = (window as any).tfsaProjectedBalanceLabel || "Projected Balance";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -41,7 +50,7 @@ function calculate() {
     plannedContribution, expectedReturn, yearsToGrow,
   ] = fieldIds.map(val);
 
-  const validationError = validateTFSAInputs(eligibleYear || 2009, currentYear || 2026, plannedContribution);
+  const validationError = validateTFSAInputs(eligibleYear || 2009, currentYear || 2026, plannedContribution, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -55,10 +64,17 @@ function calculate() {
   setValue("availableRoomResult", fmtCurrency(result.availableRoom));
   setValue("totalRoomResult", fmtCurrency(result.totalRoomSinceEligible));
   setValue("projectedBalanceResult", fmtCurrency(result.projectedBalance));
-  setValue("penaltyTaxResult", result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) + "/mo" : "None");
-  setSubtitle("penaltyTaxResult", result.excessContribution > 0 ? "Over-contribution detected" : "Within limit");
+  setValue("penaltyTaxResult", result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) + "/mo" : noneLabel);
+  setSubtitle("penaltyTaxResult", result.excessContribution > 0 ? overContributionLabel : withinLimitLabel);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de TFSA
+
+${totalRoomSinceLabel} ${eligibleYear || 2009}: ${fmtCurrency(result.totalRoomSinceEligible)}
+${availableRoomThisYearLabel}: ${fmtCurrency(result.availableRoom)}
+${projectedBalanceLabel}: ${fmtCurrency(result.projectedBalance)}
+${monthlyPenaltyLabel}: ${result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) : noneLabel}
+`.trim() : `
 TFSA Summary
 
 Total Room Since ${eligibleYear || 2009}: ${fmtCurrency(result.totalRoomSinceEligible)}

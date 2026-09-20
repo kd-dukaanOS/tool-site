@@ -19,9 +19,9 @@ export function parseNumberList(value: string): number[] {
     .filter((n) => !Number.isNaN(n));
 }
 
-export function validateStdDevInput(i: StdDevInput): string | null {
-  if (i.numbers.length === 0) return "Enter at least one number.";
-  if (i.isSample && i.numbers.length < 2) return "Sample deviation needs at least 2 numbers.";
+export function validateStdDevInput(i: StdDevInput, lang: "en" | "es" = "en"): string | null {
+  if (i.numbers.length === 0) return lang === "es" ? "Ingresa al menos un número." : "Enter at least one number.";
+  if (i.isSample && i.numbers.length < 2) return lang === "es" ? "La desviación muestral necesita al menos 2 números." : "Sample deviation needs at least 2 numbers.";
   return null;
 }
 
@@ -42,7 +42,20 @@ export function calculateStandardDeviation(i: StdDevInput): StdDevResult {
   };
 }
 
-export function copyStdDevSummary(i: StdDevInput, r: StdDevResult): string {
+export function copyStdDevSummary(i: StdDevInput, r: StdDevResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Desviación Estándar
+
+Números: ${i.numbers.join(", ")}
+Tipo: ${i.isSample ? "Muestra" : "Población"}
+
+Media: ${r.mean}
+Varianza: ${r.variance}
+Desviación Estándar: ${r.standardDeviation}
+Cantidad: ${r.count}
+`.trim();
+  }
   return `
 Standard Deviation Summary
 

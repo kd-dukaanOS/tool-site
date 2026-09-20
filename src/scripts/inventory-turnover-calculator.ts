@@ -22,6 +22,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: InventoryTurnoverInput | null = null;
 
 function showError(msg: string) {
@@ -44,11 +46,11 @@ function calculate() {
   };
 
   if (!input.cogs || (!input.beginningInventory && !input.endingInventory)) {
-    showError("Please fill all required fields.");
+    showError(lang === "es" ? "Por favor completa todos los campos requeridos." : "Please fill all required fields.");
     return;
   }
 
-  const err = validateInventoryTurnoverInput(input);
+  const err = validateInventoryTurnoverInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -69,8 +71,8 @@ function renderResults(result: ReturnType<typeof calculateInventoryTurnover>) {
   setValue("avgInventoryResult", formatCurrency(result.averageInventory, currentCurrency));
   setValue("turnoverRatioResult", `${result.turnoverRatio}x`);
   setValue("daysToSellResult", `${result.daysToSellInventory} days`);
-  setSubtitle("turnoverRatioResult", "times per year");
-  setSubtitle("daysToSellResult", "to clear stock");
+  setSubtitle("turnoverRatioResult", lang === "es" ? "veces por año" : "times per year");
+  setSubtitle("daysToSellResult", lang === "es" ? "para liquidar stock" : "to clear stock");
 }
 
 onCurrencyChange((code) => {
@@ -93,7 +95,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateInventoryTurnover(lastInput);
-  copyToClipboard(copyInventoryTurnoverSummary(lastInput, result, currentCurrency));
+  copyToClipboard(copyInventoryTurnoverSummary(lastInput, result, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

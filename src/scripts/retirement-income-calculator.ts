@@ -18,6 +18,8 @@ const fieldIds = [
   "otherAnnualIncome", "expectedAnnualReturn", "inflationRate", "retirementYears", "birthYear",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -41,7 +43,7 @@ function calculate() {
     otherAnnualIncome, expectedAnnualReturn, inflationRate, retirementYears, birthYear,
   ] = fieldIds.map(val);
 
-  const validationError = validateRetirementIncomeInputs(currentSavings, withdrawalRate, retirementYears);
+  const validationError = validateRetirementIncomeInputs(currentSavings, withdrawalRate, retirementYears, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -54,11 +56,25 @@ function calculate() {
 
   setValue("monthlyIncomeResult", fmtCurrency(result.monthlyIncome));
   setValue("totalAnnualIncomeResult", fmtCurrency(result.totalAnnualIncome));
-  setValue("rmdAgeResult", `Age ${result.rmdAge}`);
-  setValue("depletionResult", result.depletionYear === null ? `Lasts ${retirementYears}+ years` : `Depletes in Year ${result.depletionYear}`);
-  setSubtitle("depletionResult", result.depletionYear === null ? `Ending balance: ${fmtCurrency(result.endingBalance)}` : "Consider a lower withdrawal rate");
+  const rmdAgeText = lang === "es" ? `Edad ${result.rmdAge}` : `Age ${result.rmdAge}`;
+  const depletionText = result.depletionYear === null
+    ? (lang === "es" ? `Dura ${retirementYears}+ años` : `Lasts ${retirementYears}+ years`)
+    : (lang === "es" ? `Se agota en el Año ${result.depletionYear}` : `Depletes in Year ${result.depletionYear}`);
 
-  lastSummary = `
+  setValue("rmdAgeResult", rmdAgeText);
+  setValue("depletionResult", depletionText);
+  setSubtitle("depletionResult", result.depletionYear === null
+    ? (lang === "es" ? `Saldo final: ${fmtCurrency(result.endingBalance)}` : `Ending balance: ${fmtCurrency(result.endingBalance)}`)
+    : (lang === "es" ? "Considera una tasa de retiro más baja" : "Consider a lower withdrawal rate"));
+
+  lastSummary = lang === "es" ? `
+Resumen de Ingreso de Jubilación
+
+Ingreso Mensual de Jubilación Estimado: ${fmtCurrency(result.monthlyIncome)}
+Ingreso Anual de Jubilación Estimado: ${fmtCurrency(result.totalAnnualIncome)}
+Inicio de RMD: Edad ${result.rmdAge}
+Panorama del Portafolio: ${result.depletionYear === null ? `Dura todo el horizonte de ${retirementYears} años` : `Se agota en el Año ${result.depletionYear}`}
+`.trim() : `
 Retirement Income Summary
 
 Estimated Monthly Retirement Income: ${fmtCurrency(result.monthlyIncome)}

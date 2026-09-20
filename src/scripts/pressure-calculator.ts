@@ -3,8 +3,11 @@ import {
   validatePressureInput,
   copyPressureSummary,
   PRESSURE_LABELS,
+  getPressureLabel,
   type PressureInput,
 } from "../utils/pressure";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
 const valueInput = document.getElementById("value") as HTMLInputElement;
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validatePressureInput(input);
+  const err = validatePressureInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculatePressure(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", PRESSURE_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", getPressureLabel(input.toUnit, lang));
 
   lastInput = input;
 
@@ -68,7 +71,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculatePressure(lastInput);
-  copyToClipboard(copyPressureSummary(lastInput, result));
+  copyToClipboard(copyPressureSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

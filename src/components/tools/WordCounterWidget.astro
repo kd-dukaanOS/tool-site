@@ -4,16 +4,23 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Type, Hash, AlignLeft, BookOpen, Mic, Ruler } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { textLabel:"Text", placeholder:"Paste or type your text here...", analyze:"Analyze", reset:"Reset", copy:"Copy", emptyTitle:"Word Counter", emptyDesc:"Count words, characters, sentences and estimate reading time.", tip1:"Live Word Count", tip2:"Reading & Speaking Time", tip3:"Sentence & Paragraph Count", tip4:"Copy Summary", words:"Words", characters:"Characters", noSpaces:"No Spaces", sentences:"Sentences", paragraphs:"Paragraphs", avgWordLength:"Avg Word Length", readingTime:"Reading Time", speakingTime:"Speaking Time", aboutTitle:"About this Tool", aboutText:"Count words, characters, sentences and paragraphs, with estimated reading and speaking time — updates live as you type." },
+  es: { textLabel:"Texto", placeholder:"Pega o escribe tu texto aquí...", analyze:"Analizar", reset:"Restablecer", copy:"Copiar", emptyTitle:"Contador de Palabras", emptyDesc:"Cuenta palabras, caracteres, oraciones y estima el tiempo de lectura.", tip1:"Conteo en Vivo", tip2:"Tiempo de Lectura y Habla", tip3:"Conteo de Oraciones y Párrafos", tip4:"Copiar Resumen", words:"Palabras", characters:"Caracteres", noSpaces:"Sin Espacios", sentences:"Oraciones", paragraphs:"Párrafos", avgWordLength:"Longitud Media de Palabra", readingTime:"Tiempo de Lectura", speakingTime:"Tiempo de Habla", aboutTitle:"Acerca de esta Herramienta", aboutText:"Cuenta palabras, caracteres, oraciones y párrafos, con tiempo estimado de lectura y habla — se actualiza en vivo mientras escribes." },
+}[lang];
 ---
 <section class="word-counter">
   <div class="wc-layout">
     <aside class="wc-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="wcInput">Text</label>
-        <textarea id="wcInput" class="tool-textarea" placeholder="Paste or type your text here..."></textarea>
+        <label class="tool-label" for="wcInput">{copy.textLabel}</label>
+        <textarea id="wcInput" class="tool-textarea" placeholder={copy.placeholder}></textarea>
       </div>
 
-      <CalculatorActions calculateId="analyzeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="analyzeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.analyze} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
@@ -21,33 +28,36 @@ import { Type, Hash, AlignLeft, BookOpen, Mic, Ruler } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📊"
-          title="Word Counter"
-          description="Count words, characters, sentences and estimate reading time."
-          tips={["Live Word Count", "Reading & Speaking Time", "Sentence & Paragraph Count", "Copy Summary"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="wordsResult" title="Words" icon={Type} />
-          <ResultCard id="charactersResult" title="Characters" icon={Hash} />
-          <ResultCard id="noSpacesResult" title="No Spaces" icon={Hash} />
-          <ResultCard id="sentencesResult" title="Sentences" icon={AlignLeft} />
-          <ResultCard id="paragraphsResult" title="Paragraphs" icon={AlignLeft} />
-          <ResultCard id="avgWordLengthResult" title="Avg Word Length" icon={Ruler} />
-          <ResultCard id="readingTimeResult" title="Reading Time" icon={BookOpen} />
-          <ResultCard id="speakingTimeResult" title="Speaking Time" icon={Mic} />
+          <ResultCard id="wordsResult" title={copy.words} icon={Type} />
+          <ResultCard id="charactersResult" title={copy.characters} icon={Hash} />
+          <ResultCard id="noSpacesResult" title={copy.noSpaces} icon={Hash} />
+          <ResultCard id="sentencesResult" title={copy.sentences} icon={AlignLeft} />
+          <ResultCard id="paragraphsResult" title={copy.paragraphs} icon={AlignLeft} />
+          <ResultCard id="avgWordLengthResult" title={copy.avgWordLength} icon={Ruler} />
+          <ResultCard id="readingTimeResult" title={copy.readingTime} icon={BookOpen} />
+          <ResultCard id="speakingTimeResult" title={copy.speakingTime} icon={Mic} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Count words, characters, sentences and paragraphs, with estimated reading and speaking time — updates live as you type.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/word-counter";
 </script>

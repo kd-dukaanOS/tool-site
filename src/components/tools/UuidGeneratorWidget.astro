@@ -5,22 +5,29 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Fingerprint, Hash, Layers, Ruler } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { count:"Count", version:"Version", v4:"Version 4 (Random)", nil:"Nil UUID", hyphens:"Include hyphens", uppercase:"Uppercase", generate:"Generate", reset:"Reset", copy:"Copy", emptyTitle:"UUID Generator", emptyDesc:"Generate random UUID v4 identifiers instantly.", tip1:"Bulk Generation", tip2:"v4 & Nil UUID", tip3:"Custom Formatting", tip4:"Copy All", generated:"Generated", versionResult:"Version", length:"Length", generatedUuids:"Generated UUIDs", aboutTitle:"About this Tool", aboutText:"Generate cryptographically random UUID v4 identifiers in bulk, using your browser's native crypto.randomUUID()." },
+  es: { count:"Cantidad", version:"Versión", v4:"Versión 4 (Aleatorio)", nil:"UUID Nulo", hyphens:"Incluir guiones", uppercase:"Mayúsculas", generate:"Generar", reset:"Restablecer", copy:"Copiar", emptyTitle:"Generador de UUID", emptyDesc:"Genera identificadores UUID v4 aleatorios al instante.", tip1:"Generación Masiva", tip2:"v4 y UUID Nulo", tip3:"Formato Personalizado", tip4:"Copiar Todo", generated:"Generados", versionResult:"Versión", length:"Longitud", generatedUuids:"UUIDs Generados", aboutTitle:"Acerca de esta Herramienta", aboutText:"Genera identificadores UUID v4 criptográficamente aleatorios en masa, usando crypto.randomUUID() nativo de tu navegador." },
+}[lang];
 ---
 <section class="uuid-generator">
   <div class="uuid-layout">
     <aside class="uuid-sidebar">
 
-      <CalculatorField id="uuidCount" label="Count" type="number" value={5} min={1} max={1000} />
+      <CalculatorField id="uuidCount" label={copy.count} type="number" value={5} min={1} max={1000} />
 
-      <CalculatorField id="uuidVersion" label="Version" type="select">
-        <option value="v4" selected>Version 4 (Random)</option>
-        <option value="nil">Nil UUID</option>
+      <CalculatorField id="uuidVersion" label={copy.version} type="select">
+        <option value="v4" selected>{copy.v4}</option>
+        <option value="nil">{copy.nil}</option>
       </CalculatorField>
 
-      <div class="tool-checkbox-field"><input id="uuidHyphens" type="checkbox" checked /><label for="uuidHyphens">Include hyphens</label></div>
-      <div class="tool-checkbox-field"><input id="uuidUppercase" type="checkbox" /><label for="uuidUppercase">Uppercase</label></div>
+      <div class="tool-checkbox-field"><input id="uuidHyphens" type="checkbox" checked /><label for="uuidHyphens">{copy.hyphens}</label></div>
+      <div class="tool-checkbox-field"><input id="uuidUppercase" type="checkbox" /><label for="uuidUppercase">{copy.uppercase}</label></div>
 
-      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.generate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
@@ -28,33 +35,39 @@ import { Fingerprint, Hash, Layers, Ruler } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🆔"
-          title="UUID Generator"
-          description="Generate random UUID v4 identifiers instantly."
-          tips={["Bulk Generation", "v4 & Nil UUID", "Custom Formatting", "Copy All"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="countResult" title="Generated" icon={Hash} />
-          <ResultCard id="versionResult" title="Version" icon={Layers} />
-          <ResultCard id="lengthResult" title="Length" icon={Ruler} />
+          <ResultCard id="countResult" title={copy.generated} icon={Hash} />
+          <ResultCard id="versionResult" title={copy.versionResult} icon={Layers} />
+          <ResultCard id="lengthResult" title={copy.length} icon={Ruler} />
         </ResultsGrid>
 
         <div class="tool-field">
-          <label class="tool-label"><Fingerprint size={16} /> Generated UUIDs</label>
+          <label class="tool-label"><Fingerprint size={16} /> {copy.generatedUuids}</label>
           <textarea id="uuidOutput" class="tool-textarea uuid-output" readonly></textarea>
         </div>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Generate cryptographically random UUID v4 identifiers in bulk, using your browser's native crypto.randomUUID().</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uuid-generator";
 </script>

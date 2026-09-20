@@ -29,6 +29,8 @@ const scenarioButtons =
 
 let lineChart: Chart | null = null;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastMonthly: number | null = null;
 let lastReturn: number | null = null;
 let lastYears: number | null = null;
@@ -111,7 +113,7 @@ function calculate() {
   const annualReturn = parseFloat(returnInput.value);
   const years = parseFloat(tenureInput.value);
 
-  const validationError = validateSIPInputs(monthly, annualReturn, years);
+  const validationError = validateSIPInputs(monthly, annualReturn, years, lang);
 
   if (validationError) {
     showError(validationError);
@@ -125,7 +127,7 @@ function calculate() {
   setValue("returnsResult", inr(result.estimatedReturns));
   setValue("percentResult", `${result.returnPercent}%`);
 
-  insightBox.textContent = sipInsight(monthly, annualReturn, years, result);
+  insightBox.textContent = sipInsight(monthly, annualReturn, years, result, lang);
   insightBox.hidden = false;
 
   renderChart(monthly, annualReturn, years);
@@ -164,7 +166,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (lastMonthly === null || lastReturn === null || lastYears === null || !lastResult) return;
-  copyToClipboard(copySIPSummary(lastMonthly, lastReturn, lastYears, lastResult));
+  copyToClipboard(copySIPSummary(lastMonthly, lastReturn, lastYears, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

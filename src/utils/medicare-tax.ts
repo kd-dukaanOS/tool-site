@@ -44,7 +44,7 @@ export function calculateMedicareTax(
   };
 }
 
-export function validateMedicareTaxInputs(annualWages: number): string | null {
-  if (annualWages <= 0) return "Annual wages must be greater than zero.";
+export function validateMedicareTaxInputs(annualWages: number, lang: "en" | "es" = "en"): string | null {
+  if (annualWages <= 0) return lang === "es" ? "El salario anual debe ser mayor a cero." : "Annual wages must be greater than zero.";
   return null;
 }

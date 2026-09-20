@@ -18,6 +18,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const numericFieldIds = ["previousYearEarnedIncome", "unusedContributionRoom", "plannedContribution", "marginalTaxRate"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -39,7 +41,7 @@ function calculate() {
   const [previousYearEarnedIncome, unusedContributionRoom, plannedContribution, marginalTaxRate] = numericFieldIds.map(val);
   const taxYear = parseInt(strVal("taxYear"), 10) || 2025;
 
-  const validationError = validateRRSPInputs(previousYearEarnedIncome, plannedContribution);
+  const validationError = validateRRSPInputs(previousYearEarnedIncome, plannedContribution, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -50,10 +52,20 @@ function calculate() {
   setValue("contributionRoomResult", fmtCurrency(result.contributionRoom));
   setValue("taxSavingsResult", fmtCurrency(result.taxSavings));
   setValue("maxContributionResult", fmtCurrency(result.maxAllowedContribution));
-  setValue("penaltyTaxResult", result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) + "/mo" : "None");
-  setSubtitle("penaltyTaxResult", result.excessContribution > 0 ? "Over-contribution detected" : "Within limit");
+  const noPenaltyText = lang === "es" ? copy_none_es() : "None";
+  setValue("penaltyTaxResult", result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) + "/mo" : noPenaltyText);
+  setSubtitle("penaltyTaxResult", result.excessContribution > 0 ? (lang === "es" ? "Sobre-aporte detectado" : "Over-contribution detected") : (lang === "es" ? "Dentro del límite" : "Within limit"));
 
-  lastSummary = `
+  function copy_none_es() { return "Ninguno"; }
+
+  lastSummary = lang === "es" ? `
+Resumen de Aporte RRSP — Año Fiscal ${taxYear}
+
+Espacio de Aporte Disponible: ${fmtCurrency(result.contributionRoom)}
+Aporte Aplicado: ${fmtCurrency(result.maxAllowedContribution)}
+Ahorro Fiscal Estimado: ${fmtCurrency(result.taxSavings)}
+Impuesto de Penalidad Mensual (si sobre-aportó): ${result.penaltyTax > 0 ? fmtCurrency(result.penaltyTax) : "Ninguno"}
+`.trim() : `
 RRSP Contribution Summary — Tax Year ${taxYear}
 
 Available Contribution Room: ${fmtCurrency(result.contributionRoom)}

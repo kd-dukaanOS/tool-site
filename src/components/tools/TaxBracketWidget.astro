@@ -5,37 +5,44 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Receipt, TrendingUp, Percent, FileText } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income", filingStatus:"Filing Status", single:"Single or Married Filing Separately", married:"Married Filing Jointly", hoh:"Head of Household", taxableIncome:"Taxable Income", emptyTitle:"Tax Bracket Calculator", emptyDesc:"Find your marginal and effective federal tax rate.", tip1:"Total Tax", tip2:"Marginal Rate", tip3:"Effective Rate", totalTax:"Total Tax", marginalRate:"Marginal Rate", effectiveRate:"Effective Rate", taxableIncomeResult:"Taxable Income", topBracket:"Top bracket rate", breakdownTitle:"Bracket Breakdown", rateHeader:"Rate", rangeHeader:"Income Range", taxHeader:"Tax in Bracket" },
+  es: { incomeGroup:"Ingresos", filingStatus:"Estado Civil Tributario", single:"Soltero o Casado Declarando por Separado", married:"Casado Declarando en Conjunto", hoh:"Cabeza de Familia", taxableIncome:"Ingreso Gravable", emptyTitle:"Calculadora de Tramos Impositivos", emptyDesc:"Calcula tu tasa impositiva federal marginal y efectiva.", tip1:"Impuesto Total", tip2:"Tasa Marginal", tip3:"Tasa Efectiva", totalTax:"Impuesto Total", marginalRate:"Tasa Marginal", effectiveRate:"Tasa Efectiva", taxableIncomeResult:"Ingreso Gravable", topBracket:"Tasa del tramo más alto", breakdownTitle:"Desglose por Tramos", rateHeader:"Tasa", rangeHeader:"Rango de Ingresos", taxHeader:"Impuesto en el Tramo" },
+}[lang];
 ---
 <section class="tbk-calculator">
   <div class="tbk-layout">
     <aside class="tbk-sidebar">
       <div class="tbk-group">
-        <h3>Income</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select">
-          <option value="single">Single or Married Filing Separately</option>
-          <option value="married">Married Filing Jointly</option>
-          <option value="headOfHousehold">Head of Household</option>
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="filingStatus" label={copy.filingStatus} type="select">
+          <option value="single">{copy.single}</option>
+          <option value="married">{copy.married}</option>
+          <option value="headOfHousehold">{copy.hoh}</option>
         </CalculatorField>
-        <CalculatorField id="taxableIncome" label="Taxable Income" type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField id="taxableIncome" label={copy.taxableIncome} type="number" placeholder="e.g. 80000" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="tbk-content">
       <div id="emptyState">
-        <EmptyState icon="📊" title="Tax Bracket Calculator" description="Find your marginal and effective federal tax rate." tips={["Total Tax", "Marginal Rate", "Effective Rate"]} />
+        <EmptyState icon="📊" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalTaxResult" title="Total Tax" icon={Receipt} accent="success" subtitle=" " />
-          <ResultCard id="marginalRateResult" title="Marginal Rate" icon={TrendingUp} />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
-          <ResultCard id="taxableIncomeResult" title="Taxable Income" icon={FileText} />
+          <ResultCard id="totalTaxResult" title={copy.totalTax} icon={Receipt} accent="success" subtitle=" " />
+          <ResultCard id="marginalRateResult" title={copy.marginalRate} icon={TrendingUp} />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} />
+          <ResultCard id="taxableIncomeResult" title={copy.taxableIncomeResult} icon={FileText} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>Bracket Breakdown</h2>
+          <h2>{copy.breakdownTitle}</h2>
           <table class="breakdown-table">
-            <thead><tr><th>Rate</th><th>Income Range</th><th>Tax in Bracket</th></tr></thead>
+            <thead><tr><th>{copy.rateHeader}</th><th>{copy.rangeHeader}</th><th>{copy.taxHeader}</th></tr></thead>
             <tbody id="breakdownBody"></tbody>
           </table>
         </section>
@@ -43,6 +50,10 @@ import { Receipt, TrendingUp, Percent, FileText } from "@lucide/astro";
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, topBracketLabel: copy.topBracket }}>
+  window.calcLang = calcLang;
+  window.tbkTopBracketLabel = topBracketLabel;
+</script>
 <script>
   import "../../scripts/tax-bracket-calculator";
 </script>

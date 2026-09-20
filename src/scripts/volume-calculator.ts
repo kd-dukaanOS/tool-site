@@ -19,6 +19,9 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const VOLUME_LABELS_ES: Record<string, string> = { ml:"Mililitro", l:"Litro", cubicm:"Metro Cúbico", gallon:"Galón", quart:"Cuarto", pint:"Pinta", cup:"Taza", floz:"Onza Líquida" };
+
 let lastInput: VolumeInput | null = null;
 
 function showError(msg: string) {
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateVolumeInput(input);
+  const err = validateVolumeInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculateVolume(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", VOLUME_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", lang === "es" ? VOLUME_LABELS_ES[input.toUnit] : VOLUME_LABELS[input.toUnit]);
 
   lastInput = input;
 

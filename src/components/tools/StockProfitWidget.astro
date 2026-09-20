@@ -5,43 +5,55 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingUp, Percent, Receipt, Target } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { tradeDetails:"Trade Details", buyPrice:"Buy Price per Share", sellPrice:"Sell Price per Share", shares:"Number of Shares", feesGroup:"Fees", buyFees:"Buy-Side Fees", sellFees:"Sell-Side Fees", emptyTitle:"Stock Profit Calculator", emptyDesc:"Find your net profit, return, and break-even price on a trade.", tip1:"Net Profit", tip2:"Return %", tip3:"Break-Even Price", netProfit:"Net Profit/Loss", returnPct:"Return", totalFees:"Total Fees", breakEven:"Break-Even Price", profit:"Profit", loss:"Loss", aboutTitle:"About this Calculator", aboutText:"Calculates your net profit or loss, return percentage, and break-even price on a stock trade, accounting for buy and sell-side brokerage fees." },
+  es: { tradeDetails:"Detalles de la Operación", buyPrice:"Precio de Compra por Acción", sellPrice:"Precio de Venta por Acción", shares:"Número de Acciones", feesGroup:"Comisiones", buyFees:"Comisiones de Compra", sellFees:"Comisiones de Venta", emptyTitle:"Calculadora de Ganancia en Bolsa", emptyDesc:"Calcula tu ganancia neta, retorno y precio de equilibrio en una operación.", tip1:"Ganancia Neta", tip2:"Retorno %", tip3:"Precio de Equilibrio", netProfit:"Ganancia/Pérdida Neta", returnPct:"Retorno", totalFees:"Comisiones Totales", breakEven:"Precio de Equilibrio", profit:"Ganancia", loss:"Pérdida", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu ganancia o pérdida neta, porcentaje de retorno y precio de equilibrio en una operación bursátil, considerando comisiones de compra y venta." },
+}[lang];
 ---
 <section class="sp-calculator">
   <div class="sp-layout">
     <aside class="sp-sidebar">
       <div class="sp-group">
-        <h3>Trade Details</h3>
-        <CalculatorField id="buyPrice" label="Buy Price per Share" type="number" placeholder="e.g. 50" min="0" step="0.01" />
-        <CalculatorField id="sellPrice" label="Sell Price per Share" type="number" placeholder="e.g. 58" min="0" step="0.01" />
-        <CalculatorField id="numberOfShares" label="Number of Shares" type="number" placeholder="e.g. 100" min="0" step="1" />
+        <h3>{copy.tradeDetails}</h3>
+        <CalculatorField id="buyPrice" label={copy.buyPrice} type="number" placeholder="e.g. 50" min="0" step="0.01" />
+        <CalculatorField id="sellPrice" label={copy.sellPrice} type="number" placeholder="e.g. 58" min="0" step="0.01" />
+        <CalculatorField id="numberOfShares" label={copy.shares} type="number" placeholder="e.g. 100" min="0" step="1" />
       </div>
       <div class="sp-group">
-        <h3>Fees</h3>
-        <CalculatorField id="buyFees" label="Buy-Side Fees" type="number" placeholder="e.g. 5" min="0" step="0.01" />
-        <CalculatorField id="sellFees" label="Sell-Side Fees" type="number" placeholder="e.g. 5" min="0" step="0.01" />
+        <h3>{copy.feesGroup}</h3>
+        <CalculatorField id="buyFees" label={copy.buyFees} type="number" placeholder="e.g. 5" min="0" step="0.01" />
+        <CalculatorField id="sellFees" label={copy.sellFees} type="number" placeholder="e.g. 5" min="0" step="0.01" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="sp-content">
       <div id="emptyState">
-        <EmptyState icon="📊" title="Stock Profit Calculator" description="Find your net profit, return, and break-even price on a trade." tips={["Net Profit", "Return %", "Break-Even Price"]} />
+        <EmptyState icon="📊" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="netProfitResult" title="Net Profit/Loss" icon={TrendingUp} accent="success" subtitle=" " />
-          <ResultCard id="returnPercentResult" title="Return" icon={Percent} />
-          <ResultCard id="totalFeesResult" title="Total Fees" icon={Receipt} />
-          <ResultCard id="breakEvenPriceResult" title="Break-Even Price" icon={Target} />
+          <ResultCard id="netProfitResult" title={copy.netProfit} icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="returnPercentResult" title={copy.returnPct} icon={Percent} />
+          <ResultCard id="totalFeesResult" title={copy.totalFees} icon={Receipt} />
+          <ResultCard id="breakEvenPriceResult" title={copy.breakEven} icon={Target} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your net profit or loss, return percentage, and break-even price on a stock trade, accounting for buy and sell-side brokerage fees.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, profitLabel: copy.profit, lossLabel: copy.loss }}>
+  window.calcLang = calcLang;
+  window.spProfitLabel = profitLabel;
+  window.spLossLabel = lossLabel;
+</script>
 <script>
   import "../../scripts/stock-profit-calculator";
 </script>

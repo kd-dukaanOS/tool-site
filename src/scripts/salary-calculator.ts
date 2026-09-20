@@ -24,6 +24,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: SalaryInput | null = null;
 let lastResult: SalaryResult | null = null;
 
@@ -49,7 +51,7 @@ function calculate() {
     professionalTaxMonthly: parseFloat(ptInput.value) || 200,
   };
 
-  const validationError = validateSalaryInput(input);
+  const validationError = validateSalaryInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -93,7 +95,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copySalarySummary(lastInput, lastResult));
+  copyToClipboard(copySalarySummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

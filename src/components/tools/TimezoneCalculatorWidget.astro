@@ -7,6 +7,13 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Clock, ArrowLeftRight } from "@lucide/astro";
 
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { dateTimeLabel:"Date & Time", dateTimeHelp:"Select the date and time in the source timezone.", fromLabel:"From Timezone", toLabel:"To Timezone", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Timezone Calculator", emptyDesc:"Convert a date and time between any two timezones instantly.", tip1:"Converted Date & Time", tip2:"Hour Difference", tip3:"Any IANA Timezone", tip4:"DST-Aware Conversion", convertedTitle:"Converted Time", diffTitle:"Time Difference", aboutTitle:"About this Calculator", aboutText:"Convert any date and time from one timezone to another. The conversion accounts for daylight saving time automatically, so the hour difference shown reflects the actual offset on that specific date.", vsSource:"vs source timezone" },
+  es: { dateTimeLabel:"Fecha y Hora", dateTimeHelp:"Selecciona la fecha y hora en la zona horaria de origen.", fromLabel:"Zona Horaria de Origen", toLabel:"Zona Horaria de Destino", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Zona Horaria", emptyDesc:"Convierte una fecha y hora entre dos zonas horarias al instante.", tip1:"Fecha y Hora Convertida", tip2:"Diferencia de Horas", tip3:"Cualquier Zona Horaria IANA", tip4:"Conversión con Horario de Verano", convertedTitle:"Hora Convertida", diffTitle:"Diferencia de Hora", aboutTitle:"Acerca de esta Calculadora", aboutText:"Convierte cualquier fecha y hora de una zona horaria a otra. La conversión considera automáticamente el horario de verano, por lo que la diferencia de horas mostrada refleja el desfase real en esa fecha específica.", vsSource:"vs zona horaria de origen" },
+}[lang];
+
 const timezones = [
   "Asia/Kolkata",
   "America/New_York",
@@ -31,15 +38,15 @@ const timezones = [
 
       <CalculatorField
         id="dateTime"
-        label="Date & Time"
+        label={copy.dateTimeLabel}
         type="datetime-local"
         required={true}
-        helpText="Select the date and time in the source timezone."
+        helpText={copy.dateTimeHelp}
       />
 
       <CalculatorField
         id="fromTimezone"
-        label="From Timezone"
+        label={copy.fromLabel}
         type="select"
         required={true}
       >
@@ -48,7 +55,7 @@ const timezones = [
 
       <CalculatorField
         id="toTimezone"
-        label="To Timezone"
+        label={copy.toLabel}
         type="select"
         required={true}
       >
@@ -62,6 +69,9 @@ const timezones = [
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -81,13 +91,13 @@ const timezones = [
 
         <EmptyState
           icon="🌐"
-          title="Timezone Calculator"
-          description="Convert a date and time between any two timezones instantly."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Converted Date & Time",
-            "Hour Difference",
-            "Any IANA Timezone",
-            "DST-Aware Conversion"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -102,7 +112,7 @@ const timezones = [
 
           <ResultCard
             id="convertedResult"
-            title="Converted Time"
+            title={copy.convertedTitle}
             icon={Clock}
             accent="primary"
             size="lg"
@@ -110,7 +120,7 @@ const timezones = [
 
           <ResultCard
             id="differenceResult"
-            title="Time Difference"
+            title={copy.diffTitle}
             icon={ArrowLeftRight}
             accent="neutral"
           />
@@ -119,14 +129,9 @@ const timezones = [
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Convert any date and time from one timezone to another.
-            The conversion accounts for daylight saving time automatically,
-            so the hour difference shown reflects the actual offset on
-            that specific date.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -138,6 +143,9 @@ const timezones = [
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/timezone-calculator";
 </script>

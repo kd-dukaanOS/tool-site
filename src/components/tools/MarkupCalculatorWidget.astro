@@ -7,6 +7,13 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { cost:"Cost ($)", costHelp:"What you paid for the item.", markup:"Markup (%)", markupHelp:"Percentage added on top of cost.", emptyTitle:"Markup Calculator", emptyDesc:"Find your sale price and profit from cost and markup percentage.", tip1:"Sale Price", tip2:"Profit", tip3:"Margin %", salePrice:"Sale Price", profit:"Profit", margin:"Resulting Margin", aboutTitle:"About this Calculator", aboutText:"Calculates your sale price and profit from cost and a markup percentage. All calculations run locally — no external data or paid service is required." },
+  es: { cost:"Costo ($)", costHelp:"Lo que pagaste por el artículo.", markup:"Margen de Ganancia (%)", markupHelp:"Porcentaje agregado sobre el costo.", emptyTitle:"Calculadora de Margen", emptyDesc:"Calcula tu precio de venta y ganancia a partir del costo y el porcentaje de margen.", tip1:"Precio de Venta", tip2:"Ganancia", tip3:"Margen %", salePrice:"Precio de Venta", profit:"Ganancia", margin:"Margen Resultante", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu precio de venta y ganancia a partir del costo y un porcentaje de margen. Todos los cálculos se ejecutan localmente — no se requieren datos externos ni servicios pagos." },
+}[lang];
 ---
 
 <section class="markup-calculator">
@@ -16,24 +23,24 @@ import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
       <CurrencySelector />
 
       <CalculatorField
-        id="cost"        label="Cost ($)"
+        id="cost"        label={copy.cost}
         type="number"
         placeholder="e.g. 40"
         required={true}
         min="0"
         step="0.01"
-        helpText="What you paid for the item."
+        helpText={copy.costHelp}
       />
 
       <CalculatorField
         id="markupPercent"
-        label="Markup (%)"
+        label={copy.markup}
         type="number"
         placeholder="e.g. 25"
         required={true}
         min="0"
         step="0.01"
-        helpText="Percentage added on top of cost."
+        helpText={copy.markupHelp}
       />
 
       <CalculatorActions
@@ -50,25 +57,22 @@ import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🏷️"
-          title="Markup Calculator"
-          description="Find your sale price and profit from cost and markup percentage."
-          tips={["Sale Price", "Profit", "Margin %"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="salePriceResult" title="Sale Price" icon={DollarSign} accent="success" size="lg" />
-          <ResultCard id="profitResult" title="Profit" icon={TrendingUp} accent="primary" />
-          <ResultCard id="marginResult" title="Resulting Margin" icon={Tag} />
+          <ResultCard id="salePriceResult" title={copy.salePrice} icon={DollarSign} accent="success" size="lg" />
+          <ResultCard id="profitResult" title={copy.profit} icon={TrendingUp} accent="primary" />
+          <ResultCard id="marginResult" title={copy.margin} icon={Tag} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your sale price and profit from cost and a markup percentage.
-            All calculations run locally — no external data or paid service is required.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -76,6 +80,9 @@ import { DollarSign, TrendingUp, Tag } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/markup-calculator";
 </script>

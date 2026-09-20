@@ -16,9 +16,9 @@ export function parseNumberList(value: string): number[] {
     .filter((n) => !Number.isNaN(n) && Number.isInteger(n));
 }
 
-export function validateLCMInput(i: LCMInput): string | null {
-  if (i.numbers.length < 2) return "Enter at least two whole numbers.";
-  if (i.numbers.some((n) => n <= 0)) return "Enter only positive whole numbers.";
+export function validateLCMInput(i: LCMInput, lang: "en" | "es" = "en"): string | null {
+  if (i.numbers.length < 2) return lang === "es" ? "Ingresa al menos dos números enteros." : "Enter at least two whole numbers.";
+  if (i.numbers.some((n) => n <= 0)) return lang === "es" ? "Ingresa solo números enteros positivos." : "Enter only positive whole numbers.";
   return null;
 }
 
@@ -39,7 +39,16 @@ export function calculateLCM(i: LCMInput): LCMResult {
   };
 }
 
-export function copyLCMSummary(i: LCMInput, r: LCMResult): string {
+export function copyLCMSummary(i: LCMInput, r: LCMResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de MCM
+
+Números: ${i.numbers.join(", ")}
+
+MCM: ${r.lcm}
+`.trim();
+  }
   return `
 LCM Summary
 

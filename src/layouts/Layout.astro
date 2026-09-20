@@ -3,6 +3,7 @@
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import { tools } from "../data/tools.js";
+import { getAlternateUrls } from "../utils/i18n";
 import "../styles/tokens.css";
 import "../styles/global.css";
 import "../styles/effects.css";
@@ -24,12 +25,7 @@ const {
 const resolvedOgTitle = ogTitle || title;
 const resolvedOgDescription = ogDescription || description;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
-
-const altPath = Astro.url.pathname.startsWith("/es")
-  ? Astro.url.pathname.replace(/^\/es/, "") || "/"
-  : `/es${Astro.url.pathname}`;
-const enURL = new URL(lang === "es" ? altPath : Astro.url.pathname, Astro.site || Astro.url.origin);
-const esURL = new URL(lang === "es" ? Astro.url.pathname : altPath, Astro.site || Astro.url.origin);
+const alternates = getAlternateUrls(Astro.url.pathname, lang);
 
 // FAQPage — accepts either { q, a } (content files) or { question, answer } (tools.js fallback)
 const faqSchema = faqItems.length > 0 ? {
@@ -94,9 +90,9 @@ const softwareAppSchema = appName ? {
 
   <title>{title}</title>  <meta name="description" content={description} />
    <link rel="canonical" href={canonicalURL} />
-  <link rel="alternate" hreflang="en" href={enURL} />
-  <link rel="alternate" hreflang="es" href={esURL} />
-  <link rel="alternate" hreflang="x-default" href={enURL} />
+  {alternates.en && <link rel="alternate" hreflang="en" href={new URL(alternates.en, Astro.site || Astro.url.origin)} />}
+  {alternates.es && <link rel="alternate" hreflang="es" href={new URL(alternates.es, Astro.site || Astro.url.origin)} />}
+  {alternates.xDefault && <link rel="alternate" hreflang="x-default" href={new URL(alternates.xDefault, Astro.site || Astro.url.origin)} />}
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content={resolvedOgTitle} />
@@ -142,9 +138,9 @@ const softwareAppSchema = appName ? {
   </script>
 </head>
 <body>
- <Navbar lang={lang} />
+  <Navbar lang={lang} />
   <slot />
-  <Footer />
+  <Footer lang={lang} />
 
   <script is:inline>
     // single delegated handler — works even if a page has a stray duplicate toggle

@@ -5,6 +5,7 @@ export interface PasswordOptions {
   numbers: boolean;
   symbols: boolean;
   excludeAmbiguous: boolean;
+  lang?: "en" | "es";
 }
 
 const UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -27,7 +28,7 @@ export function generatePassword(opts: PasswordOptions): string {
       .join("");
   }
 
-  if (!charset) throw new Error("Select at least one character type.");
+  if (!charset) throw new Error(opts.lang === "es" ? "Selecciona al menos un tipo de carácter." : "Select at least one character type.");
 
   const array = new Uint32Array(opts.length);
   crypto.getRandomValues(array);
@@ -35,9 +36,9 @@ export function generatePassword(opts: PasswordOptions): string {
   return Array.from(array, (n) => charset[n % charset.length]).join("");
 }
 
-export type PasswordStrength = "Weak" | "Fair" | "Strong" | "Very Strong";
+export type PasswordStrength = "Weak" | "Fair" | "Strong" | "Very Strong" | "Débil" | "Regular" | "Fuerte" | "Muy Fuerte";
 
-export function getPasswordStrength(password: string): PasswordStrength {
+export function getPasswordStrength(password: string, lang: "en" | "es" = "en"): PasswordStrength {
   let score = 0;
   if (password.length >= 8) score++;
   if (password.length >= 12) score++;
@@ -46,13 +47,20 @@ export function getPasswordStrength(password: string): PasswordStrength {
   if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
+  if (lang === "es") {
+    if (score <= 2) return "Débil";
+    if (score <= 3) return "Regular";
+    if (score <= 5) return "Fuerte";
+    return "Muy Fuerte";
+  }
+
   if (score <= 2) return "Weak";
   if (score <= 3) return "Fair";
   if (score <= 5) return "Strong";
   return "Very Strong";
 }
 
-export function estimateCrackTime(password: string): string {
+export function estimateCrackTime(password: string, lang: "en" | "es" = "en"): string {
   const charsetSize =
     (/[a-z]/.test(password) ? 26 : 0) +
     (/[A-Z]/.test(password) ? 26 : 0) +
@@ -63,6 +71,16 @@ export function estimateCrackTime(password: string): string {
   const guessesPerSecond = 1e10;
   const seconds = combinations / guessesPerSecond;
 
+  if (lang === "es") {
+    if (seconds < 1) return "Instantáneamente";
+    if (seconds < 60) return `${Math.round(seconds)} segundos`;
+    if (seconds < 3600) return `${Math.round(seconds / 60)} minutos`;
+    if (seconds < 86400) return `${Math.round(seconds / 3600)} horas`;
+    if (seconds < 31536000) return `${Math.round(seconds / 86400)} días`;
+    if (seconds < 31536000000) return `${Math.round(seconds / 31536000)} años`;
+    return "Siglos";
+  }
+
   if (seconds < 1) return "Instantly";
   if (seconds < 60) return `${Math.round(seconds)} seconds`;
   if (seconds < 3600) return `${Math.round(seconds / 60)} minutes`;
@@ -72,10 +90,10 @@ export function estimateCrackTime(password: string): string {
   return "Centuries";
 }
 
-export function validatePasswordOptions(opts: PasswordOptions): string | null {
-  if (opts.length < 4 || opts.length > 128) return "Length must be between 4 and 128.";
+export function validatePasswordOptions(opts: PasswordOptions, lang: "en" | "es" = "en"): string | null {
+  if (opts.length < 4 || opts.length > 128) return lang === "es" ? "La longitud debe estar entre 4 y 128." : "Length must be between 4 and 128.";
   if (!opts.uppercase && !opts.lowercase && !opts.numbers && !opts.symbols) {
-    return "Select at least one character type.";
+    return lang === "es" ? "Selecciona al menos un tipo de carácter." : "Select at least one character type.";
   }
   return null;
 }

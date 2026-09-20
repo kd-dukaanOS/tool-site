@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["targetAmount", "currentSavings", "timeframeYears", "timeframeMonths", "annualInterestRate"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -37,7 +39,7 @@ function calculate() {
   const [targetAmount, currentSavings, timeframeYears, timeframeMonthsInput, annualInterestRate] = fieldIds.map(val);
   const totalMonths = timeframeYears * 12 + timeframeMonthsInput;
 
-  const validationError = validateSavingsGoalInputs(targetAmount, totalMonths);
+  const validationError = validateSavingsGoalInputs(targetAmount, totalMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -50,16 +52,23 @@ function calculate() {
     setValue("totalContributionsResult", fmtCurrency(0));
     setValue("interestEarnedResult", fmtCurrency(result.interestEarned));
     setValue("targetAmountResult", fmtCurrency(targetAmount));
-    setSubtitle("monthlySavingsResult", "Already on track!");
+    setSubtitle("monthlySavingsResult", lang === "es" ? "¡Ya vas por buen camino!" : "Already on track!");
   } else {
     setValue("monthlySavingsResult", fmtCurrency(result.requiredMonthlySavings));
     setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
     setValue("interestEarnedResult", fmtCurrency(result.interestEarned));
     setValue("targetAmountResult", fmtCurrency(targetAmount));
-    setSubtitle("monthlySavingsResult", `Over ${totalMonths} months`);
+    setSubtitle("monthlySavingsResult", lang === "es" ? `En ${totalMonths} meses` : `Over ${totalMonths} months`);
   }
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Meta de Ahorro
+
+Monto Objetivo: ${fmtCurrency(targetAmount)}
+Ahorro Mensual Necesario: ${fmtCurrency(result.requiredMonthlySavings)}
+Aportes Totales: ${fmtCurrency(result.totalContributions)}
+Interés Ganado: ${fmtCurrency(result.interestEarned)}
+`.trim() : `
 Savings Goal Summary
 
 Target Amount: ${fmtCurrency(targetAmount)}

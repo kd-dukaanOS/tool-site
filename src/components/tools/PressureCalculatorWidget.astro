@@ -4,28 +4,35 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", from:"From", to:"To", pascal:"Pascal", kpa:"Kilopascal", bar:"Bar", atm:"Atmosphere", psi:"PSI", mmhg:"mmHg", emptyTitle:"Pressure Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", from:"De", to:"A", pascal:"Pascal", kpa:"Kilopascal", bar:"Bar", atm:"Atmósfera", psi:"PSI", mmhg:"mmHg", emptyTitle:"Convertidor de Presión", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder="Enter value" />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="pascal">Pascal</option>
-      <option value="kpa">Kilopascal</option>
-      <option value="bar" selected>Bar</option>
-      <option value="atm">Atmosphere</option>
-      <option value="psi">PSI</option>
-      <option value="mmhg">mmHg</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="pascal">{copy.pascal}</option>
+      <option value="kpa">{copy.kpa}</option>
+      <option value="bar" selected>{copy.bar}</option>
+      <option value="atm">{copy.atm}</option>
+      <option value="psi">{copy.psi}</option>
+      <option value="mmhg">{copy.mmhg}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="pascal">Pascal</option>
-      <option value="kpa">Kilopascal</option>
-      <option value="bar">Bar</option>
-      <option value="atm">Atmosphere</option>
-      <option value="psi" selected>PSI</option>
-      <option value="mmhg">mmHg</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="pascal">{copy.pascal}</option>
+      <option value="kpa">{copy.kpa}</option>
+      <option value="bar">{copy.bar}</option>
+      <option value="atm">{copy.atm}</option>
+      <option value="psi" selected>{copy.psi}</option>
+      <option value="mmhg">{copy.mmhg}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -35,13 +42,16 @@ import { Gauge } from "@lucide/astro";
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="??" title="Pressure Converter" description="Enter a value to convert." />
+      <EmptyState icon="??" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Gauge} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Gauge} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/pressure-calculator.ts"></script>

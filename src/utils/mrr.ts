@@ -30,7 +30,7 @@ export function calculateMrr(
   };
 }
 
-export function validateMrrInputs(existingMrr: number): string | null {
-  if (existingMrr < 0) return "Existing MRR cannot be negative.";
+export function validateMrrInputs(existingMrr: number, lang: "en" | "es" = "en"): string | null {
+  if (existingMrr < 0) return lang === "es" ? "El MRR existente no puede ser negativo." : "Existing MRR cannot be negative.";
   return null;
 }

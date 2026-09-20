@@ -19,6 +19,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 const numericFieldIds = ["magi", "age", "annualContribution", "currentTaxRate", "retirementTaxRate", "annualReturnRate", "yearsToGrow"];
 const selectFieldIds = ["taxYear", "filingStatus"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -40,7 +42,7 @@ function calculate() {
   const taxYear = parseInt(strVal("taxYear"), 10) || 2025;
   const filingStatus = strVal("filingStatus") as any;
 
-  const validationError = validateRothVsTraditionalInputs(magi, annualContribution, yearsToGrow);
+  const validationError = validateRothVsTraditionalInputs(magi, annualContribution, yearsToGrow, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -48,19 +50,29 @@ function calculate() {
 
   const result = calculateRothVsTraditional(magi, filingStatus, age, annualContribution, currentTaxRate, retirementTaxRate, annualReturnRate, yearsToGrow, taxYear);
 
-  setValue("betterOptionResult", result.betterOption === "roth" ? "Roth IRA" : "Traditional IRA");
+  const betterOptionText = result.betterOption === "roth" ? (lang === "es" ? "Roth IRA" : "Roth IRA") : (lang === "es" ? "Traditional IRA" : "Traditional IRA");
+  const eligibilityText = result.rothEligibility === "full" ? (lang === "es" ? "Totalmente Elegible" : "Fully Eligible") : result.rothEligibility === "partial" ? (lang === "es" ? "Parcialmente Elegible" : "Partially Eligible") : (lang === "es" ? "No Elegible" : "Not Eligible");
+
+  setValue("betterOptionResult", betterOptionText);
   setValue("rothFVResult", fmtCurrency(result.rothFV));
   setValue("traditionalFVResult", fmtCurrency(result.traditionalFV));
-  setValue("rothEligibilityResult", result.rothEligibility === "full" ? "Fully Eligible" : result.rothEligibility === "partial" ? "Partially Eligible" : "Not Eligible");
-  setSubtitle("betterOptionResult", `By ${fmtCurrency(result.difference)}`);
+  setValue("rothEligibilityResult", eligibilityText);
+  setSubtitle("betterOptionResult", lang === "es" ? `Por ${fmtCurrency(result.difference)}` : `By ${fmtCurrency(result.difference)}`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen Roth vs Traditional IRA — Año Fiscal ${taxYear}
+
+Mejor Opción: ${betterOptionText}
+Valor Después de Impuestos (Roth): ${fmtCurrency(result.rothFV)}
+Valor Después de Impuestos (Traditional): ${fmtCurrency(result.traditionalFV)}
+Elegibilidad Roth: ${eligibilityText}
+`.trim() : `
 Roth vs Traditional IRA Summary — Tax Year ${taxYear}
 
-Better Option: ${result.betterOption === "roth" ? "Roth IRA" : "Traditional IRA"}
+Better Option: ${betterOptionText}
 After-Tax Value if Roth: ${fmtCurrency(result.rothFV)}
 After-Tax Value if Traditional: ${fmtCurrency(result.traditionalFV)}
-Roth Eligibility: ${result.rothEligibility === "full" ? "Fully Eligible" : result.rothEligibility === "partial" ? "Partially Eligible" : "Not Eligible"}
+Roth Eligibility: ${eligibilityText}
 `.trim();
 
   emptyState.hidden = true;

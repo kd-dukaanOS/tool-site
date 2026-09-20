@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["birthYear", "monthlyAIME", "plannedClaimingAge"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +38,7 @@ function calculate() {
 
   const [birthYear, monthlyAIME, plannedClaimingAge] = fieldIds.map(val);
 
-  const validationError = validateSSInputs(birthYear, monthlyAIME, plannedClaimingAge);
+  const validationError = validateSSInputs(birthYear, monthlyAIME, plannedClaimingAge, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,10 +51,20 @@ function calculate() {
   setValue("breakEvenResult", result.breakEvenAge === null ? "N/A" : `Age ${result.breakEvenAge}`);
   setValue("age62Result", fmtCurrency(result.benefitAt62));
   setValue("age70Result", fmtCurrency(result.benefitAt70));
-  setSubtitle("piaResult", `FRA: ${result.fraYears}y ${result.fraMonths}mo`);
-  setSubtitle("plannedBenefitResult", `Claiming at ${plannedClaimingAge}`);
+  setSubtitle("piaResult", lang === "es" ? `EPJ: ${result.fraYears}a ${result.fraMonths}m` : `FRA: ${result.fraYears}y ${result.fraMonths}mo`);
+  setSubtitle("plannedBenefitResult", lang === "es" ? `Reclamando a los ${plannedClaimingAge}` : `Claiming at ${plannedClaimingAge}`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Beneficios del Seguro Social
+
+Edad Plena de Jubilación: ${result.fraYears}a ${result.fraMonths}m
+Monto de Seguro Primario (PIA): ${fmtCurrency(result.pia)}
+Beneficio a los 62 años: ${fmtCurrency(result.benefitAt62)}
+Beneficio a la Edad Plena: ${fmtCurrency(result.benefitAtFRA)}
+Beneficio a los 70 años: ${fmtCurrency(result.benefitAt70)}
+Beneficio a la Edad de Reclamo Planeada (${plannedClaimingAge}): ${fmtCurrency(result.benefitAtPlanned)}
+Edad de Equilibrio vs Reclamar a los 62: ${result.breakEvenAge === null ? "N/A" : `${result.breakEvenAge} años`}
+`.trim() : `
 Social Security Benefits Summary
 
 Full Retirement Age: ${result.fraYears}y ${result.fraMonths}mo

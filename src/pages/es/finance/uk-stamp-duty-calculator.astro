@@ -1,12 +1,13 @@
 ---
+// src/pages/es/finance/uk-stamp-duty-calculator.astro
 import Layout from "../../../layouts/Layout.astro";
-import { BusinessValuationEstimatorWidget } from "../../../components/tools/BusinessValuationEstimatorWidget.astro";
+import UkStampDutyWidget from "../../../components/tools/UkStampDutyWidget.astro";
 import CalculatorContent from "../../../components/content/CalculatorContent.astro";
 import { tools, categoryIcons } from "../../../data/tools.js";
-import { businessValuationCalculatorContent } from "../../../data/calculators/es/business-valuation-calculator.ts";
+import { ukStampDutyCalculatorContent } from "../../../data/calculators/es/uk-stamp-duty-calculator.ts";
 
-const tool = tools.find((t) => t.slug === "business-valuation-calculator")!;
-const content = businessValuationCalculatorContent;
+const tool = tools.find((t) => t.slug === "uk-stamp-duty-calculator")!;
+const content = ukStampDutyCalculatorContent;
 ---
 
 <Layout
@@ -19,31 +20,28 @@ const content = businessValuationCalculatorContent;
   breadcrumbs={[
     { name: "Inicio", url: "/es/" },
     { name: "Finanzas", url: "/es/finance/" },
-    { name: "Calculadora de Valoración de Negocios", url: "/es/finance/business-valuation-calculator/" },
+    { name: "Impuesto de Timbre Reino Unido", url: "/es/finance/uk-stamp-duty-calculator/" },
   ]}
-  appName="Calculadora de Valoración de Negocios"
+  appName="Impuesto de Timbre Reino Unido"
 >
   <div class="wrap">
     <p class="breadcrumb">
-      <a href="/es/">Inicio</a> / <a href="/es/finance/">Finanzas</a> / Calculadora de Valoración de Negocios
+      <a href="/es/">Inicio</a> / <a href="/es/finance/">Finanzas</a> / Impuesto de Timbre Reino Unido
     </p>
-
     <div class="category-header">
       <div class="cat-icon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["finance"]} />
       </div>
       <div class="category-header-text">
-        <h1>Calculadora de Valoración de Negocios</h1>
-        <p>Estima cuánto podría valer tu negocio usando múltiplos de ingresos y utilidad</p>
+        <h1>Calculadora de Impuesto de Timbre del Reino Unido</h1>
+        <p>SDLT por tramos y tipo de comprador</p>
       </div>
-      <button id="bookmark-btn" class="bookmark-btn" data-slug="business-valuation-calculator" data-name="Calculadora de Valoración de Negocios" data-url="/es/finance/business-valuation-calculator/" aria-label="Guardar esta herramienta">
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="uk-stamp-duty-calculator" data-name="Impuesto de Timbre Reino Unido" data-url="/es/finance/uk-stamp-duty-calculator/" aria-label="Guardar esta herramienta">
         <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
         <span class="bookmark-btn-label">Guardar</span>
       </button>
     </div>
-
-    <BusinessValuationEstimatorWidget lang="es" />
-
+    <UkStampDutyWidget lang="es" />
     <CalculatorContent {...content} lang="es" allTools={tools} />
   </div>
 </Layout>

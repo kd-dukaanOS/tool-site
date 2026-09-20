@@ -18,6 +18,9 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const parseErrorMsg = (window as any).tsParseErrorMsg || "Could not parse timestamp or date.";
+
 let lastInput = "";
 let lastResult: ReturnType<typeof buildTimestampResult> | null = null;
 
@@ -27,13 +30,13 @@ function clearError() { errorBox.textContent = ""; errorBox.hidden = true; }
 function convert() {
   clearError();
   const value = timestampInput.value;
-  const err = validateTimestampInput(value);
+  const err = validateTimestampInput(value, lang);
   if (err) { showError(err); return; }
 
   const date = parseTimestampInput(value);
-  if (!date) { showError("Could not parse timestamp or date."); return; }
+  if (!date) { showError(parseErrorMsg); return; }
 
-  const result = buildTimestampResult(date);
+  const result = buildTimestampResult(date, lang);
 
   setValue("unixSecondsResult", result.unixSeconds);
   setValue("unixMillisResult", result.unixMillis);
@@ -64,7 +67,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastResult) return;
-  copyToClipboard(copyTimestampSummary(lastInput, lastResult));
+  copyToClipboard(copyTimestampSummary(lastInput, lastResult, lang));
 }
 
 convertBtn?.addEventListener("click", convert);

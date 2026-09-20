@@ -5,38 +5,48 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Percent, Layers, Home, ShieldCheck } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { groupTitle:"Property & Loan", homeValue:"Home Value", loanBalance:"Current Loan Balance", secondLien:"Second Lien / HELOC (optional)", emptyTitle:"LTV Calculator", emptyDesc:"Find your loan-to-value ratio, equity, and PMI status.", tip1:"LTV Ratio", tip2:"Home Equity", tip3:"PMI Status", ltvRatio:"LTV Ratio", combinedLtv:"Combined LTV", homeEquity:"Home Equity", pmiStatus:"PMI Status", aboutTitle:"About this Calculator", aboutText:"Calculates your loan-to-value ratio, combined LTV, home equity, and PMI status based on current home value and loan balances." },
+  es: { groupTitle:"Propiedad y Préstamo", homeValue:"Valor de la Vivienda", loanBalance:"Saldo Actual del Préstamo", secondLien:"Segunda Hipoteca / HELOC (opcional)", emptyTitle:"Calculadora LTV", emptyDesc:"Calcula tu relación préstamo-valor, capital y estado del PMI.", tip1:"Ratio LTV", tip2:"Capital de Vivienda", tip3:"Estado del PMI", ltvRatio:"Ratio LTV", combinedLtv:"LTV Combinado", homeEquity:"Capital de Vivienda", pmiStatus:"Estado del PMI", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu relación préstamo-valor, LTV combinado, capital de vivienda y estado del PMI según el valor actual de la vivienda y los saldos del préstamo." },
+}[lang];
 ---
 <section class="ltv-calculator">
   <div class="ltv-layout">
     <aside class="ltv-sidebar">
       <div class="ltv-group">
-        <h3>Property & Loan</h3>
-        <CalculatorField id="homeValue" label="Home Value" type="number" placeholder="e.g. 400000" min="0" step="1" />
-        <CalculatorField id="loanBalance" label="Current Loan Balance" type="number" placeholder="e.g. 280000" min="0" step="1" />
-        <CalculatorField id="secondLienBalance" label="Second Lien / HELOC (optional)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.groupTitle}</h3>
+        <CalculatorField id="homeValue" label={copy.homeValue} type="number" placeholder="e.g. 400000" min="0" step="1" />
+        <CalculatorField id="loanBalance" label={copy.loanBalance} type="number" placeholder="e.g. 280000" min="0" step="1" />
+        <CalculatorField id="secondLienBalance" label={copy.secondLien} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ltv-content">
       <div id="emptyState">
-        <EmptyState icon="📊" title="LTV Calculator" description="Find your loan-to-value ratio, equity, and PMI status." tips={["LTV Ratio", "Home Equity", "PMI Status"]} />
+        <EmptyState icon="📊" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="ltvResult" title="LTV Ratio" icon={Percent} accent="success" />
-          <ResultCard id="cltvResult" title="Combined LTV" icon={Layers} />
-          <ResultCard id="equityResult" title="Home Equity" icon={Home} subtitle=" " />
-          <ResultCard id="pmiStatusResult" title="PMI Status" icon={ShieldCheck} subtitle=" " />
+          <ResultCard id="ltvResult" title={copy.ltvRatio} icon={Percent} accent="success" />
+          <ResultCard id="cltvResult" title={copy.combinedLtv} icon={Layers} />
+          <ResultCard id="equityResult" title={copy.homeEquity} icon={Home} subtitle=" " />
+          <ResultCard id="pmiStatusResult" title={copy.pmiStatus} icon={ShieldCheck} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your loan-to-value ratio, combined LTV, home equity, and PMI status based on current home value and loan balances.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/ltv-calculator";
 </script>

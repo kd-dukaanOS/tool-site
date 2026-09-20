@@ -15,6 +15,10 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["buyPrice", "sellPrice", "numberOfShares", "buyFees", "sellFees"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const profitLabel = (window as any).spProfitLabel || "Profit";
+const lossLabel = (window as any).spLossLabel || "Loss";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -38,7 +42,7 @@ function calculate() {
 
   const [buyPrice, sellPrice, numberOfShares, buyFees, sellFees] = fieldIds.map(val);
 
-  const validationError = validateStockProfitInputs(buyPrice, numberOfShares);
+  const validationError = validateStockProfitInputs(buyPrice, numberOfShares, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -50,9 +54,16 @@ function calculate() {
   setValue("returnPercentResult", fmtPercent(result.returnPercent));
   setValue("totalFeesResult", fmtCurrency(result.totalFees));
   setValue("breakEvenPriceResult", fmtCurrency(result.breakEvenPrice));
-  setSubtitle("netProfitResult", result.netProfit >= 0 ? "Profit" : "Loss");
+  setSubtitle("netProfitResult", result.netProfit >= 0 ? profitLabel : lossLabel);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Ganancia en Bolsa
+
+Ganancia/Pérdida Neta: ${fmtCurrency(result.netProfit)}
+Retorno: ${fmtPercent(result.returnPercent)}
+Comisiones Totales: ${fmtCurrency(result.totalFees)}
+Precio de Equilibrio: ${fmtCurrency(result.breakEvenPrice)}
+`.trim() : `
 Stock Profit Summary
 
 Net Profit/Loss: ${fmtCurrency(result.netProfit)}

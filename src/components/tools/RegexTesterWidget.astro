@@ -5,18 +5,25 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Regex, Hash, Type, Layers } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { pattern:"Pattern", flags:"Flags", testText:"Test Text", testTextPlaceholder:"Paste text to test against...", test:"Test", reset:"Reset", copy:"Copy", emptyTitle:"Regex Tester", emptyDesc:"Test regular expressions against text with live match highlighting.", tip1:"Match Highlighting", tip2:"Flags Support", tip3:"Capture Groups", tip4:"Copy Summary", matches:"Matches", firstMatch:"First Match", groups:"Capture Groups", highlighted:"Highlighted Text", aboutTitle:"About this Tool", aboutText:"Test JavaScript regular expressions against sample text with live match highlighting, flags support and capture group detection." },
+  es: { pattern:"Patrón", flags:"Indicadores", testText:"Texto de Prueba", testTextPlaceholder:"Pega el texto para probar...", test:"Probar", reset:"Restablecer", copy:"Copiar", emptyTitle:"Probador de Expresiones Regulares", emptyDesc:"Prueba expresiones regulares contra texto con resaltado de coincidencias en vivo.", tip1:"Resaltado de Coincidencias", tip2:"Soporte de Indicadores", tip3:"Grupos de Captura", tip4:"Copiar Resumen", matches:"Coincidencias", firstMatch:"Primera Coincidencia", groups:"Grupos de Captura", highlighted:"Texto Resaltado", aboutTitle:"Acerca de esta Herramienta", aboutText:"Prueba expresiones regulares de JavaScript contra texto de muestra con resaltado de coincidencias en vivo, soporte de indicadores y detección de grupos de captura." },
+}[lang];
 ---
 <section class="regex-tester">
   <div class="regex-layout">
     <aside class="regex-sidebar">
 
-      <CalculatorField id="regexPattern" label="Pattern" type="text" placeholder="\\d+" />
+      <CalculatorField id="regexPattern" label={copy.pattern} type="text" placeholder="\\d+" />
 
-      <CalculatorField id="regexFlags" label="Flags" type="text" value="g" placeholder="g, i, m, s" />
+      <CalculatorField id="regexFlags" label={copy.flags} type="text" value="g" placeholder="g, i, m, s" />
 
-      <CalculatorField id="regexText" label="Test Text" type="textarea" placeholder="Paste text to test against..." />
+      <CalculatorField id="regexText" label={copy.testText} type="textarea" placeholder={copy.testTextPlaceholder} />
 
-      <CalculatorActions calculateId="testBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="testBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.test} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 
@@ -24,33 +31,36 @@ import { Regex, Hash, Type, Layers } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🧩"
-          title="Regex Tester"
-          description="Test regular expressions against text with live match highlighting."
-          tips={["Match Highlighting", "Flags Support", "Capture Groups", "Copy Summary"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="matchCountResult" title="Matches" icon={Hash} />
-          <ResultCard id="firstMatchResult" title="First Match" icon={Type} />
-          <ResultCard id="groupsResult" title="Capture Groups" icon={Layers} />
+          <ResultCard id="matchCountResult" title={copy.matches} icon={Hash} />
+          <ResultCard id="firstMatchResult" title={copy.firstMatch} icon={Type} />
+          <ResultCard id="groupsResult" title={copy.groups} icon={Layers} />
         </ResultsGrid>
 
         <div class="tool-field">
-          <label class="tool-label">Highlighted Text</label>
+          <label class="tool-label">{copy.highlighted}</label>
           <div id="highlightedOutput" class="regex-output"></div>
         </div>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Test JavaScript regular expressions against sample text with live match highlighting, flags support and capture group detection.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/regex-tester";
 </script>

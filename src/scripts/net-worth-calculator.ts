@@ -16,6 +16,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 const assetIds = ["cash", "investments", "realEstate", "otherAssets"];
 const liabilityIds = ["mortgageDebt", "loanDebt", "creditCardDebt", "otherLiabilities"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -41,7 +43,7 @@ function calculate() {
   const totalAssets = cash + investments + realEstate + otherAssets;
   const totalLiabilities = mortgageDebt + loanDebt + creditCardDebt + otherLiabilities;
 
-  const validationError = validateNetWorthInputs(totalAssets, totalLiabilities);
+  const validationError = validateNetWorthInputs(totalAssets, totalLiabilities, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -53,9 +55,16 @@ function calculate() {
   setValue("totalAssetsResult", fmtCurrency(result.totalAssets));
   setValue("totalLiabilitiesResult", fmtCurrency(result.totalLiabilities));
   setValue("debtRatioResult", `${result.debtToAssetRatio.toFixed(1)}%`);
-  setSubtitle("netWorthResult", result.netWorth >= 0 ? "Positive" : "Negative");
+  setSubtitle("netWorthResult", result.netWorth >= 0 ? (lang === "es" ? "Positivo" : "Positive") : (lang === "es" ? "Negativo" : "Negative"));
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Patrimonio Neto
+
+Activos Totales: ${fmtCurrency(result.totalAssets)}
+Pasivos Totales: ${fmtCurrency(result.totalLiabilities)}
+Patrimonio Neto: ${fmtCurrency(result.netWorth)}
+Ratio Deuda-Activo: ${result.debtToAssetRatio.toFixed(1)}%
+`.trim() : `
 Net Worth Summary
 
 Total Assets: ${fmtCurrency(result.totalAssets)}

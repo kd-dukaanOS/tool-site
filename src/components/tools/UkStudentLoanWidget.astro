@@ -5,43 +5,53 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { GraduationCap, Percent, Calendar, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { groupTitle:"Income & Plan", salaryLabel:"Annual Salary (£)", planLabel:"Student Loan Plan", plan1:"Plan 1", plan2:"Plan 2", plan4:"Plan 4 (Scotland)", plan5:"Plan 5", postgrad:"Postgraduate Loan", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Student Loan Calculator", emptyDesc:"Estimate your monthly student loan repayment by plan.", tip1:"Monthly Repayment", tip2:"Annual Repayment", tip3:"Threshold", monthlyTitle:"Monthly Repayment", annualTitle:"Annual Repayment", thresholdTitle:"Repayment Threshold", rateTitle:"Repayment Rate", aboutTitle:"About this Calculator", aboutText:"Calculates your student loan repayment as a percentage of income above your plan's threshold, using current 2026/27 thresholds for Plan 1, 2, 4, 5, and Postgraduate loans.", payrollLabel:"Deducted via payroll" },
+  es: { groupTitle:"Ingresos y Plan", salaryLabel:"Salario Anual (£)", planLabel:"Plan de Préstamo Estudiantil", plan1:"Plan 1", plan2:"Plan 2", plan4:"Plan 4 (Escocia)", plan5:"Plan 5", postgrad:"Préstamo de Posgrado", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Préstamo Estudiantil del Reino Unido", emptyDesc:"Estima tu pago mensual de préstamo estudiantil por plan.", tip1:"Pago Mensual", tip2:"Pago Anual", tip3:"Umbral", monthlyTitle:"Pago Mensual", annualTitle:"Pago Anual", thresholdTitle:"Umbral de Pago", rateTitle:"Tasa de Pago", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu pago de préstamo estudiantil como un porcentaje de ingresos por encima del umbral de tu plan, utilizando los umbrales actuales 2026/27 para los Planes 1, 2, 4, 5, y préstamos de posgrado.", payrollLabel:"Deducido vía nómina" },
+}[lang];
 ---
 <section class="uksl-calculator">
   <div class="uksl-layout">
     <aside class="uksl-sidebar">
       <div class="uksl-group">
-        <h3>Income & Plan</h3>
-        <CalculatorField id="annualSalary" label="Annual Salary (£)" type="number" placeholder="e.g. 35000" min="0" step="1" />
-        <CalculatorField type="select" id="plan" label="Student Loan Plan">
-          <option value="plan1">Plan 1</option>
-          <option value="plan2">Plan 2</option>
-          <option value="plan4">Plan 4 (Scotland)</option>
-          <option value="plan5">Plan 5</option>
-          <option value="postgrad">Postgraduate Loan</option>
+        <h3>{copy.groupTitle}</h3>
+        <CalculatorField id="annualSalary" label={copy.salaryLabel} type="number" placeholder="e.g. 35000" min="0" step="1" />
+        <CalculatorField type="select" id="plan" label={copy.planLabel}>
+          <option value="plan1">{copy.plan1}</option>
+          <option value="plan2">{copy.plan2}</option>
+          <option value="plan4">{copy.plan4}</option>
+          <option value="plan5">{copy.plan5}</option>
+          <option value="postgrad">{copy.postgrad}</option>
         </CalculatorField>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="uksl-content">
       <div id="emptyState">
-        <EmptyState icon="🎓" title="UK Student Loan Calculator" description="Estimate your monthly student loan repayment by plan." tips={["Monthly Repayment", "Annual Repayment", "Threshold"]} />
+        <EmptyState icon="🎓" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlyRepaymentResult" title="Monthly Repayment" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="annualRepaymentResult" title="Annual Repayment" icon={Calendar} />
-          <ResultCard id="thresholdResult" title="Repayment Threshold" icon={GraduationCap} />
-          <ResultCard id="repaymentRateResult" title="Repayment Rate" icon={Percent} />
+          <ResultCard id="monthlyRepaymentResult" title={copy.monthlyTitle} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="annualRepaymentResult" title={copy.annualTitle} icon={Calendar} />
+          <ResultCard id="thresholdResult" title={copy.thresholdTitle} icon={GraduationCap} />
+          <ResultCard id="repaymentRateResult" title={copy.rateTitle} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates your student loan repayment as a percentage of income above your plan's threshold, using current 2026/27 thresholds for Plan 1, 2, 4, 5, and Postgraduate loans.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-student-loan-calculator";
 </script>

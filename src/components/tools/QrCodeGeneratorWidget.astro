@@ -1,46 +1,53 @@
-﻿---
+---
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { QrCode, Type, Ruler, Download } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { textLabel:"Text or URL", sizeLabel:"Size (px)", eccLabel:"Error Correction", eccLow:"Low (L)", eccMed:"Medium (M)", eccQuart:"Quartile (Q)", eccHigh:"High (H)", fgLabel:"Foreground", bgLabel:"Background", generate:"Generate", reset:"Reset", emptyTitle:"QR Code Generator", emptyDesc:"Generate a QR code from any text, URL or email instantly.", tip1:"Custom Size", tip2:"Error Correction Level", tip3:"Custom Colors", tip4:"Download PNG", typeLabel:"Type", charsLabel:"Characters", sizeResultLabel:"Size", download:"Download PNG", aboutTitle:"About this Tool", aboutText:"Generate a scannable QR code from any text, URL, or email address, with adjustable size, colors and error correction level." },
+  es: { textLabel:"Texto o URL", sizeLabel:"Tamaño (px)", eccLabel:"Corrección de Errores", eccLow:"Baja (L)", eccMed:"Media (M)", eccQuart:"Cuartil (Q)", eccHigh:"Alta (H)", fgLabel:"Primer Plano", bgLabel:"Fondo", generate:"Generar", reset:"Restablecer", emptyTitle:"Generador de Código QR", emptyDesc:"Genera un código QR desde cualquier texto, URL o correo al instante.", tip1:"Tamaño Personalizado", tip2:"Nivel de Corrección de Errores", tip3:"Colores Personalizados", tip4:"Descargar PNG", typeLabel:"Tipo", charsLabel:"Caracteres", sizeResultLabel:"Tamaño", download:"Descargar PNG", aboutTitle:"Acerca de esta Herramienta", aboutText:"Genera un código QR escaneable desde cualquier texto, URL o correo electrónico, con tamaño, colores y nivel de corrección de errores ajustables." },
+}[lang];
 ---
 <section class="qr-generator">
   <div class="qr-layout">
     <aside class="qr-sidebar">
       <div class="tool-field">
-        <label class="tool-label" for="qrText">Text or URL</label>
+        <label class="tool-label" for="qrText">{copy.textLabel}</label>
         <textarea id="qrText" class="tool-textarea" placeholder="https://example.com"></textarea>
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="qrSize">Size (px)</label>
+        <label class="tool-label" for="qrSize">{copy.sizeLabel}</label>
         <input id="qrSize" type="number" class="tool-input" value="300" min="100" max="1000" step="50" />
       </div>
 
       <div class="tool-field">
-        <label class="tool-label" for="qrEcc">Error Correction</label>
+        <label class="tool-label" for="qrEcc">{copy.eccLabel}</label>
         <select id="qrEcc" class="tool-select">
-          <option value="L">Low (L)</option>
-          <option value="M" selected>Medium (M)</option>
-          <option value="Q">Quartile (Q)</option>
-          <option value="H">High (H)</option>
+          <option value="L">{copy.eccLow}</option>
+          <option value="M" selected>{copy.eccMed}</option>
+          <option value="Q">{copy.eccQuart}</option>
+          <option value="H">{copy.eccHigh}</option>
         </select>
       </div>
 
       <div class="tool-grid-2">
         <div class="tool-field">
-          <label class="tool-label" for="qrFgColor">Foreground</label>
+          <label class="tool-label" for="qrFgColor">{copy.fgLabel}</label>
           <input id="qrFgColor" type="color" class="tool-input" value="#000000" />
         </div>
         <div class="tool-field">
-          <label class="tool-label" for="qrBgColor">Background</label>
+          <label class="tool-label" for="qrBgColor">{copy.bgLabel}</label>
           <input id="qrBgColor" type="color" class="tool-input" value="#ffffff" />
         </div>
       </div>
 
       <div class="tool-actions">
-        <button id="generateBtn" class="tool-btn tool-btn-primary">Generate</button>
-        <button id="resetBtn" class="tool-btn tool-btn-secondary">Reset</button>
+        <button id="generateBtn" class="tool-btn tool-btn-primary">{copy.generate}</button>
+        <button id="resetBtn" class="tool-btn tool-btn-secondary">{copy.reset}</button>
       </div>
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
@@ -48,10 +55,10 @@ import { QrCode, Type, Ruler, Download } from "@lucide/astro";
     <main class="qr-content">
       <div id="emptyState">
         <EmptyState
-          icon="â¬œ"
-          title="QR Code Generator"
-          description="Generate a QR code from any text, URL or email instantly."
-          tips={["Custom Size", "Error Correction Level", "Custom Colors", "Download PNG"]}
+          icon="⬜"
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
@@ -61,24 +68,27 @@ import { QrCode, Type, Ruler, Download } from "@lucide/astro";
         </div>
 
         <ResultsGrid columns={3}>
-          <ResultCard id="typeResult" title="Type" icon={Type} />
-          <ResultCard id="charsResult" title="Characters" icon={QrCode} />
-          <ResultCard id="sizeResult" title="Size" icon={Ruler} />
+          <ResultCard id="typeResult" title={copy.typeLabel} icon={Type} />
+          <ResultCard id="charsResult" title={copy.charsLabel} icon={QrCode} />
+          <ResultCard id="sizeResult" title={copy.sizeResultLabel} icon={Ruler} />
         </ResultsGrid>
 
         <div class="tool-actions">
-          <button id="downloadBtn" class="tool-btn tool-btn-primary"><Download size={16} /> Download PNG</button>
+          <button id="downloadBtn" class="tool-btn tool-btn-primary"><Download size={16} /> {copy.download}</button>
         </div>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Generate a scannable QR code from any text, URL, or email address, with adjustable size, colors and error correction level.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/qr-code-generator";
 </script>

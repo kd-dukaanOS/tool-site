@@ -43,10 +43,20 @@ export function calculateRetirementProjection(
 export function validateRetirementInputs(
   currentAge: number,
   retirementAge: number,
-  monthlyContribution: number
+  monthlyContribution: number,
+  lang: "en" | "es" = "en"
 ): string | null {
-  if (!currentAge || currentAge <= 0) return "Please enter a valid current age.";
-  if (!retirementAge || retirementAge <= currentAge) return "Retirement age must be greater than current age.";
-  if (monthlyContribution < 0) return "Monthly contribution cannot be negative.";
+  const msg = lang === "es" ? {
+    age: "Por favor ingresa una edad actual válida.",
+    retAge: "La edad de jubilación debe ser mayor que la edad actual.",
+    contrib: "El aporte mensual no puede ser negativo.",
+  } : {
+    age: "Please enter a valid current age.",
+    retAge: "Retirement age must be greater than current age.",
+    contrib: "Monthly contribution cannot be negative.",
+  };
+  if (!currentAge || currentAge <= 0) return msg.age;
+  if (!retirementAge || retirementAge <= currentAge) return msg.retAge;
+  if (monthlyContribution < 0) return msg.contrib;
   return null;
 }

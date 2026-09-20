@@ -22,20 +22,23 @@ export interface LoanAmortizationResult {
   yearlySchedule: YearlyScheduleRow[];
 }
 
-export function validateLoanAmortizationInput(input: LoanAmortizationInput): string | null {
+export function validateLoanAmortizationInput(input: LoanAmortizationInput, lang: "en" | "es" = "en"): string | null {
   const { loanAmount, interestRate, termYears, extraMonthlyPayment } = input;
-  if (!loanAmount || Number.isNaN(loanAmount) || loanAmount <= 0) {
-    return "Please enter a valid loan amount greater than 0.";
-  }
-  if (Number.isNaN(interestRate) || interestRate < 0) {
-    return "Please enter a valid interest rate (0 or more).";
-  }
-  if (!termYears || Number.isNaN(termYears) || termYears <= 0) {
-    return "Please enter a valid loan term greater than 0.";
-  }
-  if (Number.isNaN(extraMonthlyPayment) || extraMonthlyPayment < 0) {
-    return "Please enter a valid extra payment amount (0 or more).";
-  }
+  const msg = lang === "es" ? {
+    amount: "Ingresa un monto de préstamo válido mayor a 0.",
+    rate: "Ingresa una tasa de interés válida (0 o más).",
+    term: "Ingresa un plazo de préstamo válido mayor a 0.",
+    extra: "Ingresa un pago extra válido (0 o más).",
+  } : {
+    amount: "Please enter a valid loan amount greater than 0.",
+    rate: "Please enter a valid interest rate (0 or more).",
+    term: "Please enter a valid loan term greater than 0.",
+    extra: "Please enter a valid extra payment amount (0 or more).",
+  };
+  if (!loanAmount || Number.isNaN(loanAmount) || loanAmount <= 0) return msg.amount;
+  if (Number.isNaN(interestRate) || interestRate < 0) return msg.rate;
+  if (!termYears || Number.isNaN(termYears) || termYears <= 0) return msg.term;
+  if (Number.isNaN(extraMonthlyPayment) || extraMonthlyPayment < 0) return msg.extra;
   return null;
 }
 
@@ -90,10 +93,36 @@ export function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
 }
 
-export function copyLoanAmortizationSummary(input: LoanAmortizationInput, result: LoanAmortizationResult): string {
+export function copyLoanAmortizationSummary(input: LoanAmortizationInput, result: LoanAmortizationResult, lang: "en" | "es" = "en"): string {
   const years = Math.floor(result.payoffMonths / 12);
   const months = result.payoffMonths % 12;
 
+  if (lang === "es") {
+    return `
+Resumen de Amortización de Préstamo
+
+Monto del Préstamo:
+${formatCurrency(input.loanAmount)}
+
+Tasa de Interés:
+${input.interestRate}%
+
+Plazo del Préstamo:
+${input.termYears} años
+
+Pago Mensual:
+${formatCurrency(result.monthlyPayment)}
+
+Interés Total Pagado:
+${formatCurrency(result.totalInterest)}
+
+Pago Total:
+${formatCurrency(result.totalPayment)}
+
+Tiempo de Pago:
+${years} años${months > 0 ? `, ${months} meses` : ""}
+`.trim();
+  }
   return `
 Loan Amortization Summary
 

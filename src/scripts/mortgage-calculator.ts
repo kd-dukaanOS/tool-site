@@ -28,6 +28,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: MortgageInput | null = null;
 let lastResult: MortgageResult | null = null;
 
@@ -66,7 +68,7 @@ function calculate() {
     hoaMonthly: parseFloat(hoaInput.value) || 0,
   };
 
-  const validationError = validateMortgageInput(input);
+  const validationError = validateMortgageInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -109,7 +111,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyMortgageSummary(lastInput, lastResult, currentCurrency));
+  copyToClipboard(copyMortgageSummary(lastInput, lastResult, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

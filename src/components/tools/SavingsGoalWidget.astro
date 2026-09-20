@@ -5,43 +5,53 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Target, Wallet, TrendingUp, Flag } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { goalGroup:"Your Goal", targetAmount:"Target Amount", currentSavings:"Current Savings", timeframeGroup:"Timeframe & Rate", years:"Years", months:"Additional Months", annualRate:"Annual Interest Rate (%)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Savings Goal Calculator", emptyDesc:"Enter your target, current savings and timeframe to see the monthly amount you need to save.", tip1:"Monthly Savings", tip2:"Total Contributions", tip3:"Interest Earned", monthlySavings:"Monthly Savings Needed", target:"Target Amount", totalContributions:"Total Contributions", interestEarned:"Interest Earned", onTrack:"Already on track!", overMonths:"Over", monthsSuffix:"months", aboutTitle:"About this Calculator", aboutText:"Calculates the monthly savings amount needed to reach a target, factoring in your current savings, timeframe, and expected interest rate on a savings or investment account." },
+  es: { goalGroup:"Tu Meta", targetAmount:"Monto Objetivo", currentSavings:"Ahorros Actuales", timeframeGroup:"Plazo y Tasa", years:"Años", months:"Meses Adicionales", annualRate:"Tasa de Interés Anual (%)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Meta de Ahorro", emptyDesc:"Ingresa tu meta, ahorros actuales y plazo para ver el monto mensual que necesitas ahorrar.", tip1:"Ahorro Mensual", tip2:"Aportes Totales", tip3:"Interés Ganado", monthlySavings:"Ahorro Mensual Necesario", target:"Monto Objetivo", totalContributions:"Aportes Totales", interestEarned:"Interés Ganado", onTrack:"¡Ya vas por buen camino!", overMonths:"En", monthsSuffix:"meses", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el monto de ahorro mensual necesario para alcanzar una meta, considerando tus ahorros actuales, el plazo y la tasa de interés esperada en una cuenta de ahorro o inversión." },
+}[lang];
 ---
 <section class="sg-calculator">
   <div class="sg-layout">
     <aside class="sg-sidebar">
       <div class="sg-group">
-        <h3>Your Goal</h3>
-        <CalculatorField id="targetAmount" label="Target Amount" type="number" placeholder="e.g. 50000" min="0" step="1" />
-        <CalculatorField id="currentSavings" label="Current Savings" type="number" placeholder="e.g. 5000" min="0" step="1" />
+        <h3>{copy.goalGroup}</h3>
+        <CalculatorField id="targetAmount" label={copy.targetAmount} type="number" placeholder="e.g. 50000" min="0" step="1" />
+        <CalculatorField id="currentSavings" label={copy.currentSavings} type="number" placeholder="e.g. 5000" min="0" step="1" />
       </div>
       <div class="sg-group">
-        <h3>Timeframe & Rate</h3>
-        <CalculatorField id="timeframeYears" label="Years" type="number" placeholder="e.g. 5" min="0" step="1" />
-        <CalculatorField id="timeframeMonths" label="Additional Months" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="annualInterestRate" label="Annual Interest Rate (%)" type="number" placeholder="e.g. 4" min="0" step="0.01" />
+        <h3>{copy.timeframeGroup}</h3>
+        <CalculatorField id="timeframeYears" label={copy.years} type="number" placeholder="e.g. 5" min="0" step="1" />
+        <CalculatorField id="timeframeMonths" label={copy.months} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="annualInterestRate" label={copy.annualRate} type="number" placeholder="e.g. 4" min="0" step="0.01" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="sg-content">
       <div id="emptyState">
-        <EmptyState icon="🎯" title="Savings Goal Calculator" description="Enter your target, current savings and timeframe to see the monthly amount you need to save." tips={["Monthly Savings", "Total Contributions", "Interest Earned"]} />
+        <EmptyState icon="🎯" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlySavingsResult" title="Monthly Savings Needed" icon={Target} accent="success" subtitle=" " />
-          <ResultCard id="targetAmountResult" title="Target Amount" icon={Flag} />
-          <ResultCard id="totalContributionsResult" title="Total Contributions" icon={Wallet} />
-          <ResultCard id="interestEarnedResult" title="Interest Earned" icon={TrendingUp} />
+          <ResultCard id="monthlySavingsResult" title={copy.monthlySavings} icon={Target} accent="success" subtitle=" " />
+          <ResultCard id="targetAmountResult" title={copy.target} icon={Flag} />
+          <ResultCard id="totalContributionsResult" title={copy.totalContributions} icon={Wallet} />
+          <ResultCard id="interestEarnedResult" title={copy.interestEarned} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates the monthly savings amount needed to reach a target, factoring in your current savings, timeframe, and expected interest rate on a savings or investment account.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/savings-goal-calculator";
 </script>

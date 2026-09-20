@@ -46,8 +46,8 @@ export function calculateTFSA(
   return { totalRoomSinceEligible, availableRoom, maxAllowedContribution, excessContribution, penaltyTax, projectedBalance: balance };
 }
 
-export function validateTFSAInputs(eligibleYear: number, currentYear: number, plannedContribution: number): string | null {
-  if (eligibleYear < 2009 || eligibleYear > currentYear) return "Eligible year must be between 2009 and the current year.";
-  if (plannedContribution < 0) return "Planned contribution cannot be negative.";
+export function validateTFSAInputs(eligibleYear: number, currentYear: number, plannedContribution: number, lang: "en" | "es" = "en"): string | null {
+  if (eligibleYear < 2009 || eligibleYear > currentYear) return lang === "es" ? "El año de elegibilidad debe estar entre 2009 y el año actual." : "Eligible year must be between 2009 and the current year.";
+  if (plannedContribution < 0) return lang === "es" ? "La aportación planeada no puede ser negativa." : "Planned contribution cannot be negative.";
   return null;
 }

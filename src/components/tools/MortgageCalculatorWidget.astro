@@ -1,4 +1,4 @@
-﻿---
+---
 import CalculatorField from "../calculator/CalculatorField.astro";
 import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
@@ -16,6 +16,13 @@ import {
   TrendingUp,
   Wallet
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { housePrice:"House Price (₹)", housePriceHelp:"Total purchase price of the House.", downPayment:"Down Payment (₹)", downPaymentHelp:"Amount paid upfront.", loanYears:"Loan Term (Years)", loanYearsHelp:"Repayment period.", annualRate:"Interest Rate (%)", annualRateHelp:"Annual interest rate.", propertyTax:"Property Tax (% of price/year)", propertyTaxHelp:"Optional. Leave blank if unknown.", homeInsurance:"House Insurance (₹/year)", homeInsuranceHelp:"Optional annual insurance premium.", pmi:"PMI (% of loan/year)", pmiHelp:"Applies only if down payment is under 20%.", hoa:"HOA / Maintenance (₹/month)", hoaHelp:"Optional monthly society/maintenance fee.", emptyTitle:"Mortgage Calculator", emptyDesc:"Estimate your full monthly House loan payment, including taxes and insurance.", tip1:"Monthly Principal + Interest", tip2:"Property Tax & Insurance", tip3:"PMI (if applicable)", tip4:"Total Monthly Payment", totalMonthly:"Total Monthly Payment", principalInterest:"Principal + Interest", loanAmount:"Loan Amount", propertyTaxTitle:"Monthly Property Tax", insuranceTitle:"Monthly House Insurance", pmiTitle:"Monthly PMI", hoaTitle:"Monthly HOA", totalInterestTitle:"Total Interest Paid", aboutTitle:"About this Calculator", aboutText:"Estimates your full monthly mortgage payment (PITI): Principal, Interest, Taxes and Insurance, plus PMI and HOA fees where applicable. All calculations run locally — no external data or paid service is required." },
+  es: { housePrice:"Precio de la Vivienda (₹)", housePriceHelp:"Precio total de compra de la vivienda.", downPayment:"Pago Inicial (₹)", downPaymentHelp:"Monto pagado por adelantado.", loanYears:"Plazo del Préstamo (Años)", loanYearsHelp:"Período de reembolso.", annualRate:"Tasa de Interés (%)", annualRateHelp:"Tasa de interés anual.", propertyTax:"Impuesto Predial (% del precio/año)", propertyTaxHelp:"Opcional. Déjalo en blanco si no lo sabes.", homeInsurance:"Seguro de Vivienda (₹/año)", homeInsuranceHelp:"Prima de seguro anual opcional.", pmi:"PMI (% del préstamo/año)", pmiHelp:"Solo aplica si el pago inicial es menor al 20%.", hoa:"HOA / Mantenimiento (₹/mes)", hoaHelp:"Cuota mensual opcional de mantenimiento/comunidad.", emptyTitle:"Calculadora de Hipoteca", emptyDesc:"Calcula tu pago mensual completo del préstamo hipotecario, incluyendo impuestos y seguro.", tip1:"Capital + Interés Mensual", tip2:"Impuesto Predial y Seguro", tip3:"PMI (si aplica)", tip4:"Pago Mensual Total", totalMonthly:"Pago Mensual Total", principalInterest:"Capital + Interés", loanAmount:"Monto del Préstamo", propertyTaxTitle:"Impuesto Predial Mensual", insuranceTitle:"Seguro de Vivienda Mensual", pmiTitle:"PMI Mensual", hoaTitle:"HOA Mensual", totalInterestTitle:"Interés Total Pagado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu pago hipotecario mensual completo (PITI): Capital, Interés, Impuestos y Seguro, más PMI y cuotas de HOA cuando apliquen. Todos los cálculos se ejecutan localmente — no se requiere ningún servicio externo ni de pago." },
+}[lang];
 ---
 
 <section class="mort-calculator">
@@ -28,85 +35,85 @@ import {
 
       <CalculatorField
         id="homePrice"
-        label="House Price (â‚¹)"
+        label={copy.housePrice}
         type="number"
         placeholder="e.g. 5000000"
         required={true}
         min="0"
         step="1"
-        helpText="Total purchase price of the House."
+        helpText={copy.housePriceHelp}
       />
 
       <CalculatorField
         id="downPayment"
-        label="Down Payment (â‚¹)"
+        label={copy.downPayment}
         type="number"
         placeholder="e.g. 1000000"
         min="0"
         step="1"
-        helpText="Amount paid upfront."
+        helpText={copy.downPaymentHelp}
       />
 
       <CalculatorField
         id="loanYears"
-        label="Loan Term (Years)"
+        label={copy.loanYears}
         type="number"
         placeholder="e.g. 20"
         required={true}
         min="0"
         step="1"
-        helpText="Repayment period."
+        helpText={copy.loanYearsHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Interest Rate (%)"
+        label={copy.annualRate}
         type="number"
         placeholder="e.g. 8.5"
         required={true}
         min="0"
         step="0.01"
-        helpText="Annual interest rate."
+        helpText={copy.annualRateHelp}
       />
 
       <CalculatorField
         id="propertyTaxAnnual"
-        label="Property Tax (% of price/year)"
+        label={copy.propertyTax}
         type="number"
         placeholder="e.g. 1"
         min="0"
         step="0.01"
-        helpText="Optional. Leave blank if unknown."
+        helpText={copy.propertyTaxHelp}
       />
 
       <CalculatorField
         id="homeInsuranceAnnual"
-        label="House Insurance (â‚¹/year)"
+        label={copy.homeInsurance}
         type="number"
         placeholder="e.g. 8000"
         min="0"
         step="1"
-        helpText="Optional annual insurance premium."
+        helpText={copy.homeInsuranceHelp}
       />
 
       <CalculatorField
         id="pmiAnnual"
-        label="PMI (% of loan/year)"
+        label={copy.pmi}
         type="number"
         placeholder="e.g. 0.5"
         min="0"
         step="0.01"
-        helpText="Applies only if down payment is under 20%."
+        helpText={copy.pmiHelp}
       />
 
       <CalculatorField
         id="hoaMonthly"
-        label="HOA / Maintenance (â‚¹/month)"
+        label={copy.hoa}
         type="number"
         placeholder="e.g. 1500"
         min="0"
         step="1"
-        helpText="Optional monthly society/maintenance fee."
+        helpText={copy.hoaHelp}
       />
 
       <CalculatorActions
@@ -129,14 +136,14 @@ import {
       <div id="emptyState">
 
         <EmptyState
-          icon="ðŸ "
-          title="Mortgage Calculator"
-          description="Estimate your full monthly House loan payment, including taxes and insurance."
+          icon="🏠"
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Monthly Principal + Interest",
-            "Property Tax & Insurance",
-            "PMI (if applicable)",
-            "Total Monthly Payment"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -151,50 +158,50 @@ import {
 
           <ResultCard
             id="totalMonthlyResult"
-            title="Total Monthly Payment"
+            title={copy.totalMonthly}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="principalInterestResult"
-            title="Principal + Interest"
+            title={copy.principalInterest}
             icon={House}
           />
 
           <ResultCard
             id="loanAmountResult"
-            title="Loan Amount"
+            title={copy.loanAmount}
             icon={Landmark}
           />
 
           <ResultCard
             id="propertyTaxResult"
-            title="Monthly Property Tax"
+            title={copy.propertyTaxTitle}
             icon={Receipt}
           />
 
           <ResultCard
             id="insuranceResult"
-            title="Monthly House Insurance"
+            title={copy.insuranceTitle}
             icon={ShieldCheck}
           />
 
           <ResultCard
             id="pmiResult"
-            title="Monthly PMI"
+            title={copy.pmiTitle}
             icon={Percent}
           />
 
           <ResultCard
             id="hoaResult"
-            title="Monthly HOA"
+            title={copy.hoaTitle}
             icon={Building2}
           />
 
           <ResultCard
             id="totalInterestResult"
-            title="Total Interest Paid"
+            title={copy.totalInterestTitle}
             icon={TrendingUp}
           />
 
@@ -202,14 +209,9 @@ import {
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Estimates your full monthly mortgage payment (PITI):
-            Principal, Interest, Taxes and Insurance, plus PMI and
-            HOA fees where applicable. All calculations run locally â€”
-            no external data or paid service is required.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -221,6 +223,9 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/mortgage-calculator";
 </script>

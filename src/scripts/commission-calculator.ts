@@ -27,11 +27,6 @@ const t = {
   en: { fillFields:"Please fill all required fields.", withBase:"commission + base salary", noBase:"commission only" },
   es: { fillFields:"Completa todos los campos requeridos.", withBase:"comisión + salario base", noBase:"solo comisión" },
 }[lang];
-const lang = (window as any).calcLang === "es" ? "es" : "en";
-const t = {
-  en: { fillFields:"Please fill all required fields.", withBase:"commission + base salary", noBase:"commission only" },
-  es: { fillFields:"Completa todos los campos requeridos.", withBase:"comisión + salario base", noBase:"solo comisión" },
-}[lang];
 let lastInput: CommissionInput | null = null;
 
 function showError(msg: string) {

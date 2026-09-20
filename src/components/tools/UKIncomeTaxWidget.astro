@@ -5,36 +5,46 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Landmark, TrendingUp, FileText, Wallet } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { grossIncome:"Gross Annual Salary", grossIncomeHelp:"Your gross salary before deductions (GBP).", regionNote:"Uses England, Wales & Northern Ireland tax bands. Scotland has separate bands not yet supported.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"UK Income Tax Calculator", emptyDesc:"See your estimated Income Tax, effective rate, and marginal rate.", tip1:"Income Tax Owed", tip2:"Effective Rate", tip3:"Marginal Rate", incomeTaxOwed:"Income Tax Owed", marginalRate:"Marginal Tax Rate", taxableIncome:"Taxable Income", afterTax:"After-Tax Income", aboutTitle:"About this Calculator", aboutText:"Estimates UK Income Tax using England/Wales/NI bands and the standard Personal Allowance. Excludes National Insurance — use the National Insurance Calculator for that. Personal Allowance taper above £100,000 is not modeled. Verify against current HMRC figures." },
+  es: { grossIncome:"Salario Bruto Anual", grossIncomeHelp:"Tu salario bruto antes de deducciones (GBP).", regionNote:"Usa los tramos fiscales de Inglaterra, Gales e Irlanda del Norte. Escocia tiene tramos separados aún no compatibles.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto sobre la Renta del Reino Unido", emptyDesc:"Consulta tu Impuesto sobre la Renta estimado, tasa efectiva y tasa marginal.", tip1:"Impuesto Adeudado", tip2:"Tasa Efectiva", tip3:"Tasa Marginal", incomeTaxOwed:"Impuesto sobre la Renta Adeudado", marginalRate:"Tasa Marginal de Impuesto", taxableIncome:"Ingreso Imponible", afterTax:"Ingreso Después de Impuestos", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima el Impuesto sobre la Renta del Reino Unido usando los tramos de Inglaterra/Gales/NI y la Asignación Personal estándar. Excluye el Seguro Nacional — usa la Calculadora de Seguro Nacional para eso. La reducción gradual de la Asignación Personal por encima de £100,000 no está modelada. Verifica con las cifras actuales de HMRC." },
+}[lang];
 ---
 <section class="ukit-calculator">
   <div class="ukit-layout">
     <aside class="ukit-sidebar">
-      <CalculatorField id="grossIncome" label="Gross Annual Salary" type="number" required={true} helpText="Your gross salary before deductions (GBP)." />
+      <CalculatorField id="grossIncome" label={copy.grossIncome} type="number" required={true} helpText={copy.grossIncomeHelp} />
       <div class="ukit-region-note">
-        <p>Uses England, Wales &amp; Northern Ireland tax bands. Scotland has separate bands not yet supported.</p>
+        <p>{copy.regionNote}</p>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukit-content">
       <div id="emptyState">
-        <EmptyState icon="🇬🇧" title="UK Income Tax Calculator" description="See your estimated Income Tax, effective rate, and marginal rate." tips={["Income Tax Owed", "Effective Rate", "Marginal Rate"]} />
+        <EmptyState icon="🇬🇧" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="incomeTaxResult" title="Income Tax Owed" icon={Landmark} subtitle=" " />
-          <ResultCard id="marginalRateResult" title="Marginal Tax Rate" icon={TrendingUp} />
-          <ResultCard id="taxableIncomeResult" title="Taxable Income" icon={FileText} />
-          <ResultCard id="afterTaxResult" title="After-Tax Income" icon={Wallet} />
+          <ResultCard id="incomeTaxResult" title={copy.incomeTaxOwed} icon={Landmark} subtitle=" " />
+          <ResultCard id="marginalRateResult" title={copy.marginalRate} icon={TrendingUp} />
+          <ResultCard id="taxableIncomeResult" title={copy.taxableIncome} icon={FileText} />
+          <ResultCard id="afterTaxResult" title={copy.afterTax} icon={Wallet} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates UK Income Tax using England/Wales/NI bands and the standard Personal Allowance. Excludes National Insurance — use the National Insurance Calculator for that. Personal Allowance taper above £100,000 is not modeled. Verify against current HMRC figures.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/uk-income-tax";
 </script>

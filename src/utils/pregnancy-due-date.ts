@@ -11,10 +11,10 @@ export interface PregnancyDueDateResult {
   daysRemaining: number;
 }
 
-export function validatePregnancyDueDateInput(i: PregnancyDueDateInput): string | null {
-  if (Number.isNaN(i.lastPeriodDate.getTime())) return "Please select a valid date.";
-  if (i.lastPeriodDate > new Date()) return "Date cannot be in the future.";
-  if (i.cycleLength < 20 || i.cycleLength > 45) return "Enter a realistic cycle length (20-45 days).";
+export function validatePregnancyDueDateInput(i: PregnancyDueDateInput, lang: "en" | "es" = "en"): string | null {
+  if (Number.isNaN(i.lastPeriodDate.getTime())) return lang === "es" ? "Por favor selecciona una fecha válida." : "Please select a valid date.";
+  if (i.lastPeriodDate > new Date()) return lang === "es" ? "La fecha no puede ser en el futuro." : "Date cannot be in the future.";
+  if (i.cycleLength < 20 || i.cycleLength > 45) return lang === "es" ? "Ingresa una duración de ciclo realista (20-45 días)." : "Enter a realistic cycle length (20-45 days).";
   return null;
 }
 
@@ -46,8 +46,22 @@ export function calculatePregnancyDueDate(i: PregnancyDueDateInput): PregnancyDu
 
 export function copyPregnancyDueDateSummary(
   i: PregnancyDueDateInput,
-  r: PregnancyDueDateResult
+  r: PregnancyDueDateResult,
+  lang: "en" | "es" = "en"
 ): string {
+  if (lang === "es") {
+    return `
+Resumen de Fecha de Parto
+
+Fecha del Último Período: ${i.lastPeriodDate.toLocaleDateString("es-ES")}
+Duración del Ciclo: ${i.cycleLength} días
+
+Fecha de Parto Estimada: ${r.dueDate.toLocaleDateString("es-ES")}
+Progreso Actual: Semana ${r.currentWeek}, Día ${r.currentDay}
+Trimestre: ${r.trimester}
+Días Restantes: ${r.daysRemaining}
+`.trim();
+  }
   return `
 Pregnancy Due Date Summary
 

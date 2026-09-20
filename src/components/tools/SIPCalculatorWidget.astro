@@ -8,6 +8,13 @@ import ChartCard from "../calculator/ChartCard.astro";
 import ScheduleTable from "../calculator/ScheduleTable.astro";
 
 import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { monthlyLabel:"Monthly Investment (₹)", monthlyHelp:"Amount you invest every month.", returnLabel:"Expected Annual Return (%)", returnHelp:"Estimated yearly return rate.", tenureLabel:"Investment Period (years)", tenureHelp:"How long you plan to invest.", yrsSuffix:"Yrs", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"SIP Calculator", emptyDesc:"Estimate the maturity value of your monthly investments and see year-wise growth.", tip1:"Maturity Value & Returns", tip2:"Invested vs Growth Chart", tip3:"Year-wise Growth Table", tip4:"Compounding Insight", maturity:"Maturity Value", invested:"Invested Amount", returns:"Estimated Returns", percent:"Return %", chartTitle:"Invested vs Growth Over Time", yearHeader:"Year", investedHeader:"Invested", valueHeader:"Value", scheduleCaption:"Year-wise Growth", aboutTitle:"About this Calculator", aboutText:"A Systematic Investment Plan (SIP) lets you invest a fixed amount every month. Compounding means your returns also start earning returns, so the growth curve accelerates over time.", formulaTitle:"Formula", formulaText:"— where P is the monthly investment, r is the monthly return rate, and n is the number of months." },
+  es: { monthlyLabel:"Inversión Mensual (₹)", monthlyHelp:"Monto que inviertes cada mes.", returnLabel:"Retorno Anual Esperado (%)", returnHelp:"Tasa de retorno anual estimada.", tenureLabel:"Período de Inversión (años)", tenureHelp:"Cuánto tiempo planeas invertir.", yrsSuffix:"Años", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora SIP", emptyDesc:"Estima el valor de vencimiento de tus inversiones mensuales y observa el crecimiento año a año.", tip1:"Valor de Vencimiento y Retornos", tip2:"Gráfico Invertido vs Crecimiento", tip3:"Tabla de Crecimiento Anual", tip4:"Perspectiva de Interés Compuesto", maturity:"Valor de Vencimiento", invested:"Monto Invertido", returns:"Retornos Estimados", percent:"Retorno %", chartTitle:"Invertido vs Crecimiento en el Tiempo", yearHeader:"Año", investedHeader:"Invertido", valueHeader:"Valor", scheduleCaption:"Crecimiento Anual", aboutTitle:"Acerca de esta Calculadora", aboutText:"Un Plan de Inversión Sistemática (SIP) te permite invertir un monto fijo cada mes. El interés compuesto significa que tus retornos también comienzan a generar retornos, por lo que la curva de crecimiento se acelera con el tiempo.", formulaTitle:"Fórmula", formulaText:"— donde P es la inversión mensual, r es la tasa de retorno mensual, y n es el número de meses." },
+}[lang];
 ---
 
 <section class="sip-calculator">
@@ -18,40 +25,40 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="monthlyInvestment"
-        label="Monthly Investment (₹)"
+        label={copy.monthlyLabel}
         type="number"
         placeholder="e.g. 5000"
         required={true}
         min="1"
-        helpText="Amount you invest every month."
+        helpText={copy.monthlyHelp}
       />
 
       <CalculatorField
         id="annualReturn"
-        label="Expected Annual Return (%)"
+        label={copy.returnLabel}
         type="number"
         placeholder="e.g. 12"
         required={true}
         min="0"
         step="0.1"
-        helpText="Estimated yearly return rate."
+        helpText={copy.returnHelp}
       />
 
       <CalculatorField
         id="tenure"
-        label="Investment Period (years)"
+        label={copy.tenureLabel}
         type="number"
         placeholder="e.g. 15"
         required={true}
         min="1"
-        helpText="How long you plan to invest."
+        helpText={copy.tenureHelp}
       />
 
       <div class="scenario-row">
-        <button type="button" class="scenario-btn" data-tenure="5">5 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="10">10 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="15">15 Yrs</button>
-        <button type="button" class="scenario-btn" data-tenure="20">20 Yrs</button>
+        <button type="button" class="scenario-btn" data-tenure="5">5 {copy.yrsSuffix}</button>
+        <button type="button" class="scenario-btn" data-tenure="10">10 {copy.yrsSuffix}</button>
+        <button type="button" class="scenario-btn" data-tenure="15">15 {copy.yrsSuffix}</button>
+        <button type="button" class="scenario-btn" data-tenure="20">20 {copy.yrsSuffix}</button>
       </div>
 
       <CalculatorActions
@@ -59,6 +66,9 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div
@@ -75,13 +85,13 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
 
         <EmptyState
           icon="📈"
-          title="SIP Calculator"
-          description="Estimate the maturity value of your monthly investments and see year-wise growth."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Maturity Value & Returns",
-            "Invested vs Growth Chart",
-            "Year-wise Growth Table",
-            "Compounding Insight"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -94,10 +104,10 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
 
         <ResultsGrid columns={4}>
 
-          <ResultCard id="maturityResult" title="Maturity Value" icon={TrendingUp} accent="primary" />
-          <ResultCard id="investedResult" title="Invested Amount" icon={Wallet} accent="neutral" />
-          <ResultCard id="returnsResult" title="Estimated Returns" icon={PiggyBank} accent="success" />
-          <ResultCard id="percentResult" title="Return %" icon={Percent} accent="warning" />
+          <ResultCard id="maturityResult" title={copy.maturity} icon={TrendingUp} accent="primary" />
+          <ResultCard id="investedResult" title={copy.invested} icon={Wallet} accent="neutral" />
+          <ResultCard id="returnsResult" title={copy.returns} icon={PiggyBank} accent="success" />
+          <ResultCard id="percentResult" title={copy.percent} icon={Percent} accent="warning" />
 
         </ResultsGrid>
 
@@ -109,31 +119,26 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
 
         <ChartCard
           id="sipLineChart"
-          title="Invested vs Growth Over Time"
+          title={copy.chartTitle}
         />
 
         <ScheduleTable
           id="scheduleBody"
-          headers={["Year", "Invested", "Value"]}
-          caption="Year-wise Growth"
+          headers={[copy.yearHeader, copy.investedHeader, copy.valueHeader]}
+          caption={copy.scheduleCaption}
         />
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            A Systematic Investment Plan (SIP) lets you invest a fixed
-            amount every month. Compounding means your returns also start
-            earning returns, so the growth curve accelerates over time.
-          </p>
+          <p>{copy.aboutText}</p>
 
-          <h3>Formula</h3>
+          <h3>{copy.formulaTitle}</h3>
 
           <p>
             Maturity Value = P &times; [(1+r)<sup>n</sup> &minus; 1] &divide; r &times; (1+r)
-            — where P is the monthly investment, r is the monthly return
-            rate, and n is the number of months.
+            {copy.formulaText}
           </p>
 
         </section>
@@ -146,6 +151,9 @@ import { TrendingUp, Wallet, PiggyBank, Percent } from "@lucide/astro";
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/sip-calculator";
 </script>

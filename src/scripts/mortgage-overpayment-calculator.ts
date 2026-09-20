@@ -15,6 +15,8 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["currentBalance", "interestRate", "remainingTermMonths", "extraMonthlyPayment"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +38,7 @@ function calculate() {
 
   const [currentBalance, interestRate, remainingTermMonths, extraMonthlyPayment] = fieldIds.map(val);
 
-  const validationError = validateMortgageOverpaymentInputs(currentBalance, remainingTermMonths);
+  const validationError = validateMortgageOverpaymentInputs(currentBalance, remainingTermMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -46,19 +48,32 @@ function calculate() {
 
   const years = Math.floor(result.newPayoffMonths / 12);
   const months = result.newPayoffMonths % 12;
-  const payoffLabel = years > 0 ? `${years}y ${months}mo` : `${months} months`;
+  const payoffLabel = lang === "es"
+    ? (years > 0 ? `${years}a ${months}m` : `${months} meses`)
+    : (years > 0 ? `${years}y ${months}mo` : `${months} months`);
 
   const savedYears = Math.floor(result.monthsSaved / 12);
   const savedMonths = result.monthsSaved % 12;
-  const savedLabel = result.monthsSaved > 0 ? (savedYears > 0 ? `${savedYears}y ${savedMonths}mo` : `${savedMonths} months`) : "0 months";
+  const savedLabel = result.monthsSaved > 0
+    ? (lang === "es"
+        ? (savedYears > 0 ? `${savedYears}a ${savedMonths}m` : `${savedMonths} meses`)
+        : (savedYears > 0 ? `${savedYears}y ${savedMonths}mo` : `${savedMonths} months`))
+    : (lang === "es" ? "0 meses" : "0 months");
 
   setValue("payoffTimeResult", payoffLabel);
   setValue("timeSavedResult", savedLabel);
   setValue("interestSavedResult", fmtCurrency(result.interestSaved));
   setValue("newPaymentResult", fmtCurrency(result.standardPayment + extraMonthlyPayment));
-  setSubtitle("payoffTimeResult", `vs ${remainingTermMonths} months originally`);
+  setSubtitle("payoffTimeResult", lang === "es" ? `vs ${remainingTermMonths} meses originalmente` : `vs ${remainingTermMonths} months originally`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Pago Anticipado de Hipoteca
+
+Nuevo Pago Mensual: ${fmtCurrency(result.standardPayment + extraMonthlyPayment)}
+Nuevo Tiempo de Pago: ${payoffLabel}
+Tiempo Ahorrado: ${savedLabel}
+Interés Ahorrado: ${fmtCurrency(result.interestSaved)}
+`.trim() : `
 Mortgage Overpayment Summary
 
 New Monthly Payment: ${fmtCurrency(result.standardPayment + extraMonthlyPayment)}

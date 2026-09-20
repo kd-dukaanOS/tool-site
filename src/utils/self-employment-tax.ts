@@ -37,10 +37,13 @@ const MEDICARE_RATE = 0.029;
 const ADDITIONAL_MEDICARE_RATE = 0.009;
 const SE_TAXABLE_PORTION = 0.9235;
 
-export function validateSelfEmploymentTaxInput(input: SelfEmploymentTaxInput): string | null {
+export function validateSelfEmploymentTaxInput(input: SelfEmploymentTaxInput, lang: "en" | "es" = "en"): string | null {
   const { netEarnings } = input;
+  const msg = lang === "es"
+    ? "Ingresa ganancias netas por trabajo independiente válidas, mayores a 0."
+    : "Please enter valid net self-employment earnings greater than 0.";
   if (!netEarnings || Number.isNaN(netEarnings) || netEarnings <= 0) {
-    return "Please enter valid net self-employment earnings greater than 0.";
+    return msg;
   }
   return null;
 }
@@ -68,7 +71,33 @@ export function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
 }
 
-export function copySelfEmploymentTaxSummary(input: SelfEmploymentTaxInput, result: SelfEmploymentTaxResult): string {
+export function copySelfEmploymentTaxSummary(input: SelfEmploymentTaxInput, result: SelfEmploymentTaxResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Impuesto por Trabajo Independiente (Año Fiscal ${input.taxYear})
+
+Ingresos Netos por Trabajo Independiente:
+${formatCurrency(input.netEarnings)}
+
+Impuesto de Seguro Social (12.4%):
+${formatCurrency(result.socialSecurityTax)}
+
+Impuesto de Medicare (2.9%):
+${formatCurrency(result.medicareTax)}
+
+Impuesto Adicional de Medicare (0.9%):
+${formatCurrency(result.additionalMedicareTax)}
+
+Impuesto Total por Trabajo Independiente:
+${formatCurrency(result.totalSETax)}
+
+Mitad Deducible (para el impuesto sobre la renta):
+${formatCurrency(result.deductibleHalf)}
+
+Tasa Efectiva:
+${result.effectiveRate.toFixed(1)}%
+`.trim();
+  }
   return `
 Self-Employment Tax Summary (Tax Year ${input.taxYear})
 

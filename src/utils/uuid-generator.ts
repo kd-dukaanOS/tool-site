@@ -13,9 +13,12 @@ export function generateUuids(count: number, version: UuidVersion): string[] {
   return Array.from({ length: count }, generateUuidV4);
 }
 
-export function validateUuidCount(count: number): string | null {
-  if (!count || count < 1) return "Count must be at least 1.";
-  if (count > 1000) return "Maximum count is 1000.";
+export function validateUuidCount(count: number, lang: "en" | "es" = "en"): string | null {
+  const t = lang === "es"
+    ? { min:"La cantidad debe ser al menos 1.", max:"El máximo es 1000." }
+    : { min:"Count must be at least 1.", max:"Maximum count is 1000." };
+  if (!count || count < 1) return t.min;
+  if (count > 1000) return t.max;
   return null;
 }
 

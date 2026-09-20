@@ -18,6 +18,10 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const sampleLabel = (window as any).sdSampleLabel || "sample";
+const populationLabel = (window as any).sdPopulationLabel || "population";
+
 let lastInput: StdDevInput | null = null;
 
 function showError(msg: string) {
@@ -38,7 +42,7 @@ function calculate() {
     isSample: isSampleInput.checked,
   };
 
-  const err = validateStdDevInput(input);
+  const err = validateStdDevInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +53,7 @@ function calculate() {
   setValue("stdDevResult", result.standardDeviation);
   setValue("varianceResult", result.variance);
   setValue("meanResult", result.mean);
-  setSubtitle("stdDevResult", input.isSample ? "sample" : "population");
+  setSubtitle("stdDevResult", input.isSample ? sampleLabel : populationLabel);
 
   lastInput = input;
 
@@ -71,7 +75,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateStandardDeviation(lastInput);
-  copyToClipboard(copyStdDevSummary(lastInput, result));
+  copyToClipboard(copyStdDevSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -5,39 +5,53 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, TrendingDown, Receipt, Calendar } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { loanDetails:"Loan Details", loanAmount:"Loan Amount", rate:"Interest Rate (%)", term:"Loan Term (years)", extra:"Extra Monthly Payment", emptyTitle:"Student Loan Calculator", emptyDesc:"Estimate your monthly payment, interest, and payoff time.", tip1:"Monthly Payment", tip2:"Total Interest", tip3:"Payoff Time", monthlyPayment:"Monthly Payment", totalInterest:"Total Interest", totalPaid:"Total Paid", payoffTime:"Payoff Time", withExtra:"With extra payments", standardTerm:"Standard term", aboutTitle:"About this Calculator", aboutText:"Estimates your monthly student loan payment and total interest using standard amortization, and shows how extra payments shorten your payoff time.", yLabel:"y", mLabel:"m" },
+  es: { loanDetails:"Detalles del Préstamo", loanAmount:"Monto del Préstamo", rate:"Tasa de Interés (%)", term:"Plazo del Préstamo (años)", extra:"Pago Mensual Adicional", emptyTitle:"Calculadora de Préstamo Estudiantil", emptyDesc:"Calcula tu pago mensual, interés y tiempo de pago.", tip1:"Pago Mensual", tip2:"Interés Total", tip3:"Tiempo de Pago", monthlyPayment:"Pago Mensual", totalInterest:"Interés Total", totalPaid:"Total Pagado", payoffTime:"Tiempo de Pago", withExtra:"Con pagos adicionales", standardTerm:"Plazo estándar", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu pago mensual de préstamo estudiantil e interés total usando amortización estándar, y muestra cómo los pagos adicionales acortan tu tiempo de pago.", yLabel:"a", mLabel:"m" },
+}[lang];
 ---
 <section class="stl-calculator">
   <div class="stl-layout">
     <aside class="stl-sidebar">
       <div class="stl-group">
-        <h3>Loan Details</h3>
-        <CalculatorField id="loanAmount" label="Loan Amount" type="number" placeholder="e.g. 30000" min="0" step="1" />
-        <CalculatorField id="interestRate" label="Interest Rate (%)" type="number" placeholder="e.g. 6" min="0" step="0.01" />
-        <CalculatorField id="loanTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 10" min="1" step="1" />
-        <CalculatorField id="extraMonthlyPayment" label="Extra Monthly Payment" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.loanDetails}</h3>
+        <CalculatorField id="loanAmount" label={copy.loanAmount} type="number" placeholder="e.g. 30000" min="0" step="1" />
+        <CalculatorField id="interestRate" label={copy.rate} type="number" placeholder="e.g. 6" min="0" step="0.01" />
+        <CalculatorField id="loanTermYears" label={copy.term} type="number" placeholder="e.g. 10" min="1" step="1" />
+        <CalculatorField id="extraMonthlyPayment" label={copy.extra} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="stl-content">
       <div id="emptyState">
-        <EmptyState icon="🎓" title="Student Loan Calculator" description="Estimate your monthly payment, interest, and payoff time." tips={["Monthly Payment", "Total Interest", "Payoff Time"]} />
+        <EmptyState icon="🎓" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={TrendingDown} />
-          <ResultCard id="totalPaidResult" title="Total Paid" icon={Receipt} />
-          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={Calendar} />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={TrendingDown} />
+          <ResultCard id="totalPaidResult" title={copy.totalPaid} icon={Receipt} />
+          <ResultCard id="payoffTimeResult" title={copy.payoffTime} icon={Calendar} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your monthly student loan payment and total interest using standard amortization, and shows how extra payments shorten your payoff time.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, withExtraLabel: copy.withExtra, standardTermLabel: copy.standardTerm, yLabel: copy.yLabel, mLabel: copy.mLabel }}>
+  window.calcLang = calcLang;
+  window.stlWithExtraLabel = withExtraLabel;
+  window.stlStandardTermLabel = standardTermLabel;
+  window.stlYLabel = yLabel;
+  window.stlMLabel = mLabel;
+</script>
 <script>
   import "../../scripts/student-loan-calculator";
 </script>

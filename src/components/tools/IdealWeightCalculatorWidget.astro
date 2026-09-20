@@ -5,19 +5,26 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Scale, TrendingUp } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { genderLabel:"Gender", male:"Male", female:"Female", heightLabel:"Height (cm)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter height to calculate ideal weight", emptyDesc:"Your ideal weight and healthy range will appear here.", idealWeight:"Ideal Weight", healthyRange:"Healthy Weight Range" },
+  es: { genderLabel:"Género", male:"Masculino", female:"Femenino", heightLabel:"Altura (cm)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa la altura para calcular el peso ideal", emptyDesc:"Tu peso ideal y rango saludable aparecerán aquí.", idealWeight:"Peso Ideal", healthyRange:"Rango de Peso Saludable" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <div class="field-group">
-      <label for="gender">Gender</label>
+      <label for="gender">{copy.genderLabel}</label>
       <select id="gender" class="calculator-input">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
+        <option value="male">{copy.male}</option>
+        <option value="female">{copy.female}</option>
       </select>
     </div>
 
-    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 170" />
+    <CalculatorField id="heightCm" label={copy.heightLabel} type="number" placeholder="e.g. 170" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -27,21 +34,27 @@ import { Scale, TrendingUp } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter height to calculate ideal weight"
-      description="Your ideal weight and healthy range will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="idealWeightResult" title="Ideal Weight" icon={Scale} accent="primary" size="lg" />
-      <ResultCard id="healthyRangeResult" title="Healthy Weight Range" icon={TrendingUp} accent="neutral" />
+      <ResultCard id="idealWeightResult" title={copy.idealWeight} icon={Scale} accent="primary" size="lg" />
+      <ResultCard id="healthyRangeResult" title={copy.healthyRange} icon={TrendingUp} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/ideal-weight-calculator.ts"></script>

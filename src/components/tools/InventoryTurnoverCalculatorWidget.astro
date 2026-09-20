@@ -6,14 +6,21 @@ import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import CurrencySelector from "../calculator/CurrencySelector.astro";
 import { Wallet, Repeat, CalendarDays } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { cogs:"Cost of Goods Sold", beginning:"Beginning Inventory", ending:"Ending Inventory", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter values to calculate turnover", emptyDesc:"Your inventory turnover ratio will appear here.", avgInventory:"Average Inventory", turnoverRatio:"Turnover Ratio", daysToSell:"Days to Sell" },
+  es: { cogs:"Costo de Bienes Vendidos", beginning:"Inventario Inicial", ending:"Inventario Final", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa valores para calcular la rotación", emptyDesc:"Tu ratio de rotación de inventario aparecerá aquí.", avgInventory:"Inventario Promedio", turnoverRatio:"Ratio de Rotación", daysToSell:"Días para Vender" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CurrencySelector />
-    <CalculatorField id="cogs" label="Cost of Goods Sold" type="number" placeholder="e.g. 500000" />
-    <CalculatorField id="beginningInventory" label="Beginning Inventory" type="number" placeholder="e.g. 80000" />
-    <CalculatorField id="endingInventory" label="Ending Inventory" type="number" placeholder="e.g. 60000" />
+    <CalculatorField id="cogs" label={copy.cogs} type="number" placeholder="e.g. 500000" />
+    <CalculatorField id="beginningInventory" label={copy.beginning} type="number" placeholder="e.g. 80000" />
+    <CalculatorField id="endingInventory" label={copy.ending} type="number" placeholder="e.g. 60000" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -23,22 +30,28 @@ import { Wallet, Repeat, CalendarDays } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter values to calculate turnover"
-      description="Your inventory turnover ratio will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="avgInventoryResult" title="Average Inventory" icon={Wallet} accent="neutral" />
-      <ResultCard id="turnoverRatioResult" title="Turnover Ratio" icon={Repeat} accent="primary" size="lg" />
-      <ResultCard id="daysToSellResult" title="Days to Sell" icon={CalendarDays} accent="warning" />
+      <ResultCard id="avgInventoryResult" title={copy.avgInventory} icon={Wallet} accent="neutral" />
+      <ResultCard id="turnoverRatioResult" title={copy.turnoverRatio} icon={Repeat} accent="primary" size="lg" />
+      <ResultCard id="daysToSellResult" title={copy.daysToSell} icon={CalendarDays} accent="warning" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/inventory-turnover-calculator.ts"></script>

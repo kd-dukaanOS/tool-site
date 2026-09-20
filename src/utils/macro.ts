@@ -1,4 +1,4 @@
-﻿import { round } from "./calculator";
+import { round } from "./calculator";
 
 export interface MacroInput {
   gender: string;
@@ -30,10 +30,10 @@ const GOAL_ADJUSTMENT: Record<string, number> = {
   gain: 500,
 };
 
-export function validateMacroInput(i: MacroInput): string | null {
-  if (!i.age || i.age <= 0) return "Enter a valid age.";
-  if (!i.heightCm || i.heightCm <= 0) return "Enter a valid height.";
-  if (!i.weightKg || i.weightKg <= 0) return "Enter a valid weight.";
+export function validateMacroInput(i: MacroInput, lang: "en" | "es" = "en"): string | null {
+  if (!i.age || i.age <= 0) return lang === "es" ? "Ingresa una edad válida." : "Enter a valid age.";
+  if (!i.heightCm || i.heightCm <= 0) return lang === "es" ? "Ingresa una altura válida." : "Enter a valid height.";
+  if (!i.weightKg || i.weightKg <= 0) return lang === "es" ? "Ingresa un peso válido." : "Enter a valid weight.";
   return null;
 }
 
@@ -53,7 +53,17 @@ export function calculateMacro(i: MacroInput): MacroResult {
   return { calories: round(calories), proteinG, carbsG, fatG };
 }
 
-export function copyMacroSummary(_i: MacroInput, r: MacroResult): string {
+export function copyMacroSummary(_i: MacroInput, r: MacroResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Calculadora de Macros
+
+Calorías Diarias: ${r.calories} kcal
+Proteína: ${r.proteinG} g
+Carbohidratos: ${r.carbsG} g
+Grasa: ${r.fatG} g
+`.trim();
+  }
   return `
 Macro Calculator
 

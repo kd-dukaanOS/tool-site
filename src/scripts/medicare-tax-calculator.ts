@@ -13,6 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -36,7 +38,7 @@ function calculate() {
   const filingStatus = (document.getElementById("filingStatus") as HTMLSelectElement)?.value as "single" | "mfj" | "mfs" | "hoh";
   const isSelfEmployed = (document.getElementById("employmentType") as HTMLSelectElement)?.value === "self";
 
-  const validationError = validateMedicareTaxInputs(annualWages);
+  const validationError = validateMedicareTaxInputs(annualWages, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -48,10 +50,17 @@ function calculate() {
   setValue("regularMedicareResult", fmtCurrency(result.regularMedicareTax));
   setValue("additionalMedicareResult", fmtCurrency(result.additionalMedicareTax));
   setValue("thresholdResult", fmtCurrency(result.additionalMedicareThreshold));
-  setSubtitle("totalMedicareResult", isSelfEmployed ? "2.9% + 0.9% additional" : "1.45% + 0.9% additional");
-  setSubtitle("additionalMedicareResult", result.wagesOverThreshold > 0 ? `On ${fmtCurrency(result.wagesOverThreshold)} over threshold` : "Not applicable");
+  setSubtitle("totalMedicareResult", isSelfEmployed ? (lang === "es" ? "2.9% + 0.9% adicional" : "2.9% + 0.9% additional") : (lang === "es" ? "1.45% + 0.9% adicional" : "1.45% + 0.9% additional"));
+  setSubtitle("additionalMedicareResult", result.wagesOverThreshold > 0 ? (lang === "es" ? `Sobre ${fmtCurrency(result.wagesOverThreshold)} por encima del umbral` : `On ${fmtCurrency(result.wagesOverThreshold)} over threshold`) : (lang === "es" ? "No aplicable" : "Not applicable"));
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Impuesto Medicare (2026)
+
+Impuesto Medicare Total: ${fmtCurrency(result.totalMedicareTax)}
+Impuesto Medicare Regular (${isSelfEmployed ? "2.9%" : "1.45%"}): ${fmtCurrency(result.regularMedicareTax)}
+Impuesto Medicare Adicional (0.9%): ${fmtCurrency(result.additionalMedicareTax)}
+Umbral de Impuesto Medicare Adicional: ${fmtCurrency(result.additionalMedicareThreshold)}
+`.trim() : `
 Medicare Tax Summary (2026)
 
 Total Medicare Tax: ${fmtCurrency(result.totalMedicareTax)}

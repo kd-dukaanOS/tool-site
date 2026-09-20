@@ -15,6 +15,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -40,7 +42,7 @@ function calculate() {
   const monthlyContribution = parseFloat(monthlyContributionInput.value) || 0;
   const annualReturn = parseFloat(annualReturnInput.value) || 0;
 
-  const validationError = validateRetirementInputs(currentAge, retirementAge, monthlyContribution);
+  const validationError = validateRetirementInputs(currentAge, retirementAge, monthlyContribution, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -52,9 +54,16 @@ function calculate() {
   setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
   setValue("totalGrowthResult", fmtCurrency(result.totalGrowth));
   setValue("monthlyIncomeResult", fmtCurrency(result.monthlyRetirementIncome));
-  setSubtitle("monthlyIncomeResult", "at 4% withdrawal rate");
+  setSubtitle("monthlyIncomeResult", lang === "es" ? "con tasa de retiro del 4%" : "at 4% withdrawal rate");
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Proyección de Jubilación
+
+Ahorros Proyectados: ${fmtCurrency(result.projectedSavings)}
+Aportes Totales: ${fmtCurrency(result.totalContributions)}
+Crecimiento Total: ${fmtCurrency(result.totalGrowth)}
+Ingreso Mensual Est.: ${fmtCurrency(result.monthlyRetirementIncome)}
+`.trim() : `
 Retirement Projection Summary
 
 Projected Savings: ${fmtCurrency(result.projectedSavings)}

@@ -18,6 +18,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: TimezoneInput | null = null;
 
 function showError(msg: string) {
@@ -39,7 +41,7 @@ function calculate() {
     toTimezone: toTimezoneInput.value,
   };
 
-  const err = validateTimezoneInput(input);
+  const err = validateTimezoneInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -53,7 +55,7 @@ function calculate() {
     `${result.hourDifference >= 0 ? "+" : ""}${result.hourDifference}h`
   );
   setSubtitle("convertedResult", input.toTimezone);
-  setSubtitle("differenceResult", "vs source timezone");
+  setSubtitle("differenceResult", lang === "es" ? "vs zona horaria de origen" : "vs source timezone");
 
   lastInput = input;
 
@@ -74,7 +76,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateTimezoneConversion(lastInput);
-  copyToClipboard(copyTimezoneSummary(lastInput, result));
+  copyToClipboard(copyTimezoneSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

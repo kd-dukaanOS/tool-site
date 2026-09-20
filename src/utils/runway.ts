@@ -36,8 +36,15 @@ export function calculateRunway(
   return { staticRunwayMonths, dynamicRunwayMonths, currentNetBurn, projectedBalanceIn6Months };
 }
 
-export function validateRunwayInputs(currentCashBalance: number, monthlyExpenses: number): string | null {
-  if (currentCashBalance < 0) return "Current cash balance cannot be negative.";
-  if (monthlyExpenses <= 0) return "Monthly expenses must be greater than zero.";
+export function validateRunwayInputs(currentCashBalance: number, monthlyExpenses: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    cash: "El saldo de efectivo actual no puede ser negativo.",
+    expenses: "Los gastos mensuales deben ser mayor a cero.",
+  } : {
+    cash: "Current cash balance cannot be negative.",
+    expenses: "Monthly expenses must be greater than zero.",
+  };
+  if (currentCashBalance < 0) return msg.cash;
+  if (monthlyExpenses <= 0) return msg.expenses;
   return null;
 }

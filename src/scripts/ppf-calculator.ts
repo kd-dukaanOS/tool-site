@@ -22,6 +22,9 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const scheduleBody = document.getElementById("scheduleBody") as HTMLElement | null;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const yearLabel = (window as any).ppfYearLabel || "Year";
+
 let lastInput: PPFInput | null = null;
 let lastResult: PPFResult | null = null;
 
@@ -44,7 +47,7 @@ function calculate() {
     tenureYears: parseFloat(tenureInput.value),
   };
 
-  const validationError = validatePPFInput(input);
+  const validationError = validatePPFInput(input, lang);
 
   if (validationError) {
     showError(validationError);
@@ -77,7 +80,7 @@ function renderSchedule(result: PPFResult) {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-      <td>Year ${row.year}</td>
+      <td>${yearLabel} ${row.year}</td>
       <td>${formatCurrency(row.openingBalance)}</td>
       <td>${formatCurrency(row.investment)}</td>
       <td>${formatCurrency(row.interestEarned)}</td>
@@ -105,7 +108,7 @@ function resetCalculator() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyPPFSummary(lastInput, lastResult));
+  copyToClipboard(copyPPFSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

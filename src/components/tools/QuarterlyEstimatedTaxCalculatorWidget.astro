@@ -7,6 +7,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { seIncome:"Self-Employment Income ($)", seIncomeHelp:"Expected net self-employment earnings for the year.", otherIncome:"Other Income ($)", otherIncomeHelp:"W-2 wages or other taxable income, if any.", filingStatus:"Filing Status", single:"Single", marriedJointly:"Married Filing Jointly", marriedSeparately:"Married Filing Separately", headOfHousehold:"Head of Household", taxYear:"Tax Year", deduction:"Deduction", standardDeduction:"Standard Deduction", itemizedDeduction:"Itemized Deduction", itemizedAmount:"Itemized Deduction ($)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Quarterly Estimated Tax Calculator", emptyDesc:"Estimate your quarterly tax payment by combining federal income tax and self-employment tax.", tip1:"Quarterly Payment", tip2:"Total Annual Tax", quarterlyPayment:"Quarterly Payment", totalAnnualTax:"Total Annual Tax", seTax:"Self-Employment Tax", federalIncomeTax:"Federal Income Tax", effectiveRate:"Effective Rate", aboutTitle:"About this Calculator", aboutText:"Combines federal income tax and self-employment tax on your expected annual income to estimate what to send the IRS each quarter. Uses current 2025/2026 brackets, the self-employment tax deduction, and your chosen deduction type. Does not include state tax." },
+  es: { seIncome:"Ingreso por Trabajo Independiente ($)", seIncomeHelp:"Ingresos netos esperados por trabajo independiente para el año.", otherIncome:"Otros Ingresos ($)", otherIncomeHelp:"Salarios W-2 u otros ingresos gravables, si los hay.", filingStatus:"Estado Civil Tributario", single:"Soltero", marriedJointly:"Casado Declarando en Conjunto", marriedSeparately:"Casado Declarando por Separado", headOfHousehold:"Cabeza de Familia", taxYear:"Año Fiscal", deduction:"Deducción", standardDeduction:"Deducción Estándar", itemizedDeduction:"Deducción Detallada", itemizedAmount:"Deducción Detallada ($)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto Estimado Trimestral", emptyDesc:"Estima tu pago de impuesto trimestral combinando el impuesto federal y el impuesto por trabajo independiente.", tip1:"Pago Trimestral", tip2:"Impuesto Anual Total", quarterlyPayment:"Pago Trimestral", totalAnnualTax:"Impuesto Anual Total", seTax:"Impuesto por Trabajo Independiente", federalIncomeTax:"Impuesto Federal sobre la Renta", effectiveRate:"Tasa Efectiva", aboutTitle:"Acerca de esta Calculadora", aboutText:"Combina el impuesto federal sobre la renta y el impuesto por trabajo independiente sobre tu ingreso anual esperado para estimar lo que debes enviar al IRS cada trimestre. Usa los tramos actuales de 2025/2026, la deducción del impuesto por trabajo independiente, y el tipo de deducción que elijas. No incluye impuesto estatal." },
+}[lang];
 ---
 
 <section class="qet-calculator">
@@ -15,39 +22,39 @@ import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
     <aside class="qet-sidebar">
       <CalculatorField
         id="selfEmploymentIncome"
-        label="Self-Employment Income ($)"
+        label={copy.seIncome}
         type="number"
         placeholder="e.g. 60000"
         min="0"
         step="0.01"
-        helpText="Expected net self-employment earnings for the year."
+        helpText={copy.seIncomeHelp}
       />
 
       <CalculatorField
         id="otherIncome"
-        label="Other Income ($)"
+        label={copy.otherIncome}
         type="number"
         placeholder="e.g. 0"
         min="0"
         step="0.01"
-        helpText="W-2 wages or other taxable income, if any."
+        helpText={copy.otherIncomeHelp}
       />
 
       <CalculatorField
         id="filingStatus"
-        label="Filing Status"
+        label={copy.filingStatus}
         type="select"
         required={true}
       >
-        <option value="single">Single</option>
-        <option value="marriedJointly">Married Filing Jointly</option>
-        <option value="marriedSeparately">Married Filing Separately</option>
-        <option value="headOfHousehold">Head of Household</option>
+        <option value="single">{copy.single}</option>
+        <option value="marriedJointly">{copy.marriedJointly}</option>
+        <option value="marriedSeparately">{copy.marriedSeparately}</option>
+        <option value="headOfHousehold">{copy.headOfHousehold}</option>
       </CalculatorField>
 
       <CalculatorField
         id="taxYear"
-        label="Tax Year"
+        label={copy.taxYear}
         type="select"
         required={true}
       >
@@ -57,18 +64,18 @@ import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
 
       <CalculatorField
         id="deductionMode"
-        label="Deduction"
+        label={copy.deduction}
         type="select"
         required={true}
       >
-        <option value="standard">Standard Deduction</option>
-        <option value="itemized">Itemized Deduction</option>
+        <option value="standard">{copy.standardDeduction}</option>
+        <option value="itemized">{copy.itemizedDeduction}</option>
       </CalculatorField>
 
       <div id="itemizedRow" hidden>
         <CalculatorField
           id="itemizedDeduction"
-          label="Itemized Deduction ($)"
+          label={copy.itemizedAmount}
           type="number"
           placeholder="e.g. 18000"
           min="0"
@@ -81,6 +88,9 @@ import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -90,28 +100,24 @@ import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="📅"
-          title="Quarterly Estimated Tax Calculator"
-          description="Estimate your quarterly tax payment by combining federal income tax and self-employment tax."
-          tips={["Quarterly Payment", "Total Annual Tax"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="quarterlyPaymentResult" title="Quarterly Payment" icon={CalendarClock} accent="primary" size="lg" />
-          <ResultCard id="totalAnnualTaxResult" title="Total Annual Tax" icon={Landmark} accent="neutral" size="lg" />
-          <ResultCard id="seTaxResult" title="Self-Employment Tax" icon={Receipt} accent="neutral" />
-          <ResultCard id="federalIncomeTaxResult" title="Federal Income Tax" icon={Receipt} accent="neutral" />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="primary" />
+          <ResultCard id="quarterlyPaymentResult" title={copy.quarterlyPayment} icon={CalendarClock} accent="primary" size="lg" />
+          <ResultCard id="totalAnnualTaxResult" title={copy.totalAnnualTax} icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="seTaxResult" title={copy.seTax} icon={Receipt} accent="neutral" />
+          <ResultCard id="federalIncomeTaxResult" title={copy.federalIncomeTax} icon={Receipt} accent="neutral" />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} accent="primary" />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Combines federal income tax and self-employment tax on your expected annual income to
-            estimate what to send the IRS each quarter. Uses current 2025/2026 brackets, the
-            self-employment tax deduction, and your chosen deduction type. Does not include state tax.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -119,6 +125,9 @@ import { CalendarClock, Landmark, Receipt, Percent } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/quarterly-estimated-tax-calculator";
 </script>

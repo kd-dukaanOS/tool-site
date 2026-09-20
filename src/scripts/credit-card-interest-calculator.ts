@@ -37,27 +37,7 @@ Pago Total: ${rep}
 `.trim() },
 }[lang];
 
-const lang = (window as any).calcLang === "es" ? "es" : "en";
-const t = {
-  en: { tooLow:"This monthly payment is too low to ever pay off the balance — increase it above the monthly interest charge.", yMo:(y:number,m:number)=>`${y}y ${m}mo`, monthsOnly:(m:number)=>`${m} months`, totalMonths:(m:number)=>`${m} months total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
-Credit Card Interest Summary
 
-Starting Balance: ${bal}
-Monthly Payment: ${pay}
-Time to Payoff: ${time}
-Total Interest: ${int}
-Total Repayment: ${rep}
-`.trim() },
-  es: { tooLow:"Este pago mensual es demasiado bajo para pagar el saldo — auméntalo por encima del cargo de interés mensual.", yMo:(y:number,m:number)=>`${y}a ${m}m`, monthsOnly:(m:number)=>`${m} meses`, totalMonths:(m:number)=>`${m} meses en total`, summary:(bal:string,pay:string,time:string,int:string,rep:string)=>`
-Resumen de Interés de Tarjeta de Crédito
-
-Saldo Inicial: ${bal}
-Pago Mensual: ${pay}
-Tiempo para Pagar: ${time}
-Interés Total: ${int}
-Pago Total: ${rep}
-`.trim() },
-}[lang];
 
 let lastSummary = "";
 

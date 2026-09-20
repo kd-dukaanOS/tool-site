@@ -6,6 +6,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Percent, Calculator } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { modePercentOf:"X% of Y", modeIsWhat:"X is what % of Y", modeChange:"% Change", modeFindBase:"Find the Base", emptyTitle:"Percentage Calculator", emptyDesc:"Pick a calculation type above, enter your values, and get an instant answer.", tip1:"4 Calculation Modes", tip2:"Instant Results", tip3:"Plain-English Explanation", result:"Result", calculation:"Calculation", aboutTitle:"About this Calculator", aboutText:"Percentages express a number as a fraction of 100. This calculator covers the four most common percentage questions — finding a percentage of a number, finding what percentage one number is of another, calculating percentage change, and working backward to find the original number." },
+  es: { modePercentOf:"X% de Y", modeIsWhat:"X es qué % de Y", modeChange:"% Cambio", modeFindBase:"Encontrar la Base", emptyTitle:"Calculadora de Porcentajes", emptyDesc:"Elige un tipo de cálculo arriba, ingresa tus valores y obtén una respuesta instantánea.", tip1:"4 Modos de Cálculo", tip2:"Resultados Instantáneos", tip3:"Explicación en Lenguaje Sencillo", result:"Resultado", calculation:"Cálculo", aboutTitle:"Acerca de esta Calculadora", aboutText:"Los porcentajes expresan un número como una fracción de 100. Esta calculadora cubre las cuatro preguntas de porcentaje más comunes: encontrar un porcentaje de un número, encontrar qué porcentaje representa un número de otro, calcular el cambio porcentual y trabajar hacia atrás para encontrar el número original." },
+}[lang];
 ---
 
 <section class="percent-calculator">
@@ -15,10 +22,10 @@ import { Percent, Calculator } from "@lucide/astro";
     <aside class="percent-sidebar">
 
       <div class="mode-grid">
-        <button type="button" class="mode-btn active" data-percent-mode="percentOf">X% of Y</button>
-        <button type="button" class="mode-btn" data-percent-mode="isWhatPercent">X is what % of Y</button>
-        <button type="button" class="mode-btn" data-percent-mode="percentChange">% Change</button>
-        <button type="button" class="mode-btn" data-percent-mode="findBase">Find the Base</button>
+        <button type="button" class="mode-btn active" data-percent-mode="percentOf">{copy.modePercentOf}</button>
+        <button type="button" class="mode-btn" data-percent-mode="isWhatPercent">{copy.modeIsWhat}</button>
+        <button type="button" class="mode-btn" data-percent-mode="percentChange">{copy.modeChange}</button>
+        <button type="button" class="mode-btn" data-percent-mode="findBase">{copy.modeFindBase}</button>
       </div>
 
       <p id="modeHint" class="mode-hint"></p>
@@ -58,12 +65,12 @@ import { Percent, Calculator } from "@lucide/astro";
 
         <EmptyState
           icon="％"
-          title="Percentage Calculator"
-          description="Pick a calculation type above, enter your values, and get an instant answer."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "4 Calculation Modes",
-            "Instant Results",
-            "Plain-English Explanation"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3
           ]}
         />
 
@@ -76,8 +83,8 @@ import { Percent, Calculator } from "@lucide/astro";
 
         <ResultsGrid columns={2}>
 
-          <ResultCard id="percentResult" title="Result" icon={Percent} accent="primary" size="lg" />
-          <ResultCard id="expressionResult" title="Calculation" icon={Calculator} accent="neutral" size="lg" />
+          <ResultCard id="percentResult" title={copy.result} icon={Percent} accent="primary" size="lg" />
+          <ResultCard id="expressionResult" title={copy.calculation} icon={Calculator} accent="neutral" size="lg" />
 
         </ResultsGrid>
 
@@ -89,15 +96,9 @@ import { Percent, Calculator } from "@lucide/astro";
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            Percentages express a number as a fraction of 100. This
-            calculator covers the four most common percentage questions —
-            finding a percentage of a number, finding what percentage one
-            number is of another, calculating percentage change, and
-            working backward to find the original number.
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -109,6 +110,9 @@ import { Percent, Calculator } from "@lucide/astro";
 
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/percentage-calculator";
 </script>

@@ -16,6 +16,8 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const slugOutput = document.getElementById("slugOutput") as HTMLInputElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSlug = "";
 
 function showError(m: string) { errorBox.textContent = m; errorBox.hidden = false; }
@@ -24,7 +26,7 @@ function clearError() { errorBox.textContent = ""; errorBox.hidden = true; }
 function generate() {
   clearError();
   const text = textInput.value;
-  const err = validateSlugInput(text);
+  const err = validateSlugInput(text, lang);
   if (err) { showError(err); return; }
 
   const opts: SlugOptions = {

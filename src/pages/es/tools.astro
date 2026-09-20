@@ -1,0 +1,63 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { SPANISH_CATEGORIES, SPANISH_TOOLS } from "../../utils/i18n";
+---
+
+<Layout
+  lang="es"
+  title="Todas las Herramientas — TooManyToolz"
+  description={`Explora todas las herramientas online gratuitas en español, organizadas por categoría. Sin registros ni descargas.`}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Herramientas", url: "/es/tools/" },
+  ]}
+>
+  <section class="ts-tools-page">
+    <div class="ts-tools-inner">
+      <div class="ts-tools-head">
+        <h1 class="ts-tools-title">Todas las Herramientas en Español</h1>
+        <p class="ts-tools-sub">{SPANISH_TOOLS.length} herramientas gratuitas y privadas que funcionan directamente en tu navegador.</p>
+      </div>
+
+      {SPANISH_CATEGORIES.map((cat) => {
+        const catTools = SPANISH_TOOLS.filter((t) => t.category === cat.slug);
+        if (!catTools.length) return null;
+        return (
+          <div class="ts-tools-group" id={cat.slug}>
+            <div class="ts-tools-group-head">
+              <h2 class="ts-tools-group-title">{cat.name}</h2>
+              <span class="ts-tools-group-count">{catTools.length} {catTools.length === 1 ? "herramienta" : "herramientas"}</span>
+            </div>
+            <p class="ts-tools-group-desc">{cat.description}</p>
+            <div class="ts-tools-grid">
+              {catTools.map((t) => (
+                <a href={`/es/${t.category}/${t.slug}/`} class="ts-tools-card">
+                  <span class="ts-tools-card-name">{t.name}</span>
+                  {t.desc && <span class="ts-tools-card-desc">{t.desc}</span>}
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .ts-tools-page { padding: 48px var(--space-6, 24px) 80px; }
+  .ts-tools-inner { max-width: 1120px; margin: 0 auto; }
+  .ts-tools-head { margin-bottom: 40px; }
+  .ts-tools-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px; }
+  .ts-tools-sub { font-size: 16px; color: var(--text-secondary); margin: 0; }
+  .ts-tools-group { margin-bottom: 48px; }
+  .ts-tools-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .ts-tools-group-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0; }
+  .ts-tools-group-count { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+  .ts-tools-group-desc { font-size: 14px; color: var(--text-secondary); margin: 0 0 16px; }
+  .ts-tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .ts-tools-card { display: flex; flex-direction: column; gap: 4px; padding: 16px; border-radius: var(--radius-md, 12px); background: var(--bg-card); border: 1px solid var(--border-subtle); text-decoration: none; color: inherit; transition: all 0.2s ease; }
+  .ts-tools-card:hover { transform: translateY(-2px); border-color: var(--border-hover); box-shadow: var(--shadow-sm); }
+  .ts-tools-card-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+  .ts-tools-card-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.4; }
+</style>

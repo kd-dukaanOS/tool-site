@@ -1,4 +1,4 @@
-﻿import { round } from "./calculator";
+import { round } from "./calculator";
 
 export interface HeartRateInput {
   age: number;
@@ -23,8 +23,10 @@ const ZONES: { label: string; low: number; high: number }[] = [
   { label: "Peak", low: 0.9, high: 1.0 },
 ];
 
-export function validateHeartRateInput(i: HeartRateInput): string | null {
-  if (!i.age || i.age <= 0 || i.age > 120) return "Enter a valid age.";
+export function validateHeartRateInput(i: HeartRateInput, lang: "en" | "es" = "en"): string | null {
+  if (!i.age || i.age <= 0 || i.age > 120) {
+    return lang === "es" ? "Ingresa una edad válida." : "Enter a valid age.";
+  }
   return null;
 }
 
@@ -38,8 +40,21 @@ export function calculateHeartRate(i: HeartRateInput): HeartRateResult {
   return { maxHr: round(maxHr, 0), zones };
 }
 
-export function copyHeartRateSummary(_i: HeartRateInput, r: HeartRateResult): string {
-  const zoneLines = r.zones.map((z) => `${z.label}: ${z.low}-${z.high} bpm`).join("\n");
+const ZONE_LABELS_ES: Record<string, string> = {
+  "Warm Up": "Calentamiento", "Fat Burn": "Quema de Grasa", "Cardio": "Cardio", "Hardcore": "Intenso", "Peak": "Máximo",
+};
+
+export function copyHeartRateSummary(_i: HeartRateInput, r: HeartRateResult, lang: "en" | "es" = "en"): string {
+  const zoneLines = r.zones.map((z) => `${lang === "es" ? ZONE_LABELS_ES[z.label] ?? z.label : z.label}: ${z.low}-${z.high} bpm`).join("\n");
+  if (lang === "es") {
+    return `
+Calculadora de Zonas de Frecuencia Cardíaca
+
+Frecuencia Cardíaca Máxima: ${r.maxHr} ppm
+
+${zoneLines}
+`.trim();
+  }
   return `
 Heart Rate Zone Calculator
 

@@ -5,44 +5,54 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingDown, Home, Clock, PiggyBank } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { currentLoan:"Current Loan", balance:"Current Loan Balance", currentRate:"Current Interest Rate (%)", months:"Months Remaining", newLoan:"New Loan", newRate:"New Interest Rate (%)", newTerm:"New Loan Term (months)", closingCosts:"Closing Costs", emptyTitle:"Mortgage Refinance Calculator", emptyDesc:"Compare your current and new loan terms to see monthly savings and break-even point.", tip1:"Monthly Savings", tip2:"Break-Even Point", tip3:"Lifetime Savings", monthlySavings:"Monthly Savings", newPayment:"New Payment", breakEven:"Break-Even Point", lifetimeSavings:"Lifetime Interest Savings", aboutTitle:"About this Calculator", aboutText:"Compares your current mortgage payment against a new refinanced loan, factoring in closing costs, to show monthly savings, break-even point, and total interest saved over the life of the loan.", lowerPayment:"Lower payment", higherPayment:"Higher payment", noSavings:"No savings" },
+  es: { currentLoan:"Préstamo Actual", balance:"Saldo Actual del Préstamo", currentRate:"Tasa de Interés Actual (%)", months:"Meses Restantes", newLoan:"Nuevo Préstamo", newRate:"Nueva Tasa de Interés (%)", newTerm:"Nuevo Plazo del Préstamo (meses)", closingCosts:"Costos de Cierre", emptyTitle:"Calculadora de Refinanciamiento Hipotecario", emptyDesc:"Compara tu préstamo actual y el nuevo para ver ahorros mensuales y el punto de equilibrio.", tip1:"Ahorro Mensual", tip2:"Punto de Equilibrio", tip3:"Ahorro Total", monthlySavings:"Ahorro Mensual", newPayment:"Nuevo Pago", breakEven:"Punto de Equilibrio", lifetimeSavings:"Ahorro Total de Interés", aboutTitle:"Acerca de esta Calculadora", aboutText:"Compara tu pago hipotecario actual contra un nuevo préstamo refinanciado, considerando los costos de cierre, para mostrar el ahorro mensual, el punto de equilibrio y el interés total ahorrado durante la vida del préstamo.", lowerPayment:"Pago menor", higherPayment:"Pago mayor", noSavings:"Sin ahorros" },
+}[lang];
 ---
 <section class="mr-calculator">
   <div class="mr-layout">
     <aside class="mr-sidebar">
       <div class="mr-group">
-        <h3>Current Loan</h3>
-        <CalculatorField id="currentBalance" label="Current Loan Balance" type="number" placeholder="e.g. 300000" min="0" step="1" />
-        <CalculatorField id="currentRate" label="Current Interest Rate (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
-        <CalculatorField id="currentTermRemainingMonths" label="Months Remaining" type="number" placeholder="e.g. 300" min="1" step="1" />
+        <h3>{copy.currentLoan}</h3>
+        <CalculatorField id="currentBalance" label={copy.balance} type="number" placeholder="e.g. 300000" min="0" step="1" />
+        <CalculatorField id="currentRate" label={copy.currentRate} type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="currentTermRemainingMonths" label={copy.months} type="number" placeholder="e.g. 300" min="1" step="1" />
       </div>
       <div class="mr-group">
-        <h3>New Loan</h3>
-        <CalculatorField id="newRate" label="New Interest Rate (%)" type="number" placeholder="e.g. 5.5" min="0" step="0.01" />
-        <CalculatorField id="newTermMonths" label="New Loan Term (months)" type="number" placeholder="e.g. 360" min="1" step="1" />
-        <CalculatorField id="closingCosts" label="Closing Costs" type="number" placeholder="e.g. 4000" min="0" step="1" />
+        <h3>{copy.newLoan}</h3>
+        <CalculatorField id="newRate" label={copy.newRate} type="number" placeholder="e.g. 5.5" min="0" step="0.01" />
+        <CalculatorField id="newTermMonths" label={copy.newTerm} type="number" placeholder="e.g. 360" min="1" step="1" />
+        <CalculatorField id="closingCosts" label={copy.closingCosts} type="number" placeholder="e.g. 4000" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mr-content">
       <div id="emptyState">
-        <EmptyState icon="🏠" title="Mortgage Refinance Calculator" description="Compare your current and new loan terms to see monthly savings and break-even point." tips={["Monthly Savings", "Break-Even Point", "Lifetime Savings"]} />
+        <EmptyState icon="🏠" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="monthlySavingsResult" title="Monthly Savings" icon={TrendingDown} accent="success" subtitle=" " />
-          <ResultCard id="newPaymentResult" title="New Payment" icon={Home} />
-          <ResultCard id="breakEvenResult" title="Break-Even Point" icon={Clock} />
-          <ResultCard id="lifetimeSavingsResult" title="Lifetime Interest Savings" icon={PiggyBank} />
+          <ResultCard id="monthlySavingsResult" title={copy.monthlySavings} icon={TrendingDown} accent="success" subtitle=" " />
+          <ResultCard id="newPaymentResult" title={copy.newPayment} icon={Home} />
+          <ResultCard id="breakEvenResult" title={copy.breakEven} icon={Clock} />
+          <ResultCard id="lifetimeSavingsResult" title={copy.lifetimeSavings} icon={PiggyBank} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Compares your current mortgage payment against a new refinanced loan, factoring in closing costs, to show monthly savings, break-even point, and total interest saved over the life of the loan.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/mortgage-refinance-calculator";
 </script>

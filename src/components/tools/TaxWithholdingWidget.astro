@@ -5,56 +5,68 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, Percent, Calendar, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { basicsGroup:"W-4 Basics", filingStatus:"Filing Status", single:"Single or Married Filing Separately", married:"Married Filing Jointly", hoh:"Head of Household", payFrequency:"Pay Frequency", weekly:"Weekly", biweekly:"Biweekly", semimonthly:"Semimonthly", monthly:"Monthly", annual:"Annual", grossPay:"Gross Pay per Period", multipleJobs:"Multiple Jobs / Spouse Works", adjustmentsGroup:"W-4 Adjustments", dependents:"Dependents Credit (annual)", otherIncome:"Other Income (annual)", deductions:"Deductions (annual)", extra:"Extra Withholding (per paycheck)", emptyTitle:"Tax Withholding Calculator", emptyDesc:"Estimate your federal paycheck withholding based on your W-4.", tip1:"Withholding per Paycheck", tip2:"Annual Tax Withheld", tip3:"Effective Rate", perPaycheck:"Withholding per Paycheck", annualWithholding:"Annual Withholding", effectiveRate:"Effective Rate", annualGross:"Annual Gross Income", basedOn:"Based on", pay:"pay", aboutTitle:"About this Calculator", aboutText:"Estimates federal income tax withheld from each paycheck using the IRS Percentage Method, based on your filing status, pay frequency, dependents, and W-4 adjustments." },
+  es: { basicsGroup:"Datos Básicos del W-4", filingStatus:"Estado Civil Tributario", single:"Soltero o Casado Declarando por Separado", married:"Casado Declarando en Conjunto", hoh:"Cabeza de Familia", payFrequency:"Frecuencia de Pago", weekly:"Semanal", biweekly:"Quincenal", semimonthly:"Bimensual", monthly:"Mensual", annual:"Anual", grossPay:"Pago Bruto por Período", multipleJobs:"Múltiples Empleos / Cónyuge Trabaja", adjustmentsGroup:"Ajustes del W-4", dependents:"Crédito por Dependientes (anual)", otherIncome:"Otros Ingresos (anual)", deductions:"Deducciones (anual)", extra:"Retención Adicional (por cheque)", emptyTitle:"Calculadora de Retención de Impuestos", emptyDesc:"Calcula la retención federal de tu cheque de pago según tu W-4.", tip1:"Retención por Cheque", tip2:"Retención Anual", tip3:"Tasa Efectiva", perPaycheck:"Retención por Cheque", annualWithholding:"Retención Anual", effectiveRate:"Tasa Efectiva", annualGross:"Ingreso Bruto Anual", basedOn:"Basado en pago", pay:"", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el impuesto federal retenido de cada cheque de pago usando el Método de Porcentaje del IRS, según tu estado civil tributario, frecuencia de pago, dependientes y ajustes del W-4." },
+}[lang];
 ---
 <section class="twh-calculator">
   <div class="twh-layout">
     <aside class="twh-sidebar">
       <div class="twh-group">
-        <h3>W-4 Basics</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select">
-          <option value="single">Single or Married Filing Separately</option>
-          <option value="married">Married Filing Jointly</option>
-          <option value="headOfHousehold">Head of Household</option>
+        <h3>{copy.basicsGroup}</h3>
+        <CalculatorField id="filingStatus" label={copy.filingStatus} type="select">
+          <option value="single">{copy.single}</option>
+          <option value="married">{copy.married}</option>
+          <option value="headOfHousehold">{copy.hoh}</option>
         </CalculatorField>
-        <CalculatorField id="payFrequency" label="Pay Frequency" type="select">
-          <option value="weekly">Weekly</option>
-          <option value="biweekly">Biweekly</option>
-          <option value="semimonthly">Semimonthly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annual">Annual</option>
+        <CalculatorField id="payFrequency" label={copy.payFrequency} type="select">
+          <option value="weekly">{copy.weekly}</option>
+          <option value="biweekly">{copy.biweekly}</option>
+          <option value="semimonthly">{copy.semimonthly}</option>
+          <option value="monthly">{copy.monthly}</option>
+          <option value="annual">{copy.annual}</option>
         </CalculatorField>
-        <CalculatorField id="grossPayPerPeriod" label="Gross Pay per Period" type="number" placeholder="e.g. 2500" min="0" step="1" />
-        <CalculatorField id="multipleJobs" label="Multiple Jobs / Spouse Works" type="checkbox" />
+        <CalculatorField id="grossPayPerPeriod" label={copy.grossPay} type="number" placeholder="e.g. 2500" min="0" step="1" />
+        <CalculatorField id="multipleJobs" label={copy.multipleJobs} type="checkbox" />
       </div>
       <div class="twh-group">
-        <h3>W-4 Adjustments</h3>
-        <CalculatorField id="dependentsAmountAnnual" label="Dependents Credit (annual)" type="number" placeholder="e.g. 2000" min="0" step="1" />
-        <CalculatorField id="otherIncomeAnnual" label="Other Income (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="deductionsAnnual" label="Deductions (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="extraWithholdingPerPeriod" label="Extra Withholding (per paycheck)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.adjustmentsGroup}</h3>
+        <CalculatorField id="dependentsAmountAnnual" label={copy.dependents} type="number" placeholder="e.g. 2000" min="0" step="1" />
+        <CalculatorField id="otherIncomeAnnual" label={copy.otherIncome} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="deductionsAnnual" label={copy.deductions} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="extraWithholdingPerPeriod" label={copy.extra} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="twh-content">
       <div id="emptyState">
-        <EmptyState icon="🧾" title="Tax Withholding Calculator" description="Estimate your federal paycheck withholding based on your W-4." tips={["Withholding per Paycheck", "Annual Tax Withheld", "Effective Rate"]} />
+        <EmptyState icon="🧾" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="perPeriodResult" title="Withholding per Paycheck" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="annualTaxResult" title="Annual Withholding" icon={Receipt} />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} />
-          <ResultCard id="annualGrossResult" title="Annual Gross Income" icon={Calendar} />
+          <ResultCard id="perPeriodResult" title={copy.perPaycheck} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="annualTaxResult" title={copy.annualWithholding} icon={Receipt} />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} />
+          <ResultCard id="annualGrossResult" title={copy.annualGross} icon={Calendar} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates federal income tax withheld from each paycheck using the IRS Percentage Method, based on your filing status, pay frequency, dependents, and W-4 adjustments.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, basedOnLabel: copy.basedOn, payLabel: copy.pay }}>
+  window.calcLang = calcLang;
+  window.twhBasedOnLabel = basedOnLabel;
+  window.twhPayLabel = payLabel;
+</script>
 <script>
   import "../../scripts/tax-withholding-calculator";
 </script>

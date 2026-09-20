@@ -19,8 +19,8 @@ export function parseNumberList(value: string): number[] {
     .filter((n) => !Number.isNaN(n));
 }
 
-export function validateMMMInput(i: MMMInput): string | null {
-  if (i.numbers.length === 0) return "Enter at least one valid number.";
+export function validateMMMInput(i: MMMInput, lang: "en" | "es" = "en"): string | null {
+  if (i.numbers.length === 0) return lang === "es" ? "Ingresa al menos un número válido." : "Enter at least one valid number.";
   return null;
 }
 
@@ -50,7 +50,20 @@ export function calculateMeanMedianMode(i: MMMInput): MMMResult {
   };
 }
 
-export function copyMMMSummary(i: MMMInput, r: MMMResult): string {
+export function copyMMMSummary(i: MMMInput, r: MMMResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Media, Mediana, Moda
+
+Números: ${i.numbers.join(", ")}
+
+Media: ${r.mean}
+Mediana: ${r.median}
+Moda: ${r.mode.length ? r.mode.join(", ") : "Sin moda"}
+Rango: ${r.range}
+Cantidad: ${r.count}
+`.trim();
+  }
   return `
 Mean, Median, Mode Summary
 

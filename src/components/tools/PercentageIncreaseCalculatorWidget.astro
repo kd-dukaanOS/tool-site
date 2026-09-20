@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { ArrowUpRight, Percent } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { original:"Original Value", newVal:"New Value", emptyTitle:"Enter values to calculate change", emptyDesc:"Percentage increase or decrease will appear here.", change:"Change", percentChange:"Percentage Change", fillAll:"Please fill all fields." },
+  es: { original:"Valor Original", newVal:"Nuevo Valor", emptyTitle:"Ingresa los valores para calcular el cambio", emptyDesc:"El aumento o disminución porcentual aparecerá aquí.", change:"Cambio", percentChange:"Cambio Porcentual", fillAll:"Por favor completa todos los campos." },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="originalValue" label="Original Value" type="number" placeholder="e.g. 200" />
-    <CalculatorField id="newValue" label="New Value" type="number" placeholder="e.g. 250" />
+    <CalculatorField id="originalValue" label={copy.original} type="number" placeholder="e.g. 200" />
+    <CalculatorField id="newValue" label={copy.newVal} type="number" placeholder="e.g. 250" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -26,15 +33,18 @@ import { ArrowUpRight, Percent } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter values to calculate change"
-      description="Percentage increase or decrease will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="changeResult" title="Change" icon={ArrowUpRight} accent="neutral" />
-      <ResultCard id="percentResult" title="Percentage Change" icon={Percent} accent="primary" size="lg" />
+      <ResultCard id="changeResult" title={copy.change} icon={ArrowUpRight} accent="neutral" />
+      <ResultCard id="percentResult" title={copy.percentChange} icon={Percent} accent="primary" size="lg" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/percentage-increase-calculator.ts"></script>

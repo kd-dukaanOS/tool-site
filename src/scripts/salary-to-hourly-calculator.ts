@@ -14,6 +14,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { annualSalary: number; hoursPerWeek: number; weeksPerYear: number } | null = null;
 let lastResult: ReturnType<typeof calculateSalaryToHourly> | null = null;
 
@@ -35,7 +37,7 @@ function calculate() {
     weeksPerYear: parseFloat(weeksPerYearInput.value) || 52,
   };
 
-  const error = validateSalaryToHourlyInput(input);
+  const error = validateSalaryToHourlyInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -73,7 +75,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copySalaryToHourlySummary(lastInput, lastResult));
+  copyToClipboard(copySalaryToHourlySummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

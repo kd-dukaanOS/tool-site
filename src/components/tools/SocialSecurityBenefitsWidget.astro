@@ -5,44 +5,54 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Calendar, DollarSign, TrendingUp, PiggyBank, Clock } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { yourInfoGroup:"Your Info", birthYearLabel:"Birth Year", aimeLabel:"Avg. Indexed Monthly Earnings ($)", claimingPlanGroup:"Claiming Plan", plannedAgeLabel:"Planned Claiming Age", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Social Security Benefits Calculator", emptyDesc:"Estimate your PIA and monthly benefit at 62, full retirement age, and 70.", tip1:"Primary Insurance Amount", tip2:"Benefit at Planned Age", tip3:"Break-Even Age", piaTitle:"Full Retirement Benefit (PIA)", plannedBenefitTitle:"Benefit at Planned Age", breakEvenTitle:"Break-Even Age vs Claiming at 62", age62Title:"Benefit if Claimed at 62", age70Title:"Benefit if Claimed at 70", aboutTitle:"About this Calculator", aboutText:"Estimates your Primary Insurance Amount using the 2026 Social Security bend-point formula, then projects your benefit at ages 62, full retirement age, and 70, along with the break-even age for delaying your claim." },
+  es: { yourInfoGroup:"Tu Información", birthYearLabel:"Año de Nacimiento", aimeLabel:"Promedio de Ingresos Mensuales Indexados ($)", claimingPlanGroup:"Plan de Reclamo", plannedAgeLabel:"Edad de Reclamo Planeada", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Beneficios del Seguro Social", emptyDesc:"Estima tu PIA y beneficio mensual a los 62, la edad plena de jubilación, y los 70.", tip1:"Monto de Seguro Primario", tip2:"Beneficio a la Edad Planeada", tip3:"Edad de Equilibrio", piaTitle:"Beneficio de Jubilación Plena (PIA)", plannedBenefitTitle:"Beneficio a la Edad Planeada", breakEvenTitle:"Edad de Equilibrio vs Reclamar a los 62", age62Title:"Beneficio si Reclama a los 62", age70Title:"Beneficio si Reclama a los 70", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima tu Monto de Seguro Primario utilizando la fórmula de puntos de quiebre del Seguro Social de 2026, luego proyecta tu beneficio a los 62 años, la edad plena de jubilación, y los 70, junto con la edad de equilibrio para retrasar tu reclamo." },
+}[lang];
 ---
 <section class="ssb-calculator">
   <div class="ssb-layout">
     <aside class="ssb-sidebar">
       <div class="ssb-group">
-        <h3>Your Info</h3>
-        <CalculatorField id="birthYear" label="Birth Year" type="number" placeholder="e.g. 1985" min="1930" max="2010" step="1" />
-        <CalculatorField id="monthlyAIME" label="Avg. Indexed Monthly Earnings ($)" type="number" placeholder="e.g. 5000" min="0" step="1" />
+        <h3>{copy.yourInfoGroup}</h3>
+        <CalculatorField id="birthYear" label={copy.birthYearLabel} type="number" placeholder="e.g. 1985" min="1930" max="2010" step="1" />
+        <CalculatorField id="monthlyAIME" label={copy.aimeLabel} type="number" placeholder="e.g. 5000" min="0" step="1" />
       </div>
       <div class="ssb-group">
-        <h3>Claiming Plan</h3>
-        <CalculatorField id="plannedClaimingAge" label="Planned Claiming Age" type="number" placeholder="e.g. 67" min="62" max="70" step="1" />
+        <h3>{copy.claimingPlanGroup}</h3>
+        <CalculatorField id="plannedClaimingAge" label={copy.plannedAgeLabel} type="number" placeholder="e.g. 67" min="62" max="70" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ssb-content">
       <div id="emptyState">
-        <EmptyState icon="🏛️" title="Social Security Benefits Calculator" description="Estimate your PIA and monthly benefit at 62, full retirement age, and 70." tips={["Primary Insurance Amount", "Benefit at Planned Age", "Break-Even Age"]} />
+        <EmptyState icon="🏛️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="piaResult" title="Full Retirement Benefit (PIA)" icon={PiggyBank} subtitle=" " />
-          <ResultCard id="plannedBenefitResult" title="Benefit at Planned Age" icon={DollarSign} accent="success" subtitle=" " />
-          <ResultCard id="breakEvenResult" title="Break-Even Age vs Claiming at 62" icon={Clock} />
+          <ResultCard id="piaResult" title={copy.piaTitle} icon={PiggyBank} subtitle=" " />
+          <ResultCard id="plannedBenefitResult" title={copy.plannedBenefitTitle} icon={DollarSign} accent="success" subtitle=" " />
+          <ResultCard id="breakEvenResult" title={copy.breakEvenTitle} icon={Clock} />
         </ResultsGrid>
         <ResultsGrid columns={2}>
-          <ResultCard id="age62Result" title="Benefit if Claimed at 62" icon={Calendar} />
-          <ResultCard id="age70Result" title="Benefit if Claimed at 70" icon={TrendingUp} />
+          <ResultCard id="age62Result" title={copy.age62Title} icon={Calendar} />
+          <ResultCard id="age70Result" title={copy.age70Title} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your Primary Insurance Amount using the 2026 Social Security bend-point formula, then projects your benefit at ages 62, full retirement age, and 70, along with the break-even age for delaying your claim.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/social-security-calculator";
 </script>

@@ -17,9 +17,9 @@ export function buildQrUrl(opts: QrOptions): string {
   return `https://api.qrserver.com/v1/create-qr-code/?${params.toString()}`;
 }
 
-export function validateQrInput(text: string): string | null {
-  if (!text.trim()) return "Please enter text or a URL to encode.";
-  if (text.length > 2000) return "Text is too long for a reliable QR code.";
+export function validateQrInput(text: string, lang: "en" | "es" = "en"): string | null {
+  if (!text.trim()) return lang === "es" ? "Por favor ingresa texto o una URL para codificar." : "Please enter text or a URL to encode.";
+  if (text.length > 2000) return lang === "es" ? "El texto es demasiado largo para un código QR confiable." : "Text is too long for a reliable QR code.";
   return null;
 }
 

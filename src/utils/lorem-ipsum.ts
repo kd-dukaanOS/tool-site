@@ -49,9 +49,9 @@ export function generateLorem(type: LoremType, count: number, startWithLorem = t
   return result;
 }
 
-export function validateLoremInput(count: number): string | null {
-  if (!count || count < 1) return "Please enter a count of at least 1.";
-  if (count > 500) return "Maximum count is 500.";
+export function validateLoremInput(count: number, lang: "en" | "es" = "en"): string | null {
+  if (!count || count < 1) return lang === "es" ? "Ingresa una cantidad de al menos 1." : "Please enter a count of at least 1.";
+  if (count > 500) return lang === "es" ? "La cantidad máxima es 500." : "Maximum count is 500.";
   return null;
 }
 

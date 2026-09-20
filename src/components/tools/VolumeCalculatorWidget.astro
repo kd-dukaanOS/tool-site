@@ -4,32 +4,39 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Beaker } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", valuePh:"Enter value", from:"From", to:"To", ml:"Milliliter", l:"Liter", cubicm:"Cubic Meter", gallon:"Gallon", quart:"Quart", pint:"Pint", cup:"Cup", floz:"Fluid Ounce", emptyTitle:"Volume Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", valuePh:"Ingresa un valor", from:"De", to:"A", ml:"Mililitro", l:"Litro", cubicm:"Metro Cúbico", gallon:"Galón", quart:"Cuarto", pint:"Pinta", cup:"Taza", floz:"Onza Líquida", emptyTitle:"Convertidor de Volumen", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder={copy.valuePh} />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="ml">Milliliter</option>
-      <option value="l" selected>Liter</option>
-      <option value="cubicm">Cubic Meter</option>
-      <option value="gallon">Gallon</option>
-      <option value="quart">Quart</option>
-      <option value="pint">Pint</option>
-      <option value="cup">Cup</option>
-      <option value="floz">Fluid Ounce</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="ml">{copy.ml}</option>
+      <option value="l" selected>{copy.l}</option>
+      <option value="cubicm">{copy.cubicm}</option>
+      <option value="gallon">{copy.gallon}</option>
+      <option value="quart">{copy.quart}</option>
+      <option value="pint">{copy.pint}</option>
+      <option value="cup">{copy.cup}</option>
+      <option value="floz">{copy.floz}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="ml">Milliliter</option>
-      <option value="l">Liter</option>
-      <option value="cubicm">Cubic Meter</option>
-      <option value="gallon" selected>Gallon</option>
-      <option value="quart">Quart</option>
-      <option value="pint">Pint</option>
-      <option value="cup">Cup</option>
-      <option value="floz">Fluid Ounce</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="ml">{copy.ml}</option>
+      <option value="l">{copy.l}</option>
+      <option value="cubicm">{copy.cubicm}</option>
+      <option value="gallon" selected>{copy.gallon}</option>
+      <option value="quart">{copy.quart}</option>
+      <option value="pint">{copy.pint}</option>
+      <option value="cup">{copy.cup}</option>
+      <option value="floz">{copy.floz}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -39,13 +46,19 @@ import { Beaker } from "@lucide/astro";
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="??" title="Volume Converter" description="Enter a value to convert." />
+      <EmptyState icon="??" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Beaker} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Beaker} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/volume-calculator.ts"></script>

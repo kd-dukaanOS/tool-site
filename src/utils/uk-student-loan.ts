@@ -29,7 +29,7 @@ export function calculateUkStudentLoan(annualSalary: number, plan: string): UkSt
   };
 }
 
-export function validateUkStudentLoanInputs(annualSalary: number): string | null {
-  if (annualSalary <= 0) return "Enter an annual salary greater than zero.";
+export function validateUkStudentLoanInputs(annualSalary: number, lang: "en" | "es" = "en"): string | null {
+  if (annualSalary <= 0) return lang === "es" ? "Ingresa un salario anual mayor a cero." : "Enter an annual salary greater than zero.";
   return null;
 }

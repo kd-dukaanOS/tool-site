@@ -22,28 +22,41 @@ export interface SalaryResult {
   monthlyHRA: number;
 }
 
-export function validateSalaryInput(input: SalaryInput): string | null {
+export function validateSalaryInput(input: SalaryInput, lang: "en" | "es" = "en"): string | null {
 
   const { annualCTC, basicPercent, hraPercent, employeePFPercent, employerPFPercent } = input;
+  const msg = lang === "es" ? {
+    ctc: "Por favor ingresa un CTC anual válido.",
+    basic: "El % de salario base debe estar entre 1 y 100.",
+    hra: "El % de HRA debe estar entre 0 y 100.",
+    empPF: "El % de PF del empleado debe estar entre 0 y 100.",
+    erPF: "El % de PF del empleador debe estar entre 0 y 100.",
+  } : {
+    ctc: "Please enter a valid annual CTC.",
+    basic: "Basic salary % must be between 1 and 100.",
+    hra: "HRA % must be between 0 and 100.",
+    empPF: "Employee PF % must be between 0 and 100.",
+    erPF: "Employer PF % must be between 0 and 100.",
+  };
 
   if (!annualCTC || Number.isNaN(annualCTC) || annualCTC <= 0) {
-    return "Please enter a valid annual CTC.";
+    return msg.ctc;
   }
 
   if (!basicPercent || basicPercent <= 0 || basicPercent > 100) {
-    return "Basic salary % must be between 1 and 100.";
+    return msg.basic;
   }
 
   if (hraPercent < 0 || hraPercent > 100) {
-    return "HRA % must be between 0 and 100.";
+    return msg.hra;
   }
 
   if (employeePFPercent < 0 || employeePFPercent > 100) {
-    return "Employee PF % must be between 0 and 100.";
+    return msg.empPF;
   }
 
   if (employerPFPercent < 0 || employerPFPercent > 100) {
-    return "Employer PF % must be between 0 and 100.";
+    return msg.erPF;
   }
 
   return null;
@@ -96,7 +109,31 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
-export function copySalarySummary(input: SalaryInput, result: SalaryResult): string {
+export function copySalarySummary(input: SalaryInput, result: SalaryResult, lang: "en" | "es" = "en"): string {
+
+  if (lang === "es") {
+    return `
+Desglose de Salario
+
+CTC Anual:
+${formatCurrency(input.annualCTC)}
+
+Bruto Mensual:
+${formatCurrency(result.monthlyGross)}
+
+Base Mensual:
+${formatCurrency(result.monthlyBasic)}
+
+HRA Mensual:
+${formatCurrency(result.monthlyHRA)}
+
+Salario Neto Mensual:
+${formatCurrency(result.monthlyNetTakeHome)}
+
+Salario Neto Anual:
+${formatCurrency(result.annualNetTakeHome)}
+`.trim();
+  }
 
   return `
 Salary Breakdown

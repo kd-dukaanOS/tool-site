@@ -11,6 +11,13 @@ import {
   TrendingUp,
   Coins
 } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { investment:"Annual Investment (₹)", investmentHelp:"Max ₹1,50,000 per year as per PPF rules.", rate:"Interest Rate (% p.a.)", rateHelp:"Current PPF rate, revised quarterly by the govt.", tenure:"Tenure (Years)", tenureHelp:"Minimum lock-in is 15 years.", emptyTitle:"PPF Calculator", emptyDesc:"Calculate your Public Provident Fund maturity value.", tip1:"Maturity Value", tip2:"Total Invested", tip3:"Total Interest Earned", tip4:"Year-wise Growth", maturity:"Maturity Value", interest:"Total Interest Earned", invested:"Total Invested", scheduleCaption:"Year-wise Growth Schedule", headers:["Year","Opening Balance","Investment","Interest Earned","Closing Balance"], aboutTitle:"About this Calculator", aboutText:"PPF compounds annually, with each year's deposit assumed to be made at the start of the year. Interest is calculated on the running balance, and the account has a mandatory 15-year lock-in (extendable in blocks of 5 years).", yearLabel:"Year" },
+  es: { investment:"Inversión Anual (₹)", investmentHelp:"Máximo ₹1,50,000 por año según las reglas del PPF.", rate:"Tasa de Interés (% anual)", rateHelp:"Tasa actual del PPF, revisada trimestralmente por el gobierno.", tenure:"Plazo (Años)", tenureHelp:"El bloqueo mínimo es de 15 años.", emptyTitle:"Calculadora de PPF", emptyDesc:"Calcula el valor de vencimiento de tu Fondo Público de Previsión.", tip1:"Valor de Vencimiento", tip2:"Total Invertido", tip3:"Interés Total Ganado", tip4:"Crecimiento Anual", maturity:"Valor de Vencimiento", interest:"Interés Total Ganado", invested:"Total Invertido", scheduleCaption:"Cronograma de Crecimiento Anual", headers:["Año","Saldo Inicial","Inversión","Interés Ganado","Saldo Final"], aboutTitle:"Acerca de esta Calculadora", aboutText:"El PPF capitaliza anualmente, asumiendo que el depósito de cada año se realiza al inicio del año. El interés se calcula sobre el saldo acumulado, y la cuenta tiene un bloqueo obligatorio de 15 años (ampliable en bloques de 5 años).", yearLabel:"Año" },
+}[lang];
 ---
 
 <section class="ppf-calculator">
@@ -21,36 +28,36 @@ import {
 
       <CalculatorField
         id="annualInvestment"
-        label="Annual Investment (₹)"
+        label={copy.investment}
         type="number"
         placeholder="e.g. 150000"
         required={true}
         min="0"
         max="150000"
         step="1"
-        helpText="Max ₹1,50,000 per year as per PPF rules."
+        helpText={copy.investmentHelp}
       />
 
       <CalculatorField
         id="annualRate"
-        label="Interest Rate (% p.a.)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 7.1"
         required={true}
         min="0"
         step="0.01"
-        helpText="Current PPF rate, revised quarterly by the govt."
+        helpText={copy.rateHelp}
       />
 
       <CalculatorField
         id="tenureYears"
-        label="Tenure (Years)"
+        label={copy.tenure}
         type="number"
         value="15"
         required={true}
         min="15"
         step="1"
-        helpText="Minimum lock-in is 15 years."
+        helpText={copy.tenureHelp}
       />
 
       <CalculatorActions
@@ -74,13 +81,13 @@ import {
 
         <EmptyState
           icon="🛡️"
-          title="PPF Calculator"
-          description="Calculate your Public Provident Fund maturity value."
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
           tips={[
-            "Maturity Value",
-            "Total Invested",
-            "Total Interest Earned",
-            "Year-wise Growth"
+            copy.tip1,
+            copy.tip2,
+            copy.tip3,
+            copy.tip4
           ]}
         />
 
@@ -95,20 +102,20 @@ import {
 
           <ResultCard
             id="maturityResult"
-            title="Maturity Value"
+            title={copy.maturity}
             icon={Wallet}
             accent="success"
           />
 
           <ResultCard
             id="interestResult"
-            title="Total Interest Earned"
+            title={copy.interest}
             icon={TrendingUp}
           />
 
           <ResultCard
             id="investedResult"
-            title="Total Invested"
+            title={copy.invested}
             icon={Coins}
           />
 
@@ -116,20 +123,15 @@ import {
 
         <ScheduleTable
           id="scheduleBody"
-          headers={["Year", "Opening Balance", "Investment", "Interest Earned", "Closing Balance"]}
-          caption="Year-wise Growth Schedule"
+          headers={copy.headers}
+          caption={copy.scheduleCaption}
         />
 
         <section class="calculator-info">
 
-          <h2>About this Calculator</h2>
+          <h2>{copy.aboutTitle}</h2>
 
-          <p>
-            PPF compounds annually, with each year's deposit assumed
-            to be made at the start of the year. Interest is calculated
-            on the running balance, and the account has a mandatory
-            15-year lock-in (extendable in blocks of 5 years).
-          </p>
+          <p>{copy.aboutText}</p>
 
         </section>
 
@@ -141,6 +143,10 @@ import {
 
 </section>
 
+<script define:vars={{ calcLang: lang, yearLabel: copy.yearLabel }}>
+  window.calcLang = calcLang;
+  window.ppfYearLabel = yearLabel;
+</script>
 <script>
   import "../../scripts/ppf-calculator";
 </script>

@@ -5,13 +5,20 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Calculator, BarChart2, Hash } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { numbers:"Numbers (comma or space separated)", emptyTitle:"Enter numbers to calculate", emptyDesc:"Mean, median, mode, and range will appear here.", mean:"Mean", median:"Median", mode:"Mode", range:"Range" },
+  es: { numbers:"Números (separados por coma o espacio)", emptyTitle:"Ingresa números para calcular", emptyDesc:"La media, mediana, moda y rango aparecerán aquí.", mean:"Media", median:"Mediana", mode:"Moda", range:"Rango" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CalculatorField
       id="numbers"
-      label="Numbers (comma or space separated)"
+      label={copy.numbers}
       type="text"
       placeholder="e.g. 2, 4, 4, 6, 8"
     />
@@ -30,17 +37,20 @@ import { Calculator, BarChart2, Hash } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter numbers to calculate"
-      description="Mean, median, mode, and range will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="meanResult" title="Mean" icon={Calculator} accent="primary" size="lg" />
-      <ResultCard id="medianResult" title="Median" icon={BarChart2} accent="neutral" />
-      <ResultCard id="modeResult" title="Mode" icon={Hash} accent="neutral" />
-      <ResultCard id="rangeResult" title="Range" icon={Hash} accent="neutral" />
+      <ResultCard id="meanResult" title={copy.mean} icon={Calculator} accent="primary" size="lg" />
+      <ResultCard id="medianResult" title={copy.median} icon={BarChart2} accent="neutral" />
+      <ResultCard id="modeResult" title={copy.mode} icon={Hash} accent="neutral" />
+      <ResultCard id="rangeResult" title={copy.range} icon={Hash} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/mean-median-mode-calculator.ts"></script>

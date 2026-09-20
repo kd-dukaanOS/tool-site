@@ -5,13 +5,20 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Hash } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { numbers:"Numbers (comma or space separated)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Enter numbers to find LCM", emptyDesc:"The least common multiple will appear here.", lcm:"LCM" },
+  es: { numbers:"Números (separados por coma o espacio)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Ingresa números para hallar el MCM", emptyDesc:"El mínimo común múltiplo aparecerá aquí.", lcm:"MCM" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
     <CalculatorField
       id="numbers"
-      label="Numbers (comma or space separated)"
+      label={copy.numbers}
       type="text"
       placeholder="e.g. 4, 6, 8"
     />
@@ -24,20 +31,26 @@ import { Hash } from "@lucide/astro";
       copyId="copyBtn"
       showDownload={false}
       showShare={false}
+      calculateText={copy.calculate}
+      resetText={copy.reset}
+      copyText={copy.copy}
     />
   </div>
 
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter numbers to find LCM"
-      description="The least common multiple will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="lcmResult" title="LCM" icon={Hash} accent="primary" size="lg" />
+      <ResultCard id="lcmResult" title={copy.lcm} icon={Hash} accent="primary" size="lg" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/lcm-calculator.ts"></script>

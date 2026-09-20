@@ -1,0 +1,47 @@
+---
+// src/pages/es/finance/sales-tax-calculator.astro
+import Layout from "../../../layouts/Layout.astro";
+import SalesTaxCalculatorWidget from "../../../components/tools/SalesTaxCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { salesTaxCalculatorContent } from "../../../data/calculators/es/sales-tax-calculator.ts";
+
+const tool = tools.find((t) => t.slug === "sales-tax-calculator")!;
+const content = salesTaxCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Finanzas", url: "/es/finance/" },
+    { name: "Impuesto de Venta", url: "/es/finance/sales-tax-calculator/" },
+  ]}
+  appName="Calculadora de Impuesto de Venta"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/finance/">Finanzas</a> / Impuesto de Venta
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["finance"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Impuesto de Venta</h1>
+        <p>Monto neto, impuesto y bruto de tu compra</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="sales-tax-calculator" data-name="Impuesto de Venta" data-url="/es/finance/sales-tax-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <SalesTaxCalculatorWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

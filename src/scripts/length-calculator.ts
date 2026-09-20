@@ -19,6 +19,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: LengthInput | null = null;
 
 function showError(msg: string) {
@@ -40,7 +42,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateLengthInput(input);
+  const err = validateLengthInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -68,7 +70,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateLength(lastInput);
-  copyToClipboard(copyLengthSummary(lastInput, result));
+  copyToClipboard(copyLengthSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

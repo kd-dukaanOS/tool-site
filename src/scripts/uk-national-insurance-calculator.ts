@@ -11,6 +11,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function showError(msg: string) { errorBox.textContent = msg; errorBox.hidden = false; }
@@ -20,7 +22,7 @@ function calculate() {
   clearError();
   const grossIncome = parseFloat(incomeInput.value);
 
-  const err = validateIncome(grossIncome);
+  const err = validateIncome(grossIncome, lang);
   if (err) return showError(err);
 
   const r = calculateNIDetailed(grossIncome);
@@ -29,9 +31,16 @@ function calculate() {
   setValue("employeeResult", formatCurrency(r.employeeContribution, "GBP"));
   setValue("employerResult", formatCurrency(r.employerContribution, "GBP"));
   setValue("totalResult", formatCurrency(r.totalContribution, "GBP"));
-  setSubtitle("employeeResult", "deducted from your pay");
+  setSubtitle("employeeResult", lang === "es" ? "deducido de tu salario" : "deducted from your pay");
 
-  lastSummary = `National Insurance Summary\n\nGross Salary: ${formatCurrency(grossIncome, "GBP")}\n` +
+  lastSummary = lang === "es" ?
+    `Resumen de Seguro Nacional\n\nSalario Bruto: ${formatCurrency(grossIncome, "GBP")}\n` +
+    `Ingresos Sobre el Umbral: ${formatCurrency(r.earningsAboveThreshold, "GBP")}\n` +
+    `Contribución del Empleado: ${formatCurrency(r.employeeContribution, "GBP")}\n` +
+    `Contribución del Empleador: ${formatCurrency(r.employerContribution, "GBP")}\n` +
+    `Contribución Total: ${formatCurrency(r.totalContribution, "GBP")}\n`
+    :
+    `National Insurance Summary\n\nGross Salary: ${formatCurrency(grossIncome, "GBP")}\n` +
     `Earnings Above Threshold: ${formatCurrency(r.earningsAboveThreshold, "GBP")}\n` +
     `Employee Contribution: ${formatCurrency(r.employeeContribution, "GBP")}\n` +
     `Employer Contribution: ${formatCurrency(r.employerContribution, "GBP")}\n` +

@@ -5,58 +5,68 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Home, Key, Scale, Calendar } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { buyingGroup:"Buying", homePrice:"Home Price", downPayment:"Down Payment (%)", mortgageRate:"Mortgage Rate (%)", loanTerm:"Loan Term (years)", ownershipGroup:"Ownership Costs", propertyTax:"Property Tax Rate (% / yr)", insurance:"Annual Insurance", maintenance:"Maintenance Rate (% / yr)", closingCost:"Closing Costs (%)", sellingCost:"Selling Costs (%)", appreciation:"Home Appreciation (%/yr)", rentingGroup:"Renting", monthlyRent:"Monthly Rent", rentGrowth:"Annual Rent Growth (%)", investmentReturn:"Investment Return (%/yr)", timeframeGroup:"Timeframe", comparisonYears:"Years to Compare", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Rent vs Buy Calculator", emptyDesc:"Compare the long-term net worth impact of renting versus buying.", tip1:"Buying Net Worth", tip2:"Renting Net Worth", tip3:"Break-Even Year", betterOption:"Better Option", buyNetWorth:"Net Worth if Buying", rentNetWorth:"Net Worth if Renting", breakEven:"Break-Even Year", buying:"Buying", renting:"Renting", beyondRange:"Beyond range", yearPrefix:"Year", overYears:"Over", years:"years", aboutTitle:"About this Calculator", aboutText:"Compares the projected net worth of buying a home versus renting and investing the difference, accounting for equity, appreciation, ownership costs, and investment growth over your chosen timeframe." },
+  es: { buyingGroup:"Comprar", homePrice:"Precio de la Vivienda", downPayment:"Pago Inicial (%)", mortgageRate:"Tasa Hipotecaria (%)", loanTerm:"Plazo del Préstamo (años)", ownershipGroup:"Costos de Propiedad", propertyTax:"Tasa de Impuesto Predial (% / año)", insurance:"Seguro Anual", maintenance:"Tasa de Mantenimiento (% / año)", closingCost:"Costos de Cierre (%)", sellingCost:"Costos de Venta (%)", appreciation:"Apreciación de Vivienda (%/año)", rentingGroup:"Alquilar", monthlyRent:"Renta Mensual", rentGrowth:"Crecimiento Anual de Renta (%)", investmentReturn:"Retorno de Inversión (%/año)", timeframeGroup:"Plazo", comparisonYears:"Años a Comparar", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Alquilar vs Comprar", emptyDesc:"Compara el impacto en el patrimonio neto a largo plazo de alquilar versus comprar.", tip1:"Patrimonio al Comprar", tip2:"Patrimonio al Alquilar", tip3:"Año de Equilibrio", betterOption:"Mejor Opción", buyNetWorth:"Patrimonio Neto al Comprar", rentNetWorth:"Patrimonio Neto al Alquilar", breakEven:"Año de Equilibrio", buying:"Comprar", renting:"Alquilar", beyondRange:"Fuera del rango", yearPrefix:"Año", overYears:"Durante", years:"años", aboutTitle:"Acerca de esta Calculadora", aboutText:"Compara el patrimonio neto proyectado de comprar una vivienda versus alquilar e invertir la diferencia, considerando el capital, la apreciación, los costos de propiedad y el crecimiento de la inversión durante el plazo elegido." },
+}[lang];
 ---
 <section class="rvb-calculator">
   <div class="rvb-layout">
     <aside class="rvb-sidebar">
       <div class="rvb-group">
-        <h3>Buying</h3>
-        <CalculatorField id="homePrice" label="Home Price" type="number" placeholder="e.g. 350000" min="0" step="1" />
-        <CalculatorField id="downPaymentPercent" label="Down Payment (%)" type="number" placeholder="e.g. 20" min="0" step="0.1" />
-        <CalculatorField id="mortgageRate" label="Mortgage Rate (%)" type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
-        <CalculatorField id="loanTermYears" label="Loan Term (years)" type="number" placeholder="e.g. 30" min="1" step="1" />
+        <h3>{copy.buyingGroup}</h3>
+        <CalculatorField id="homePrice" label={copy.homePrice} type="number" placeholder="e.g. 350000" min="0" step="1" />
+        <CalculatorField id="downPaymentPercent" label={copy.downPayment} type="number" placeholder="e.g. 20" min="0" step="0.1" />
+        <CalculatorField id="mortgageRate" label={copy.mortgageRate} type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
+        <CalculatorField id="loanTermYears" label={copy.loanTerm} type="number" placeholder="e.g. 30" min="1" step="1" />
       </div>
       <div class="rvb-group">
-        <h3>Ownership Costs</h3>
-        <CalculatorField id="propertyTaxRate" label="Property Tax Rate (% / yr)" type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
-        <CalculatorField id="annualInsurance" label="Annual Insurance" type="number" placeholder="e.g. 1400" min="0" step="1" />
-        <CalculatorField id="maintenanceRate" label="Maintenance Rate (% / yr)" type="number" placeholder="e.g. 1" min="0" step="0.1" />
-        <CalculatorField id="closingCostPercent" label="Closing Costs (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="sellingCostPercent" label="Selling Costs (%)" type="number" placeholder="e.g. 7" min="0" step="0.1" />
-        <CalculatorField id="appreciationRate" label="Home Appreciation (%/yr)" type="number" placeholder="e.g. 3.5" min="0" step="0.1" />
+        <h3>{copy.ownershipGroup}</h3>
+        <CalculatorField id="propertyTaxRate" label={copy.propertyTax} type="number" placeholder="e.g. 1.1" min="0" step="0.01" />
+        <CalculatorField id="annualInsurance" label={copy.insurance} type="number" placeholder="e.g. 1400" min="0" step="1" />
+        <CalculatorField id="maintenanceRate" label={copy.maintenance} type="number" placeholder="e.g. 1" min="0" step="0.1" />
+        <CalculatorField id="closingCostPercent" label={copy.closingCost} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="sellingCostPercent" label={copy.sellingCost} type="number" placeholder="e.g. 7" min="0" step="0.1" />
+        <CalculatorField id="appreciationRate" label={copy.appreciation} type="number" placeholder="e.g. 3.5" min="0" step="0.1" />
       </div>
       <div class="rvb-group">
-        <h3>Renting</h3>
-        <CalculatorField id="monthlyRent" label="Monthly Rent" type="number" placeholder="e.g. 1800" min="0" step="1" />
-        <CalculatorField id="rentGrowthRate" label="Annual Rent Growth (%)" type="number" placeholder="e.g. 3" min="0" step="0.1" />
-        <CalculatorField id="investmentReturnRate" label="Investment Return (%/yr)" type="number" placeholder="e.g. 6" min="0" step="0.1" />
+        <h3>{copy.rentingGroup}</h3>
+        <CalculatorField id="monthlyRent" label={copy.monthlyRent} type="number" placeholder="e.g. 1800" min="0" step="1" />
+        <CalculatorField id="rentGrowthRate" label={copy.rentGrowth} type="number" placeholder="e.g. 3" min="0" step="0.1" />
+        <CalculatorField id="investmentReturnRate" label={copy.investmentReturn} type="number" placeholder="e.g. 6" min="0" step="0.1" />
       </div>
       <div class="rvb-group">
-        <h3>Timeframe</h3>
-        <CalculatorField id="comparisonYears" label="Years to Compare" type="number" placeholder="e.g. 10" min="1" step="1" />
+        <h3>{copy.timeframeGroup}</h3>
+        <CalculatorField id="comparisonYears" label={copy.comparisonYears} type="number" placeholder="e.g. 10" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="rvb-content">
       <div id="emptyState">
-        <EmptyState icon="⚖️" title="Rent vs Buy Calculator" description="Compare the long-term net worth impact of renting versus buying." tips={["Buying Net Worth", "Renting Net Worth", "Break-Even Year"]} />
+        <EmptyState icon="⚖️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="betterOptionResult" title="Better Option" icon={Scale} accent="success" subtitle=" " />
-          <ResultCard id="buyNetWorthResult" title="Net Worth if Buying" icon={Home} />
-          <ResultCard id="rentNetWorthResult" title="Net Worth if Renting" icon={Key} />
-          <ResultCard id="breakEvenResult" title="Break-Even Year" icon={Calendar} />
+          <ResultCard id="betterOptionResult" title={copy.betterOption} icon={Scale} accent="success" subtitle=" " />
+          <ResultCard id="buyNetWorthResult" title={copy.buyNetWorth} icon={Home} />
+          <ResultCard id="rentNetWorthResult" title={copy.rentNetWorth} icon={Key} />
+          <ResultCard id="breakEvenResult" title={copy.breakEven} icon={Calendar} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Compares the projected net worth of buying a home versus renting and investing the difference, accounting for equity, appreciation, ownership costs, and investment growth over your chosen timeframe.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/rent-vs-buy-calculator";
 </script>

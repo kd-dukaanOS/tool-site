@@ -19,7 +19,7 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
 const lang = (window as any).calcLang === "es" ? "es" : "en";
-const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: ColorConverterInput | null = null;
 
 function showError(msg: string) {

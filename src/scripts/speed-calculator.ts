@@ -3,8 +3,11 @@ import {
   validateSpeedInput,
   copySpeedSummary,
   SPEED_LABELS,
+  getSpeedLabel,
   type SpeedInput,
 } from "../utils/speed";
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
 import { setValue, setSubtitle, copyToClipboard } from "../utils/calculator";
 
 const valueInput = document.getElementById("value") as HTMLInputElement;
@@ -40,7 +43,7 @@ function calculate() {
     toUnit: toUnitInput.value,
   };
 
-  const err = validateSpeedInput(input);
+  const err = validateSpeedInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   const result = calculateSpeed(input);
 
   setValue("convertedResult", result.convertedValue);
-  setSubtitle("convertedResult", SPEED_LABELS[input.toUnit]);
+  setSubtitle("convertedResult", getSpeedLabel(input.toUnit, lang));
 
   lastInput = input;
 
@@ -68,7 +71,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateSpeed(lastInput);
-  copyToClipboard(copySpeedSummary(lastInput, result));
+  copyToClipboard(copySpeedSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

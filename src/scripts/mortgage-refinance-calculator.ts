@@ -15,10 +15,16 @@ const resultsContainer = document.getElementById("resultsContainer") as HTMLElem
 
 const fieldIds = ["currentBalance", "currentRate", "currentTermRemainingMonths", "newRate", "newTermMonths", "closingCosts"];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
   return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+}
+
+function copy_noSavings(lang: string): string {
+  return lang === "es" ? "Sin ahorros" : "No savings";
 }
 
 function showError(message: string) {
@@ -36,7 +42,7 @@ function calculate() {
 
   const [currentBalance, currentRate, currentTermRemainingMonths, newRate, newTermMonths, closingCosts] = fieldIds.map(val);
 
-  const validationError = validateMortgageRefinanceInputs(currentBalance, currentTermRemainingMonths, newTermMonths);
+  const validationError = validateMortgageRefinanceInputs(currentBalance, currentTermRemainingMonths, newTermMonths, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -46,11 +52,19 @@ function calculate() {
 
   setValue("monthlySavingsResult", fmtCurrency(result.monthlySavings));
   setValue("newPaymentResult", fmtCurrency(result.newPayment));
-  setValue("breakEvenResult", result.breakEvenMonths === null ? "No savings" : `${result.breakEvenMonths} months`);
+  setValue("breakEvenResult", result.breakEvenMonths === null ? copy_noSavings(lang) : (lang === "es" ? `${result.breakEvenMonths} meses` : `${result.breakEvenMonths} months`));
   setValue("lifetimeSavingsResult", fmtCurrency(result.lifetimeInterestSavings));
-  setSubtitle("monthlySavingsResult", result.monthlySavings >= 0 ? "Lower payment" : "Higher payment");
+  setSubtitle("monthlySavingsResult", result.monthlySavings >= 0 ? (lang === "es" ? "Pago menor" : "Lower payment") : (lang === "es" ? "Pago mayor" : "Higher payment"));
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Refinanciamiento Hipotecario
+
+Pago Anterior: ${fmtCurrency(result.oldPayment)}
+Nuevo Pago: ${fmtCurrency(result.newPayment)}
+Ahorro Mensual: ${fmtCurrency(result.monthlySavings)}
+Punto de Equilibrio: ${result.breakEvenMonths === null ? "Sin ahorros" : `${result.breakEvenMonths} meses`}
+Ahorro Total de Interés: ${fmtCurrency(result.lifetimeInterestSavings)}
+`.trim() : `
 Mortgage Refinance Summary
 
 Old Payment: ${fmtCurrency(result.oldPayment)}

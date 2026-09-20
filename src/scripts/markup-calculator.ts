@@ -12,6 +12,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { cost: number; markupPercent: number } | null = null;
 let lastResult: ReturnType<typeof calculateMarkup> | null = null;
 
@@ -37,7 +39,7 @@ function calculate() {
     markupPercent: parseFloat(markupPercentInput.value),
   };
 
-  const error = validateMarkupInput(input);
+  const error = validateMarkupInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -59,7 +61,7 @@ function calculate() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  navigator.clipboard.writeText(copyMarkupSummary(lastInput, lastResult));
+  navigator.clipboard.writeText(copyMarkupSummary(lastInput, lastResult, lang));
 }
 
 function reset() {

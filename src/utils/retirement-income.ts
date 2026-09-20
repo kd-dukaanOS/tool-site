@@ -53,9 +53,18 @@ export function calculateRetirementIncome(
   };
 }
 
-export function validateRetirementIncomeInputs(currentSavings: number, withdrawalRate: number, retirementYears: number): string | null {
-  if (currentSavings <= 0) return "Current savings must be greater than zero.";
-  if (withdrawalRate <= 0 || withdrawalRate > 20) return "Withdrawal rate must be between 0 and 20%.";
-  if (retirementYears <= 0) return "Retirement horizon must be greater than zero.";
+export function validateRetirementIncomeInputs(currentSavings: number, withdrawalRate: number, retirementYears: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    savings: "Los ahorros actuales deben ser mayores a cero.",
+    rate: "La tasa de retiro debe estar entre 0 y 20%.",
+    years: "El horizonte de jubilación debe ser mayor a cero.",
+  } : {
+    savings: "Current savings must be greater than zero.",
+    rate: "Withdrawal rate must be between 0 and 20%.",
+    years: "Retirement horizon must be greater than zero.",
+  };
+  if (currentSavings <= 0) return msg.savings;
+  if (withdrawalRate <= 0 || withdrawalRate > 20) return msg.rate;
+  if (retirementYears <= 0) return msg.years;
   return null;
 }

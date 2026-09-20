@@ -19,8 +19,9 @@ const ACTIVITY_ADD_ML: Record<ActivityLevel, number> = {
   active: 750,
 };
 
-export function validateWaterIntakeInput(i: WaterIntakeInput): string | null {
-  if (i.weightKg <= 0 || i.weightKg > 300) return "Enter a realistic weight.";
+export function validateWaterIntakeInput(i: WaterIntakeInput, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? "Ingresa un peso realista." : "Enter a realistic weight.";
+  if (i.weightKg <= 0 || i.weightKg > 300) return msg;
   return null;
 }
 

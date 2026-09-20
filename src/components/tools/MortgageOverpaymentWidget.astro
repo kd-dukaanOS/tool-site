@@ -5,42 +5,52 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Clock, TrendingDown, PiggyBank, Home } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { currentLoan:"Current Loan", balance:"Current Loan Balance", rate:"Interest Rate (%)", months:"Months Remaining", overpaymentGroup:"Overpayment", extra:"Extra Monthly Payment", emptyTitle:"Mortgage Overpayment Calculator", emptyDesc:"See how extra monthly payments cut years off your mortgage and save on interest.", tip1:"New Payoff Time", tip2:"Time Saved", tip3:"Interest Saved", payoffTime:"New Payoff Time", timeSaved:"Time Saved", interestSaved:"Interest Saved", newPayment:"New Monthly Payment", aboutTitle:"About this Calculator", aboutText:"Shows how adding a fixed extra amount to your monthly mortgage payment shortens your payoff time and reduces total interest paid, by simulating the amortization schedule month by month." },
+  es: { currentLoan:"Préstamo Actual", balance:"Saldo Actual del Préstamo", rate:"Tasa de Interés (%)", months:"Meses Restantes", overpaymentGroup:"Pago Adicional", extra:"Pago Mensual Adicional", emptyTitle:"Calculadora de Pago Anticipado de Hipoteca", emptyDesc:"Descubre cómo pagos mensuales adicionales reducen años de tu hipoteca y ahorran interés.", tip1:"Nuevo Tiempo de Pago", tip2:"Tiempo Ahorrado", tip3:"Interés Ahorrado", payoffTime:"Nuevo Tiempo de Pago", timeSaved:"Tiempo Ahorrado", interestSaved:"Interés Ahorrado", newPayment:"Nuevo Pago Mensual", aboutTitle:"Acerca de esta Calculadora", aboutText:"Muestra cómo agregar un monto fijo adicional a tu pago hipotecario mensual reduce tu tiempo de pago y disminuye el interés total pagado, simulando el cronograma de amortización mes a mes." },
+}[lang];
 ---
 <section class="mo-calculator">
   <div class="mo-layout">
     <aside class="mo-sidebar">
       <div class="mo-group">
-        <h3>Current Loan</h3>
-        <CalculatorField id="currentBalance" label="Current Loan Balance" type="number" placeholder="e.g. 250000" min="0" step="1" />
-        <CalculatorField id="interestRate" label="Interest Rate (%)" type="number" placeholder="e.g. 6" min="0" step="0.01" />
-        <CalculatorField id="remainingTermMonths" label="Months Remaining" type="number" placeholder="e.g. 300" min="1" step="1" />
+        <h3>{copy.currentLoan}</h3>
+        <CalculatorField id="currentBalance" label={copy.balance} type="number" placeholder="e.g. 250000" min="0" step="1" />
+        <CalculatorField id="interestRate" label={copy.rate} type="number" placeholder="e.g. 6" min="0" step="0.01" />
+        <CalculatorField id="remainingTermMonths" label={copy.months} type="number" placeholder="e.g. 300" min="1" step="1" />
       </div>
       <div class="mo-group">
-        <h3>Overpayment</h3>
-        <CalculatorField id="extraMonthlyPayment" label="Extra Monthly Payment" type="number" placeholder="e.g. 200" min="0" step="1" />
+        <h3>{copy.overpaymentGroup}</h3>
+        <CalculatorField id="extraMonthlyPayment" label={copy.extra} type="number" placeholder="e.g. 200" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mo-content">
       <div id="emptyState">
-        <EmptyState icon="🏡" title="Mortgage Overpayment Calculator" description="See how extra monthly payments cut years off your mortgage and save on interest." tips={["New Payoff Time", "Time Saved", "Interest Saved"]} />
+        <EmptyState icon="🏡" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="payoffTimeResult" title="New Payoff Time" icon={Clock} accent="success" subtitle=" " />
-          <ResultCard id="timeSavedResult" title="Time Saved" icon={TrendingDown} />
-          <ResultCard id="interestSavedResult" title="Interest Saved" icon={PiggyBank} />
-          <ResultCard id="newPaymentResult" title="New Monthly Payment" icon={Home} />
+          <ResultCard id="payoffTimeResult" title={copy.payoffTime} icon={Clock} accent="success" subtitle=" " />
+          <ResultCard id="timeSavedResult" title={copy.timeSaved} icon={TrendingDown} />
+          <ResultCard id="interestSavedResult" title={copy.interestSaved} icon={PiggyBank} />
+          <ResultCard id="newPaymentResult" title={copy.newPayment} icon={Home} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Shows how adding a fixed extra amount to your monthly mortgage payment shortens your payoff time and reduces total interest paid, by simulating the amortization schedule month by month.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/mortgage-overpayment-calculator";
 </script>

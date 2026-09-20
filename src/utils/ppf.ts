@@ -22,28 +22,30 @@ export interface PPFResult {
 const MAX_ANNUAL_INVESTMENT = 150000; // current PPF annual cap
 const MIN_TENURE = 15; // PPF lock-in
 
-export function validatePPFInput(input: PPFInput): string | null {
+export function validatePPFInput(input: PPFInput, lang: "en" | "es" = "en"): string | null {
 
   const { annualInvestment, annualRate, tenureYears } = input;
 
   if (!annualInvestment || Number.isNaN(annualInvestment) || annualInvestment <= 0) {
-    return "Please enter an annual investment greater than 0.";
+    return lang === "es" ? "Por favor ingresa una inversión anual mayor a 0." : "Please enter an annual investment greater than 0.";
   }
 
   if (annualInvestment > MAX_ANNUAL_INVESTMENT) {
-    return `PPF annual investment cannot exceed ₹${MAX_ANNUAL_INVESTMENT.toLocaleString("en-IN")}.`;
+    return lang === "es"
+      ? `La inversión anual del PPF no puede exceder ₹${MAX_ANNUAL_INVESTMENT.toLocaleString("en-IN")}.`
+      : `PPF annual investment cannot exceed ₹${MAX_ANNUAL_INVESTMENT.toLocaleString("en-IN")}.`;
   }
 
   if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) {
-    return "Please enter an interest rate greater than 0.";
+    return lang === "es" ? "Por favor ingresa una tasa de interés mayor a 0." : "Please enter an interest rate greater than 0.";
   }
 
   if (!tenureYears || Number.isNaN(tenureYears) || tenureYears < MIN_TENURE) {
-    return `PPF tenure must be at least ${MIN_TENURE} years.`;
+    return lang === "es" ? `El plazo del PPF debe ser de al menos ${MIN_TENURE} años.` : `PPF tenure must be at least ${MIN_TENURE} years.`;
   }
 
   if (tenureYears > 50) {
-    return "Please enter a realistic tenure (under 50 years).";
+    return lang === "es" ? "Por favor ingresa un plazo realista (menos de 50 años)." : "Please enter a realistic tenure (under 50 years).";
   }
 
   return null;
@@ -102,7 +104,31 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
-export function copyPPFSummary(input: PPFInput, result: PPFResult): string {
+export function copyPPFSummary(input: PPFInput, result: PPFResult, lang: "en" | "es" = "en"): string {
+
+  if (lang === "es") {
+    return `
+Resumen de PPF
+
+Inversión Anual:
+${formatCurrency(input.annualInvestment)}
+
+Tasa de Interés:
+${input.annualRate}%
+
+Plazo:
+${input.tenureYears} Años
+
+Valor de Vencimiento:
+${formatCurrency(result.maturityValue)}
+
+Total Invertido:
+${formatCurrency(result.totalInvested)}
+
+Interés Total Ganado:
+${formatCurrency(result.totalInterest)}
+`.trim();
+  }
 
   return `
 PPF Summary

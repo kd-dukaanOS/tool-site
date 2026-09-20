@@ -14,6 +14,9 @@ const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 const breakdownBody = document.getElementById("breakdownBody") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const topBracketLabel = (window as any).tbkTopBracketLabel || "Top bracket rate";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -37,7 +40,7 @@ function calculate() {
     "single" | "married" | "headOfHousehold";
   const taxableIncome = val("taxableIncome");
 
-  const validationError = validateTaxBracketInputs(taxableIncome);
+  const validationError = validateTaxBracketInputs(taxableIncome, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -49,7 +52,7 @@ function calculate() {
   setValue("marginalRateResult", `${result.marginalRate.toFixed(0)}%`);
   setValue("effectiveRateResult", `${result.effectiveRate.toFixed(1)}%`);
   setValue("taxableIncomeResult", fmtCurrency(result.taxableIncome));
-  setSubtitle("marginalRateResult", "Top bracket rate");
+  setSubtitle("marginalRateResult", topBracketLabel);
 
   if (breakdownBody) {
     breakdownBody.innerHTML = result.bracketBreakdown
@@ -60,7 +63,14 @@ function calculate() {
       .join("");
   }
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Tramos Impositivos
+
+Impuesto Total: ${fmtCurrency(result.totalTax)}
+Tasa Marginal: ${result.marginalRate.toFixed(0)}%
+Tasa Efectiva: ${result.effectiveRate.toFixed(1)}%
+Ingreso Gravable: ${fmtCurrency(result.taxableIncome)}
+`.trim() : `
 Tax Bracket Summary
 
 Total Tax: ${fmtCurrency(result.totalTax)}

@@ -27,8 +27,6 @@ const scheduleBody = document.getElementById("scheduleBody") as HTMLElement | nu
 
 const lang = (window as any).calcLang === "es" ? "es" : "en";
 const earSubtitle = lang === "es" ? "Rendimiento anual real una vez aplicada la capitalización" : "True yearly return once compounding is applied";
-const lang = (window as any).calcLang === "es" ? "es" : "en";
-const earSubtitle = lang === "es" ? "Rendimiento anual real una vez aplicada la capitalización" : "True yearly return once compounding is applied";
 let lastInput: CompoundInterestInput | null = null;
 let lastResult: CompoundInterestResult | null = null;
 
@@ -129,9 +127,6 @@ calculateBtn?.addEventListener("click", calculate);
 resetBtn?.addEventListener("click", resetCalculator);
 copyBtn?.addEventListener("click", handleCopy);
 
-onCurrencyChange(() => {
-  if (lastInput && lastResult) calculate();
-});
 onCurrencyChange(() => {
   if (lastInput && lastResult) calculate();
 });

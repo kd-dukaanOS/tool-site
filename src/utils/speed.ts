@@ -24,10 +24,22 @@ export const SPEED_LABELS: Record<string, string> = {
   fps: "ft/s",
 };
 
-export function validateSpeedInput(i: SpeedInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
+export const SPEED_LABELS_ES: Record<string, string> = {
+  mps: "m/s",
+  kmph: "km/h",
+  mph: "mph",
+  knot: "Nudo",
+  fps: "pies/s",
+};
+
+export function getSpeedLabel(unit: string, lang: "en" | "es" = "en"): string {
+  return lang === "es" ? SPEED_LABELS_ES[unit] : SPEED_LABELS[unit];
+}
+
+export function validateSpeedInput(i: SpeedInput, lang: "en" | "es" = "en"): string | null {
+  if (i.value === undefined || Number.isNaN(i.value)) return lang === "es" ? "Ingresa un número válido." : "Enter a valid number.";
+  if (!i.fromUnit || !i.toUnit) return lang === "es" ? "Selecciona ambas unidades." : "Select both units.";
+  if (i.fromUnit === i.toUnit) return lang === "es" ? "Elige dos unidades diferentes." : "Choose two different units.";
   return null;
 }
 
@@ -37,7 +49,14 @@ export function calculateSpeed(i: SpeedInput): SpeedResult {
   return { convertedValue };
 }
 
-export function copySpeedSummary(i: SpeedInput, r: SpeedResult): string {
+export function copySpeedSummary(i: SpeedInput, r: SpeedResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Velocidad
+
+${i.value} ${getSpeedLabel(i.fromUnit, "es")} = ${r.convertedValue} ${getSpeedLabel(i.toUnit, "es")}
+`.trim();
+  }
   return `
 Speed Conversion
 

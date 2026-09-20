@@ -19,6 +19,10 @@ const numericFieldIds = [
   "deductionsAnnual", "extraWithholdingPerPeriod",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const basedOnLabel = (window as any).twhBasedOnLabel || "Based on";
+const payLabel = (window as any).twhPayLabel || "pay";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -49,7 +53,7 @@ function calculate() {
     deductionsAnnual, extraWithholdingPerPeriod,
   ] = numericFieldIds.map(val);
 
-  const validationError = validateWithholdingInputs(grossPayPerPeriod);
+  const validationError = validateWithholdingInputs(grossPayPerPeriod, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -64,9 +68,16 @@ function calculate() {
   setValue("annualTaxResult", fmtCurrency(result.annualTaxWithheld));
   setValue("effectiveRateResult", `${result.effectiveWithholdingRate.toFixed(1)}%`);
   setValue("annualGrossResult", fmtCurrency(result.annualGrossIncome));
-  setSubtitle("perPeriodResult", `Based on ${payFrequency} pay`);
+  setSubtitle("perPeriodResult", lang === "es" ? `${basedOnLabel} ${payFrequency}` : `${basedOnLabel} ${payFrequency} ${payLabel}`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Retención de Impuestos
+
+Retención Estimada por Cheque: ${fmtCurrency(result.perPeriodWithholding)}
+Retención Anual Estimada: ${fmtCurrency(result.annualTaxWithheld)}
+Tasa de Retención Efectiva: ${result.effectiveWithholdingRate.toFixed(1)}%
+Ingreso Bruto Anual: ${fmtCurrency(result.annualGrossIncome)}
+`.trim() : `
 Tax Withholding Summary
 
 Estimated Withholding per Paycheck: ${fmtCurrency(result.perPeriodWithholding)}

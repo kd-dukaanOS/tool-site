@@ -1,0 +1,50 @@
+---
+// src/pages/es/finance/ca-income-tax.astro
+import Layout from "../../../layouts/Layout.astro";
+import CAIncomeTaxWidget from "../../../components/tools/CAIncomeTaxWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { caIncomeTaxCalculatorContent } from "../../../data/calculators/es/ca-income-tax.ts";
+
+const tool = tools.find((t) => t.slug === "ca-income-tax")!;
+const content = caIncomeTaxCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Finanzas", url: "/es/finance/" },
+    { name: "Calculadora de Impuesto sobre la Renta", url: "/es/finance/ca-income-tax/" },
+  ]}
+  appName="Calculadora de Impuesto sobre la Renta"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/finance/">Finanzas</a> / Calculadora de Impuesto sobre la Renta
+    </p>
+
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["finance"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Impuesto sobre la Renta de Canadá</h1>
+        <p>Impuesto federal y provincial para Ontario, Alberta y BC</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="ca-income-tax" data-name="Calculadora de Impuesto sobre la Renta" data-url="/es/finance/ca-income-tax/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+
+    <CAIncomeTaxWidget lang="es" />
+
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

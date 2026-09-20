@@ -1,0 +1,47 @@
+---
+// src/pages/es/developer-tools/json-formatter.astro
+import Layout from "../../../layouts/Layout.astro";
+import JsonFormatterWidget from "../../../components/tools/JsonFormatterWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { jsonFormatterContent } from "../../../data/calculators/es/json-formatter.ts";
+
+const tool = tools.find((t) => t.slug === "json-formatter")!;
+const content = jsonFormatterContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Herramientas de Desarrollo", url: "/es/developer-tools/" },
+    { name: "Formateador JSON", url: "/es/developer-tools/json-formatter/" },
+  ]}
+  appName="Formateador JSON"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/developer-tools/">Herramientas de Desarrollo</a> / Formateador JSON
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["developer-tools"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Formateador JSON</h1>
+        <p>Formatea, minifica y valida al instante</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="json-formatter" data-name="Formateador JSON" data-url="/es/developer-tools/json-formatter/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <JsonFormatterWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

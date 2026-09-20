@@ -13,6 +13,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: { revenue: number; totalExpenses: number } | null = null;
 let lastResult: ReturnType<typeof calculateNetProfit> | null = null;
 
@@ -33,7 +35,7 @@ function calculate() {
     totalExpenses: parseFloat(totalExpensesInput.value),
   };
 
-  const error = validateNetProfitInput(input);
+  const error = validateNetProfitInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -63,7 +65,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyNetProfitSummary(lastInput, lastResult));
+  copyToClipboard(copyNetProfitSummary(lastInput, lastResult, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -24,6 +24,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: Parameters<typeof calculateQuarterlyTax>[0] | null = null;
 let lastResult: ReturnType<typeof calculateQuarterlyTax> | null = null;
 
@@ -52,7 +54,7 @@ function calculate() {
     itemizedDeduction: parseFloat(itemizedInput.value) || 0,
   };
 
-  const error = validateQuarterlyTaxInput(input);
+  const error = validateQuarterlyTaxInput(input, lang);
   if (error) {
     showError(error);
     return;
@@ -90,7 +92,7 @@ function reset() {
 
 function handleCopy() {
   if (!lastInput || !lastResult) return;
-  copyToClipboard(copyQuarterlyTaxSummary(lastInput, lastResult));
+  copyToClipboard(copyQuarterlyTaxSummary(lastInput, lastResult, lang));
 }
 
 deductionModeSelect?.addEventListener("change", toggleItemizedRow);

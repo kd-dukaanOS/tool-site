@@ -2,6 +2,7 @@
 import Button from './ui/Button.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import { tools } from '../data/tools.js';
+import { SPANISH_TOOLS } from '../utils/i18n';
 
 interface Props {
   lang?: "en" | "es";
@@ -26,13 +27,13 @@ const copy = {
   },
   es: {
     nav: [
-      { label: 'Texto', href: '/es/text-tools/' },
-      { label: 'Desarrollo', href: '/es/developer-tools/' },
-      { label: 'Conversores', href: '/es/converters/' },
-      { label: 'Seguridad', href: '/es/security-tools/' },
       { label: 'Finanzas', href: '/es/finance/' },
       { label: 'Salud', href: '/es/health/' },
-      { label: 'Acerca de', href: '/es/about' },
+      { label: 'Conversores', href: '/es/converters/' },
+      { label: 'Fecha y Hora', href: '/es/date-time/' },
+      { label: 'Negocios', href: '/es/business/' },
+      { label: 'Matemáticas', href: '/es/math-stats/' },
+      { label: 'Quiénes Somos', href: '/es/about/' },
     ],
     searchLabel: 'Buscar herramientas', searchPlaceholder: 'Buscar herramientas...',
     clearSearch: 'Borrar búsqueda', toggleDark: 'Modo oscuro',
@@ -42,6 +43,9 @@ const copy = {
 
 const t = copy[lang];
 const navLinks = t.nav;
+const searchTools = lang === "es"
+  ? SPANISH_TOOLS.map((tool) => ({ name: tool.name, slug: tool.slug, category: tool.category, desc: tool.desc }))
+  : tools.map((tool) => ({ name: tool.name, slug: tool.slug, category: tool.category, desc: tool.desc }));
 ---
 <header class="ts-nav">
   <div class="ts-nav-inner">
@@ -63,11 +67,11 @@ const navLinks = t.nav;
         <button id="nav-clear-btn" class="ts-nav-search-clear" style="display:none" aria-label={t.clearSearch}>✕</button>
         <div class="ts-nav-search-results" id="nav-search-results" role="listbox" aria-live="polite"></div>
       </div>
-      <script type="application/json" id="tools-data" set:html={JSON.stringify(tools.map(t => ({ name: t.name, slug: t.slug, category: t.category, desc: t.desc })))}></script>
+      <script type="application/json" id="tools-data" set:html={JSON.stringify(searchTools)}></script>
      <button class="ts-nav-icon-btn" id="theme-toggle" aria-label={t.toggleDark}>
         <span id="theme-icon">🌙</span>
       </button>
-      <a href={`${prefix}/bookmarks`} class="ts-nav-icon-btn ts-nav-bookmarks" aria-label={t.bookmarks}>🔖</a>
+      <a href={`${prefix}/bookmarks/`} class="ts-nav-icon-btn ts-nav-bookmarks" aria-label={t.bookmarks}>🔖</a>
       <LanguageSwitcher lang={lang} />
       <button class="ts-nav-icon-btn ts-nav-mobile-toggle" id="mobile-menu-toggle" aria-label={t.openMenu} aria-expanded="false" aria-controls="mobile-menu">☰</button>
     </div>
@@ -82,7 +86,7 @@ const navLinks = t.nav;
     {navLinks.map((link) => (
       <a href={link.href} class="ts-nav-mobile-link">{link.label}</a>
     ))}
-    <a href={`${prefix}/bookmarks`} class="ts-nav-mobile-link">🔖 {t.bookmarks}</a>
+    <a href={`${prefix}/bookmarks/`} class="ts-nav-mobile-link">🔖 {t.bookmarks}</a>
   </nav>
 </header>
 

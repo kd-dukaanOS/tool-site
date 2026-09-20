@@ -13,18 +13,17 @@ export interface HourlyToSalaryResult {
   weeklySalary: number;
 }
 
-export function validateHourlyToSalaryInput(input: HourlyToSalaryInput): string | null {
+export function validateHourlyToSalaryInput(input: HourlyToSalaryInput, lang: "en" | "es" = "en"): string | null {
   const { hourlyRate, hoursPerWeek, weeksPerYear } = input;
+  const msg = lang === "es" ? {
+    rate:"Por favor ingresa una tarifa por hora válida mayor a 0.", hours:"Por favor ingresa horas por semana válidas (1–168).", weeks:"Por favor ingresa semanas por año válidas (1–52).",
+  } : {
+    rate:"Please enter a valid hourly rate greater than 0.", hours:"Please enter valid hours per week (1–168).", weeks:"Please enter valid weeks per year (1–52).",
+  };
 
-  if (!hourlyRate || Number.isNaN(hourlyRate) || hourlyRate <= 0) {
-    return "Please enter a valid hourly rate greater than 0.";
-  }
-  if (!hoursPerWeek || Number.isNaN(hoursPerWeek) || hoursPerWeek <= 0 || hoursPerWeek > 168) {
-    return "Please enter valid hours per week (1–168).";
-  }
-  if (!weeksPerYear || Number.isNaN(weeksPerYear) || weeksPerYear <= 0 || weeksPerYear > 52) {
-    return "Please enter valid weeks per year (1–52).";
-  }
+  if (!hourlyRate || Number.isNaN(hourlyRate) || hourlyRate <= 0) return msg.rate;
+  if (!hoursPerWeek || Number.isNaN(hoursPerWeek) || hoursPerWeek <= 0 || hoursPerWeek > 168) return msg.hours;
+  if (!weeksPerYear || Number.isNaN(weeksPerYear) || weeksPerYear <= 0 || weeksPerYear > 52) return msg.weeks;
 
   return null;
 }
@@ -41,7 +40,30 @@ export function calculateHourlyToSalary(input: HourlyToSalaryInput): HourlyToSal
 
 
 
-export function copyHourlyToSalarySummary(input: HourlyToSalaryInput, result: HourlyToSalaryResult): string {
+export function copyHourlyToSalarySummary(input: HourlyToSalaryInput, result: HourlyToSalaryResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Salario por Hora
+
+Tarifa por Hora:
+${formatCurrency(input.hourlyRate)}
+
+Horas por Semana:
+${input.hoursPerWeek}
+
+Semanas por Año:
+${input.weeksPerYear}
+
+Salario Semanal:
+${formatCurrency(result.weeklySalary)}
+
+Salario Mensual:
+${formatCurrency(result.monthlySalary)}
+
+Salario Anual:
+${formatCurrency(result.annualSalary)}
+`.trim();
+  }
   return `
 Hourly to Salary Summary
 

@@ -5,15 +5,22 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Clock, Globe, MapPin, History, Hash, Milestone } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { inputLabel:"Timestamp or Date", useNow:"Use Now", emptyTitle:"Timestamp Converter", emptyDesc:"Convert between Unix timestamps and human-readable dates.", tip1:"Unix Seconds & Millis", tip2:"ISO 8601", tip3:"UTC & Local Time", tip4:"Relative Time", unixSeconds:"Unix (seconds)", unixMillis:"Unix (millis)", relative:"Relative", iso:"ISO 8601", utc:"UTC", local:"Local Time", aboutTitle:"About this Tool", aboutText:"Convert Unix timestamps to human-readable dates, or dates to Unix time, with ISO 8601, UTC, local time and relative time formats.", parseError:"Could not parse timestamp or date.", emptyInputError:"Please enter a timestamp or date.", second:"second", minute:"minute", hour:"hour", day:"day", week:"week", month:"month", year:"year", fromNow:"from now", ago:"ago" },
+  es: { inputLabel:"Marca de Tiempo o Fecha", useNow:"Usar Ahora", emptyTitle:"Convertidor de Marca de Tiempo", emptyDesc:"Convierte entre marcas de tiempo Unix y fechas legibles.", tip1:"Segundos y Milisegundos Unix", tip2:"ISO 8601", tip3:"UTC y Hora Local", tip4:"Tiempo Relativo", unixSeconds:"Unix (segundos)", unixMillis:"Unix (milisegundos)", relative:"Relativo", iso:"ISO 8601", utc:"UTC", local:"Hora Local", aboutTitle:"Acerca de esta Herramienta", aboutText:"Convierte marcas de tiempo Unix a fechas legibles, o fechas a tiempo Unix, con formatos ISO 8601, UTC, hora local y tiempo relativo.", parseError:"No se pudo interpretar la marca de tiempo o fecha.", emptyInputError:"Por favor ingresa una marca de tiempo o fecha.", second:"segundo", minute:"minuto", hour:"hora", day:"día", week:"semana", month:"mes", year:"año", fromNow:"a partir de ahora", ago:"hace" },
+}[lang];
 ---
 <section class="timestamp-converter">
   <div class="ts-layout">
     <aside class="ts-sidebar">
 
-      <CalculatorField id="timestampInput" label="Timestamp or Date" type="text" placeholder="1735689600 or 2026-01-01" />
+      <CalculatorField id="timestampInput" label={copy.inputLabel} type="text" placeholder="1735689600 or 2026-01-01" />
 
       <div class="tool-actions">
-        <button id="nowBtn" class="tool-btn tool-btn-secondary">Use Now</button>
+        <button id="nowBtn" class="tool-btn tool-btn-secondary">{copy.useNow}</button>
       </div>
 
       <CalculatorActions calculateId="convertBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -24,31 +31,35 @@ import { Clock, Globe, MapPin, History, Hash, Milestone } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🕒"
-          title="Timestamp Converter"
-          description="Convert between Unix timestamps and human-readable dates."
-          tips={["Unix Seconds & Millis", "ISO 8601", "UTC & Local Time", "Relative Time"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2, copy.tip3, copy.tip4]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="unixSecondsResult" title="Unix (seconds)" icon={Hash} />
-          <ResultCard id="unixMillisResult" title="Unix (millis)" icon={Milestone} />
-          <ResultCard id="relativeResult" title="Relative" icon={History} />
-          <ResultCard id="isoResult" title="ISO 8601" icon={Clock} />
-          <ResultCard id="utcResult" title="UTC" icon={Globe} />
-          <ResultCard id="localResult" title="Local Time" icon={MapPin} />
+          <ResultCard id="unixSecondsResult" title={copy.unixSeconds} icon={Hash} />
+          <ResultCard id="unixMillisResult" title={copy.unixMillis} icon={Milestone} />
+          <ResultCard id="relativeResult" title={copy.relative} icon={History} />
+          <ResultCard id="isoResult" title={copy.iso} icon={Clock} />
+          <ResultCard id="utcResult" title={copy.utc} icon={Globe} />
+          <ResultCard id="localResult" title={copy.local} icon={MapPin} />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Tool</h2>
-          <p>Convert Unix timestamps to human-readable dates, or dates to Unix time, with ISO 8601, UTC, local time and relative time formats.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang, parseErrorMsg: copy.parseError }}>
+  window.calcLang = calcLang;
+  window.tsParseErrorMsg = parseErrorMsg;
+</script>
 <script>
   import "../../scripts/timestamp-converter";
 </script>

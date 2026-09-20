@@ -1,0 +1,47 @@
+---
+// src/pages/es/converters/weight-calculator.astro
+import Layout from "../../../layouts/Layout.astro";
+import WeightCalculatorWidget from "../../../components/tools/WeightCalculatorWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { weightCalculatorContent } from "../../../data/calculators/es/weight-calculator.ts";
+
+const tool = tools.find((t) => t.slug === "weight-calculator")!;
+const content = weightCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Convertidores", url: "/es/converters/" },
+    { name: "Convertidor de Peso", url: "/es/converters/weight-calculator/" },
+  ]}
+  appName="Convertidor de Peso"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/converters/">Convertidores</a> / Convertidor de Peso
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["converters"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Convertidor de Peso</h1>
+        <p>Convierte entre kg, libras, onzas y más</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="weight-calculator" data-name="Convertidor de Peso" data-url="/es/converters/weight-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <WeightCalculatorWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

@@ -5,39 +5,49 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { House, Landmark, Wallet, Scale, TrendingUp } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { income:"Annual Gross Income", incomeHelp:"Your total gross income before tax.", debts:"Monthly Debt Payments", debtsHelp:"Car loans, student loans, credit cards, etc. Leave blank if none.", downPayment:"Down Payment", downPaymentHelp:"Amount you plan to pay upfront.", rate:"Interest Rate (%)", rateHelp:"Expected annual mortgage rate.", years:"Loan Term (Years)", yearsHelp:"Typical terms are 15, 20, or 30 years.", taxIns:"Est. Monthly Tax + Insurance", taxInsHelp:"Optional. Rough monthly property tax + home insurance estimate.", emptyTitle:"Mortgage Affordability Calculator", emptyDesc:"Find out how much home you can realistically afford based on your income and debts.", tip1:"Max Home Price", tip2:"Max Loan Amount", tip3:"Debt-to-Income Ratios", maxHomePrice:"Max Home Price", maxLoanAmount:"Max Loan Amount", maxMonthlyPayment:"Max Monthly Payment", frontEnd:"Front-End DTI Ratio", backEnd:"Back-End DTI Ratio", aboutTitle:"About this Calculator", aboutText:"Estimates the maximum home price you can afford using the standard 28/36 debt-to-income guideline lenders commonly use: housing costs at or under 28% of gross income, and total debts at or under 36%. This is a general guideline, not a lending decision — actual approval depends on your specific lender, credit profile, and other factors.", housingBudget:"housing budget", debtLoad:"total debt load" },
+  es: { income:"Ingreso Bruto Anual", incomeHelp:"Tu ingreso bruto total antes de impuestos.", debts:"Pagos de Deuda Mensuales", debtsHelp:"Préstamos de auto, estudiantiles, tarjetas de crédito, etc. Déjalo en blanco si no tienes.", downPayment:"Pago Inicial", downPaymentHelp:"Monto que planeas pagar por adelantado.", rate:"Tasa de Interés (%)", rateHelp:"Tasa hipotecaria anual esperada.", years:"Plazo del Préstamo (Años)", yearsHelp:"Los plazos típicos son 15, 20 o 30 años.", taxIns:"Est. Impuesto + Seguro Mensual", taxInsHelp:"Opcional. Estimación aproximada mensual de impuesto predial + seguro de vivienda.", emptyTitle:"Calculadora de Capacidad Hipotecaria", emptyDesc:"Descubre cuánta vivienda puedes pagar realmente según tus ingresos y deudas.", tip1:"Precio Máximo de Vivienda", tip2:"Monto Máximo del Préstamo", tip3:"Ratios de Deuda-Ingreso", maxHomePrice:"Precio Máximo de Vivienda", maxLoanAmount:"Monto Máximo del Préstamo", maxMonthlyPayment:"Pago Mensual Máximo", frontEnd:"Ratio DTI Front-End", backEnd:"Ratio DTI Back-End", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima el precio máximo de vivienda que puedes pagar usando la guía estándar de deuda-ingreso 28/36 que usan los prestamistas: costos de vivienda máximo 28% del ingreso bruto, y deudas totales máximo 36%. Esto es una guía general, no una decisión de préstamo — la aprobación real depende de tu prestamista, perfil crediticio y otros factores.", housingBudget:"presupuesto de vivienda", debtLoad:"carga total de deuda" },
+}[lang];
 ---
 <section class="morta-calculator">
   <div class="morta-layout">
     <aside class="morta-sidebar">
-      <CalculatorField id="annualIncome" label="Annual Gross Income" type="number" placeholder="e.g. 85000" required={true} min="0" step="1" helpText="Your total gross income before tax." />
-      <CalculatorField id="monthlyDebts" label="Monthly Debt Payments" type="number" placeholder="e.g. 400" min="0" step="1" helpText="Car loans, student loans, credit cards, etc. Leave blank if none." />
-      <CalculatorField id="downPayment" label="Down Payment" type="number" placeholder="e.g. 40000" min="0" step="1" helpText="Amount you plan to pay upfront." />
-      <CalculatorField id="annualRate" label="Interest Rate (%)" type="number" placeholder="e.g. 6.5" required={true} min="0" step="0.01" helpText="Expected annual mortgage rate." />
-      <CalculatorField id="loanYears" label="Loan Term (Years)" type="number" placeholder="e.g. 30" required={true} min="1" step="1" helpText="Typical terms are 15, 20, or 30 years." />
-      <CalculatorField id="monthlyTaxesInsurance" label="Est. Monthly Tax + Insurance" type="number" placeholder="e.g. 350" min="0" step="1" helpText="Optional. Rough monthly property tax + home insurance estimate." />
+      <CalculatorField id="annualIncome" label={copy.income} type="number" placeholder="e.g. 85000" required={true} min="0" step="1" helpText={copy.incomeHelp} />
+      <CalculatorField id="monthlyDebts" label={copy.debts} type="number" placeholder="e.g. 400" min="0" step="1" helpText={copy.debtsHelp} />
+      <CalculatorField id="downPayment" label={copy.downPayment} type="number" placeholder="e.g. 40000" min="0" step="1" helpText={copy.downPaymentHelp} />
+      <CalculatorField id="annualRate" label={copy.rate} type="number" placeholder="e.g. 6.5" required={true} min="0" step="0.01" helpText={copy.rateHelp} />
+      <CalculatorField id="loanYears" label={copy.years} type="number" placeholder="e.g. 30" required={true} min="1" step="1" helpText={copy.yearsHelp} />
+      <CalculatorField id="monthlyTaxesInsurance" label={copy.taxIns} type="number" placeholder="e.g. 350" min="0" step="1" helpText={copy.taxInsHelp} />
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="morta-content">
       <div id="emptyState">
-        <EmptyState icon="🏠" title="Mortgage Affordability Calculator" description="Find out how much home you can realistically afford based on your income and debts." tips={["Max Home Price", "Max Loan Amount", "Debt-to-Income Ratios"]} />
+        <EmptyState icon="🏠" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={3}>
-          <ResultCard id="maxHomePriceResult" title="Max Home Price" icon={House} accent="success" subtitle=" " />
-          <ResultCard id="maxLoanAmountResult" title="Max Loan Amount" icon={Landmark} />
-          <ResultCard id="maxMonthlyPaymentResult" title="Max Monthly Payment" icon={Wallet} />
-          <ResultCard id="frontEndRatioResult" title="Front-End DTI Ratio" icon={Scale} />
-          <ResultCard id="backEndRatioResult" title="Back-End DTI Ratio" icon={TrendingUp} />
+          <ResultCard id="maxHomePriceResult" title={copy.maxHomePrice} icon={House} accent="success" subtitle=" " />
+          <ResultCard id="maxLoanAmountResult" title={copy.maxLoanAmount} icon={Landmark} />
+          <ResultCard id="maxMonthlyPaymentResult" title={copy.maxMonthlyPayment} icon={Wallet} />
+          <ResultCard id="frontEndRatioResult" title={copy.frontEnd} icon={Scale} />
+          <ResultCard id="backEndRatioResult" title={copy.backEnd} icon={TrendingUp} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates the maximum home price you can afford using the standard 28/36 debt-to-income guideline lenders commonly use: housing costs at or under 28% of gross income, and total debts at or under 36%. This is a general guideline, not a lending decision — actual approval depends on your specific lender, credit profile, and other factors.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/mortgage-affordability-calculator";
 </script>

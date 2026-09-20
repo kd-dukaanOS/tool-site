@@ -7,6 +7,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { amount:"Loan Amount ($)", rate:"Annual Interest Rate (%)", term:"Loan Term (Years)", extra:"Extra Monthly Payment ($)", extraHelp:"Optional — pay off the loan faster.", emptyTitle:"Loan Amortization Calculator", emptyDesc:"See your monthly payment, total interest, and full year-by-year payoff schedule.", tip1:"Monthly Payment", tip2:"Amortization Schedule", monthlyPayment:"Monthly Payment", totalInterest:"Total Interest", totalPayment:"Total Payment", payoffTime:"Payoff Time", scheduleTitle:"Yearly Amortization Schedule", year:"Year", principalPaid:"Principal Paid", interestPaid:"Interest Paid", endingBalance:"Ending Balance", aboutTitle:"About this Calculator", aboutText:"Calculates your monthly loan payment and full amortization schedule using the standard fixed-rate amortization formula. Add an optional extra monthly payment to see how much faster you'd pay off the loan and how much interest you'd save." },
+  es: { amount:"Monto del Préstamo ($)", rate:"Tasa de Interés Anual (%)", term:"Plazo del Préstamo (Años)", extra:"Pago Mensual Extra ($)", extraHelp:"Opcional — paga el préstamo más rápido.", emptyTitle:"Calculadora de Amortización de Préstamo", emptyDesc:"Consulta tu pago mensual, interés total y el calendario de pago año por año.", tip1:"Pago Mensual", tip2:"Calendario de Amortización", monthlyPayment:"Pago Mensual", totalInterest:"Interés Total", totalPayment:"Pago Total", payoffTime:"Tiempo de Pago", scheduleTitle:"Calendario Anual de Amortización", year:"Año", principalPaid:"Capital Pagado", interestPaid:"Interés Pagado", endingBalance:"Saldo Final", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu pago mensual del préstamo y el calendario completo de amortización usando la fórmula estándar de tasa fija. Agrega un pago mensual extra opcional para ver qué tan rápido pagarías el préstamo y cuánto interés ahorrarías." },
+}[lang];
 ---
 
 <section class="la-calculator">
@@ -15,7 +22,7 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
     <aside class="la-sidebar">
       <CalculatorField
         id="loanAmount"
-        label="Loan Amount ($)"
+        label={copy.amount}
         type="number"
         placeholder="e.g. 300000"
         required={true}
@@ -25,7 +32,7 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
 
       <CalculatorField
         id="interestRate"
-        label="Annual Interest Rate (%)"
+        label={copy.rate}
         type="number"
         placeholder="e.g. 6.5"
         required={true}
@@ -35,7 +42,7 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
 
       <CalculatorField
         id="termYears"
-        label="Loan Term (Years)"
+        label={copy.term}
         type="number"
         placeholder="e.g. 30"
         required={true}
@@ -45,12 +52,12 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
 
       <CalculatorField
         id="extraMonthlyPayment"
-        label="Extra Monthly Payment ($)"
+        label={copy.extra}
         type="number"
         placeholder="e.g. 0"
         min="0"
         step="0.01"
-        helpText="Optional — pay off the loan faster."
+        helpText={copy.extraHelp}
       />
 
       <CalculatorActions
@@ -67,30 +74,30 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🏦"
-          title="Loan Amortization Calculator"
-          description="See your monthly payment, total interest, and full year-by-year payoff schedule."
-          tips={["Monthly Payment", "Amortization Schedule"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="monthlyPaymentResult" title="Monthly Payment" icon={Wallet} accent="primary" size="lg" />
-          <ResultCard id="totalInterestResult" title="Total Interest" icon={Landmark} accent="neutral" size="lg" />
-          <ResultCard id="totalPaymentResult" title="Total Payment" icon={Receipt} accent="neutral" />
-          <ResultCard id="payoffTimeResult" title="Payoff Time" icon={CalendarClock} accent="primary" />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={Wallet} accent="primary" size="lg" />
+          <ResultCard id="totalInterestResult" title={copy.totalInterest} icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="totalPaymentResult" title={copy.totalPayment} icon={Receipt} accent="neutral" />
+          <ResultCard id="payoffTimeResult" title={copy.payoffTime} icon={CalendarClock} accent="primary" />
         </ResultsGrid>
 
         <section class="amortization-table-section">
-          <h2>Yearly Amortization Schedule</h2>
+          <h2>{copy.scheduleTitle}</h2>
           <div class="table-scroll">
             <table class="amortization-table">
               <thead>
                 <tr>
-                  <th>Year</th>
-                  <th>Principal Paid</th>
-                  <th>Interest Paid</th>
-                  <th>Ending Balance</th>
+                  <th>{copy.year}</th>
+                  <th>{copy.principalPaid}</th>
+                  <th>{copy.interestPaid}</th>
+                  <th>{copy.endingBalance}</th>
                 </tr>
               </thead>
               <tbody id="scheduleTableBody"></tbody>
@@ -99,12 +106,8 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
         </section>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates your monthly loan payment and full amortization schedule using the standard
-            fixed-rate amortization formula. Add an optional extra monthly payment to see how much
-            faster you'd pay off the loan and how much interest you'd save.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -112,6 +115,9 @@ import { Wallet, Landmark, Receipt, CalendarClock } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/loan-amortization-calculator";
 </script>

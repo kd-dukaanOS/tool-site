@@ -83,7 +83,7 @@ export function calculateTaxRefund(
   };
 }
 
-export function validateTaxRefundInputs(annualGrossIncome: number): string | null {
-  if (annualGrossIncome <= 0) return "Annual gross income must be greater than zero.";
+export function validateTaxRefundInputs(annualGrossIncome: number, lang: "en" | "es" = "en"): string | null {
+  if (annualGrossIncome <= 0) return lang === "es" ? "El ingreso bruto anual debe ser mayor a cero." : "Annual gross income must be greater than zero.";
   return null;
 }

@@ -26,8 +26,8 @@ export function calculateStockProfit(
   return { totalCost, totalProceeds, grossProfit, netProfit, totalFees, returnPercent, breakEvenPrice };
 }
 
-export function validateStockProfitInputs(buyPrice: number, numberOfShares: number): string | null {
-  if (buyPrice <= 0) return "Buy price must be greater than zero.";
-  if (numberOfShares <= 0) return "Number of shares must be greater than zero.";
+export function validateStockProfitInputs(buyPrice: number, numberOfShares: number, lang: "en" | "es" = "en"): string | null {
+  if (buyPrice <= 0) return lang === "es" ? "El precio de compra debe ser mayor a cero." : "Buy price must be greater than zero.";
+  if (numberOfShares <= 0) return lang === "es" ? "El número de acciones debe ser mayor a cero." : "Number of shares must be greater than zero.";
   return null;
 }

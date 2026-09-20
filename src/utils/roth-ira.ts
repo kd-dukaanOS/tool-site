@@ -26,9 +26,18 @@ export function calculateRothIRA(
   return { projectedBalance: balance, totalContributions, investmentGrowth, yearsInvested };
 }
 
-export function validateRothIRAInputs(currentAge: number, retirementAge: number, annualContribution: number): string | null {
-  if (currentAge <= 0) return "Current age must be greater than zero.";
-  if (retirementAge <= currentAge) return "Retirement age must be greater than current age.";
-  if (annualContribution > 8600) return "2026 Roth IRA limit is $8,600 (age 50+) or $7,500 (under 50) — adjust your annual contribution.";
+export function validateRothIRAInputs(currentAge: number, retirementAge: number, annualContribution: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    age: "La edad actual debe ser mayor a cero.",
+    retAge: "La edad de jubilación debe ser mayor que la edad actual.",
+    limit: "El límite de Roth IRA para 2026 es $8,600 (50+ años) o $7,500 (menos de 50) — ajusta tu aporte anual.",
+  } : {
+    age: "Current age must be greater than zero.",
+    retAge: "Retirement age must be greater than current age.",
+    limit: "2026 Roth IRA limit is $8,600 (age 50+) or $7,500 (under 50) — adjust your annual contribution.",
+  };
+  if (currentAge <= 0) return msg.age;
+  if (retirementAge <= currentAge) return msg.retAge;
+  if (annualContribution > 8600) return msg.limit;
   return null;
 }

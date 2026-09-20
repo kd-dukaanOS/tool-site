@@ -13,29 +13,43 @@ export interface SimpleInterestResult {
 }
 
 export function validateSimpleInterestInput(
-  input: SimpleInterestInput
+  input: SimpleInterestInput,
+  lang: "en" | "es" = "en"
 ): string | null {
 
   const { principal, annualRate, years } = input;
+  const msg = lang === "es" ? {
+    principal: "Ingresa un monto principal mayor a 0.",
+    rate: "Ingresa una tasa de interés mayor a 0.",
+    years: "Ingresa un plazo mayor a 0.",
+    yearsMax: "Ingresa un plazo realista (menos de 100 años).",
+    rateMax: "Ingresa una tasa de interés realista (menos de 100%).",
+  } : {
+    principal: "Please enter a principal amount greater than 0.",
+    rate: "Please enter an interest rate greater than 0.",
+    years: "Please enter a time period greater than 0.",
+    yearsMax: "Please enter a realistic time period (under 100 years).",
+    rateMax: "Please enter a realistic interest rate (under 100%).",
+  };
 
   if (!principal || Number.isNaN(principal) || principal <= 0) {
-    return "Please enter a principal amount greater than 0.";
+    return msg.principal;
   }
 
   if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) {
-    return "Please enter an interest rate greater than 0.";
+    return msg.rate;
   }
 
   if (!years || Number.isNaN(years) || years <= 0) {
-    return "Please enter a time period greater than 0.";
+    return msg.years;
   }
 
   if (years > 100) {
-    return "Please enter a realistic time period (under 100 years).";
+    return msg.yearsMax;
   }
 
   if (annualRate > 100) {
-    return "Please enter a realistic interest rate (under 100%).";
+    return msg.rateMax;
   }
 
   return null;
@@ -72,8 +86,30 @@ export function formatCurrency(value: number): string {
 
 export function copySimpleInterestSummary(
   input: SimpleInterestInput,
-  result: SimpleInterestResult
+  result: SimpleInterestResult,
+  lang: "en" | "es" = "en"
 ): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Interés Simple
+
+Monto Principal:
+${formatCurrency(input.principal)}
+
+Tasa de Interés Anual:
+${input.annualRate}%
+
+Plazo:
+${input.years} Años
+
+Interés Total:
+${formatCurrency(result.totalInterest)}
+
+Monto Total:
+${formatCurrency(result.totalAmount)}
+`.trim();
+  }
 
   return `
 Simple Interest Summary

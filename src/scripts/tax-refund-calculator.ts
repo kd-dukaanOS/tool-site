@@ -19,6 +19,10 @@ const numericFieldIds = [
   "federalTaxWithheldAnnual", "estimatedPaymentsAnnual",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const estRefundLabel = (window as any).trfEstRefundLabel || "Estimated Refund";
+const estOwedLabel = (window as any).trfEstOwedLabel || "Estimated Amount Owed";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -47,7 +51,7 @@ function calculate() {
     federalTaxWithheldAnnual, estimatedPaymentsAnnual,
   ] = numericFieldIds.map(val);
 
-  const validationError = validateTaxRefundInputs(annualGrossIncome);
+  const validationError = validateTaxRefundInputs(annualGrossIncome, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -62,9 +66,19 @@ function calculate() {
   setValue("taxLiabilityResult", fmtCurrency(result.taxLiability));
   setValue("taxableIncomeResult", fmtCurrency(result.taxableIncome));
   setValue("effectiveRateResult", `${result.effectiveTaxRate.toFixed(1)}%`);
-  setSubtitle("refundOrOwedResult", result.isRefund ? "Estimated Refund" : "Estimated Amount Owed");
+  setSubtitle("refundOrOwedResult", result.isRefund ? estRefundLabel : estOwedLabel);
 
-  lastSummary = `
+  lastSummary = lang === "es" ?
+    `
+Resumen de Reembolso de Impuestos
+
+${result.isRefund ? "Reembolso Estimado" : "Monto Adeudado Estimado"}: ${fmtCurrency(result.refundOrOwed)}
+Obligación Fiscal: ${fmtCurrency(result.taxLiability)}
+Ingreso Gravable: ${fmtCurrency(result.taxableIncome)}
+Tasa Impositiva Efectiva: ${result.effectiveTaxRate.toFixed(1)}%
+`.trim()
+    :
+    `
 Tax Refund Summary
 
 ${result.isRefund ? "Estimated Refund" : "Estimated Amount Owed"}: ${fmtCurrency(result.refundOrOwed)}

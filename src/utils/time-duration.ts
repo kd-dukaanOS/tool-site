@@ -10,10 +10,10 @@ export interface TimeDurationResult {
   crossesMidnight: boolean;
 }
 
-export function validateTimeDurationInput(i: TimeDurationInput): string | null {
+export function validateTimeDurationInput(i: TimeDurationInput, lang: "en" | "es" = "en"): string | null {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  if (!timeRegex.test(i.startTime)) return "Enter a valid start time.";
-  if (!timeRegex.test(i.endTime)) return "Enter a valid end time.";
+  if (!timeRegex.test(i.startTime)) return lang === "es" ? "Ingresa una hora de inicio válida." : "Enter a valid start time.";
+  if (!timeRegex.test(i.endTime)) return lang === "es" ? "Ingresa una hora de fin válida." : "Enter a valid end time.";
   return null;
 }
 
@@ -37,7 +37,19 @@ export function calculateTimeDuration(i: TimeDurationInput): TimeDurationResult 
   };
 }
 
-export function copyTimeDurationSummary(i: TimeDurationInput, r: TimeDurationResult): string {
+export function copyTimeDurationSummary(i: TimeDurationInput, r: TimeDurationResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Resumen de Duración
+
+Hora de Inicio: ${i.startTime}
+Hora de Fin: ${i.endTime}
+
+Duración: ${r.hours}h ${r.minutes}m
+Minutos Totales: ${r.totalMinutes}
+${r.crossesMidnight ? "Cruza la medianoche" : ""}
+`.trim();
+  }
   return `
 Time Duration Summary
 

@@ -5,12 +5,19 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Flower2, CalendarRange, CalendarClock } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { lastPeriod:"First Day of Last Period", cycleLength:"Average Cycle Length (days)", emptyTitle:"Enter details to estimate ovulation", emptyDesc:"Ovulation date and fertile window will appear here.", ovulationDate:"Ovulation Date", fertileWindow:"Fertile Window", nextPeriod:"Next Period (Est.)" },
+  es: { lastPeriod:"Primer Día de Tu Último Período", cycleLength:"Duración Promedio del Ciclo (días)", emptyTitle:"Ingresa los datos para estimar la ovulación", emptyDesc:"La fecha de ovulación y la ventana fértil aparecerán aquí.", ovulationDate:"Fecha de Ovulación", fertileWindow:"Ventana Fértil", nextPeriod:"Próximo Período (Est.)" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="lastPeriodDate" label="First Day of Last Period" type="date" />
-    <CalculatorField id="cycleLength" label="Average Cycle Length (days)" type="number" placeholder="e.g. 28" />
+    <CalculatorField id="lastPeriodDate" label={copy.lastPeriod} type="date" />
+    <CalculatorField id="cycleLength" label={copy.cycleLength} type="number" placeholder="e.g. 28" />
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
 
@@ -26,16 +33,19 @@ import { Flower2, CalendarRange, CalendarClock } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter details to estimate ovulation"
-      description="Ovulation date and fertile window will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="ovulationDateResult" title="Ovulation Date" icon={Flower2} accent="primary" size="lg" />
-      <ResultCard id="fertileWindowResult" title="Fertile Window" icon={CalendarRange} accent="neutral" />
-      <ResultCard id="nextPeriodResult" title="Next Period (Est.)" icon={CalendarClock} accent="neutral" />
+      <ResultCard id="ovulationDateResult" title={copy.ovulationDate} icon={Flower2} accent="primary" size="lg" />
+      <ResultCard id="fertileWindowResult" title={copy.fertileWindow} icon={CalendarRange} accent="neutral" />
+      <ResultCard id="nextPeriodResult" title={copy.nextPeriod} icon={CalendarClock} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/ovulation-calculator.ts"></script>

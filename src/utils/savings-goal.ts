@@ -34,8 +34,15 @@ export function calculateSavingsGoal(
   return { requiredMonthlySavings, totalContributions, interestEarned, alreadyOnTrack: false };
 }
 
-export function validateSavingsGoalInputs(targetAmount: number, timeframeMonths: number): string | null {
-  if (targetAmount <= 0) return "Target amount must be greater than zero.";
-  if (timeframeMonths <= 0) return "Timeframe must be greater than zero.";
+export function validateSavingsGoalInputs(targetAmount: number, timeframeMonths: number, lang: "en" | "es" = "en"): string | null {
+  const msg = lang === "es" ? {
+    target: "El monto objetivo debe ser mayor a cero.",
+    timeframe: "El plazo debe ser mayor a cero.",
+  } : {
+    target: "Target amount must be greater than zero.",
+    timeframe: "Timeframe must be greater than zero.",
+  };
+  if (targetAmount <= 0) return msg.target;
+  if (timeframeMonths <= 0) return msg.timeframe;
   return null;
 }

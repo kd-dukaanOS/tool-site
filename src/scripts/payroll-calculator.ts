@@ -21,6 +21,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: PayrollInput | null = null;
 
 function showError(msg: string) {
@@ -46,11 +48,11 @@ function calculate() {
   };
 
   if (!input.basicSalary) {
-    showError("Please enter basic salary.");
+    showError(lang === "es" ? "Por favor ingresa el salario base." : "Please enter basic salary.");
     return;
   }
 
-  const err = validatePayrollInput(input);
+  const err = validatePayrollInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -62,7 +64,7 @@ function calculate() {
   setValue("pfDeductionResult", `₹${result.pfDeduction.toLocaleString("en-IN")}`);
   setValue("totalDeductionsResult", `₹${result.totalDeductions.toLocaleString("en-IN")}`);
   setValue("netSalaryResult", `₹${result.netSalary.toLocaleString("en-IN")}`);
-  setSubtitle("netSalaryResult", "take-home pay");
+  setSubtitle("netSalaryResult", lang === "es" ? "pago neto a recibir" : "take-home pay");
 
   lastInput = input;
 
@@ -88,7 +90,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculatePayroll(lastInput);
-  copyToClipboard(copyPayrollSummary(lastInput, result));
+  copyToClipboard(copyPayrollSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

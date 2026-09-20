@@ -26,10 +26,23 @@ export const PRESSURE_LABELS: Record<string, string> = {
   mmhg: "mmHg",
 };
 
-export function validatePressureInput(i: PressureInput): string | null {
-  if (i.value === undefined || Number.isNaN(i.value)) return "Enter a valid number.";
-  if (!i.fromUnit || !i.toUnit) return "Select both units.";
-  if (i.fromUnit === i.toUnit) return "Choose two different units.";
+export const PRESSURE_LABELS_ES: Record<string, string> = {
+  pascal: "Pascal",
+  kpa: "Kilopascal",
+  bar: "Bar",
+  atm: "Atmósfera",
+  psi: "PSI",
+  mmhg: "mmHg",
+};
+
+export function getPressureLabel(unit: string, lang: "en" | "es" = "en"): string {
+  return lang === "es" ? PRESSURE_LABELS_ES[unit] : PRESSURE_LABELS[unit];
+}
+
+export function validatePressureInput(i: PressureInput, lang: "en" | "es" = "en"): string | null {
+  if (i.value === undefined || Number.isNaN(i.value)) return lang === "es" ? "Ingresa un número válido." : "Enter a valid number.";
+  if (!i.fromUnit || !i.toUnit) return lang === "es" ? "Selecciona ambas unidades." : "Select both units.";
+  if (i.fromUnit === i.toUnit) return lang === "es" ? "Elige dos unidades diferentes." : "Choose two different units.";
   return null;
 }
 
@@ -39,7 +52,14 @@ export function calculatePressure(i: PressureInput): PressureResult {
   return { convertedValue };
 }
 
-export function copyPressureSummary(i: PressureInput, r: PressureResult): string {
+export function copyPressureSummary(i: PressureInput, r: PressureResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Conversión de Presión
+
+${i.value} ${getPressureLabel(i.fromUnit, "es")} = ${r.convertedValue} ${getPressureLabel(i.toUnit, "es")}
+`.trim();
+  }
   return `
 Pressure Conversion
 

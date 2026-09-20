@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: LCMInput | null = null;
 
 function showError(msg: string) {
@@ -36,7 +38,7 @@ function calculate() {
     numbers: parseNumberList(numbersInput.value),
   };
 
-  const err = validateLCMInput(input);
+  const err = validateLCMInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -45,7 +47,7 @@ function calculate() {
   const result = calculateLCM(input);
 
   setValue("lcmResult", result.lcm);
-  setSubtitle("lcmResult", `of ${input.numbers.join(", ")}`);
+  setSubtitle("lcmResult", lang === "es" ? `de ${input.numbers.join(", ")}` : `of ${input.numbers.join(", ")}`);
 
   lastInput = input;
 
@@ -66,7 +68,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateLCM(lastInput);
-  copyToClipboard(copyLCMSummary(lastInput, result));
+  copyToClipboard(copyLCMSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

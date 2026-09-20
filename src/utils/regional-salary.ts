@@ -121,12 +121,16 @@ export function calculateUKNI(annualIncome: number): number {
   return mainBandEarnings * ukNationalInsurance.rate + upperBandEarnings * UK_NI_ADDITIONAL_RATE;
 }
 
-export function calculateUKTakeHome(grossAnnual: number): TakeHomeResult {
+export function calculateUKTakeHome(grossAnnual: number, lang: "en" | "es" = "en"): TakeHomeResult {
   const incomeTax = calculateBracketTax(grossAnnual, ukIncomeTax.brackets);
   const ni = calculateUKNI(grossAnnual);
 
   const totalDeductions = incomeTax + ni;
   const netAnnual = grossAnnual - totalDeductions;
+
+  const labels = lang === "es"
+    ? { incomeTax: "Impuesto sobre la Renta", ni: "Seguro Nacional" }
+    : { incomeTax: "Income Tax", ni: "National Insurance" };
 
   return {
     grossAnnual,
@@ -136,8 +140,8 @@ export function calculateUKTakeHome(grossAnnual: number): TakeHomeResult {
     netBiweekly: netAnnual / 26,
     netWeekly: netAnnual / 52,
     breakdown: [
-      { label: "Income Tax", amount: incomeTax },
-      { label: "National Insurance", amount: ni },
+      { label: labels.incomeTax, amount: incomeTax },
+      { label: labels.ni, amount: ni },
     ],
     effectiveRate: grossAnnual > 0 ? (totalDeductions / grossAnnual) * 100 : 0,
   };

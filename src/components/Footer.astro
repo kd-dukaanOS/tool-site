@@ -1,41 +1,103 @@
 ---
 import { categories, tools } from '../data/tools.js';
-const footerCategories = categories.slice(0, 5);
-const footerPopular = tools.slice(0, 5);
+import { SPANISH_CATEGORIES, SPANISH_TOOLS } from '../utils/i18n';
+
+interface Props {
+  lang?: "en" | "es";
+}
+
+const { lang = "en" } = Astro.props as Props;
+
+const isEs = lang === "es";
+const homeHref = isEs ? "/es/" : "/";
+
+const copy = {
+  en: {
+    tagline: "Fast, private, free tools for everyday work — nothing ever leaves your browser.",
+    categoriesTitle: "Categories",
+    resourcesTitle: "Resources",
+    popularTitle: "Popular",
+    legalTitle: "Legal",
+    about: "About",
+    contact: "Contact",
+    blog: "Blog",
+    tools: "All Tools",
+    privacy: "Privacy Policy",
+    terms: "Terms & Conditions",
+    rights: "All rights reserved.",
+  },
+  es: {
+    tagline: "Herramientas rápidas, privadas y gratuitas para el trabajo diario — nada sale de tu navegador.",
+    categoriesTitle: "Categorías",
+    resourcesTitle: "Recursos",
+    popularTitle: "Populares",
+    legalTitle: "Legal",
+    about: "Quiénes Somos",
+    contact: "Contacto",
+    blog: "Blog",
+    tools: "Todas las Herramientas",
+    privacy: "Política de Privacidad",
+    terms: "Términos y Condiciones",
+    rights: "Todos los derechos reservados.",
+  },
+}[lang];
+
+const footerCategories = isEs
+  ? SPANISH_CATEGORIES.slice(0, 5).map(c => ({ name: c.name, href: `/es/${c.slug}/` }))
+  : categories.slice(0, 5).map(c => ({ name: c.name, href: `/${c.slug}/` }));
+
+const footerPopular = isEs
+  ? SPANISH_TOOLS.slice(0, 5).map(t => ({ name: t.name, href: `/es/${t.category}/${t.slug}/` }))
+  : tools.slice(0, 5).map(t => ({ name: t.name, href: `/${t.category}/${t.slug}/` }));
+
+const resources = isEs
+  ? [
+      { name: copy.about, href: "/es/about/" },
+      { name: copy.contact, href: "/es/contact/" },
+      { name: copy.tools, href: "/es/tools/" },
+    ]
+  : [
+      { name: copy.blog, href: "/blog/" },
+      { name: copy.about, href: "/about/" },
+      { name: copy.contact, href: "/contact/" },
+    ];
+
+const legal = isEs
+  ? [
+      { name: copy.privacy, href: "/es/privacy-policy/" },
+      { name: copy.terms, href: "/es/terms/" },
+    ]
+  : [
+      { name: copy.privacy, href: "/privacy-policy/" },
+      { name: copy.terms, href: "/terms/" },
+    ];
 ---
 <footer class="ts-footer">
   <div class="ts-footer-inner">
     <div class="ts-footer-grid">
       <div class="ts-footer-brand">
-        <a href="/" class="ts-footer-logo"><span class="ts-footer-mark">T</span>TooManyToolz</a>
-        <p>Fast, private, free tools for everyday work — nothing ever leaves your browser.</p>
+        <a href={homeHref} class="ts-footer-logo"><span class="ts-footer-mark">T</span>TooManyToolz</a>
+        <p>{copy.tagline}</p>
       </div>
       <div>
-        <h5>Categories</h5>
-        <ul>{footerCategories.map((c) => <li><a href={`/${c.slug}/`}>{c.name}</a></li>)}</ul>
+        <h5>{copy.categoriesTitle}</h5>
+        <ul>{footerCategories.map((c) => <li><a href={c.href}>{c.name}</a></li>)}</ul>
       </div>
       <div>
-        <h5>Resources</h5>
-        <ul>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/contact/">Contact</a></li>
-        </ul>
+        <h5>{copy.resourcesTitle}</h5>
+        <ul>{resources.map((r) => <li><a href={r.href}>{r.name}</a></li>)}</ul>
       </div>
       <div>
-        <h5>Popular</h5>
-        <ul>{footerPopular.map((t) => <li><a href={`/${t.category}/${t.slug}/`}>{t.name}</a></li>)}</ul>
+        <h5>{copy.popularTitle}</h5>
+        <ul>{footerPopular.map((t) => <li><a href={t.href}>{t.name}</a></li>)}</ul>
       </div>
       <div>
-        <h5>Legal</h5>
-        <ul>
-          <li><a href="/privacy-policy/">Privacy Policy</a></li>
-          <li><a href="/terms/">Terms & Conditions</a></li>
-        </ul>
+        <h5>{copy.legalTitle}</h5>
+        <ul>{legal.map((l) => <li><a href={l.href}>{l.name}</a></li>)}</ul>
       </div>
     </div>
     <div class="ts-footer-bottom">
-      <span>© 2026 TooManyToolz. All rights reserved.</span>
+      <span>© 2026 TooManyToolz. {copy.rights}</span>
       <div class="ts-footer-social">
         <a href="https://github.com" aria-label="GitHub">GitHub</a>
         <a href="https://twitter.com" aria-label="Twitter">Twitter</a>

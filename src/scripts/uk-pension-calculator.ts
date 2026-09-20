@@ -23,6 +23,8 @@ const fieldIds = [
   "expectedReturn",
 ];
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastSummary = "";
 
 function fmtCurrency(n: number): string {
@@ -52,7 +54,7 @@ function calculate() {
     expectedReturn,
   ] = fieldIds.map(val);
 
-  const validationError = validateUkPensionInputs(currentAge, retirementAge);
+  const validationError = validateUkPensionInputs(currentAge, retirementAge, lang);
   if (validationError) {
     showError(validationError);
     return;
@@ -72,9 +74,17 @@ function calculate() {
   setValue("totalContributionsResult", fmtCurrency(result.totalContributions));
   setValue("employerContributionsResult", fmtCurrency(result.employerContributions));
   setValue("taxReliefAddedResult", fmtCurrency(result.taxReliefAdded));
-  setSubtitle("projectedPotResult", `${result.yearsInvested} years invested`);
+  setSubtitle("projectedPotResult", lang === "es" ? `${result.yearsInvested} años invertidos` : `${result.yearsInvested} years invested`);
 
-  lastSummary = `
+  lastSummary = lang === "es" ? `
+Resumen de Proyección de Pensión del Reino Unido
+
+Fondo Proyectado: ${fmtCurrency(result.projectedPot)}
+Tus Contribuciones: ${fmtCurrency(result.totalContributions)}
+Contribuciones del Empleador: ${fmtCurrency(result.employerContributions)}
+Alivio Fiscal Agregado: ${fmtCurrency(result.taxReliefAdded)}
+Años Invertidos: ${result.yearsInvested}
+`.trim() : `
 UK Pension Projection Summary
 
 Projected Pot: ${fmtCurrency(result.projectedPot)}

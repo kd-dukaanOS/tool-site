@@ -17,6 +17,8 @@ const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
 
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+
 let lastInput: ROIInput | null = null;
 
 function showError(msg: string) {
@@ -39,11 +41,11 @@ function calculate() {
   };
 
   if (!input.investedAmount || !input.currentValue) {
-    showError("Please fill all required fields.");
+    showError(lang === "es" ? "Por favor completa todos los campos requeridos." : "Please fill all required fields.");
     return;
   }
 
-  const err = validateROIInput(input);
+  const err = validateROIInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -66,10 +68,10 @@ function renderResults(result: ReturnType<typeof calculateROI>) {
 
   if (result.annualizedROI !== null) {
     setValue("annualizedResult", `${result.annualizedROI}%`);
-    setSubtitle("annualizedResult", "per year");
+    setSubtitle("annualizedResult", lang === "es" ? "por año" : "per year");
   } else {
     setValue("annualizedResult", "—");
-    setSubtitle("annualizedResult", "add time period");
+    setSubtitle("annualizedResult", lang === "es" ? "agrega un período de tiempo" : "add time period");
   }
 }
 
@@ -93,7 +95,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculateROI(lastInput);
-  copyToClipboard(copyROISummary(lastInput, result, currentCurrency));
+  copyToClipboard(copyROISummary(lastInput, result, currentCurrency, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

@@ -1,0 +1,47 @@
+---
+// src/pages/es/finance/stock-profit-calculator.astro
+import Layout from "../../../layouts/Layout.astro";
+import StockProfitWidget from "../../../components/tools/StockProfitWidget.astro";
+import CalculatorContent from "../../../components/content/CalculatorContent.astro";
+import { tools, categoryIcons } from "../../../data/tools.js";
+import { stockProfitCalculatorContent } from "../../../data/calculators/es/stock-profit-calculator.ts";
+
+const tool = tools.find((t) => t.slug === "stock-profit-calculator")!;
+const content = stockProfitCalculatorContent;
+---
+
+<Layout
+  lang="es"
+  title={`${content.meta.seoTitle} | TooManyToolz`}
+  description={content.meta.metaDescription}
+  ogTitle={content.meta.ogTitle}
+  ogDescription={content.meta.ogDescription}
+  faqItems={content.faq}
+  breadcrumbs={[
+    { name: "Inicio", url: "/es/" },
+    { name: "Finanzas", url: "/es/finance/" },
+    { name: "Calculadora de Ganancia en Bolsa", url: "/es/finance/stock-profit-calculator/" },
+  ]}
+  appName="Calculadora de Ganancia en Bolsa"
+>
+  <div class="wrap">
+    <p class="breadcrumb">
+      <a href="/es/">Inicio</a> / <a href="/es/finance/">Finanzas</a> / Calculadora de Ganancia en Bolsa
+    </p>
+    <div class="category-header">
+      <div class="cat-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" set:html={categoryIcons["finance"]} />
+      </div>
+      <div class="category-header-text">
+        <h1>Calculadora de Ganancia en Bolsa</h1>
+        <p>Ganancia neta, retorno y precio de equilibrio</p>
+      </div>
+      <button id="bookmark-btn" class="bookmark-btn" data-slug="stock-profit-calculator" data-name="Calculadora de Ganancia en Bolsa" data-url="/es/finance/stock-profit-calculator/" aria-label="Guardar esta herramienta">
+        <svg id="bookmark-star" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.16 3.6 1.64-7.03L2 9.24l7.19-.61L12 2l2.81 6.63 7.19.61-5.48 4.63 1.64 7.03z"/></svg>
+        <span class="bookmark-btn-label">Guardar</span>
+      </button>
+    </div>
+    <StockProfitWidget lang="es" />
+    <CalculatorContent {...content} lang="es" allTools={tools} />
+  </div>
+</Layout>

@@ -22,24 +22,24 @@ export interface MortgageResult {
   loanToValuePercent: number;
 }
 
-export function validateMortgageInput(input: MortgageInput): string | null {
+export function validateMortgageInput(input: MortgageInput, lang: "en" | "es" = "en"): string | null {
 
   const { homePrice, downPayment, loanYears, annualRate } = input;
 
   if (!homePrice || Number.isNaN(homePrice) || homePrice <= 0) {
-    return "Please enter a valid home price.";
+    return lang === "es" ? "Por favor ingresa un precio de vivienda válido." : "Please enter a valid home price.";
   }
 
   if (downPayment < 0 || downPayment >= homePrice) {
-    return "Down payment must be less than the home price.";
+    return lang === "es" ? "El pago inicial debe ser menor al precio de la vivienda." : "Down payment must be less than the home price.";
   }
 
   if (!loanYears || Number.isNaN(loanYears) || loanYears <= 0) {
-    return "Please enter a valid loan term.";
+    return lang === "es" ? "Por favor ingresa un plazo de préstamo válido." : "Please enter a valid loan term.";
   }
 
   if (!annualRate || Number.isNaN(annualRate) || annualRate <= 0) {
-    return "Please enter a valid interest rate.";
+    return lang === "es" ? "Por favor ingresa una tasa de interés válida." : "Please enter a valid interest rate.";
   }
 
   return null;
@@ -108,7 +108,31 @@ export function calculateMortgage(input: MortgageInput): MortgageResult {
 
 import { formatCurrency, type CurrencyCode } from "./currencyselector";
 
-export function copyMortgageSummary(input: MortgageInput, result: MortgageResult, currency: CurrencyCode = "INR"): string {
+export function copyMortgageSummary(input: MortgageInput, result: MortgageResult, currency: CurrencyCode = "INR", lang: "en" | "es" = "en"): string {
+
+  if (lang === "es") {
+    return `
+Resumen de Hipoteca
+
+Precio de la Vivienda:
+${formatCurrency(input.homePrice, currency)}
+
+Pago Inicial:
+${formatCurrency(input.downPayment, currency)}
+
+Monto del Préstamo:
+${formatCurrency(result.loanAmount, currency)}
+
+Capital + Interés Mensual:
+${formatCurrency(result.monthlyPrincipalInterest, currency)}
+
+Pago Mensual Total:
+${formatCurrency(result.totalMonthlyPayment, currency)}
+
+Interés Total Pagado:
+${formatCurrency(result.totalInterestPaid, currency)}
+`.trim();
+  }
 
   return `
 Mortgage Summary

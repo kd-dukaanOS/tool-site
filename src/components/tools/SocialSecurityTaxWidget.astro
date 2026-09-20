@@ -5,40 +5,50 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Shield, Wallet, TrendingUp, Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income", annualWagesLabel:"Annual Wages / Net Earnings", employmentTypeLabel:"Employment Type", employee:"Employee", selfEmployed:"Self-Employed", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Social Security Tax Calculator", emptyDesc:"Find your 2026 Social Security tax and wage base cap status.", tip1:"SS Tax Owed", tip2:"Taxable Wages", tip3:"Wage Base Cap", ssTaxTitle:"Social Security Tax", taxableWagesTitle:"Taxable Wages", wagesOverCapTitle:"Wages Over Cap", capStatusTitle:"Cap Status", aboutTitle:"About this Calculator", aboutText:"Calculates Social Security tax using the 2026 wage base cap of $184,500, for both employees (6.2%) and self-employed individuals (12.4%)." },
+  es: { incomeGroup:"Ingresos", annualWagesLabel:"Salarios Anuales / Ingresos Netos", employmentTypeLabel:"Tipo de Empleo", employee:"Empleado", selfEmployed:"Trabajador Independiente", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto de Seguro Social", emptyDesc:"Encuentra tu impuesto de Seguro Social 2026 y el estado del tope salarial.", tip1:"Impuesto SS Adeudado", tip2:"Salarios Gravables", tip3:"Tope Salarial", ssTaxTitle:"Impuesto de Seguro Social", taxableWagesTitle:"Salarios Gravables", wagesOverCapTitle:"Salarios Sobre el Tope", capStatusTitle:"Estado del Tope", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el impuesto de Seguro Social utilizando el tope salarial 2026 de $184,500, tanto para empleados (6.2%) como para trabajadores independientes (12.4%)." },
+}[lang];
 ---
 <section class="sst-calculator">
   <div class="sst-layout">
     <aside class="sst-sidebar">
       <div class="sst-group">
-        <h3>Income</h3>
-        <CalculatorField id="annualWages" label="Annual Wages / Net Earnings" type="number" placeholder="e.g. 80000" min="0" step="1" />
-        <CalculatorField type="select" id="employmentType" label="Employment Type">
-  <option value="employee">Employee</option>
-  <option value="self">Self-Employed</option>
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="annualWages" label={copy.annualWagesLabel} type="number" placeholder="e.g. 80000" min="0" step="1" />
+        <CalculatorField type="select" id="employmentType" label={copy.employmentTypeLabel}>
+  <option value="employee">{copy.employee}</option>
+  <option value="self">{copy.selfEmployed}</option>
 </CalculatorField>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="sst-content">
       <div id="emptyState">
-        <EmptyState icon="🛡️" title="Social Security Tax Calculator" description="Find your 2026 Social Security tax and wage base cap status." tips={["SS Tax Owed", "Taxable Wages", "Wage Base Cap"]} />
+        <EmptyState icon="🛡️" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="primaryTaxResult" title="Social Security Tax" icon={Shield} accent="success" subtitle=" " />
-          <ResultCard id="taxableWagesResult" title="Taxable Wages" icon={Wallet} />
-          <ResultCard id="wagesOverCapResult" title="Wages Over Cap" icon={TrendingUp} />
-          <ResultCard id="capStatusResult" title="Cap Status" icon={Gauge} subtitle=" " />
+          <ResultCard id="primaryTaxResult" title={copy.ssTaxTitle} icon={Shield} accent="success" subtitle=" " />
+          <ResultCard id="taxableWagesResult" title={copy.taxableWagesTitle} icon={Wallet} />
+          <ResultCard id="wagesOverCapResult" title={copy.wagesOverCapTitle} icon={TrendingUp} />
+          <ResultCard id="capStatusResult" title={copy.capStatusTitle} icon={Gauge} subtitle=" " />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates Social Security tax using the 2026 wage base cap of $184,500, for both employees (6.2%) and self-employed individuals (12.4%).</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/social-security-tax-calculator";
 </script>

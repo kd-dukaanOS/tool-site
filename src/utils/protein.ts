@@ -1,4 +1,4 @@
-﻿import { round } from "./calculator";
+import { round } from "./calculator";
 
 export interface ProteinInput {
   weightKg: number;
@@ -21,9 +21,9 @@ const GOAL_RANGE: Record<string, [number, number]> = {
   athlete: [2.0, 2.6],
 };
 
-export function validateProteinInput(i: ProteinInput): string | null {
-  if (!i.weightKg || i.weightKg <= 0) return "Enter a valid weight.";
-  if (!i.goal) return "Select a goal.";
+export function validateProteinInput(i: ProteinInput, lang: "en" | "es" = "en"): string | null {
+  if (!i.weightKg || i.weightKg <= 0) return lang === "es" ? "Ingresa un peso válido." : "Enter a valid weight.";
+  if (!i.goal) return lang === "es" ? "Selecciona un objetivo." : "Select a goal.";
   return null;
 }
 
@@ -35,7 +35,16 @@ export function calculateProtein(i: ProteinInput): ProteinResult {
   return { gramsPerDay, minGrams, maxGrams, calories: round(gramsPerDay * 4) };
 }
 
-export function copyProteinSummary(_i: ProteinInput, r: ProteinResult): string {
+export function copyProteinSummary(_i: ProteinInput, r: ProteinResult, lang: "en" | "es" = "en"): string {
+  if (lang === "es") {
+    return `
+Calculadora de Ingesta de Proteína
+
+Recomendado: ${r.gramsPerDay} g/día
+Rango: ${r.minGrams} - ${r.maxGrams} g/día
+Calorías de la proteína: ${r.calories} kcal
+`.trim();
+  }
   return `
 Protein Intake Calculator
 

@@ -5,17 +5,24 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Scale, TrendingUp, CalendarDays } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { weight:"Pre-Pregnancy Weight (kg)", height:"Height (cm)", week:"Current Week of Pregnancy", twins:"Twin pregnancy", emptyTitle:"Enter details to check weight gain", emptyDesc:"Recommended pregnancy weight gain range will appear here.", bmi:"Pre-Pregnancy BMI", totalGain:"Total Recommended Gain", gainToDate:"Recommended Gain by Now", byWeek:"by week", fillAll:"Please fill all required fields.", underweight:"Underweight", normal:"Normal weight", overweight:"Overweight", obese:"Obese", single:"Single Pregnancy", twinLabel:"Twin Pregnancy" },
+  es: { weight:"Peso Pre-Embarazo (kg)", height:"Altura (cm)", week:"Semana Actual del Embarazo", twins:"Embarazo de gemelos", emptyTitle:"Ingresa los datos para verificar el aumento de peso", emptyDesc:"El rango recomendado de aumento de peso durante el embarazo aparecerá aquí.", bmi:"IMC Pre-Embarazo", totalGain:"Aumento Total Recomendado", gainToDate:"Aumento Recomendado Hasta Ahora", byWeek:"para la semana", fillAll:"Por favor completa todos los campos requeridos.", underweight:"Bajo peso", normal:"Peso normal", overweight:"Sobrepeso", obese:"Obesidad", single:"Embarazo Único", twinLabel:"Embarazo de Gemelos" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-inputs">
-    <CalculatorField id="prePregnancyWeightKg" label="Pre-Pregnancy Weight (kg)" type="number" placeholder="e.g. 60" />
-    <CalculatorField id="heightCm" label="Height (cm)" type="number" placeholder="e.g. 165" />
-    <CalculatorField id="currentWeekOfPregnancy" label="Current Week of Pregnancy" type="number" placeholder="e.g. 20" />
+    <CalculatorField id="prePregnancyWeightKg" label={copy.weight} type="number" placeholder="e.g. 60" />
+    <CalculatorField id="heightCm" label={copy.height} type="number" placeholder="e.g. 165" />
+    <CalculatorField id="currentWeekOfPregnancy" label={copy.week} type="number" placeholder="e.g. 20" />
 
     <label class="checkbox-field">
       <input type="checkbox" id="isTwins" />
-      <span>Twin pregnancy</span>
+      <span>{copy.twins}</span>
     </label>
 
     <div id="errorBox" class="error-box" role="alert" hidden></div>
@@ -32,16 +39,21 @@ import { Scale, TrendingUp, CalendarDays } from "@lucide/astro";
   <div class="calculator-output">
     <EmptyState
       id="emptyState"
-      title="Enter details to check weight gain"
-      description="Recommended pregnancy weight gain range will appear here."
+      title={copy.emptyTitle}
+      description={copy.emptyDesc}
     />
 
     <ResultsGrid id="resultsContainer" hidden>
-      <ResultCard id="bmiResult" title="Pre-Pregnancy BMI" icon={Scale} accent="neutral" />
-      <ResultCard id="totalGainResult" title="Total Recommended Gain" icon={TrendingUp} accent="primary" size="lg" />
-      <ResultCard id="gainToDateResult" title="Recommended Gain by Now" icon={CalendarDays} accent="neutral" />
+      <ResultCard id="bmiResult" title={copy.bmi} icon={Scale} accent="neutral" />
+      <ResultCard id="totalGainResult" title={copy.totalGain} icon={TrendingUp} accent="primary" size="lg" />
+      <ResultCard id="gainToDateResult" title={copy.gainToDate} icon={CalendarDays} accent="neutral" />
     </ResultsGrid>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang, byWeekLabel: copy.byWeek, fillAllMsg: copy.fillAll }}>
+  window.calcLang = calcLang;
+  window.pwgByWeekLabel = byWeekLabel;
+  window.pwgFillAllMsg = fillAllMsg;
+</script>
 <script src="../../scripts/pregnancy-weight-gain-calculator.ts"></script>

@@ -4,26 +4,33 @@ import ActionButtons from "../calculator/ActionButtons.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import { Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { value:"Value", from:"From", to:"To", mps:"m/s", kmph:"km/h", mph:"mph", knot:"Knot", fps:"ft/s", emptyTitle:"Speed Converter", emptyDesc:"Enter a value to convert.", converted:"Converted Value" },
+  es: { value:"Valor", from:"De", to:"A", mps:"m/s", kmph:"km/h", mph:"mph", knot:"Nudo", fps:"pies/s", emptyTitle:"Convertidor de Velocidad", emptyDesc:"Ingresa un valor para convertir.", converted:"Valor Convertido" },
+}[lang];
 ---
 
 <div class="calculator-widget">
   <div class="calculator-form">
-    <CalculatorField id="value" label="Value" type="number" placeholder="Enter value" />
+    <CalculatorField id="value" label={copy.value} type="number" placeholder="Enter value" />
 
-    <CalculatorField id="fromUnit" label="From" type="select">
-      <option value="mps">m/s</option>
-      <option value="kmph" selected>km/h</option>
-      <option value="mph">mph</option>
-      <option value="knot">Knot</option>
-      <option value="fps">ft/s</option>
+    <CalculatorField id="fromUnit" label={copy.from} type="select">
+      <option value="mps">{copy.mps}</option>
+      <option value="kmph" selected>{copy.kmph}</option>
+      <option value="mph">{copy.mph}</option>
+      <option value="knot">{copy.knot}</option>
+      <option value="fps">{copy.fps}</option>
     </CalculatorField>
 
-    <CalculatorField id="toUnit" label="To" type="select">
-      <option value="mps">m/s</option>
-      <option value="kmph">km/h</option>
-      <option value="mph" selected>mph</option>
-      <option value="knot">Knot</option>
-      <option value="fps">ft/s</option>
+    <CalculatorField id="toUnit" label={copy.to} type="select">
+      <option value="mps">{copy.mps}</option>
+      <option value="kmph">{copy.kmph}</option>
+      <option value="mph" selected>{copy.mph}</option>
+      <option value="knot">{copy.knot}</option>
+      <option value="fps">{copy.fps}</option>
     </CalculatorField>
 
     <div id="errorBox" class="error-box" hidden></div>
@@ -33,13 +40,16 @@ import { Gauge } from "@lucide/astro";
 
   <div class="calculator-results">
     <div id="emptyState">
-      <EmptyState icon="??" title="Speed Converter" description="Enter a value to convert." />
+      <EmptyState icon="??" title={copy.emptyTitle} description={copy.emptyDesc} />
     </div>
 
     <div id="resultsContainer" hidden>
-      <ResultCard id="convertedResult" title="Converted Value" icon={Gauge} />
+      <ResultCard id="convertedResult" title={copy.converted} icon={Gauge} />
     </div>
   </div>
 </div>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script src="../../scripts/speed-calculator.ts"></script>

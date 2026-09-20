@@ -5,22 +5,29 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { HeartPulse, Wallet, TrendingUp, Gauge } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { groupTitle:"Income & Filing", wages:"Annual Wages / Net Earnings", filingStatus:"Filing Status", single:"Single", mfj:"Married Filing Jointly", mfs:"Married Filing Separately", hoh:"Head of Household", employmentType:"Employment Type", employee:"Employee", selfEmployed:"Self-Employed", emptyTitle:"Medicare Tax Calculator", emptyDesc:"Find your regular and Additional Medicare Tax for 2026.", tip1:"Total Medicare Tax", tip2:"Regular Tax", tip3:"Additional Tax", total:"Total Medicare Tax", regular:"Regular Medicare Tax", additional:"Additional Medicare Tax", threshold:"Your Threshold", aboutTitle:"About this Calculator", aboutText:"Calculates regular Medicare tax (1.45%/2.9%) plus the 0.9% Additional Medicare Tax above IRS income thresholds for 2026." },
+  es: { groupTitle:"Ingresos y Declaración", wages:"Salario Anual / Ingresos Netos", filingStatus:"Estado Civil Tributario", single:"Soltero", mfj:"Casado Declarando en Conjunto", mfs:"Casado Declarando por Separado", hoh:"Cabeza de Familia", employmentType:"Tipo de Empleo", employee:"Empleado", selfEmployed:"Trabajador Independiente", emptyTitle:"Calculadora de Impuesto Medicare", emptyDesc:"Calcula tu Impuesto Medicare regular y adicional para 2026.", tip1:"Impuesto Medicare Total", tip2:"Impuesto Regular", tip3:"Impuesto Adicional", total:"Impuesto Medicare Total", regular:"Impuesto Medicare Regular", additional:"Impuesto Medicare Adicional", threshold:"Tu Umbral", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el impuesto Medicare regular (1.45%/2.9%) más el Impuesto Medicare Adicional de 0.9% por encima de los umbrales de ingresos del IRS para 2026." },
+}[lang];
 ---
 <section class="mct-calculator">
   <div class="mct-layout">
     <aside class="mct-sidebar">
       <div class="mct-group">
-        <h3>Income & Filing</h3>
-        <CalculatorField id="annualWages" label="Annual Wages / Net Earnings" type="number" placeholder="e.g. 220000" min="0" step="1" />
-        <CalculatorField type="select" id="filingStatus" label="Filing Status">
-  <option value="single">Single</option>
-  <option value="mfj">Married Filing Jointly</option>
-  <option value="mfs">Married Filing Separately</option>
-  <option value="hoh">Head of Household</option>
+        <h3>{copy.groupTitle}</h3>
+        <CalculatorField id="annualWages" label={copy.wages} type="number" placeholder="e.g. 220000" min="0" step="1" />
+        <CalculatorField type="select" id="filingStatus" label={copy.filingStatus}>
+  <option value="single">{copy.single}</option>
+  <option value="mfj">{copy.mfj}</option>
+  <option value="mfs">{copy.mfs}</option>
+  <option value="hoh">{copy.hoh}</option>
 </CalculatorField>
-        <CalculatorField type="select" id="employmentType" label="Employment Type">
-  <option value="employee">Employee</option>
-  <option value="self">Self-Employed</option>
+        <CalculatorField type="select" id="employmentType" label={copy.employmentType}>
+  <option value="employee">{copy.employee}</option>
+  <option value="self">{copy.selfEmployed}</option>
 </CalculatorField>
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
@@ -28,23 +35,26 @@ import { HeartPulse, Wallet, TrendingUp, Gauge } from "@lucide/astro";
     </aside>
     <main class="mct-content">
       <div id="emptyState">
-        <EmptyState icon="🏥" title="Medicare Tax Calculator" description="Find your regular and Additional Medicare Tax for 2026." tips={["Total Medicare Tax", "Regular Tax", "Additional Tax"]} />
+        <EmptyState icon="🏥" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="totalMedicareResult" title="Total Medicare Tax" icon={HeartPulse} accent="success" subtitle=" " />
-          <ResultCard id="regularMedicareResult" title="Regular Medicare Tax" icon={Wallet} />
-          <ResultCard id="additionalMedicareResult" title="Additional Medicare Tax" icon={TrendingUp} subtitle=" " />
-          <ResultCard id="thresholdResult" title="Your Threshold" icon={Gauge} />
+          <ResultCard id="totalMedicareResult" title={copy.total} icon={HeartPulse} accent="success" subtitle=" " />
+          <ResultCard id="regularMedicareResult" title={copy.regular} icon={Wallet} />
+          <ResultCard id="additionalMedicareResult" title={copy.additional} icon={TrendingUp} subtitle=" " />
+          <ResultCard id="thresholdResult" title={copy.threshold} icon={Gauge} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Calculates regular Medicare tax (1.45%/2.9%) plus the 0.9% Additional Medicare Tax above IRS income thresholds for 2026.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/medicare-tax-calculator";
 </script>

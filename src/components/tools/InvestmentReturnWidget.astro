@@ -5,39 +5,49 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { TrendingUp, DollarSign, Percent, PiggyBank } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { groupTitle:"Investment", initial:"Initial Investment ($)", monthly:"Monthly Contribution ($)", years:"Years Invested", ending:"Ending Value ($)", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Investment Return Calculator", emptyDesc:"Find your total gain and true annualized return, including contributions.", tip1:"Annualized Return", tip2:"Total Gain", tip3:"Total Return %", annualizedReturn:"Annualized Return", totalGain:"Total Gain", totalReturnPct:"Total Return", totalContributed:"Total Contributed", aboutTitle:"About this Calculator", aboutText:"Solves for your true annualized return (CAGR-equivalent) by reconciling your initial investment, contribution schedule, and ending balance — the correct way to compare performance across investments." },
+  es: { groupTitle:"Inversión", initial:"Inversión Inicial ($)", monthly:"Aporte Mensual ($)", years:"Años Invertidos", ending:"Valor Final ($)", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Retorno de Inversión", emptyDesc:"Encuentra tu ganancia total y el retorno anualizado real, incluyendo aportes.", tip1:"Retorno Anualizado", tip2:"Ganancia Total", tip3:"Retorno Total %", annualizedReturn:"Retorno Anualizado", totalGain:"Ganancia Total", totalReturnPct:"Retorno Total", totalContributed:"Total Aportado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu retorno anualizado real (equivalente a CAGR) conciliando tu inversión inicial, calendario de aportes y saldo final — la forma correcta de comparar el rendimiento entre inversiones." },
+}[lang];
 ---
 <section class="irc-calculator">
   <div class="irc-layout">
     <aside class="irc-sidebar">
       <div class="irc-group">
-        <h3>Investment</h3>
-        <CalculatorField id="initialInvestment" label="Initial Investment ($)" type="number" placeholder="e.g. 10000" min="0" step="1" />
-        <CalculatorField id="monthlyContribution" label="Monthly Contribution ($)" type="number" placeholder="e.g. 200" min="0" step="1" />
-        <CalculatorField id="years" label="Years Invested" type="number" placeholder="e.g. 10" min="0.1" step="0.1" />
-        <CalculatorField id="endingValue" label="Ending Value ($)" type="number" placeholder="e.g. 60000" min="0" step="1" />
+        <h3>{copy.groupTitle}</h3>
+        <CalculatorField id="initialInvestment" label={copy.initial} type="number" placeholder="e.g. 10000" min="0" step="1" />
+        <CalculatorField id="monthlyContribution" label={copy.monthly} type="number" placeholder="e.g. 200" min="0" step="1" />
+        <CalculatorField id="years" label={copy.years} type="number" placeholder="e.g. 10" min="0.1" step="0.1" />
+        <CalculatorField id="endingValue" label={copy.ending} type="number" placeholder="e.g. 60000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="irc-content">
       <div id="emptyState">
-        <EmptyState icon="📈" title="Investment Return Calculator" description="Find your total gain and true annualized return, including contributions." tips={["Annualized Return", "Total Gain", "Total Return %"]} />
+        <EmptyState icon="📈" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="annualizedReturnResult" title="Annualized Return" icon={TrendingUp} accent="success" subtitle=" " />
-          <ResultCard id="totalGainResult" title="Total Gain" icon={DollarSign} />
-          <ResultCard id="totalReturnPercentResult" title="Total Return" icon={Percent} />
-          <ResultCard id="totalContributedResult" title="Total Contributed" icon={PiggyBank} />
+          <ResultCard id="annualizedReturnResult" title={copy.annualizedReturn} icon={TrendingUp} accent="success" subtitle=" " />
+          <ResultCard id="totalGainResult" title={copy.totalGain} icon={DollarSign} />
+          <ResultCard id="totalReturnPercentResult" title={copy.totalReturnPct} icon={Percent} />
+          <ResultCard id="totalContributedResult" title={copy.totalContributed} icon={PiggyBank} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Solves for your true annualized return (CAGR-equivalent) by reconciling your initial investment, contribution schedule, and ending balance — the correct way to compare performance across investments.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/investment-return-calculator";
 </script>

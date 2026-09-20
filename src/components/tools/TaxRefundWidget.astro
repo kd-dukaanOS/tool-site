@@ -5,53 +5,65 @@ import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 import { Wallet, Percent, FileText, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { incomeGroup:"Income", filingStatus:"Filing Status", single:"Single or Married Filing Separately", married:"Married Filing Jointly", hoh:"Head of Household", grossIncome:"Annual Gross Income", otherIncome:"Other Income (annual)", adjustments:"Adjustments (annual)", deductionsGroup:"Deductions & Credits", itemized:"Itemized Deductions (0 if standard)", credits:"Tax Credits (annual)", paymentsGroup:"Payments Made", withheld:"Federal Tax Withheld (annual)", estimated:"Estimated Payments (annual)", emptyTitle:"Tax Refund Calculator", emptyDesc:"Estimate your federal tax refund or amount owed.", tip1:"Refund or Owed", tip2:"Tax Liability", tip3:"Taxable Income", refundOwed:"Refund / Owed", taxLiability:"Tax Liability", taxableIncome:"Taxable Income", effectiveRate:"Effective Tax Rate", estRefund:"Estimated Refund", estOwed:"Estimated Amount Owed", aboutTitle:"About this Calculator", aboutText:"Estimates your federal tax refund or balance due by comparing your calculated tax liability against total withholding and estimated payments made during the year." },
+  es: { incomeGroup:"Ingresos", filingStatus:"Estado Civil Tributario", single:"Soltero o Casado Declarando por Separado", married:"Casado Declarando en Conjunto", hoh:"Cabeza de Familia", grossIncome:"Ingreso Bruto Anual", otherIncome:"Otros Ingresos (anual)", adjustments:"Ajustes (anual)", deductionsGroup:"Deducciones y Créditos", itemized:"Deducciones Detalladas (0 si es estándar)", credits:"Créditos Fiscales (anual)", paymentsGroup:"Pagos Realizados", withheld:"Impuesto Federal Retenido (anual)", estimated:"Pagos Estimados (anual)", emptyTitle:"Calculadora de Reembolso de Impuestos", emptyDesc:"Calcula tu reembolso de impuestos federal estimado o el monto adeudado.", tip1:"Reembolso o Adeudado", tip2:"Obligación Fiscal", tip3:"Ingreso Gravable", refundOwed:"Reembolso / Adeudado", taxLiability:"Obligación Fiscal", taxableIncome:"Ingreso Gravable", effectiveRate:"Tasa Impositiva Efectiva", estRefund:"Reembolso Estimado", estOwed:"Monto Adeudado Estimado", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula tu reembolso de impuestos federal estimado o saldo adeudado comparando tu obligación fiscal calculada con la retención total y los pagos estimados realizados durante el año." },
+}[lang];
 ---
 <section class="trf-calculator">
   <div class="trf-layout">
     <aside class="trf-sidebar">
       <div class="trf-group">
-        <h3>Income</h3>
-        <CalculatorField id="filingStatus" label="Filing Status" type="select">
-          <option value="single">Single or Married Filing Separately</option>
-          <option value="married">Married Filing Jointly</option>
-          <option value="headOfHousehold">Head of Household</option>
+        <h3>{copy.incomeGroup}</h3>
+        <CalculatorField id="filingStatus" label={copy.filingStatus} type="select">
+          <option value="single">{copy.single}</option>
+          <option value="married">{copy.married}</option>
+          <option value="headOfHousehold">{copy.hoh}</option>
         </CalculatorField>
-        <CalculatorField id="annualGrossIncome" label="Annual Gross Income" type="number" placeholder="e.g. 70000" min="0" step="1" />
-        <CalculatorField id="otherIncome" label="Other Income (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="adjustments" label="Adjustments (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="annualGrossIncome" label={copy.grossIncome} type="number" placeholder="e.g. 70000" min="0" step="1" />
+        <CalculatorField id="otherIncome" label={copy.otherIncome} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="adjustments" label={copy.adjustments} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <div class="trf-group">
-        <h3>Deductions & Credits</h3>
-        <CalculatorField id="itemizedDeductions" label="Itemized Deductions (0 if standard)" type="number" placeholder="e.g. 0" min="0" step="1" />
-        <CalculatorField id="taxCreditsAnnual" label="Tax Credits (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.deductionsGroup}</h3>
+        <CalculatorField id="itemizedDeductions" label={copy.itemized} type="number" placeholder="e.g. 0" min="0" step="1" />
+        <CalculatorField id="taxCreditsAnnual" label={copy.credits} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <div class="trf-group">
-        <h3>Payments Made</h3>
-        <CalculatorField id="federalTaxWithheldAnnual" label="Federal Tax Withheld (annual)" type="number" placeholder="e.g. 9500" min="0" step="1" />
-        <CalculatorField id="estimatedPaymentsAnnual" label="Estimated Payments (annual)" type="number" placeholder="e.g. 0" min="0" step="1" />
+        <h3>{copy.paymentsGroup}</h3>
+        <CalculatorField id="federalTaxWithheldAnnual" label={copy.withheld} type="number" placeholder="e.g. 9500" min="0" step="1" />
+        <CalculatorField id="estimatedPaymentsAnnual" label={copy.estimated} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
       <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="trf-content">
       <div id="emptyState">
-        <EmptyState icon="💰" title="Tax Refund Calculator" description="Estimate your federal tax refund or amount owed." tips={["Refund or Owed", "Tax Liability", "Taxable Income"]} />
+        <EmptyState icon="💰" title={copy.emptyTitle} description={copy.emptyDesc} tips={[copy.tip1, copy.tip2, copy.tip3]} />
       </div>
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={4}>
-          <ResultCard id="refundOrOwedResult" title="Refund / Owed" icon={Wallet} accent="success" subtitle=" " />
-          <ResultCard id="taxLiabilityResult" title="Tax Liability" icon={Receipt} />
-          <ResultCard id="taxableIncomeResult" title="Taxable Income" icon={FileText} />
-          <ResultCard id="effectiveRateResult" title="Effective Tax Rate" icon={Percent} />
+          <ResultCard id="refundOrOwedResult" title={copy.refundOwed} icon={Wallet} accent="success" subtitle=" " />
+          <ResultCard id="taxLiabilityResult" title={copy.taxLiability} icon={Receipt} />
+          <ResultCard id="taxableIncomeResult" title={copy.taxableIncome} icon={FileText} />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} />
         </ResultsGrid>
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>Estimates your federal tax refund or balance due by comparing your calculated tax liability against total withholding and estimated payments made during the year.</p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
   </div>
 </section>
+<script define:vars={{ calcLang: lang, estRefundLabel: copy.estRefund, estOwedLabel: copy.estOwed }}>
+  window.calcLang = calcLang;
+  window.trfEstRefundLabel = estRefundLabel;
+  window.trfEstOwedLabel = estOwedLabel;
+</script>
 <script>
   import "../../scripts/tax-refund-calculator";
 </script>

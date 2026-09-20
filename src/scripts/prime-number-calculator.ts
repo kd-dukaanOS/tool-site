@@ -1,4 +1,4 @@
-﻿import {
+import {
   calculatePrime,
   validatePrimeInput,
   copyPrimeSummary,
@@ -15,6 +15,12 @@ const copyBtn = document.getElementById("copyBtn");
 const errorBox = document.getElementById("errorBox") as HTMLElement;
 const emptyState = document.getElementById("emptyState") as HTMLElement;
 const resultsContainer = document.getElementById("resultsContainer") as HTMLElement;
+
+const lang = (window as any).calcLang === "es" ? "es" : "en";
+const primeLabel = (window as any).pnPrimeLabel || "Prime";
+const notPrimeLabel = (window as any).pnNotPrimeLabel || "Not Prime";
+const noneLabel = (window as any).pnNoneLabel || "None";
+const fillNumberMsg = (window as any).pnFillNumberMsg || "Please enter a number.";
 
 let lastInput: PrimeInput | null = null;
 
@@ -34,11 +40,11 @@ function calculate() {
   const input: PrimeInput = { number: Number(numberInput.value) };
 
   if (numberInput.value === "") {
-    showError("Please enter a number.");
+    showError(fillNumberMsg);
     return;
   }
 
-  const err = validatePrimeInput(input);
+  const err = validatePrimeInput(input, lang);
   if (err) {
     showError(err);
     return;
@@ -46,9 +52,9 @@ function calculate() {
 
   const result = calculatePrime(input);
 
-  setValue("isPrimeResult", result.isPrime ? "Prime" : "Not Prime");
+  setValue("isPrimeResult", result.isPrime ? primeLabel : notPrimeLabel);
   setValue("factorsResult", result.factors.join(", "));
-  setValue("nearestBelowResult", result.nearestPrimeBelow ?? "None");
+  setValue("nearestBelowResult", result.nearestPrimeBelow ?? noneLabel);
   setValue("nearestAboveResult", result.nearestPrimeAbove);
 
   lastInput = input;
@@ -70,7 +76,7 @@ function resetCalculator() {
 function handleCopy() {
   if (!lastInput) return;
   const result = calculatePrime(lastInput);
-  copyToClipboard(copyPrimeSummary(lastInput, result));
+  copyToClipboard(copyPrimeSummary(lastInput, result, lang));
 }
 
 calculateBtn?.addEventListener("click", calculate);

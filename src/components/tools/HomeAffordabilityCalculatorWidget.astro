@@ -5,17 +5,27 @@ import CalculatorActions from "../calculator/ActionButtons.astro";
 import EmptyState from "../calculator/EmptyState.astro";
 import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
+import CurrencySelector from "../calculator/CurrencySelector.astro";
 
 import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { annualIncome:"Annual Income ($)", monthlyDebts:"Monthly Debt Payments ($)", monthlyDebtsHelp:"Car loans, credit cards, student loans, etc.", downPayment:"Down Payment ($)", interestRate:"Interest Rate (%)", loanTerm:"Loan Term (Years)", propertyTax:"Property Tax Rate (% / year)", insurance:"Annual Home Insurance ($)", maxDTI:"Max Debt-to-Income Ratio (%)", maxDTIHelp:"Lenders typically cap this at 36–43%.", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Home Affordability Calculator", emptyDesc:"Find the maximum home price you can afford based on your income, debts and down payment.", tip1:"Max Home Price", tip2:"Estimated Monthly Payment", maxHomePrice:"Max Home Price", maxLoanAmount:"Max Loan Amount", monthlyPayment:"Est. Monthly Payment (PITI)", monthlyPI:"Principal & Interest Only", aboutTitle:"About this Calculator", aboutText:"Estimates the maximum home price you can afford by capping your total monthly housing payment (principal, interest, property tax and insurance) at your target debt-to-income ratio. Does not include HOA fees, PMI, or a lender's specific underwriting rules." },
+  es: { annualIncome:"Ingreso Anual ($)", monthlyDebts:"Pagos de Deuda Mensuales ($)", monthlyDebtsHelp:"Préstamos de auto, tarjetas de crédito, préstamos estudiantiles, etc.", downPayment:"Pago Inicial ($)", interestRate:"Tasa de Interés (%)", loanTerm:"Plazo del Préstamo (Años)", propertyTax:"Tasa de Impuesto Predial (% / año)", insurance:"Seguro Anual del Hogar ($)", maxDTI:"Relación Máxima Deuda-Ingreso (%)", maxDTIHelp:"Los prestamistas suelen limitar esto al 36–43%.", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Asequibilidad de Vivienda", emptyDesc:"Encuentra el precio máximo de vivienda que puedes pagar según tus ingresos, deudas y pago inicial.", tip1:"Precio Máximo de Vivienda", tip2:"Pago Mensual Estimado", maxHomePrice:"Precio Máximo de Vivienda", maxLoanAmount:"Monto Máximo del Préstamo", monthlyPayment:"Pago Mensual Est. (PITI)", monthlyPI:"Solo Capital e Interés", aboutTitle:"Acerca de esta Calculadora", aboutText:"Estima el precio máximo de vivienda que puedes pagar limitando tu pago mensual total de vivienda (capital, interés, impuesto predial y seguro) a tu relación deuda-ingreso objetivo. No incluye cuotas de HOA, PMI, ni reglas específicas del prestamista." },
+}[lang];
 ---
 
 <section class="ha-calculator">
   <div class="ha-layout">
 
     <aside class="ha-sidebar">
+      <CurrencySelector />
+
       <CalculatorField
         id="annualIncome"
-        label="Annual Income ($)"
+        label={copy.annualIncome}
         type="number"
         placeholder="e.g. 90000"
         required={true}
@@ -25,17 +35,17 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="monthlyDebts"
-        label="Monthly Debt Payments ($)"
+        label={copy.monthlyDebts}
         type="number"
         placeholder="e.g. 400"
         min="0"
         step="0.01"
-        helpText="Car loans, credit cards, student loans, etc."
+        helpText={copy.monthlyDebtsHelp}
       />
 
       <CalculatorField
         id="downPayment"
-        label="Down Payment ($)"
+        label={copy.downPayment}
         type="number"
         placeholder="e.g. 40000"
         min="0"
@@ -44,7 +54,7 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="interestRate"
-        label="Interest Rate (%)"
+        label={copy.interestRate}
         type="number"
         placeholder="e.g. 6.5"
         required={true}
@@ -54,7 +64,7 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="loanTermYears"
-        label="Loan Term (Years)"
+        label={copy.loanTerm}
         type="number"
         placeholder="30"
         required={true}
@@ -64,7 +74,7 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="propertyTaxRate"
-        label="Property Tax Rate (% / year)"
+        label={copy.propertyTax}
         type="number"
         placeholder="e.g. 1.1"
         min="0"
@@ -73,7 +83,7 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="annualInsurance"
-        label="Annual Home Insurance ($)"
+        label={copy.insurance}
         type="number"
         placeholder="e.g. 1500"
         min="0"
@@ -82,14 +92,14 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
 
       <CalculatorField
         id="maxDTI"
-        label="Max Debt-to-Income Ratio (%)"
+        label={copy.maxDTI}
         type="number"
         placeholder="36"
         required={true}
         min="1"
         max="100"
         step="1"
-        helpText="Lenders typically cap this at 36–43%."
+        helpText={copy.maxDTIHelp}
       />
 
       <CalculatorActions
@@ -97,6 +107,9 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -106,27 +119,23 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🏡"
-          title="Home Affordability Calculator"
-          description="Find the maximum home price you can afford based on your income, debts and down payment."
-          tips={["Max Home Price", "Estimated Monthly Payment"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="maxHomePriceResult" title="Max Home Price" icon={Home} accent="primary" size="lg" />
-          <ResultCard id="maxLoanAmountResult" title="Max Loan Amount" icon={Landmark} accent="neutral" size="lg" />
-          <ResultCard id="monthlyPaymentResult" title="Est. Monthly Payment (PITI)" icon={Wallet} accent="success" />
-          <ResultCard id="monthlyPIResult" title="Principal & Interest Only" icon={Receipt} accent="neutral" />
+          <ResultCard id="maxHomePriceResult" title={copy.maxHomePrice} icon={Home} accent="primary" size="lg" />
+          <ResultCard id="maxLoanAmountResult" title={copy.maxLoanAmount} icon={Landmark} accent="neutral" size="lg" />
+          <ResultCard id="monthlyPaymentResult" title={copy.monthlyPayment} icon={Wallet} accent="success" />
+          <ResultCard id="monthlyPIResult" title={copy.monthlyPI} icon={Receipt} accent="neutral" />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Estimates the maximum home price you can afford by capping your total monthly housing
-            payment (principal, interest, property tax and insurance) at your target debt-to-income
-            ratio. Does not include HOA fees, PMI, or a lender's specific underwriting rules.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -134,6 +143,9 @@ import { Home, Landmark, Wallet, Receipt } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/home-affordability-calculator";
 </script>

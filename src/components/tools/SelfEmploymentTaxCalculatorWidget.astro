@@ -7,6 +7,13 @@ import ResultCard from "../calculator/ResultCard.astro";
 import ResultsGrid from "../calculator/ResultsGrid.astro";
 
 import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
+
+interface Props { lang?: "en" | "es"; }
+const { lang = "en" } = Astro.props as Props;
+const copy = {
+  en: { netEarningsLabel:"Net Self-Employment Earnings ($)", netEarningsHelp:"Net profit from self-employment, before SE tax.", filingStatusLabel:"Filing Status", single:"Single", marriedJointly:"Married Filing Jointly", marriedSeparately:"Married Filing Separately", headOfHousehold:"Head of Household", taxYearLabel:"Tax Year", calculate:"Calculate", reset:"Reset", copy:"Copy", emptyTitle:"Self-Employment Tax Calculator", emptyDesc:"Calculate Social Security and Medicare tax owed on your self-employment income.", tip1:"Total SE Tax", tip2:"Deductible Half", totalSETax:"Total SE Tax", deductibleHalf:"Deductible Half", socialSecurity:"Social Security (12.4%)", medicare:"Medicare (2.9% + Additional)", effectiveRate:"Effective Rate", aboutTitle:"About this Calculator", aboutText:"Calculates Social Security and Medicare (self-employment) tax on 92.35% of your net self-employment earnings, using current IRS rates and the Social Security wage base for 2025 and 2026. Also shows the deductible half of SE tax you can claim against income tax." },
+  es: { netEarningsLabel:"Ingresos Netos por Trabajo Independiente ($)", netEarningsHelp:"Ganancia neta del trabajo independiente, antes del impuesto SE.", filingStatusLabel:"Estado Civil Tributario", single:"Soltero(a)", marriedJointly:"Casado(a) Declaración Conjunta", marriedSeparately:"Casado(a) Declaración Separada", headOfHousehold:"Cabeza de Familia", taxYearLabel:"Año Fiscal", calculate:"Calcular", reset:"Restablecer", copy:"Copiar", emptyTitle:"Calculadora de Impuesto por Trabajo Independiente", emptyDesc:"Calcula el impuesto de Seguro Social y Medicare sobre tus ingresos por trabajo independiente.", tip1:"Impuesto SE Total", tip2:"Mitad Deducible", totalSETax:"Impuesto SE Total", deductibleHalf:"Mitad Deducible", socialSecurity:"Seguro Social (12.4%)", medicare:"Medicare (2.9% + Adicional)", effectiveRate:"Tasa Efectiva", aboutTitle:"Acerca de esta Calculadora", aboutText:"Calcula el impuesto de Seguro Social y Medicare (trabajo independiente) sobre el 92.35% de tus ingresos netos por trabajo independiente, utilizando las tasas actuales del IRS y la base salarial del Seguro Social para 2025 y 2026. También muestra la mitad deducible del impuesto SE que puedes reclamar contra el impuesto sobre la renta." },
+}[lang];
 ---
 
 <section class="set-calculator">
@@ -15,30 +22,30 @@ import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
     <aside class="set-sidebar">
       <CalculatorField
         id="netEarnings"
-        label="Net Self-Employment Earnings ($)"
+        label={copy.netEarningsLabel}
         type="number"
         placeholder="e.g. 60000"
         required={true}
         min="0"
         step="0.01"
-        helpText="Net profit from self-employment, before SE tax."
+        helpText={copy.netEarningsHelp}
       />
 
       <CalculatorField
         id="filingStatus"
-        label="Filing Status"
+        label={copy.filingStatusLabel}
         type="select"
         required={true}
       >
-        <option value="single">Single</option>
-        <option value="marriedJointly">Married Filing Jointly</option>
-        <option value="marriedSeparately">Married Filing Separately</option>
-        <option value="headOfHousehold">Head of Household</option>
+        <option value="single">{copy.single}</option>
+        <option value="marriedJointly">{copy.marriedJointly}</option>
+        <option value="marriedSeparately">{copy.marriedSeparately}</option>
+        <option value="headOfHousehold">{copy.headOfHousehold}</option>
       </CalculatorField>
 
       <CalculatorField
         id="taxYear"
-        label="Tax Year"
+        label={copy.taxYearLabel}
         type="select"
         required={true}
       >
@@ -51,6 +58,9 @@ import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
         resetId="resetBtn"
         copyId="copyBtn"
         showCopy={true}
+        calculateText={copy.calculate}
+        resetText={copy.reset}
+        copyText={copy.copy}
       />
 
       <div id="errorBox" class="error-box" hidden></div>
@@ -60,28 +70,24 @@ import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
       <div id="emptyState">
         <EmptyState
           icon="🧾"
-          title="Self-Employment Tax Calculator"
-          description="Calculate Social Security and Medicare tax owed on your self-employment income."
-          tips={["Total SE Tax", "Deductible Half"]}
+          title={copy.emptyTitle}
+          description={copy.emptyDesc}
+          tips={[copy.tip1, copy.tip2]}
         />
       </div>
 
       <div id="resultsContainer" hidden>
         <ResultsGrid columns={2}>
-          <ResultCard id="totalSETaxResult" title="Total SE Tax" icon={Landmark} accent="primary" size="lg" />
-          <ResultCard id="deductibleHalfResult" title="Deductible Half" icon={Wallet} accent="success" size="lg" />
-          <ResultCard id="socialSecurityResult" title="Social Security (12.4%)" icon={Receipt} accent="neutral" />
-          <ResultCard id="medicareResult" title="Medicare (2.9% + Additional)" icon={Receipt} accent="neutral" />
-          <ResultCard id="effectiveRateResult" title="Effective Rate" icon={Percent} accent="primary" />
+          <ResultCard id="totalSETaxResult" title={copy.totalSETax} icon={Landmark} accent="primary" size="lg" />
+          <ResultCard id="deductibleHalfResult" title={copy.deductibleHalf} icon={Wallet} accent="success" size="lg" />
+          <ResultCard id="socialSecurityResult" title={copy.socialSecurity} icon={Receipt} accent="neutral" />
+          <ResultCard id="medicareResult" title={copy.medicare} icon={Receipt} accent="neutral" />
+          <ResultCard id="effectiveRateResult" title={copy.effectiveRate} icon={Percent} accent="primary" />
         </ResultsGrid>
 
         <section class="calculator-info">
-          <h2>About this Calculator</h2>
-          <p>
-            Calculates Social Security and Medicare (self-employment) tax on 92.35% of your net
-            self-employment earnings, using current IRS rates and the Social Security wage base for
-            2025 and 2026. Also shows the deductible half of SE tax you can claim against income tax.
-          </p>
+          <h2>{copy.aboutTitle}</h2>
+          <p>{copy.aboutText}</p>
         </section>
       </div>
     </main>
@@ -89,6 +95,9 @@ import { Landmark, Percent, Wallet, Receipt } from "@lucide/astro";
   </div>
 </section>
 
+<script define:vars={{ calcLang: lang }}>
+  window.calcLang = calcLang;
+</script>
 <script>
   import "../../scripts/self-employment-tax-calculator";
 </script>
