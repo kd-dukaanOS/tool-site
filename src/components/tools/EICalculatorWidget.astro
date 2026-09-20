@@ -17,7 +17,7 @@ const copy = {
   <div class="ei-layout">
     <aside class="ei-sidebar">
       <CalculatorField id="grossIncome" label={copy.grossIncome} type="number" required={true} helpText={copy.grossIncomeHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ei-content">

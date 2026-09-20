@@ -19,7 +19,7 @@ const copy = {
       <CalculatorField id="balance" label={copy.balance} type="number" placeholder="e.g. 5000" required={true} min="0" step="1" helpText={copy.balanceHelp} />
       <CalculatorField id="apr" label={copy.apr} type="number" placeholder="e.g. 24" required={true} min="0" step="0.01" helpText={copy.aprHelp} />
       <CalculatorField id="monthlyPayment" label={copy.monthlyPayment} type="number" placeholder="e.g. 200" required={true} min="0" step="1" helpText={copy.monthlyPaymentHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ccp-content">

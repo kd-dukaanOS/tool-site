@@ -65,7 +65,7 @@ const copy = {
         <CalculatorField id="salaryGrowthRate" label={copy.salaryGrowth} type="number" placeholder="e.g. 3" min="0" step="0.1" />
         <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="fk-content">

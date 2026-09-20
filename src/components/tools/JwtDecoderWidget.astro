@@ -19,7 +19,7 @@ const copy = {
         <label class="tool-label" for="jwtInput">{copy.token}</label>
         <textarea id="jwtInput" class="tool-textarea" placeholder="eyJhbGciOiJIUzI1NiIs..."></textarea>
       </div>
-      <CalculatorActions calculateId="decodeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="decodeBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 

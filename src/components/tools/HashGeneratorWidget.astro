@@ -12,7 +12,7 @@ import { Hash, KeyRound, ShieldCheck, Lock } from "@lucide/astro";
         <label class="tool-label" for="hashText">Text to Hash</label>
         <textarea id="hashText" class="tool-textarea" placeholder="Enter text..."></textarea>
       </div>
-      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 

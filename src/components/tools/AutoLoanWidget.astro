@@ -47,7 +47,7 @@ const copy = {
         <CalculatorField id="apr" label={copy.apr} type="number" placeholder="e.g. 6.5" min="0" step="0.01" />
         <CalculatorField id="termMonths" label={copy.termMonths} type="number" placeholder="e.g. 60" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="al-content">

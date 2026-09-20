@@ -10,7 +10,7 @@ import { Wallet, CalendarDays, Repeat, MinusCircle } from "@lucide/astro";
   <div class="usts-layout">
     <aside class="usts-sidebar">
       <CalculatorField id="grossIncome" label="Gross Annual Income" type="number" required={true} helpText="Your gross salary before deductions (USD)." />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="usts-content">

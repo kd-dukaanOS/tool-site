@@ -17,7 +17,7 @@ const copy = {
   <div class="ni-layout">
     <aside class="ni-sidebar">
       <CalculatorField id="grossIncome" label={copy.income} type="number" required={true} helpText={copy.incomeHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ni-content">

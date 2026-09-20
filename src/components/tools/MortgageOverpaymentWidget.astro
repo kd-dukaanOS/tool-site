@@ -26,7 +26,7 @@ const copy = {
         <h3>{copy.overpaymentGroup}</h3>
         <CalculatorField id="extraMonthlyPayment" label={copy.extra} type="number" placeholder="e.g. 200" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mo-content">

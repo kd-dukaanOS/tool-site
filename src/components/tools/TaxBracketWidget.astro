@@ -25,7 +25,7 @@ const copy = {
         </CalculatorField>
         <CalculatorField id="taxableIncome" label={copy.taxableIncome} type="number" placeholder="e.g. 80000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="tbk-content">

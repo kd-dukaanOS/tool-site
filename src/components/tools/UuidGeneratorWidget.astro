@@ -27,7 +27,7 @@ const copy = {
       <div class="tool-checkbox-field"><input id="uuidHyphens" type="checkbox" checked /><label for="uuidHyphens">{copy.hyphens}</label></div>
       <div class="tool-checkbox-field"><input id="uuidUppercase" type="checkbox" /><label for="uuidUppercase">{copy.uppercase}</label></div>
 
-      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.generate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.generate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 

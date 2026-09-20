@@ -28,7 +28,7 @@ const copy = {
         <CalculatorField id="newTermMonths" label={copy.newTerm} type="number" placeholder="e.g. 360" min="1" step="1" />
         <CalculatorField id="closingCosts" label={copy.closingCosts} type="number" placeholder="e.g. 4000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mr-content">

@@ -25,7 +25,7 @@ const copy = {
         <h3>{copy.extraPaymentGroup}</h3>
         <CalculatorField id="extraMonthlyPayment" label={copy.extraPayment} type="number" placeholder="e.g. 150" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="dsb-content">

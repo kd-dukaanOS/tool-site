@@ -26,7 +26,7 @@ const copy = {
         <CalculatorField id="targetMonths" label={copy.targetMonths} type="number" placeholder="e.g. 6" min="1" step="1" />
         <CalculatorField id="monthlySavingsCapacity" label={copy.monthlySavingsCapacity} type="number" placeholder="e.g. 300" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ef-content">

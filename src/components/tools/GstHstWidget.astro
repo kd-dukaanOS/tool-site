@@ -35,7 +35,7 @@ import { Receipt, Percent, DollarSign, Calculator } from "@lucide/astro";
           <option value="remove">Remove tax from amount</option>
         </CalculatorField>
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="gsth-content">

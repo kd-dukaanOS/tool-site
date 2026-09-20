@@ -34,7 +34,7 @@ const copy = {
         <CalculatorField id="inflationRate" label={copy.inflationRate} type="number" placeholder="e.g. 3" min="0" step="0.1" />
         <CalculatorField id="retirementYears" label={copy.retirementYears} type="number" placeholder="e.g. 30" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ric-content">

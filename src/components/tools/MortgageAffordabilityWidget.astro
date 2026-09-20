@@ -22,7 +22,7 @@ const copy = {
       <CalculatorField id="annualRate" label={copy.rate} type="number" placeholder="e.g. 6.5" required={true} min="0" step="0.01" helpText={copy.rateHelp} />
       <CalculatorField id="loanYears" label={copy.years} type="number" placeholder="e.g. 30" required={true} min="1" step="1" helpText={copy.yearsHelp} />
       <CalculatorField id="monthlyTaxesInsurance" label={copy.taxIns} type="number" placeholder="e.g. 350" min="0" step="1" helpText={copy.taxInsHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="morta-content">

@@ -27,7 +27,7 @@ const copy = {
         <CalculatorField id="buyFees" label={copy.buyFees} type="number" placeholder="e.g. 5" min="0" step="0.01" />
         <CalculatorField id="sellFees" label={copy.sellFees} type="number" placeholder="e.g. 5" min="0" step="0.01" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="sp-content">

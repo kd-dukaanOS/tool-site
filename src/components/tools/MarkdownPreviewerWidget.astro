@@ -19,7 +19,7 @@ const copy = {
         <label class="tool-label" for="markdownInput">{copy.label}</label>
         <textarea id="markdownInput" class="tool-textarea" placeholder="# Heading&#10;Type Markdown here..."></textarea>
       </div>
-      <CalculatorActions calculateId="renderBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="renderBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 

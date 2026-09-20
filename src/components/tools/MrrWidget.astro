@@ -27,7 +27,7 @@ const copy = {
         <CalculatorField id="churnedMrr" label={copy.churnedMrr} type="number" placeholder="e.g. 2000" min="0" step="1" />
         <CalculatorField id="contractionMrr" label={copy.contractionMrr} type="number" placeholder="e.g. 1000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="mrr-content">

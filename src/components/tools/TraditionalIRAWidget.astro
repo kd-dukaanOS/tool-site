@@ -34,7 +34,7 @@ import { PiggyBank, FileMinus, TrendingDown, Landmark } from "@lucide/astro";
         <CalculatorField id="contribution" label="Planned Contribution" type="number" placeholder="e.g. 7000" min="0" step="1" />
         <CalculatorField id="marginalTaxRate" label="Marginal Tax Rate (%)" type="number" placeholder="e.g. 22" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="tira-content">

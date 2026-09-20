@@ -40,7 +40,7 @@ const copy = {
         <CalculatorField id="monthsPrepaidTax" label={copy.monthsPrepaidTax} type="number" placeholder="e.g. 6" min="0" step="1" />
         <CalculatorField id="annualPropertyTax" label={copy.annualPropertyTax} type="number" placeholder="e.g. 3800" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="cc-content">

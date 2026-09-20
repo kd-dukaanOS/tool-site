@@ -52,7 +52,7 @@ const copy = {
         <h3>{copy.groupProjection}</h3>
         <CalculatorField id="projectionMonths" label={copy.projMonths} type="number" placeholder="e.g. 12" min="1" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="arr-content">

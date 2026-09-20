@@ -24,7 +24,7 @@ const copy = {
       <CalculatorField id="amount" label={copy.amount} type="number" required={true} helpText={copy.amountHelp} />
       <CalculatorField id="hoursPerWeek" label={copy.hoursPerWeek} type="number" helpText={copy.hoursPerWeekHelp} />
       <CalculatorField id="weeksPerYear" label={copy.weeksPerYear} type="number" helpText={copy.weeksPerYearHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="salary-content">

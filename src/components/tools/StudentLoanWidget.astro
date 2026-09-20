@@ -23,7 +23,7 @@ const copy = {
         <CalculatorField id="loanTermYears" label={copy.term} type="number" placeholder="e.g. 10" min="1" step="1" />
         <CalculatorField id="extraMonthlyPayment" label={copy.extra} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="stl-content">

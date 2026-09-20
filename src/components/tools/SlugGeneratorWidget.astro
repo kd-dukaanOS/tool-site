@@ -36,7 +36,7 @@ const copy = {
       <div class="tool-checkbox-field"><input id="slugLowercase" type="checkbox" checked /><label for="slugLowercase">{copy.lowercase}</label></div>
       <div class="tool-checkbox-field"><input id="slugRemoveStopwords" type="checkbox" /><label for="slugRemoveStopwords">{copy.removeStopwords}</label></div>
 
-      <CalculatorActions calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.generate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="generateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.generate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
 

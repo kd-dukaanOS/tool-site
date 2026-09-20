@@ -29,7 +29,7 @@ const copy = {
         <CalculatorField id="otherIncome" label={copy.otherIncome} type="number" placeholder="e.g. 12570" min="0" step="1" />
         <CalculatorField id="dividendIncome" label={copy.dividendIncome} type="number" placeholder="e.g. 20000" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukdt-content">

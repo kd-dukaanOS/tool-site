@@ -17,7 +17,7 @@ const copy = {
   <div class="ukts-layout">
     <aside class="ukts-sidebar">
       <CalculatorField id="grossIncome" label={copy.grossLabel} type="number" required={true} helpText={copy.grossHelp} />
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ukts-content">

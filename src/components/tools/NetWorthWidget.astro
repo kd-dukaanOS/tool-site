@@ -30,7 +30,7 @@ const copy = {
         <CalculatorField id="creditCardDebt" label={copy.creditCardDebt} type="number" placeholder="e.g. 3000" min="0" step="1" />
         <CalculatorField id="otherLiabilities" label={copy.otherLiabilities} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="nw-content">

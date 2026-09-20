@@ -27,7 +27,7 @@ const copy = {
         <CalculatorField id="annualContribution" label={copy.annualContribution} type="number" placeholder="e.g. 7000" min="0" step="1" />
         <CalculatorField id="expectedReturn" label={copy.expectedReturn} type="number" placeholder="e.g. 7" min="0" step="0.1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="ri-content">

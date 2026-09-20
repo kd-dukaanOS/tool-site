@@ -10,9 +10,18 @@ interface Props {
   showDownload?: boolean;
   showShare?: boolean;
 
+  lang?: "en" | "es";
   calculateText?: string;
   resetText?: string;
+  copyText?: string;
+  downloadText?: string;
+  shareText?: string;
 }
+
+const defaultLabels = {
+  en: { calculate: "Calculate", reset: "Reset", copy: "Copy", download: "Download", share: "Share" },
+  es: { calculate: "Calcular", reset: "Restablecer", copy: "Copiar", download: "Descargar", share: "Compartir" },
+};
 
 const {
   calculateId = "calculateBtn",
@@ -25,40 +34,51 @@ const {
   showDownload = false,
   showShare = false,
 
-  calculateText = "Calculate",
-  resetText = "Reset",
+  lang = "en",
+  calculateText,
+  resetText,
+  copyText,
+  downloadText,
+  shareText,
 } = Astro.props as Props;
+
+const d = defaultLabels[lang] ?? defaultLabels.en;
+const finalCalculateText = calculateText ?? d.calculate;
+const finalResetText = resetText ?? d.reset;
+const finalCopyText = copyText ?? d.copy;
+const finalDownloadText = downloadText ?? d.download;
+const finalShareText = shareText ?? d.share;
 ---
 
 <div class="calculator-actions">
   <button id={calculateId} type="button" class="btn btn-primary">
     <span>⚡</span>
-    <span>{calculateText}</span>
+    <span>{finalCalculateText}</span>
   </button>
 
   <button id={resetId} type="reset" class="btn btn-secondary">
     <span>↺</span>
-    <span>{resetText}</span>
+    <span>{finalResetText}</span>
   </button>
 
   {showCopy && (
     <button id={copyId} type="button" class="btn btn-secondary">
       <span>📋</span>
-      <span>Copy</span>
+      <span>{finalCopyText}</span>
     </button>
   )}
 
   {showDownload && (
     <button id={downloadId} type="button" class="btn btn-ghost">
       <span>⬇</span>
-      <span>Download</span>
+      <span>{finalDownloadText}</span>
     </button>
   )}
 
   {showShare && (
     <button id={shareId} type="button" class="btn btn-ghost">
       <span>🔗</span>
-      <span>Share</span>
+      <span>{finalShareText}</span>
     </button>
   )}
 </div>

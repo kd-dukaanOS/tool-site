@@ -37,7 +37,7 @@ const copy = {
         <CalculatorField id="agi" label={copy.agi} type="number" placeholder="e.g. 20000" min="0" step="1" />
         <CalculatorField id="investmentIncome" label={copy.investmentIncome} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} calculateText={copy.calculate} resetText={copy.reset} copyText={copy.copy} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="eitc-content">

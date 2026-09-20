@@ -46,7 +46,7 @@ const copy = {
         <CalculatorField id="monthlyRevenue" label={copy.revenueLabel} type="number" placeholder={copy.revenuePh} min="0" step="1" />
         <CalculatorField id="monthlyOperatingExpenses" label={copy.expensesLabel} type="number" placeholder={copy.expensesPh} min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="brc-content">

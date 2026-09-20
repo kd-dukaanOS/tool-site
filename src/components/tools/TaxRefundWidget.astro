@@ -37,7 +37,7 @@ const copy = {
         <CalculatorField id="federalTaxWithheldAnnual" label={copy.withheld} type="number" placeholder="e.g. 9500" min="0" step="1" />
         <CalculatorField id="estimatedPaymentsAnnual" label={copy.estimated} type="number" placeholder="e.g. 0" min="0" step="1" />
       </div>
-      <CalculatorActions calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
+      <CalculatorActions lang={lang} calculateId="calculateBtn" resetId="resetBtn" copyId="copyBtn" showCopy={true} />
       <div id="errorBox" class="error-box" hidden></div>
     </aside>
     <main class="trf-content">
