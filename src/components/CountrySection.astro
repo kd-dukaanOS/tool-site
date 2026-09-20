@@ -1,14 +1,25 @@
 ---
-const countries = [
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const countries = lang === "es" ? [
+  { flagCode: "us", name: "Estados Unidos", desc: "Impuesto federal, FICA y salario neto", href: "/us" },
+  { flagCode: "ca", name: "Canadá", desc: "Impuesto federal + provincial, CPP y EI", href: "/canada" },
+  { flagCode: "gb", name: "Reino Unido", desc: "Impuesto sobre la Renta y Seguro Nacional", href: "/uk" },
+] : [
   { flagCode: "us", name: "United States", desc: "Federal tax, FICA & take-home pay", href: "/us" },
   { flagCode: "ca", name: "Canada", desc: "Federal + provincial tax, CPP & EI", href: "/canada" },
   { flagCode: "gb", name: "United Kingdom", desc: "Income Tax & National Insurance", href: "/uk" },
 ];
+
+const title = lang === "es" ? "🌍 Herramientas que hablan tu idioma fiscal." : "🌍 Tools that speak your country.";
 ---
 <section class="ts-country-section">
   <div class="ts-country-inner">
     <div class="ts-country-head">
-      <h2 class="ts-country-title">🌍 Tools that speak your country.</h2>
+      <h2 class="ts-country-title">{title}</h2>
     </div>
     <div class="ts-country-grid">
       {countries.map((c) => (

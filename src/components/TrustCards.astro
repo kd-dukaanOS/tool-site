@@ -1,7 +1,17 @@
 ---
 import { tools } from '../data/tools.js';
 
-const trustItems = [
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const trustItems = lang === "es" ? [
+  { icon: '🧰', title: `${tools.length}+ Herramientas`, subtitle: 'Problemas pequeños, resueltos rápido.' },
+  { icon: '🌐', title: 'Funciona en tu Navegador', subtitle: 'Tus datos se quedan en tu navegador.' },
+  { icon: '✅', title: 'Sin Registro', subtitle: 'Abre. Usa. Listo.' },
+  { icon: '🎁', title: 'Siempre Gratis', subtitle: 'Sin muro de pago al final.' },
+] : [
   { icon: '🧰', title: `${tools.length}+ Tools`, subtitle: 'Small problems, solved fast.' },
   { icon: '🌐', title: 'Runs in Your Browser', subtitle: 'Your data stays in your browser.' },
   { icon: '✅', title: 'No Sign-up', subtitle: 'Open. Use. Done.' },

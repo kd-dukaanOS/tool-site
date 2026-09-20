@@ -1,7 +1,17 @@
 ---
 import Card from './ui/Card.astro';
 
-const values = [
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+
+const values = lang === "es" ? [
+  { icon: '🔒', title: '100% Privado', desc: 'Todo el procesamiento ocurre en tu navegador. Nada se sube nunca a un servidor.' },
+  { icon: '🎁', title: 'Siempre Gratis', desc: 'Cada herramienta es gratis y lo seguirá siendo — sin muros de pago, nunca.' },
+  { icon: '∞', title: 'Uso Ilimitado', desc: 'Úsalas tanto como quieras, tantas veces como quieras, para siempre.' },
+  { icon: '🔄', title: 'Mejora Constante', desc: 'Creadas a partir de comentarios reales, no suposiciones — se agregan herramientas nuevas según lo que la gente pide.' },
+] : [
   { icon: '🔒', title: '100% Private', desc: 'All processing happens in your browser. Nothing is ever uploaded.' },
   { icon: '🎁', title: 'Always Free', desc: 'Every tool is free and will always be free — no paywalls, ever.' },
   { icon: '∞', title: 'Unlimited Usage', desc: 'Use as much as you want, as often as you want, forever.' },

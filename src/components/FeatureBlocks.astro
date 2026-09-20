@@ -1,5 +1,12 @@
 ---
-const blocks = [
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+const prefix = lang === "es" ? "/es" : "";
+const viewAllLabel = lang === "es" ? "Ver todo →" : "View all →";
+
+const blocksEn = [
   {
     title: "What's getting clicked", href: '/tools/',
     items: [
@@ -41,6 +48,55 @@ const blocks = [
     ],
   },
 ];
+
+const blocksEs = [
+  {
+    title: "Lo más clickeado", href: '/tools/',
+    items: [
+      { icon: '%', name: 'Calculadora de Descuento', desc: 'Calcula el precio con descuento', tag: '', href: '/finance/discount-calculator/' },
+      { icon: '⚖', name: 'Conversor de Peso', desc: 'Convierte entre unidades de peso', tag: '', href: '/converters/weight-calculator/' },
+      { icon: '💧', name: 'Calculadora de Ingesta de Agua', desc: 'Meta diaria de agua', tag: '', href: '/health/water-intake-calculator/' },
+      { icon: '🕐', name: 'Calculadora de Zona Horaria', desc: 'Convierte entre zonas horarias', tag: '', href: '/date-time/timezone-calculator/' },
+      { icon: '📈', name: 'Calculadora de Interés Simple', desc: 'Calcula el interés simple', tag: '', href: '/finance/simple-interest-calculator/' },
+    ],
+  },
+  {
+    title: 'Recién agregado', href: '/finance/',
+    items: [
+      { icon: '≠', name: 'Comparador de Textos', desc: 'Compara dos bloques de texto', tag: 'NUEVO', href: '/text-tools/diff-checker/' },
+      { icon: '/', name: 'Generador de Slugs', desc: 'Convierte texto en slugs para URLs', tag: 'NUEVO', href: '/text-tools/slug-generator/' },
+      { icon: '🎯', name: 'Calculadora de CAC', desc: 'Calcula el CAC a partir del gasto en marketing', tag: 'NUEVO', href: '/finance/customer-acquisition-cost-calculator/' },
+      { icon: '⬆', name: 'Calculadora de Aumento de Salario', desc: 'Calcula tu nuevo salario tras un aumento', tag: 'NUEVO', href: '/finance/raise-calculator/' },
+      { icon: '📣', name: 'Calculadora de ROAS', desc: 'Calcula el retorno del gasto publicitario', tag: 'NUEVO', href: '/finance/roas-calculator/' },
+    ],
+  },
+  {
+    title: 'Con mucho movimiento', href: '/finance/',
+    items: [
+      { icon: '1', name: 'Calculadora de SIP', desc: 'Proyecta el retorno de tu SIP', tag: '↑ 9%', href: '/finance/sip-calculator/' },
+      { icon: '2', name: 'Calculadora de ROI', desc: 'Retorno sobre la inversión', tag: '↑ 7%', href: '/finance/roi-calculator/' },
+      { icon: '3', name: 'Calculadora de Hipoteca', desc: 'Estima tu pago mensual de hipoteca', tag: '↑ 6%', href: '/finance/mortgage-calculator/' },
+      { icon: '4', name: 'Calculadora de Interés Compuesto', desc: 'Calcula el crecimiento con interés compuesto', tag: '↑ 5%', href: '/finance/compound-interest-calculator/' },
+      { icon: '5', name: 'Calculadora de CAGR', desc: 'Tasa de crecimiento anual compuesta', tag: '↑ 4%', href: '/finance/cagr-calculator/' },
+    ],
+  },
+  {
+    title: 'Para quienes viven en VS Code', href: '/developer-tools/',
+    items: [
+      { icon: '⚙', name: 'Probador de Regex', desc: 'Prueba patrones regex en vivo', tag: '', href: '/developer-tools/regex-tester/' },
+      { icon: '{}', name: 'Conversor de Base Numérica', desc: 'Convierte entre bases numéricas', tag: '', href: '/developer-tools/number-base-converter/' },
+      { icon: '📄', name: 'Herramienta Base64', desc: 'Codifica y decodifica en Base64', tag: '', href: '/converters/base64-tool/' },
+      { icon: '🎨', name: 'Conversor de Color', desc: 'Convierte entre HEX, RGB, HSL', tag: '', href: '/converters/color-converter/' },
+      { icon: '⏱', name: 'Conversor de Marca de Tiempo', desc: 'Convierte timestamps Unix', tag: '', href: '/converters/timestamp-converter/' },
+    ],
+  },
+];
+
+const blocks = (lang === "es" ? blocksEs : blocksEn).map((block) => ({
+  ...block,
+  href: `${prefix}${block.href}`,
+  items: block.items.map((item) => ({ ...item, href: `${prefix}${item.href}` })),
+}));
 ---
 <section class="ts-feat">
   <div class="ts-feat-inner">
@@ -48,7 +104,7 @@ const blocks = [
       <div class="ts-feat-col">
         <div class="ts-feat-head">
           <h3 class="ts-feat-title">{block.title}</h3>
-          <a href={block.href} class="ts-feat-viewall">View all →</a>
+          <a href={block.href} class="ts-feat-viewall">{viewAllLabel}</a>
         </div>
         <ul class="ts-feat-list">
           {block.items.map((item) => (

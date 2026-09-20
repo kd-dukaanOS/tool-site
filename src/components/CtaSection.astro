@@ -1,17 +1,26 @@
 ---
 import Button from './ui/Button.astro';
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+const prefix = lang === "es" ? "/es" : "";
+const isEs = lang === "es";
 ---
 <section class="ts-cta">
   <div class="ts-cta-inner">
     <div>
-      <h2>You've got the problem.<br />We've got the tool.</h2>
-      <p>Search it. Open it. Get it done.</p>
+      {isEs
+        ? <h2>Tienes el problema.<br />Nosotros tenemos la herramienta.</h2>
+        : <h2>You've got the problem.<br />We've got the tool.</h2>}
+      <p>{isEs ? "Búscala. Ábrela. Listo." : "Search it. Open it. Get it done."}</p>
     </div>
     <div class="ts-cta-action">
-      <a href="/tools" class="ts-cta-link">
-        <Button variant="secondary">Explore TooManyToolz →</Button>
+      <a href={`${prefix}/tools`} class="ts-cta-link">
+        <Button variant="secondary">{isEs ? "Explora TooManyToolz →" : "Explore TooManyToolz →"}</Button>
       </a>
-      <span class="ts-cta-note">99+ free tools · No account required</span>
+      <span class="ts-cta-note">{isEs ? "99+ herramientas gratis · Sin cuenta requerida" : "99+ free tools · No account required"}</span>
     </div>
   </div>
 </section>
