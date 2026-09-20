@@ -1,6 +1,13 @@
 ﻿---
 import CategoryCard from './ui/CategoryCard.astro';
 import { tools } from '../data/tools.js';
+import { SPANISH_CATEGORIES, SPANISH_TOOLS } from '../utils/i18n';
+
+interface Props {
+  lang?: "en" | "es";
+}
+const { lang = "en" } = Astro.props as Props;
+const prefix = lang === "es" ? "/es" : "";
 
 interface CategoryItem {
   icon: string;
@@ -41,16 +48,34 @@ const categoryDefs: CategoryItem[] = [
     tools: ['Burn Rate Calculator', 'Cash Flow Calculator', 'Markup Calculator'], href: '/business' },
 ];
 
-const categories = categoryDefs.map((cat) => ({
-  ...cat,
-  count: tools.filter((t) => t.category === cat.href.slice(1)).length,
-}));
+const categories = categoryDefs.map((cat) => {
+  const slug = cat.href.slice(1);
+  const count = tools.filter((t) => t.category === slug).length;
+
+  if (lang === "es") {
+    const esCat = SPANISH_CATEGORIES.find((c) => c.slug === slug);
+    const esExamples = SPANISH_TOOLS.filter((t) => t.category === slug).slice(0, 3).map((t) => t.name);
+    return {
+      ...cat,
+      title: esCat?.name ?? cat.title,
+      description: esCat?.description ?? cat.description,
+      tools: esExamples.length > 0 ? esExamples : cat.tools,
+      count,
+      href: `${prefix}${cat.href}`,
+      lang,
+    };
+  }
+
+  return { ...cat, count, href: `${prefix}${cat.href}`, lang };
+});
+
+const viewAllCopy = lang === "es" ? "Ver todas las herramientas →" : "View all tools →";
 ---
 <section class="ts-cat-section">
   <div class="ts-cat-section-inner">
     <div class="ts-cat-section-head">
       <h2 class="ts-cat-section-title">✦ Find your kind of useful.</h2>
-      <a href="/tools" class="ts-cat-section-viewall">View all tools →</a>
+      <a href={`${prefix}/tools`} class="ts-cat-section-viewall">{viewAllCopy}</a>
     </div>
 
     <div class="ts-cat-grid reveal-stagger">

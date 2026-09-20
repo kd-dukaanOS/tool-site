@@ -7,15 +7,18 @@ interface Props {
   tools: string[];
   href: string;
   accent: 'purple' | 'violet' | 'teal' | 'red' | 'green' | 'orange' | 'blue' | 'yellow';
+  lang?: 'en' | 'es';
 }
-const { icon, title, count, description, tools, href, accent } = Astro.props;
+const { icon, title, count, description, tools, href, accent, lang = 'en' } = Astro.props;
+const countLabel = lang === 'es' ? `${count} herramientas` : `${count} tools`;
+const exploreLabel = lang === 'es' ? 'Explorar →' : 'Explore →';
 ---
 <a href={href} class="ts-cat-card" style={`--acc-bg: var(--accent-${accent}-bg); --acc-icon: var(--accent-${accent}-icon);`}>
   <div class="ts-cat-head">
     <span class="ts-cat-icon">{icon}</span>
     <div class="ts-cat-title-row">
       <h3 class="ts-cat-title">{title}</h3>
-      <span class="ts-cat-count">{count} tools</span>
+      <span class="ts-cat-count">{countLabel}</span>
     </div>
   </div>
 
@@ -25,7 +28,7 @@ const { icon, title, count, description, tools, href, accent } = Astro.props;
     {tools.map((tool) => <li>{tool}</li>)}
   </ul>
 
-  <span class="ts-cat-explore">Explore →</span>
+  <span class="ts-cat-explore">{exploreLabel}</span>
 </a>
 
 <style>
