@@ -27,7 +27,7 @@ const copy = {
   },
 }[lang];
 
-const popularSearches = [
+const popularSearchesEn = [
   { name: 'JSON Formatter', href: `${prefix}/developer-tools/json-formatter/` },
   { name: 'Word Counter', href: `${prefix}/text-tools/word-counter/` },
   { name: 'UUID Generator', href: `${prefix}/security-tools/uuid-generator/` },
@@ -37,16 +37,33 @@ const popularSearches = [
   { name: 'BMI Calculator', href: `${prefix}/health/bmi-calculator/` },
   { name: 'Age Calculator', href: `${prefix}/date-time/age-calculator/` },
 ];
+
+const popularSearchesEs = [
+  { name: 'Formateador JSON', href: `${prefix}/developer-tools/json-formatter/` },
+  { name: 'Conversor de Mayúsculas', href: `${prefix}/text-tools/case-converter/` },
+  { name: 'Generador de UUID', href: `${prefix}/security-tools/uuid-generator/` },
+  { name: 'Generador de Códigos QR', href: `${prefix}/generators-calculators/qr-code-generator/` },
+  { name: 'Calculadora de EMI', href: `${prefix}/finance/emi-calculator/` },
+  { name: 'Calculadora de IVA', href: `${prefix}/finance/vat-calculator/` },
+  { name: 'Calculadora de IMC', href: `${prefix}/health/bmi-calculator/` },
+  { name: 'Calculadora de Edad', href: `${prefix}/date-time/age-calculator/` },
+];
+
+const popularSearches = lang === "es" ? popularSearchesEs : popularSearchesEn;
+
+const floatBadgesEn = ["JSON", "BMI", "GST", "EMI", "Word Count", "QR Code", "Percentage", "Age"];
+const floatBadgesEs = ["JSON", "IMC", "IVA", "EMI", "Palabras", "Código QR", "Porcentaje", "Edad"];
+const floatBadges = lang === "es" ? floatBadgesEs : floatBadgesEn;
 ---
 <section class="ts-hero">
-  <div class="ts-hero-float f1"><span class="dot" style="background:#ef4444"></span> JSON</div>
-  <div class="ts-hero-float f2"><span class="dot" style="background:#2563eb"></span> BMI</div>
-  <div class="ts-hero-float f3"><span class="dot" style="background:#059669"></span> GST</div>
-  <div class="ts-hero-float f4"><span class="dot" style="background:#ea580c"></span> EMI</div>
-  <div class="ts-hero-float f5"><span class="dot" style="background:#7c3aed"></span> Word Count</div>
-  <div class="ts-hero-float f6"><span class="dot" style="background:#d97706"></span> QR Code</div>
-  <div class="ts-hero-float f7"><span class="dot" style="background:#0891b2"></span> Percentage</div>
-  <div class="ts-hero-float f8"><span class="dot" style="background:#db2777"></span> Age</div>
+  <div class="ts-hero-float f1"><span class="dot" style="background:#ef4444"></span> {floatBadges[0]}</div>
+  <div class="ts-hero-float f2"><span class="dot" style="background:#2563eb"></span> {floatBadges[1]}</div>
+  <div class="ts-hero-float f3"><span class="dot" style="background:#059669"></span> {floatBadges[2]}</div>
+  <div class="ts-hero-float f4"><span class="dot" style="background:#ea580c"></span> {floatBadges[3]}</div>
+  <div class="ts-hero-float f5"><span class="dot" style="background:#7c3aed"></span> {floatBadges[4]}</div>
+  <div class="ts-hero-float f6"><span class="dot" style="background:#d97706"></span> {floatBadges[5]}</div>
+  <div class="ts-hero-float f7"><span class="dot" style="background:#0891b2"></span> {floatBadges[6]}</div>
+  <div class="ts-hero-float f8"><span class="dot" style="background:#db2777"></span> {floatBadges[7]}</div>
   <div class="ts-hero-inner reveal">
     <Badge tone="primary" class="ts-hero-badge">
       ✦ {tools.length}+ {copy.badgeSuffix}
